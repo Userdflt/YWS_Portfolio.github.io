@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Vision Model RAG</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>YOUNG</strong> <span>WOO SONG</span></a>
+						<a href="https://github.com/Userdflt" class="button2">GitHub</a>
+						<a href="https://www.linkedin.com/in/young-woo-song-145488217" class="button2">LinkedIn</a>
+						<a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="button2">Resume/CV</a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links"[EP02/Health Master]>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="coming_soon.html">Full_App - Coming Soon - </a></li>
+							<li><a href="notion_mcp.html">MCP</a></li>
+							<li><a href="stablediffusion.html">Image Generation</a></li>
+							<li><a href="vision_model.html">Vision Model RAG</a></li>
+							<li><a href="llm.html">LLM_RAG</a></li>
+							<li><a href="cv.html">Computer Vision</a></li>
+						</ul>
+						
+					</nav>
+
+				<!-- Banner -->
+				<!-- Note: The "styleN" class below should match that of the header element. -->
+					<section id="banner" class="style4">
+						<div class="inner">
+							<span class="image">
+								<img src="images/building_code.png" alt=""/>
+							</span>
+							<header class="major">
+								<h1>Vision Model RAG</h1>
+							</header>
+							<div class="content">
+								<p>Intelligent_Building_Code_Retrieval</p>
+								<ul class="actions">
+									<li><a href="https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval" class="button next scrolly"> GitHub for more details</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h2>Overview</h2>
+									</header>
+									<p>CodeVision NZ is an AI-powered personal project designed to simplify information retrieval 
+										from the New Zealand Building Code documentation. 
+										Leveraging open-source technologies, it efficiently extracts, indexes, and retrieves textual and visual data from PDF documents.</p>
+								</div>
+							</section>
+
+						<!-- Two -->
+							<section id="two" class="spotlights">
+								<section>
+									<a class="image">
+										<img src="images/Workflow_Diagram.jpeg" alt="" data-position="center center" style="width: 100%; height: auto;" />
+										<br>
+										<br>
+										<br>
+
+										<img src="images/Sample_extracted.png" alt="" data-position="center center" style="width: 100%; height: auto;" />
+								
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>Workflow</h3>
+											</header>
+								
+									<li>
+									<strong>Data Ingestion &amp; Indexing:</strong>
+									<ul>
+										<li>Locate and load PDFs matching a prefix/suffix.</li>
+										<li>Extract text chunks and embedded images simultaneously.</li>
+										<li>
+										<em>Image Extraction:</em>
+										<ul>
+											<li>Store raw image data from each PDF.</li>
+											<li>Run a vision model to generate metadata and embeddings.</li>
+											<li>Save image embeddings into the Chroma collection.</li>
+										</ul>
+										</li>
+										<li>
+										<em>Text Extraction:</em>
+										<ul>
+											<li>Split raw text into manageable chunks.</li>
+											<li>Generate embeddings for each text chunk.</li>
+											<li>Save text embeddings into the Chroma collection.</li>
+										</ul>
+										</li>
+									</ul>
+									</li>
+
+									<li>
+									<strong>User Query &amp; Retrieval:</strong>
+									<ul>
+										<li>Receive the user’s question and load conversation context.</li>
+										<li>
+										<em>Retrieval Nodes:</em>
+										<ul>
+											<li>Text node retrieves relevant text embeddings from Chroma.</li>
+											<li>Image node retrieves matching image embeddings from Chroma.</li>
+											<li>Merge text and image results into a single context payload.</li>
+										</ul>
+										</li>
+										<li>Use an LLM to generate a final answer from the combined context.</li>
+										<li>Return the generated answer to the user.</li>
+									</ul>
+									</li>
+								</ul>
+										</div>
+									</div>
+								</section>
+								<section>
+									<a class="image">
+										<img src="images/vit.png" alt="" data-position="center center" />
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>Tools and Methods</h3>
+											</header>
+											<table border="1" cellpadding="5" cellspacing="0">
+											<thead>
+												<tr>
+												<th>Tool/Method</th>
+												<th>Implementation</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+												<td>Document Extraction</td>
+												<td>Unstructured io</td>
+												</tr>
+												<tr>
+												<td>Vision Analysis</td>
+												<td>Open-source Vision Transformer models, HuggingFace libraries</td>
+												</tr>
+												<tr>
+												<td>Text Embedding</td>
+												<td>SentenceTransformers (open-source embedding models)</td>
+												</tr>
+												<tr>
+												<td>Vector Storage</td>
+												<td>Chroma Vector Database</td>
+												</tr>
+												<tr>
+												<td>Language Model</td>
+												<td>Open-source LLMs (e.g., Ollama models, GPT-Neo, LLaMA)</td>
+												</tr>
+												<tr>
+												<td>Deployment Interface</td>
+												<td>Streamlit (for local deployment)</td>
+												</tr>
+											</tbody>
+											</table>
+
+										</div>
+									</div>
+								</section>
+
+							</section>
+
+						<!-- Three -->
+							<section id="three">
+								<div class="inner">
+									<header class="major">
+										<h3>Overall Key Features</h3>
+										</header>
+									<p>
+											<ul>
+												<li>
+												🔍 <strong>AI-Powered Code Retrieval</strong> – Ask questions in natural language and get precise Building Code sections, tables, or images in response.
+												</li>
+												<li>
+												🖼️ <strong>Vision &amp; Text Indexing</strong> – Automatically extract both textual content and embedded images/tables from New Zealand Building Code PDFs.
+												</li>
+												<li>
+												🎯 <strong>Dual-Stream Processing</strong>
+												<ul>
+													<li>
+													<em>Image Extraction:</em> Store raw image data, run through vision-transformer models for metadata, and index results in Chroma.
+													</li>
+													<li>
+													<em>Text Extraction:</em> Split PDF text into chunks, generate embeddings via SentenceTransformers, and store them in Chroma.
+													</li>
+												</ul>
+												</li>
+												<li>
+												💾 <strong>Local Vector Storage</strong> – Use Chroma Vector Database to keep all image and text embeddings on your machine, enabling fast similarity searches.
+												</li>
+												<li>
+												🧠 <strong>LLM-Driven Responses</strong> – Combine retrieved text and image metadata to generate coherent, contextually accurate answers using open-source LLMs (e.g., Ollama, GPT-Neo, LLaMA).
+												</li>
+												<li>
+												🖥️ <strong>Streamlit Deployment Interface</strong> – A lightweight, local web UI that lets you chat with CodeVision NZ, review extracted images/tables, and refine queries—all without any cloud dependencies.
+												</li>
+												<li>
+												⚡ <strong>Real-Time Interaction</strong> – Immediate feedback on queries thanks to optimized indexing and retrieval pipelines.
+												</li>
+												<li>
+												🛠️ <strong>Extensible Architecture</strong> – Swap out document loaders, embedding models, or vision backends without touching core logic.
+												</li>
+											</ul>
+
+									
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<section id="contact">
+						<div class="contact-methods">
+							<div class="contact-method">
+								<span class="icon solid alt fa-envelope"></span>
+								<h3>Email</h3>
+								<a>youngwoo930@gmail.com</a>
+							</div>
+							<div class="contact-method">
+								<span class="icon solid alt fa-phone"></span>
+								<h3>Phone</h3>
+								<span>(021) 0240 0930</span>
+							</div>
+						</div>
+					</section>
+
+
+				<!-- Footer -->
+					<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+						<!-- 1) Notion icon (now using <img src="…notion.svg">) -->
+						<li>
+							<a
+							href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f?pvs=4"
+							class="icon brands alt fa-notion-custom"
+							target="_blank"
+							>
+							
+							<span class="notion-mask"></span>
+							<span class="label">Notion</span>
+							<img
+								src="assets\icons\notion-mask.svg"
+								alt="Notion"
+								class="notion-svg"
+							/>
+							</a>
+						</li>
+						<li>
+							<a href="https://github.com/Userdflt" class="icon brands alt fa-github">
+							<span class="label">GitHub</span>
+							</a>
+						</li>
+						<li>
+							<a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="icon brands alt fa-linkedin-in">
+							<span class="label">LinkedIn</span>
+							</a>
+						</li>
+						</ul>
+
+					</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

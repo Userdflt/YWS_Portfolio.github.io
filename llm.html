@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>LLM_RAG</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>YOUNG</strong> <span>WOO SONG</span></a>
+						<a href="https://github.com/Userdflt" class="button2">GitHub</a>
+						<a href="https://www.linkedin.com/in/young-woo-song-145488217" class="button2">LinkedIn</a>
+						<a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="button2">Resume/CV</a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links"[EP02/Health Master]>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="coming_soon.html">Full_App - Coming Soon - </a></li>
+							<li><a href="notion_mcp.html">MCP</a></li>
+							<li><a href="stablediffusion.html">Image Generation</a></li>
+							<li><a href="vision_model.html">Vision Model RAG</a></li>
+							<li><a href="llm.html">LLM_RAG</a></li>
+							<li><a href="cv.html">Computer Vision</a></li>
+						</ul>
+						
+					</nav>
+
+				<!-- Banner -->
+				<!-- Note: The "styleN" class below should match that of the header element. -->
+					<section id="banner" class="style5">
+						<div class="inner">
+							<span class="image">
+								<img src="images/LLM.png" alt=""/>
+							</span>
+							<header class="major">
+								<h1>LLM_RAG</h1>
+							</header>
+							<div class="content">
+								<p>LLM_for_Self-Correcting_Retrieval-Augmented_Generation_(RAG)</p>
+								
+								<ul class="actions">
+									<li><a href="https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-" class="button next scrolly">GitHub for more details</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h2>Overview</h2>
+									</header>
+									<p>This project leverages a local Large Language Model (LLM) that autonomously 
+										decides whether to retrieve documents 
+										from a local vector store or perform a web search. After generating an initial answer,
+										 the system performs both reflection and hallucination checks  before finalizing the response.</p>
+								</div>
+							</section>
+
+						<!-- Two -->
+							<section id="two" class="spotlights">
+								<section>
+									<a class="image">
+										<img src="images/llmflow.png" alt="" data-position="center center" />
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>Key Features</h3>
+											</header>
+											<table border="1" cellpadding="5" cellspacing="0">
+												<thead>
+													<tr>
+													<th>Feature</th>
+													<th>Description</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+													<td><strong>Indicator &amp; Retrieval Decision</strong></td>
+													<td>
+														Evaluates the user’s question to choose between a Web Search (for external data) or Local Retrieval (from Chroma). Results are graded for relevance—if “Not Relevant,” the workflow loops back to Indicator.
+													</td>
+													</tr>
+													<tr>
+													<td><strong>Vector Store Retrieval</strong></td>
+													<td>
+														Fetches documents from the Chroma vector database when Local Retrieval is chosen or Web Search results aren’t relevant. Retrieved documents are graded; if “Not Relevant,” loop back to Indicator.
+													</td>
+													</tr>
+													<tr>
+													<td><strong>Generate &amp; Reflect Loop</strong></td>
+													<td>
+														Uses an LLM to draft an initial response from the retrieved context. The <code>Reflect</code> step checks <code>Reflection_Status</code>—if “Incomplete,” regenerate; if “Complete,” proceed to Output.
+													</td>
+													</tr>
+													<tr>
+													<td><strong>Output</strong></td>
+													<td>
+														Returns the finalized, reflected answer to the user once <code>Reflection_Status</code> is “Complete.”
+													</td>
+													</tr>
+												</tbody>
+												</table>
+
+										</div>
+									</div>
+								</section>
+								
+								<section>
+									<a class="image">
+										<img src="images/llm_flow_chart.jpeg" alt="" data-position="center center" style="width: 100%; height: 90%;" />
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>Technical Workflow</h3>
+											</header>
+											
+
+												<!-- Indicator & Retrieval -->
+												<h4>1. Indicator &amp; Retrieval</h4>
+												<ul>
+													<li><strong>Indicator Function:</strong> Routes each question to either Chroma DB (local) or Web Search (external).</li>
+													<li><strong>Retrieve/Search:</strong>  
+													<ul>
+														<li><em>Chroma DB:</em> Fetch local documents.</li>
+														<li><em>Web Search:</em> Gather external data if local context is insufficient.</li>
+													</ul>
+													</li>
+												</ul>
+
+												<!-- Generation & Reflection -->
+												<h4>2. Generation &amp; Reflection</h4>
+												<ul>
+													<li><strong>Generate:</strong> LLM drafts an initial answer from retrieved context.</li>
+													<li><strong>Reflect:</strong> Check for completeness and accuracy. If <code>Reflection_Status</code> is <em>Incomplete</em>, loop back to Generate.</li>
+													<li><strong>Hallucination Check:</strong> Validate factual correctness; regenerate if inaccuracies are found.</li>
+												</ul>
+
+												<!-- Adaptability -->
+												<h4>3. Adaptability &amp; Goal-Oriented Loop</h4>
+												<p>
+													A state graph monitors relevance and iteratively refines answers—looping between Indicator, Retrieve/Search, and Generate/Reflect until a thorough, accurate response is produced.
+												</p>
+
+										</div>
+									</div>
+								</section>
+
+							</section>
+
+						<!-- Three -->
+							<section id="three">
+								<div class="inner">
+									<header class="major">
+										<h2>Summary</h2>
+									</header>
+									  
+										<ul>
+											<li>
+											🤖 <strong>Fully Autonomous AI Agent</strong> – Processes user inputs end-to-end without manual intervention.
+											</li>
+											<li>
+											📡 <strong>Data Source Decision-Making</strong> – Automatically chooses between local or external information based on context.
+											</li>
+											<li>
+											🔄 <strong>Iterative Refinement</strong> – Continuously refines outputs for reliability through self-correction loops.
+											</li>
+											<li>
+											🔍 <strong>Combined Retrieval &amp; Generation</strong> – Integrates retrieval, generation, reflection, and hallucination checks for robust answers.
+											</li>
+											<li>
+											🎯 <strong>Self-Correcting Capabilities</strong> – Ensures accurate, context-rich responses by looping until completeness and factual correctness are achieved.
+											</li>
+										</ul>
+
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<section id="contact">
+						<div class="contact-methods">
+							<div class="contact-method">
+								<span class="icon solid alt fa-envelope"></span>
+								<h3>Email</h3>
+								<a>youngwoo930@gmail.com</a>
+							</div>
+							<div class="contact-method">
+								<span class="icon solid alt fa-phone"></span>
+								<h3>Phone</h3>
+								<span>(021) 0240 0930</span>
+							</div>
+						</div>
+					</section>
+
+
+				<!-- Footer -->
+					<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+						<!-- 1) Notion icon (now using <img src="…notion.svg">) -->
+						<li>
+							<a
+							href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f?pvs=4"
+							class="icon brands alt fa-notion-custom"
+							target="_blank"
+							>
+							
+							<span class="notion-mask"></span>
+							<span class="label">Notion</span>
+							<img
+								src="assets\icons\notion-mask.svg"
+								alt="Notion"
+								class="notion-svg"
+							/>
+							</a>
+						</li>
+						<li>
+							<a href="https://github.com/Userdflt" class="icon brands alt fa-github">
+							<span class="label">GitHub</span>
+							</a>
+						</li>
+						<li>
+							<a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="icon brands alt fa-linkedin-in">
+							<span class="label">LinkedIn</span>
+							</a>
+						</li>
+						</ul>
+
+					</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

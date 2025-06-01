@@ -1,0 +1,341 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>MCP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>YOUNG</strong> <span>WOO SONG</span></a>
+						<a href="https://github.com/Userdflt" class="button2">GitHub</a>
+						<a href="https://www.linkedin.com/in/young-woo-song-145488217" class="button2">LinkedIn</a>
+						<a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="button2">Resume/CV</a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links"[EP02/Health Master]>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="coming_soon.html">Full_App - Coming Soon - </a></li>
+							<li><a href="notion_mcp.html">MCP</a></li>
+							<li><a href="stablediffusion.html">Image Generation</a></li>
+							<li><a href="vision_model.html">Vision Model RAG</a></li>
+							<li><a href="llm.html">LLM_RAG</a></li>
+							<li><a href="cv.html">Computer Vision</a></li>
+						</ul>
+						
+					</nav>
+
+				<!-- Banner -->
+				<!-- Note: The "styleN" class below should match that of the header element. -->
+					<section id="banner" class="style2">
+						<div class="inner">
+							<span class="image">
+								<img src="images/mcp_logo.png" alt=""/>
+							</span>
+							<header class="major">
+								<h1>MCP</h1>
+							</header>
+							<div class="content">
+								<p>Notion‑MCP‑Agent</p>
+								<ul class="actions">
+									<li><a href="https://github.com/Userdflt/Notion-MCP-Agent" class="button next scrolly"> GitHub for more details</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h2>Overview</h2>
+									</header>
+									<p>Notion‑MCP‑Agent turns your Notion workspace into a live, AI‑driven knowledge hub — now with one‑click text‑to‑speech.
+									   A FastMCP server exposes a rich toolbox for manipulating Notion pages. Using LangChain Agentic Framework and GPT‑4o orchestrates conversations, 
+									   read, write, summarise, build tables, manage metadata, and even generate MP3s of your notes — all in real time.</p>
+								</div>
+							</section>
+
+						<!-- Two -->
+							<section id="two" class="spotlights">
+								<section>
+									<a class="image">
+										<img src="images/gifs/Table_Creation.gif" alt="" data-position="center center" />
+										<br>
+										<br>
+										<br>
+										<br>
+										<img src="images/gifs/page_with_notes.gif" alt="" data-position="center center" />
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>Available MCP Tools</h3>
+											</header>
+
+												<table border="1" cellpadding="5" cellspacing="0">
+												<thead>
+													<tr>
+													<th>Category</th>
+													<th>Tool</th>
+													<th>Purpose (Args → Returns)</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+													<td>Content</td>
+													<td>
+														<code>append_content</code>, <code>create_table</code>
+													</td>
+													<td>
+														Markdown-like → blocks (append)
+														2-D list → Notion table block
+													</td>
+													</tr>
+													<tr>
+													<td>Read</td>
+													<td>
+														<code>get_page_text</code>
+													</td>
+													<td>
+														Deep text extraction (recursive)
+													</td>
+													</tr>
+													<tr>
+													<td>Properties</td>
+													<td>
+														<code>retrieve_page_property</code>
+													</td>
+													<td>
+														Paginated property read
+													</td>
+													</tr>
+													<tr>
+													<td>Pages</td>
+													<td>
+														<code>update_page_title</code>, <code>create_subpage</code>, <code>retrieve_page</code>, <code>update_page</code>
+													</td>
+													<td>
+														Rename a page<br>
+														Create child page<br>
+														Retrieve and update existing pages
+													</td>
+													</tr>
+													<tr>
+													<td>Users</td>
+													<td>
+														<code>list_users</code>, <code>retrieve_user</code>, <code>get_me</code>
+													</td>
+													<td>
+														Workspace user management
+													</td>
+													</tr>
+													<tr>
+													<td>Search</td>
+													<td>
+														<code>search_notion</code>
+													</td>
+													<td>
+														Full-workspace search
+													</td>
+													</tr>
+													<tr>
+													<td>Media</td>
+													<td>
+														<code>text_to_speech</code>
+													</td>
+													<td>
+														Plain text → MP3 via <strong>Coqui TTS</strong>
+													</td>
+													</tr>
+												</tbody>
+												</table>
+
+
+										</div>
+									</div>
+								</section>
+								<section>
+									<a class="image">
+										<img src="images/fastmcp.png" alt="" data-position="center center" />
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>FastMCP Server</h3>
+											</header>
+											<section>
+												
+									
+												<p><strong>FastMCP Server</strong> enables real-time interaction with Notion using AI agents. It provides:</p>
+
+												<ul>
+													<li>
+													<strong>Tool Registration</strong>:
+													<ul>
+														<li><strong>Content:</strong> <code>append_content</code>, <code>create_table</code></li>
+														<li><strong>Page:</strong> <code>get_page_text</code>, <code>update_page_title</code>, <code>create_subpage</code></li>
+														<li><strong>User:</strong> <code>list_users</code>, <code>retrieve_user</code>, <code>get_me</code></li>
+														<li><strong>Search:</strong> <code>search_notion</code>, <code>retrieve_page_property</code></li>
+														<li><strong>Media:</strong> <code>text_to_speech</code></li>
+													</ul>
+													</li>
+
+													<li>
+													<strong>Prompt Endpoints</strong>:
+													<ul>
+														<li><code>default_prompt</code> – general tasks</li>
+														<li><code>structured_notes_prompt</code> – multi-section notes</li>
+													</ul>
+													</li>
+
+													<li>
+													<strong>Transport</strong>: Uses <strong>SSE</strong> at <code>/sse</code> for low-latency, push-style communication.
+													</li>
+												</ul>
+												</section>
+
+
+											
+										</div>
+									</div>
+								</section>
+								<section>
+									<a class="image">
+										<img src="images/langchain.png" alt="" data-position="25% 25%" />
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>LangChain Agent</h3>
+											</header>
+											<section>
+												
+												<p>
+													The <strong>LangChain Agent</strong> serves as the orchestration layer that powers intelligent behavior over Notion content by leveraging tools and a language model. It includes the following key components:
+												</p>
+
+												<ul>
+													<li>
+													<strong>Tool Loading</strong>: Automatically discovers and injects all available MCP tools into the LangChain runtime, allowing dynamic tool use without manual configuration.
+													</li>
+													<li>
+													<strong>LLM</strong>: Defaults to <code>gpt‑4o</code> via <code>ChatOpenAI</code>, with easy swapping to any Ollama or OpenAI-compatible model using a single flag.
+													</li>
+													<li>
+													<strong>Helpers</strong>: Provides built-in wrappers like <code>summarize</code> for condensing long text and <code>speak</code> for converting content into MP3s.
+													</li>
+												</ul>
+												</section>
+											
+										</div>
+									</div>
+								</section>
+							</section>
+
+						<!-- Three -->
+							<section id="three">
+								<div class="inner">
+									<header class="major">
+										<h2>Overall Key Features</h2>
+											<ul>
+											<li>🔧 <strong>End-to-End Workspace Control</strong> &ndash; append blocks, build tables, rename pages, manage users, and search &mdash; all from chat.</li>
+											<li>🗣️ <strong>Text-to-Speech</strong> &ndash; highlight or request any content and receive a downloadable MP3.</li>
+											<li>💡 <strong>Structured-Notes Mode</strong> &ndash; generate pedagogical 10-section guides with intros, code, visuals, and references.</li>
+											<li>⚡ <strong>Real-Time Interaction</strong> &ndash; SSE keeps server and agent perfectly in sync.</li>
+											<li>🖥️ <strong>Local-First Desktop App</strong> &ndash; works offline with local LLMs and Coqui TTS; zero cloud cost if you choose.</li>
+											<li>🛠️ <strong>Extensible</strong> &ndash; add new MCP tools or swap frontend frameworks without touching core logic.</li>
+											</ul>
+
+									
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Contact -->
+					<section id="contact">
+						<div class="contact-methods">
+							<div class="contact-method">
+								<span class="icon solid alt fa-envelope"></span>
+								<h3>Email</h3>
+								<a>youngwoo930@gmail.com</a>
+							</div>
+							<div class="contact-method">
+								<span class="icon solid alt fa-phone"></span>
+								<h3>Phone</h3>
+								<span>(021) 0240 0930</span>
+							</div>
+						</div>
+					</section>
+
+
+				<!-- Footer -->
+					<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+						<!-- 1) Notion icon (now using <img src="…notion.svg">) -->
+						<li>
+							<a
+							href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f?pvs=4"
+							class="icon brands alt fa-notion-custom"
+							target="_blank"
+							>
+							
+							<span class="notion-mask"></span>
+							<span class="label">Notion</span>
+							<img
+								src="assets\icons\notion-mask.svg"
+								alt="Notion"
+								class="notion-svg"
+							/>
+							</a>
+						</li>
+						<li>
+							<a href="https://github.com/Userdflt" class="icon brands alt fa-github">
+							<span class="label">GitHub</span>
+							</a>
+						</li>
+						<li>
+							<a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="icon brands alt fa-linkedin-in">
+							<span class="label">LinkedIn</span>
+							</a>
+						</li>
+						</ul>
+
+					</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

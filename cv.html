@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Computer Vision</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>YOUNG</strong> <span>WOO SONG</span></a>
+						<a href="https://github.com/Userdflt" class="button2">GitHub</a>
+						<a href="https://www.linkedin.com/in/young-woo-song-145488217" class="button2">LinkedIn</a>
+						<a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="button2">Resume/CV</a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links"[EP02/Health Master]>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="coming_soon.html">Full_App - Coming Soon - </a></li>
+							<li><a href="notion_mcp.html">MCP</a></li>
+							<li><a href="stablediffusion.html">Image Generation</a></li>
+							<li><a href="vision_model.html">Vision Model RAG</a></li>
+							<li><a href="llm.html">LLM_RAG</a></li>
+							<li><a href="cv.html">Computer Vision</a></li>
+						</ul>
+						
+					</nav>
+
+				<!-- Banner -->
+				<!-- Note: The "styleN" class below should match that of the header element. -->
+					<section id="banner" class="style6">
+						<div class="inner">
+							<span class="image">
+								<img src="images/cv.png" alt=""/>
+							</span>
+							<header class="major">
+								<h1>Computer Vision</h1>
+							</header>
+							<div class="content">
+								<p>Object_Detection_for_Safety_Compliance_on_Construction_Sites</p>
+								<ul class="actions">
+									<li><a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model" class="button next scrolly"> GitHub for more details</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h2>Overview</h2>
+									</header>
+									<p>The project investigates the idea of object detection of safety 
+										compliance items (PPE gear) at construction sites using labeled image data. 
+										The goal is to effectively identify whether workers are wearing proper safety (PPE) 
+										gear when working on construction sites.</p>
+								</div>
+							</section>
+
+						<!-- Two -->
+							<section id="two" class="spotlights">
+								<section>
+									<a class="image">
+										<img src="images/cv2.png" alt="" data-position="center center" />
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>Key Components</h3>
+											</header>
+												<table border="1" cellpadding="5" cellspacing="0">
+												<thead>
+													<tr>
+													<th>Component</th>
+													<th>Details</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+													<td><strong>Safety Challenge</strong></td>
+													<td>
+														Manual safety monitoring on New Zealand construction sites is slow, error-prone, and costly, increasing the risk of accidents and legal liabilities.
+													</td>
+													</tr>
+													<tr>
+													<td><strong>Dataset</strong></td>
+													<td>
+														Kaggle “Construction Site Safety Image Dataset” (2,605 images at 640×640), annotated for 10 PPE-related classes (e.g., Hardhat, Vest, Mask).
+													</td>
+													</tr>
+													<tr>
+													<td><strong>Detection Model</strong></td>
+													<td>
+														YOLOv9 with a CSPDarknet backbone and anchor-free detection, selected for fast, accurate localization of varied PPE sizes.
+													</td>
+													</tr>
+													<tr>
+													<td><strong>Training Details</strong></td>
+													<td>
+														• Fine-tuning with normalization (70 epochs, LR 1e-3, batch 16)  
+														• Optional oversampling to balance underrepresented classes (50 epochs to prevent overfitting)
+													</td>
+													</tr>
+													<tr>
+													<td><strong>Evaluation Results</strong></td>
+													<td>
+														mAP@0.5 ≈ 0.89; high precision/recall on key classes (Mask 0.95, Vest 0.93); underperformance on underrepresented classes (NO-Mask, Vehicle).
+													</td>
+													</tr>
+													<tr>
+													<td><strong>Deployment Considerations</strong></td>
+													<td>
+														Real-time inference speed requirements; continuous data collection and re-training; choice of edge vs. cloud deployment; compute and maintenance costs.
+													</td>
+													</tr>
+													<tr>
+													<td><strong>Project Impact</strong></td>
+													<td>
+														Automated PPE detection and tracking model that reduces accident rates, lowers operational costs, and improves compliance on construction sites.
+													</td>
+													</tr>
+												</tbody>
+												</table>
+
+										</div>
+									</div>
+								</section>
+								
+								<section>
+									<a class="image">
+										<img src="images/output8.png" alt="" data-position="center center"/>
+										<br>
+										<img src="images/output1.png" alt="" data-position="center center"/>
+										
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>Test Image Analysis</h3>
+											</header>
+												<p>
+													<strong>First Test Image:</strong>  
+													The model finds one person and correctly labels their hardhat (0.93), mask (0.94), and safety vest (0.95). All items overlap only slightly, showing the model can spot multiple PPE pieces at once.
+												</p>
+
+												<p>
+													<strong>Second Test Image:</strong>  
+													There are two workers. The model detects both hardhats (0.94 and 0.93) but flags “NO-Mask” (0.83 and 0.85) and “NO-Safety Vest” (0.43) for each. Lower confidence on the person (0.55) and vest shows it struggles a bit in cluttered, busy scenes.
+												</p>
+
+										</div>
+									</div>
+								</section>
+
+							</section>
+
+							<section id="two" class="spotlights">
+								<section>
+									<a class="image">
+										<img src="images/gifs/construction_workers.gif" alt="" data-position="center center" />
+									</a>
+									<div class="content">
+										<div class="inner">
+											<header class="major">
+												<h3>Demonstration</h3>
+											</header>
+
+
+										</div>
+									</div>
+								</section>
+							</section>
+
+						<!-- Three -->
+							<section id="three">
+								<div class="inner">
+									<header class="major">
+										<h2>Summary</h2>
+									</header>
+									  
+										<ul>
+												<li>🚧 <strong>Automated PPE Detection</strong> – Identifies helmets, vests, masks, and other safety gear in real time to improve construction site compliance.</li>
+												<li>🖼️ <strong>Vision-Based Monitoring</strong> – Utilizes YOLOv9 with a CSPDarknet backbone for fast, accurate localization and classification of varied PPE items.</li>
+												<li>📊 <strong>High-Accuracy Performance</strong> – Achieves mAP@0.5 ≈ 0.89, with strong precision/recall on key classes (Mask 0.95, Vest 0.93) and reliable detection even in crowded scenes.</li>
+												<li>📈 <strong>Balanced Training Strategy</strong> – Fine-tuned on a 2,605-image Kaggle dataset (640×640), employing normalization and optional oversampling to address class imbalance.</li>
+												<li>⚙️ <strong>Real-Time Deployment Ready</strong> – Optimized for edge/cloud inference, ensuring low latency for on-site monitoring and rapid feedback loops.</li>
+												<li>🔄 <strong>Continuous Improvement Loop</strong> – Incorporates ongoing data collection, re-labeling, and retraining to adapt the model to new environments, reducing false positives and missed detections.</li>
+										</ul>
+
+								</div>
+							</section>
+							
+
+					</div>
+					
+
+				<!-- Contact -->
+					<section id="contact">
+						<div class="contact-methods">
+							<div class="contact-method">
+								<span class="icon solid alt fa-envelope"></span>
+								<h3>Email</h3>
+								<a>youngwoo930@gmail.com</a>
+							</div>
+							<div class="contact-method">
+								<span class="icon solid alt fa-phone"></span>
+								<h3>Phone</h3>
+								<span>(021) 0240 0930</span>
+							</div>
+						</div>
+					</section>
+
+
+				<!-- Footer -->
+					<footer id="footer">
+					<div class="inner">
+						<ul class="icons">
+						<!-- 1) Notion icon (now using <img src="…notion.svg">) -->
+						<li>
+							<a
+							href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f?pvs=4"
+							class="icon brands alt fa-notion-custom"
+							target="_blank"
+							>
+							
+							<span class="notion-mask"></span>
+							<span class="label">Notion</span>
+							<img
+								src="assets\icons\notion-mask.svg"
+								alt="Notion"
+								class="notion-svg"
+							/>
+							</a>
+						</li>
+						<li>
+							<a href="https://github.com/Userdflt" class="icon brands alt fa-github">
+							<span class="label">GitHub</span>
+							</a>
+						</li>
+						<li>
+							<a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="icon brands alt fa-linkedin-in">
+							<span class="label">LinkedIn</span>
+							</a>
+						</li>
+						</ul>
+
+					</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
