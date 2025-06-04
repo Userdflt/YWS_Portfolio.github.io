@@ -15,8 +15,7 @@ Bringing a unique blend of creativity, technical precision, and problem-solving 
 1. [Overview](#overview)  
 2. [Features](#features)  
 3. [Built With](#built-with)  
-4. [Contributing](#contributing)  
-5. [Contact](#contact)
+4. [Contact](#contact)
 
 ---
 
