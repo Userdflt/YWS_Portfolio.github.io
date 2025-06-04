@@ -15,14 +15,8 @@ Bringing a unique blend of creativity, technical precision, and problem-solving 
 1. [Overview](#overview)  
 2. [Features](#features)  
 3. [Built With](#built-with)  
-4. [Project Structure](#project-structure)  
-5. [Getting Started](#getting-started)  
-   1. [Prerequisites](#prerequisites)  
-   2. [Installation](#installation)  
-   3. [Running Locally](#running-locally)  
-6. [Usage & Screenshots](#usage--screenshots)  
-7. [Contributing](#contributing)  
-8. [Contact](#contact)
+4. [Contributing](#contributing)  
+5. [Contact](#contact)
 
 ---
 
@@ -62,23 +56,6 @@ It is fully responsive, mobile-friendly, and employs modern UI patterns such as 
   - LLM RAG System · Ollama LLaMA 3.1 · ChromaDB  
   - Vision Model RAG · OCR + LLM ensemble  
   - CodeVision Flutter App (coming soon)
-
----
-
-## Project Structure
-/
-├─ images/ # Thumbnails & hero images
-├─ css/
-│ └─ styles.css # Global styles & variables
-├─ js/
-│ └─ main.js # Interactivity & navigation
-├─ index.html # Home page
-├─ notion_mcp.html # Notion MCP Agent
-├─ stablediffusion.html # GenAI Image Generation
-├─ llm.html # LLM RAG System
-├─ vision_model.html # Vision Model RAG
-├─ coming_soon.html # CodeVision Flutter placeholder
-└─ README.md # You are here
 
 ---
 
