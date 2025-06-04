@@ -61,7 +61,8 @@ It is fully responsive, mobile-friendly, and employs modern UI patterns such as 
 ## Contact
 
 Young Woo Song
+
 Email: youngwoo930@gmail.com
+
 LinkedIn: linkedin.com/in/young-woo-song-145488217
 
-© 2025 Young Woo Song. All rights reserved.
