@@ -253,517 +253,6 @@
     },
     {
       "parameters": {
-        "mode": "retrieve-as-tool",
-        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
-        "tableName": {
-          "__rl": true,
-          "value": "code-b",
-          "mode": "list",
-          "cachedResultName": "code-b"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-      "typeVersion": 1.3,
-      "position": [
-        -1300,
-        800
-      ],
-      "id": "16f99860-5aa4-42c7-b89b-d99bab328ffb",
-      "name": "Supabase Vector Store",
-      "credentials": {
-        "supabaseApi": {
-          "id": "TdfCs3Gcima2kL9z",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        -1300,
-        940
-      ],
-      "id": "a5eb9a82-e2bc-49b3-a277-75ec2222cc32",
-      "name": "Embeddings OpenAI",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4.1",
-          "mode": "list",
-          "cachedResultName": "gpt-4.1"
-        },
-        "options": {
-          "temperature": 0.4
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        -1480,
-        800
-      ],
-      "id": "f517e1ce-8753-467b-a8f9-f90d71a3c918",
-      "name": "OpenAI Chat Model1",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "retrieve-as-tool",
-        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
-        "tableName": {
-          "__rl": true,
-          "value": "code-b",
-          "mode": "list",
-          "cachedResultName": "code-b"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-      "typeVersion": 1.3,
-      "position": [
-        -720,
-        800
-      ],
-      "id": "a3456a98-0474-4735-a717-9d2af310b0f8",
-      "name": "Supabase Vector Store1",
-      "credentials": {
-        "supabaseApi": {
-          "id": "TdfCs3Gcima2kL9z",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        -720,
-        920
-      ],
-      "id": "bd4acb37-939e-42ca-addc-d26ce1dd1e50",
-      "name": "Embeddings OpenAI1",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4.1",
-          "mode": "list",
-          "cachedResultName": "gpt-4.1"
-        },
-        "options": {
-          "temperature": 0.4
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        -900,
-        800
-      ],
-      "id": "28f74f6c-e2ab-4af3-bb27-e78def9cc7b2",
-      "name": "OpenAI Chat Model2",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "retrieve-as-tool",
-        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
-        "tableName": {
-          "__rl": true,
-          "value": "code-b",
-          "mode": "list",
-          "cachedResultName": "code-b"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-      "typeVersion": 1.3,
-      "position": [
-        -180,
-        780
-      ],
-      "id": "4d937c6c-5cc3-4e5c-9844-dcd0c6ad2e77",
-      "name": "Supabase Vector Store2",
-      "credentials": {
-        "supabaseApi": {
-          "id": "TdfCs3Gcima2kL9z",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        -180,
-        920
-      ],
-      "id": "41a6b66e-f454-4afe-b291-f3f58136a936",
-      "name": "Embeddings OpenAI2",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4.1",
-          "mode": "list",
-          "cachedResultName": "gpt-4.1"
-        },
-        "options": {
-          "temperature": 0.4
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        -360,
-        780
-      ],
-      "id": "a16fa0c1-ec7d-46fa-9d9f-9693515bea4c",
-      "name": "OpenAI Chat Model3",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "retrieve-as-tool",
-        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
-        "tableName": {
-          "__rl": true,
-          "value": "code-b",
-          "mode": "list",
-          "cachedResultName": "code-b"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-      "typeVersion": 1.3,
-      "position": [
-        400,
-        780
-      ],
-      "id": "1bbea2a6-7d36-4522-879d-20fc5256714c",
-      "name": "Supabase Vector Store3",
-      "credentials": {
-        "supabaseApi": {
-          "id": "TdfCs3Gcima2kL9z",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        400,
-        920
-      ],
-      "id": "8a22699b-d97b-469e-8d2e-8973ded6f81d",
-      "name": "Embeddings OpenAI3",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4.1",
-          "mode": "list",
-          "cachedResultName": "gpt-4.1"
-        },
-        "options": {
-          "temperature": 0.4
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        220,
-        780
-      ],
-      "id": "a59516ab-b5ca-4aad-84a4-5e184e47cb96",
-      "name": "OpenAI Chat Model4",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "retrieve-as-tool",
-        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
-        "tableName": {
-          "__rl": true,
-          "value": "code-b",
-          "mode": "list",
-          "cachedResultName": "code-b"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-      "typeVersion": 1.3,
-      "position": [
-        940,
-        780
-      ],
-      "id": "8b4f56cf-4334-4eae-92af-94dfb7a5d17b",
-      "name": "Supabase Vector Store4",
-      "credentials": {
-        "supabaseApi": {
-          "id": "TdfCs3Gcima2kL9z",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        940,
-        920
-      ],
-      "id": "71c9f136-f583-45ae-b742-849cc467e29d",
-      "name": "Embeddings OpenAI4",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4.1",
-          "mode": "list",
-          "cachedResultName": "gpt-4.1"
-        },
-        "options": {
-          "temperature": 0.4
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        780,
-        780
-      ],
-      "id": "e35af57c-e789-487b-b804-f71a7de1bd8e",
-      "name": "OpenAI Chat Model5",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "retrieve-as-tool",
-        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
-        "tableName": {
-          "__rl": true,
-          "value": "code-b",
-          "mode": "list",
-          "cachedResultName": "code-b"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-      "typeVersion": 1.3,
-      "position": [
-        1480,
-        780
-      ],
-      "id": "02b6a721-25cc-4c57-aafa-de64a7c7de69",
-      "name": "Supabase Vector Store5",
-      "credentials": {
-        "supabaseApi": {
-          "id": "TdfCs3Gcima2kL9z",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        1480,
-        920
-      ],
-      "id": "bcddc1d5-b2d2-411b-af3b-fbaf7d2f385a",
-      "name": "Embeddings OpenAI5",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4.1",
-          "mode": "list",
-          "cachedResultName": "gpt-4.1"
-        },
-        "options": {
-          "temperature": 0.4
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        1320,
-        780
-      ],
-      "id": "248f54e1-84c0-4c9b-a0d0-3f16f4dd14a6",
-      "name": "OpenAI Chat Model6",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "retrieve-as-tool",
-        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
-        "tableName": {
-          "__rl": true,
-          "value": "code-b",
-          "mode": "list",
-          "cachedResultName": "code-b"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-      "typeVersion": 1.3,
-      "position": [
-        2040,
-        780
-      ],
-      "id": "db9e98ad-3b4e-4f55-8781-e3e50db77ad0",
-      "name": "Supabase Vector Store6",
-      "credentials": {
-        "supabaseApi": {
-          "id": "TdfCs3Gcima2kL9z",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        2060,
-        920
-      ],
-      "id": "85827bc6-b655-4ba6-ad1e-a7e50607a83d",
-      "name": "Embeddings OpenAI6",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4.1",
-          "mode": "list",
-          "cachedResultName": "gpt-4.1"
-        },
-        "options": {
-          "temperature": 0.4
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        1880,
-        780
-      ],
-      "id": "e54d164e-86b8-440f-8529-e092a130bcd5",
-      "name": "OpenAI Chat Model7",
-      "credentials": {
-        "openAiApi": {
-          "id": "K2jeo2wgqDkDF516",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "content": "## Code-H-Agent",
         "height": 600,
         "width": 540,
@@ -879,7 +368,7 @@
         "promptType": "define",
         "text": "={{ $json.query }}",
         "options": {
-          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “B”).\nAnswer questions about the Code’s B Stability provisions—Clause B1 Structure (buildings, elements, and site-works must resist self-weight, temperature, water, earthquake, snow, wind, and fire loads during construction, alteration, and service life) and Clause B2 Durability (materials must remain functional for at least 50, 15, or 5 years so the building continues to meet performance requirements and protect people and property).\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/b-stability"
+          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “H”).\nAnswer questions about the Code’s H1 Energy efficiency provisions—thermal-resistance requirements, control of uncontrolled airflow, and performance criteria for hot-water systems, artificial lighting, and HVAC in conditioned spaces.\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/h-energy-efficiency"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -896,7 +385,7 @@
         "promptType": "define",
         "text": "={{ $json.query }}",
         "options": {
-          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “B”).\nAnswer questions about the Code’s B Stability provisions—Clause B1 Structure (buildings, elements, and site-works must resist self-weight, temperature, water, earthquake, snow, wind, and fire loads during construction, alteration, and service life) and Clause B2 Durability (materials must remain functional for at least 50, 15, or 5 years so the building continues to meet performance requirements and protect people and property).\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/b-stability"
+          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “G”).\nAnswer questions about the Code’s G Services and Facilities provisions—Clauses G1-G15 addressing personal hygiene, laundering, food preparation, ventilation, interior environment, sound control, natural and artificial light, electricity, piped services, gas, water supply, foul water, industrial liquid waste, and solid-waste management.\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/g-services-and-facilities"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -913,7 +402,7 @@
         "promptType": "define",
         "text": "={{ $json.query }}",
         "options": {
-          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “B”).\nAnswer questions about the Code’s B Stability provisions—Clause B1 Structure (buildings, elements, and site-works must resist self-weight, temperature, water, earthquake, snow, wind, and fire loads during construction, alteration, and service life) and Clause B2 Durability (materials must remain functional for at least 50, 15, or 5 years so the building continues to meet performance requirements and protect people and property).\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/b-stability"
+          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “F”).\nAnswer questions about the Code’s F Safety of Users provisions—Clauses F1 to F9 covering hazardous agents (F1), hazardous materials (F2), hazardous substances/processes (F3), safety from falling (F4), construction & demolition hazards (F5), visibility in escape routes (F6), warning systems (F7), safety signage (F8), and restricting young-children access to residential pools (F9).\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/f-safety-of-users"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -930,7 +419,7 @@
         "promptType": "define",
         "text": "={{ $json.query }}",
         "options": {
-          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “B”).\nAnswer questions about the Code’s B Stability provisions—Clause B1 Structure (buildings, elements, and site-works must resist self-weight, temperature, water, earthquake, snow, wind, and fire loads during construction, alteration, and service life) and Clause B2 Durability (materials must remain functional for at least 50, 15, or 5 years so the building continues to meet performance requirements and protect people and property).\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/b-stability"
+          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “E”).\nAnswer questions about the Code’s E Moisture provisions—Clause E1 Surface water (drainage and disposal of rainwater), Clause E2 External moisture (roofs, claddings, and openings must prevent water entry and accumulation), and Clause E3 Internal moisture (impervious surfaces, ventilation, thermal resistance, overflow disposal to avoid condensation and fungal growth).\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/e-moisture"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -947,7 +436,7 @@
         "promptType": "define",
         "text": "={{ $json.query }}",
         "options": {
-          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “B”).\nAnswer questions about the Code’s B Stability provisions—Clause B1 Structure (buildings, elements, and site-works must resist self-weight, temperature, water, earthquake, snow, wind, and fire loads during construction, alteration, and service life) and Clause B2 Durability (materials must remain functional for at least 50, 15, or 5 years so the building continues to meet performance requirements and protect people and property).\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/b-stability"
+          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “D”).\nAnswer questions about the Code’s D Access provisions—Clause D1 Access routes (safe entry, internal/external stairs, ramps, corridors, lifts; slip resistance; facilities for people with disabilities; vehicle movement, loading, parking) and Clause D2 Mechanical installations for access (lifts, escalators, moving walks must resist service loads, prevent accidents, and safeguard users and maintenance staff).\n\nyour goal is to provide an accurate answer based on this information ONLY.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/d-access"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -970,23 +459,6 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        1360,
-        580
-      ],
-      "id": "bfb0878d-6d5e-49e6-9e2d-db8b083799f4",
-      "name": "Code-C-Agent"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.query }}",
-        "options": {
-          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “B”).\nAnswer questions about the Code’s B Stability provisions—Clause B1 Structure (buildings, elements, and site-works must resist self-weight, temperature, water, earthquake, snow, wind, and fire loads during construction, alteration, and service life) and Clause B2 Durability (materials must remain functional for at least 50, 15, or 5 years so the building continues to meet performance requirements and protect people and property).\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/b-stability"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2,
-      "position": [
         1900,
         580
       ],
@@ -995,7 +467,7 @@
     },
     {
       "parameters": {
-        "content": "## Orchestration Agent",
+        "content": "## Orchestration Agent\n**(can connect to webhook)**",
         "height": 460,
         "width": 840,
         "color": 3
@@ -1023,6 +495,541 @@
       ],
       "id": "7d84bc0e-7fb2-42bf-b9e7-feadee5453f6",
       "name": "Orchestration Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=You are a New Zealand Building Code expert (focusing on Building Code “C”).\nAnswer questions about the Code’s C Protection from Fire provisions—Clauses C1–C6, which cover: preventing fires (C2), limiting fire spread (C3), enabling safe evacuation (C4), providing firefighting access (C5), and maintaining structural stability during fire (C6), all in line with the objectives of C1.\n\nUse only the information returned from the vectorstore.\n\nIf there are images provided from the retrieved information, you should return this in markdown format.\n\nIf the answer is not in the vectorstore, reply “I don’t know.” Then add:\nFor more detail, see https://www.building.govt.nz/building-code-compliance/c-protection-from-fire"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        580
+      ],
+      "id": "2b14c9b6-2a8e-449d-a7d0-cb9f9ae42b73",
+      "name": "Code-C Agent"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
+        "tableName": {
+          "__rl": true,
+          "value": "code-c",
+          "mode": "list",
+          "cachedResultName": "code-c"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1500,
+        780
+      ],
+      "id": "73a4abee-ec89-41b2-bc1a-684d493264fc",
+      "name": "Supabase Vector Store code c",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TdfCs3Gcima2kL9z",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
+        "tableName": {
+          "__rl": true,
+          "value": "code-b",
+          "mode": "list",
+          "cachedResultName": "code-b"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        2040,
+        780
+      ],
+      "id": "db9e98ad-3b4e-4f55-8781-e3e50db77ad0",
+      "name": "Supabase Vector Store code b",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TdfCs3Gcima2kL9z",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
+        "tableName": {
+          "__rl": true,
+          "value": "code-d",
+          "mode": "list",
+          "cachedResultName": "code-d"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        940,
+        780
+      ],
+      "id": "8b4f56cf-4334-4eae-92af-94dfb7a5d17b",
+      "name": "Supabase Vector Store code d",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TdfCs3Gcima2kL9z",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
+        "tableName": {
+          "__rl": true,
+          "value": "code-e",
+          "mode": "list",
+          "cachedResultName": "code-e"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        400,
+        780
+      ],
+      "id": "1bbea2a6-7d36-4522-879d-20fc5256714c",
+      "name": "Supabase Vector Store code e",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TdfCs3Gcima2kL9z",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
+        "tableName": {
+          "__rl": true,
+          "value": "code-f",
+          "mode": "list",
+          "cachedResultName": "code-f"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -180,
+        780
+      ],
+      "id": "4d937c6c-5cc3-4e5c-9844-dcd0c6ad2e77",
+      "name": "Supabase Vector Store code f",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TdfCs3Gcima2kL9z",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
+        "tableName": {
+          "__rl": true,
+          "value": "code-g",
+          "mode": "list",
+          "cachedResultName": "code-g"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -720,
+        800
+      ],
+      "id": "a3456a98-0474-4735-a717-9d2af310b0f8",
+      "name": "Supabase Vector Store code g",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TdfCs3Gcima2kL9z",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to retrieve relevant information from the vectorstore.",
+        "tableName": {
+          "__rl": true,
+          "value": "code-h",
+          "mode": "list",
+          "cachedResultName": "code-h"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -1300,
+        800
+      ],
+      "id": "16f99860-5aa4-42c7-b89b-d99bab328ffb",
+      "name": "Supabase Vector Store code h",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TdfCs3Gcima2kL9z",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1480,
+        800
+      ],
+      "id": "f517e1ce-8753-467b-a8f9-f90d71a3c918",
+      "name": "OpenAI Chat Model code h",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1300,
+        940
+      ],
+      "id": "a5eb9a82-e2bc-49b3-a277-75ec2222cc32",
+      "name": "Embeddings OpenAI code h",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -900,
+        800
+      ],
+      "id": "28f74f6c-e2ab-4af3-bb27-e78def9cc7b2",
+      "name": "OpenAI Chat Model code g",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -720,
+        920
+      ],
+      "id": "bd4acb37-939e-42ca-addc-d26ce1dd1e50",
+      "name": "Embeddings OpenAI code g",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -360,
+        780
+      ],
+      "id": "a16fa0c1-ec7d-46fa-9d9f-9693515bea4c",
+      "name": "OpenAI Chat Model code f",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -180,
+        920
+      ],
+      "id": "41a6b66e-f454-4afe-b291-f3f58136a936",
+      "name": "Embeddings OpenAI code f",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        780
+      ],
+      "id": "a59516ab-b5ca-4aad-84a4-5e184e47cb96",
+      "name": "OpenAI Chat Model code e",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        920
+      ],
+      "id": "8a22699b-d97b-469e-8d2e-8973ded6f81d",
+      "name": "Embeddings OpenAI code e",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        780,
+        780
+      ],
+      "id": "e35af57c-e789-487b-b804-f71a7de1bd8e",
+      "name": "OpenAI Chat Model code d",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        940,
+        920
+      ],
+      "id": "71c9f136-f583-45ae-b742-849cc467e29d",
+      "name": "Embeddings OpenAI code d",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1320,
+        780
+      ],
+      "id": "9f97d68a-69c7-4df2-bb89-fca989f99044",
+      "name": "OpenAI Chat Model code c",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        920
+      ],
+      "id": "766babec-74de-4193-b6cd-7f4f8bae81bf",
+      "name": "Embeddings OpenAI code c",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1880,
+        780
+      ],
+      "id": "e54d164e-86b8-440f-8529-e092a130bcd5",
+      "name": "OpenAI Chat Model code b",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2060,
+        920
+      ],
+      "id": "85827bc6-b655-4ba6-ad1e-a7e50607a83d",
+      "name": "Embeddings OpenAI codeb",
+      "credentials": {
+        "openAiApi": {
+          "id": "K2jeo2wgqDkDF516",
+          "name": "OpenAi account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -1137,205 +1144,18 @@
         ]
       ]
     },
-    "Supabase Vector Store": {
+    "Supabase Vector Store code c": {
       "ai_tool": [
         [
           {
-            "node": "Code-H-Agent",
+            "node": "Code-C Agent",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Embeddings OpenAI": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Supabase Vector Store",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Code-H-Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Supabase Vector Store1": {
-      "ai_tool": [
-        [
-          {
-            "node": "Code-G-Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Embeddings OpenAI1": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Supabase Vector Store1",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model2": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Code-G-Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Supabase Vector Store2": {
-      "ai_tool": [
-        [
-          {
-            "node": "Code-F-Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Embeddings OpenAI2": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Supabase Vector Store2",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model3": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Code-F-Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Supabase Vector Store3": {
-      "ai_tool": [
-        [
-          {
-            "node": "Code-E-Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Embeddings OpenAI3": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Supabase Vector Store3",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model4": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Code-E-Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Supabase Vector Store4": {
-      "ai_tool": [
-        [
-          {
-            "node": "Code-D-Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Embeddings OpenAI4": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Supabase Vector Store4",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model5": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Code-D-Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Supabase Vector Store5": {
-      "ai_tool": [
-        [
-          {
-            "node": "Code-C-Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Embeddings OpenAI5": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Supabase Vector Store5",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model6": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Code-C-Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Supabase Vector Store6": {
+    "Supabase Vector Store code b": {
       "ai_tool": [
         [
           {
@@ -1346,23 +1166,210 @@
         ]
       ]
     },
-    "Embeddings OpenAI6": {
+    "Supabase Vector Store code d": {
+      "ai_tool": [
+        [
+          {
+            "node": "Code-D-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store code e": {
+      "ai_tool": [
+        [
+          {
+            "node": "Code-E-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store code f": {
+      "ai_tool": [
+        [
+          {
+            "node": "Code-F-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store code g": {
+      "ai_tool": [
+        [
+          {
+            "node": "Code-G-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store code h": {
+      "ai_tool": [
+        [
+          {
+            "node": "Code-H-Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model code h": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Code-H-Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI code h": {
       "ai_embedding": [
         [
           {
-            "node": "Supabase Vector Store6",
+            "node": "Supabase Vector Store code h",
             "type": "ai_embedding",
             "index": 0
           }
         ]
       ]
     },
-    "OpenAI Chat Model7": {
+    "OpenAI Chat Model code g": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Code-G-Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI code g": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store code g",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model code f": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Code-F-Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI code f": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store code f",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model code e": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Code-E-Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI code e": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store code e",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model code d": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Code-D-Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI code d": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store code d",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model code c": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Code-C Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI code c": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store code c",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model code b": {
       "ai_languageModel": [
         [
           {
             "node": "Code-B-Agent",
             "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI codeb": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store code b",
+            "type": "ai_embedding",
             "index": 0
           }
         ]
@@ -1373,7 +1380,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "a3e8a3f7-a9d3-4c5f-9f88-015e41657bda",
+  "versionId": "256ac6ab-27b8-4671-9763-66bff3c36128",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "9fac6fbe2b20f1df9286807f34768c00032486a6b680cb6de72f14997a3910a0"
