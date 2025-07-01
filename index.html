@@ -110,23 +110,78 @@
             background-color: var(--color-background);
             line-height: 1.6;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(253, 121, 168, 0.05) 0%, transparent 50%);
-            background-attachment: fixed;
-            animation: backgroundShift 20s ease-in-out infinite;
+            position: relative;
         }
 
-        @keyframes backgroundShift {
+        /* Code-style Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.15;
+            background-image: 
+                /* Code editor grid */
+                linear-gradient(rgba(0, 212, 170, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.1) 1px, transparent 1px),
+                /* Subtle circuit lines */
+                linear-gradient(45deg, transparent 35%, rgba(108, 92, 231, 0.05) 35%, rgba(108, 92, 231, 0.05) 40%, transparent 40%),
+                linear-gradient(-45deg, transparent 35%, rgba(253, 121, 168, 0.03) 35%, rgba(253, 121, 168, 0.03) 40%, transparent 40%);
+            background-size: 40px 40px, 40px 40px, 200px 200px, 180px 180px;
+            animation: gridFlow 30s linear infinite;
+        }
+
+        /* Flowing Data Connections */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                /* Neural network nodes */
+                radial-gradient(circle at 15% 25%, rgba(0, 212, 170, 0.08) 2px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(108, 92, 231, 0.08) 2px, transparent 3px),
+                radial-gradient(circle at 65% 15%, rgba(253, 121, 168, 0.06) 1px, transparent 2px),
+                radial-gradient(circle at 25% 85%, rgba(0, 212, 170, 0.06) 1px, transparent 2px),
+                radial-gradient(circle at 75% 45%, rgba(108, 92, 231, 0.05) 1px, transparent 2px),
+                /* Data flow streams */
+                linear-gradient(135deg, transparent 48%, rgba(0, 212, 170, 0.03) 49%, rgba(0, 212, 170, 0.03) 51%, transparent 52%),
+                linear-gradient(45deg, transparent 48%, rgba(108, 92, 231, 0.02) 49%, rgba(108, 92, 231, 0.02) 51%, transparent 52%);
+            background-size: 800px 600px, 900px 700px, 400px 300px, 600px 400px, 300px 250px, 1200px 800px, 1000px 600px;
+            animation: dataFlow 25s ease-in-out infinite;
+        }
+
+        @keyframes gridFlow {
+            0% {
+                background-position: 0 0, 0 0, 0 0, 0 0;
+            }
+            100% {
+                background-position: 40px 40px, 40px 40px, 200px 200px, -180px -180px;
+            }
+        }
+
+        @keyframes dataFlow {
             0%, 100% {
-                background-position: 0% 0%, 100% 0%, 50% 50%;
+                background-position: 0% 0%, 100% 100%, 0% 100%, 100% 0%, 50% 50%, 0% 0%, 100% 100%;
+                opacity: 0.6;
             }
-            33% {
-                background-position: 10% 10%, 90% 10%, 60% 40%;
+            25% {
+                background-position: 5% 5%, 95% 95%, 10% 90%, 90% 10%, 60% 40%, 10% 10%, 90% 90%;
+                opacity: 0.8;
             }
-            66% {
-                background-position: -5% 5%, 105% -5%, 40% 60%;
+            50% {
+                background-position: 10% 10%, 90% 90%, 20% 80%, 80% 20%, 70% 30%, 20% 20%, 80% 80%;
+                opacity: 0.7;
+            }
+            75% {
+                background-position: 5% 15%, 95% 85%, 15% 85%, 85% 15%, 55% 45%, 15% 15%, 85% 85%;
+                opacity: 0.9;
             }
         }
 
@@ -499,72 +554,159 @@
             border: 1px solid var(--glass-border);
         }
 
-        /* Floating Shapes with Enhanced Animation */
+        /* Professional Tech Elements */
         .floating-shape {
             position: absolute;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            opacity: 0.15;
-            animation: float 8s ease-in-out infinite;
-            filter: blur(1px);
+            opacity: 0.1;
             transition: all var(--transition-normal);
+            pointer-events: none;
         }
 
         .floating-shape:hover {
-            opacity: 0.3;
-            transform: scale(1.2);
+            opacity: 0.2;
         }
 
+        /* Hexagonal Data Node */
         .floating-shape:nth-child(1) {
-            width: 100px;
-            height: 100px;
-            top: 15%;
-            left: 5%;
-            animation-delay: 0s;
-            animation: float 8s ease-in-out infinite, pulse 4s ease-in-out infinite;
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            left: 8%;
+            background: transparent;
+            border: 2px solid var(--color-primary);
+            position: relative;
+            animation: techFloat1 12s ease-in-out infinite;
         }
 
+        .floating-shape:nth-child(1)::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: transparent;
+            border: 1px solid var(--color-secondary);
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+        }
+
+        .floating-shape:nth-child(1)::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--color-primary);
+        }
+
+        /* Rectangular Terminal Window */
         .floating-shape:nth-child(2) {
-            width: 150px;
-            height: 150px;
-            top: 55%;
-            right: 5%;
-            animation-delay: 3s;
-            animation: float 10s ease-in-out infinite reverse, pulse 6s ease-in-out infinite;
-        }
-
-        .floating-shape:nth-child(3) {
             width: 80px;
-            height: 80px;
-            bottom: 15%;
-            left: 15%;
-            animation-delay: 6s;
-            animation: float 12s ease-in-out infinite, pulse 5s ease-in-out infinite;
+            height: 50px;
+            top: 60%;
+            right: 10%;
+            background: var(--glass-bg);
+            border: 1px solid var(--color-secondary);
+            border-radius: 4px;
+            position: relative;
+            animation: techFloat2 15s ease-in-out infinite reverse;
         }
 
-        @keyframes float {
+        .floating-shape:nth-child(2)::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-primary) 30%, transparent 30%, transparent 60%, var(--color-secondary) 60%);
+            animation: dataStream 3s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(2)::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            box-shadow: 12px 0 var(--color-primary), 24px 0 var(--color-secondary);
+        }
+
+        /* Diamond Network Node */
+        .floating-shape:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            bottom: 25%;
+            left: 20%;
+            background: transparent;
+            border: 2px solid var(--color-accent);
+            transform: rotate(45deg);
+            position: relative;
+            animation: techFloat3 10s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(3)::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            background: var(--color-accent);
+            transform: translate(-50%, -50%) rotate(-45deg);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            box-shadow: 0 0 8px var(--color-accent);
+        }
+
+        @keyframes techFloat1 {
             0%, 100% { 
-                transform: translateY(0px) rotate(0deg) translateX(0px); 
+                transform: translateY(0px) translateX(0px) rotate(0deg); 
+            }
+            33% { 
+                transform: translateY(-20px) translateX(15px) rotate(120deg); 
+            }
+            66% { 
+                transform: translateY(-10px) translateX(-10px) rotate(240deg); 
+            }
+        }
+
+        @keyframes techFloat2 {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px); 
             }
             25% { 
-                transform: translateY(-30px) rotate(90deg) translateX(10px); 
+                transform: translateY(-15px) translateX(-20px); 
             }
             50% { 
-                transform: translateY(-20px) rotate(180deg) translateX(-10px); 
+                transform: translateY(-25px) translateX(5px); 
             }
             75% { 
-                transform: translateY(-40px) rotate(270deg) translateX(5px); 
+                transform: translateY(-10px) translateX(15px); 
             }
         }
 
-        @keyframes pulse {
+        @keyframes techFloat3 {
             0%, 100% { 
-                opacity: 0.15; 
-                transform: scale(1);
+                transform: translateY(0px) translateX(0px) rotate(45deg); 
             }
             50% { 
-                opacity: 0.25; 
-                transform: scale(1.1);
+                transform: translateY(-30px) translateX(20px) rotate(225deg); 
+            }
+        }
+
+        @keyframes dataStream {
+            0%, 100% { 
+                background: linear-gradient(90deg, var(--color-primary) 30%, transparent 30%, transparent 60%, var(--color-secondary) 60%);
+            }
+            50% { 
+                background: linear-gradient(90deg, transparent 20%, var(--color-primary) 20%, var(--color-primary) 50%, transparent 50%, transparent 80%, var(--color-secondary) 80%);
             }
         }
 
@@ -831,6 +973,89 @@
             border-color: var(--color-text);
         }
 
+        /* Technologies Section */
+        .technologies {
+            padding: var(--space-12) 0;
+            background-color: var(--color-background-alt);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+        }
+
+        .tech-category {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            backdrop-filter: var(--glass-backdrop);
+            transition: all var(--transition-normal);
+            text-align: center;
+        }
+
+        .tech-category:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--color-primary);
+        }
+
+        .tech-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-primary);
+            color: var(--color-text-inverse);
+            font-size: 1.5rem;
+            margin: 0 auto var(--space-4);
+            box-shadow: var(--shadow-glow);
+            transition: all var(--transition-normal);
+        }
+
+        .tech-category:hover .tech-icon {
+            transform: scale(1.1);
+            box-shadow: 
+                var(--shadow-glow), 
+                0 0 30px rgba(0, 212, 170, 0.5);
+        }
+
+        .tech-category h3 {
+            margin-bottom: var(--space-4);
+            font-size: 1.25rem;
+            color: var(--color-text);
+            text-align: center;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+            justify-content: center;
+        }
+
+        .tech-tag {
+            background: var(--color-background-elevated);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all var(--transition-normal);
+        }
+
+        .tech-tag:hover {
+            background: var(--color-primary);
+            color: var(--color-text-inverse);
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 212, 170, 0.3);
+        }
+
         /* Skills Section */
         .skills {
             padding: var(--space-12) 0;
@@ -919,6 +1144,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: var(--space-6);
+            transform: translate3d(0, 0, 0);
         }
 
         .project-card {
@@ -927,43 +1153,54 @@
             border-radius: var(--radius-lg);
             overflow: hidden;
             backdrop-filter: var(--glass-backdrop);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             color: inherit;
             position: relative;
-            transform-style: preserve-3d;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--gradient-primary);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 1;
-            pointer-events: none;
+            cursor: pointer;
+            will-change: transform, box-shadow;
+            transform: translate3d(0, 0, 0);
         }
 
         .project-card:hover {
-            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            transform: translateY(-8px) scale(1.02);
             box-shadow: 
-                var(--shadow-glow), 
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(0, 212, 170, 0.3);
+                0 20px 40px rgba(0, 0, 0, 0.15),
+                0 0 20px rgba(0, 212, 170, 0.1);
             border-color: var(--color-primary);
             color: inherit;
         }
 
-        .project-card:hover::before {
-            opacity: 0.03;
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
         }
 
-        .project-card:hover .project-image img {
-            transform: scale(1.1) rotate(2deg);
+        .project-card.clicking {
+            animation: fadeAway 0.25s cubic-bezier(0.4, 0, 1, 1) forwards;
+            pointer-events: none;
+        }
+
+        .project-card:active {
+            transform: translateY(-4px) scale(0.98);
+            transition: all 0.05s ease;
+        }
+
+        @keyframes fadeAway {
+            0% { 
+                opacity: 1;
+                transform: translateY(-8px) scale(1.02);
+                filter: blur(0px);
+            }
+            30% { 
+                opacity: 0.7;
+                transform: translateY(-4px) scale(1.01);
+                filter: blur(0.5px);
+            }
+            100% { 
+                opacity: 0;
+                transform: translateY(0px) scale(0.95);
+                filter: blur(2px);
+            }
         }
 
         .project-image {
@@ -980,15 +1217,30 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform var(--transition-normal);
-        }
-
-        .project-card:hover .project-image img {
-            transform: scale(1.00);
+            transition: transform 0.3s ease;
         }
 
         .project-content {
             padding: var(--space-5);
+            position: relative;
+        }
+
+        .project-content::after {
+            content: '→';
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            color: var(--color-primary);
+            font-size: 1.2rem;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-content::after {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .project-category {
@@ -1204,8 +1456,23 @@
             }
         }
 
+        @media (max-width: 768px) {
+            .tech-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: var(--space-4);
+            }
+            
+            .tech-category {
+                padding: var(--space-4);
+            }
+        }
+
         @media (max-width: 480px) {
             .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tech-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -1223,6 +1490,7 @@
                     <ul class="nav-links">
                         <li><a href="#home" class="active">Home</a></li>
                         <li><a href="#about">About</a></li>
+                        <li><a href="#technologies">Technologies</a></li>
                         <li><a href="#skills">Skills</a></li>
                         <li><a href="#projects">Projects</a></li>
                         <li><a href="#contact">Contact</a></li>
@@ -1329,46 +1597,77 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="skill-category">
-                            <h3>Technologies</h3>
-                            <div class="skill-tags">
-                                <!--h3>Programming Languages & Frameworks</h3-->
-                                <span class="skill-tag">Python</span>
-                                <span class="skill-tag">Flutter</span>
-                                <span class="skill-tag">Tkinter</span>
-                                <span class="skill-tag">Streamlit</span>
 
-                                <!--h3>Machine Learning & AI Frameworks</h3-->
-                                <span class="skill-tag">PyTorch</span>
-                                <span class="skill-tag">Keras</span>
-                                <span class="skill-tag">LangChain</span>
-                                <span class="skill-tag">LangGraph</span>
-                                <span class="skill-tag">Hugging Face</span>
-
-                                <!--h3>Workflow Automation & Integration</h3-->
-                                <span class="skill-tag">n8n</span>
-                                <span class="skill-tag">Supabase</span>
-                                <span class="skill-tag">Mistral OCR</span>
-
-                                <!--h3>Generative AI & Vision Models</h3-->
-                                <span class="skill-tag">Retrieval-Augmented Generation (RAG)</span>
-                                <span class="skill-tag">Multi-Agent Systems</span>
-                                <span class="skill-tag">Stable Diffusion</span>
-                                <span class="skill-tag">ControlNet</span>
-                                <span class="skill-tag">YOLO</span>
-
-                                <!--h3>APIs & Platforms</h3-->
-                                <span class="skill-tag">OpenAI API</span>
-                                <span class="skill-tag">Google Gemini API</span>
-                                <span class="skill-tag">Google AI Studio</span>
-                                <span class="skill-tag">Ollama API</span>
-                                <span class="skill-tag">FastMCP</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </section>
+
+    <!-- Technologies Section -->
+    <section id="technologies" class="technologies">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Technology Stacks</h2>
+            <div class="tech-grid">
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="100">
+                    <div class="tech-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Programming & Frameworks</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Flutter</span>
+                        <span class="tech-tag">Tkinter</span>
+                        <span class="tech-tag">Streamlit</span>
+                        <span class="tech-tag">PyTorch</span>
+                        <span class="tech-tag">Keras</span>
+                        <span class="tech-tag">LangChain</span>
+                        <span class="tech-tag">LangGraph</span>
+                        <span class="tech-tag">Hugging Face</span>
+                    </div>
+                </div>
+                
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tech-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Automation & Integration</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">n8n</span>
+                        <span class="tech-tag">Supabase</span>
+                        <span class="tech-tag">Mistral OCR</span>
+                        <span class="tech-tag">FastMCP</span>
+                    </div>
+                </div>
+                
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tech-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Generative AI & Vision</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Multi-Agent Systems</span>
+                        <span class="tech-tag">Stable Diffusion</span>
+                        <span class="tech-tag">ControlNet</span>
+                        <span class="tech-tag">YOLO</span>
+                        <span class="tech-tag">RAG</span>
+                    </div>
+                </div>
+                
+                <div class="tech-category" data-aos="fade-up" data-aos-delay="400">
+                    <div class="tech-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>APIs & Platforms</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">OpenAI API</span>
+                        <span class="tech-tag">Google Gemini API</span>
+                        <span class="tech-tag">Google AI Studio</span>
+                        <span class="tech-tag">Ollama API</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Skills Section -->
     <section id="skills" class="skills">
@@ -1728,37 +2027,50 @@
                 skillObserver.observe(bar);
             });
 
-            // Enhanced project card animations
+            // Professional project card animations
             const projectCards = document.querySelectorAll('.project-card');
             projectCards.forEach((card, index) => {
-                // Staggered entrance animation
-                card.style.animationDelay = `${index * 0.1}s`;
+                // Clean staggered entrance animation
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
                 
-                // Enhanced hover effects with mousemove tracking
-                card.addEventListener('mousemove', function(e) {
-                    const rect = this.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / 10;
-                    const rotateY = (centerX - x) / 10;
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                    card.style.transition = 'all 0.6s ease';
+                }, index * 200 + 300);
+
+                // Snappy fade-away animation
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
                     
-                    this.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = '';
+                    // Prevent multiple clicks during animation
+                    if (this.classList.contains('clicking')) return;
+                    
+                    // Add clicking class for fade-away animation
+                    this.classList.add('clicking');
+                    
+                    // Navigate after fade-away completes
+                    setTimeout(() => {
+                        if (this.href) {
+                            window.location.href = this.href;
+                        }
+                    }, 280);
                 });
             });
 
-            // Parallax effect for floating shapes
-            const floatingShapes = document.querySelectorAll('.floating-shape');
+            // Parallax effect for tech elements
+            const techElements = document.querySelectorAll('.floating-shape');
             window.addEventListener('scroll', () => {
                 const scrolled = window.pageYOffset;
-                floatingShapes.forEach((shape, index) => {
-                    const speed = 0.5 + (index * 0.2);
-                    shape.style.transform = `translateY(${scrolled * speed}px)`;
+                techElements.forEach((element, index) => {
+                    const speed = 0.3 + (index * 0.15);
+                    const currentTransform = window.getComputedStyle(element).transform;
+                    if (currentTransform && currentTransform !== 'none') {
+                        element.style.transform = `${currentTransform} translateZ(${scrolled * speed * 0.1}px)`;
+                    } else {
+                        element.style.transform = `translateY(${scrolled * speed}px)`;
+                    }
                 });
             });
 
@@ -1792,7 +2104,7 @@
                 revealObserver.observe(section);
             });
 
-            console.log('🚀 Enhanced dynamic portfolio website initialized successfully!');
+            console.log('🚀 Portfolio website with smooth animations initialized successfully!');
         });
     </script>
 </body>
