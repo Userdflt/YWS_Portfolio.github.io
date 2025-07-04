@@ -19,41 +19,38 @@
     
     <!-- Custom Styles -->
     <style>
-        /* Base Styles - Dark Mode */
+        /* Base Styles - Light Mode */
         :root {
-            /* Dark Mode Colors */
-            --color-primary: #00d4aa;
-            --color-primary-dark: #00b894;
-            --color-secondary: #6c5ce7;
-            --color-accent: #4361ee;
-            --color-warning: #fdcb6e;
-            --color-success: #00b894;
-            --color-error: #e84393;
+            /* Light Mode Colors */
+            --color-primary: #3b82f6;
+            --color-primary-dark: #2563eb;
+            --color-secondary: #8b5cf6;
+            --color-accent: #f59e0b;
+            --color-warning: #1e40af;
+            --color-success: #10b981;
+            --color-error: #ef4444;
             
             /* Background Colors */
-            --color-background: #0a0a0a;
-            --color-background-alt: #111111;
-            --color-background-card: #1a1a1a;
-            --color-background-elevated: #222222;
+            --color-background: #ffffff;
+            --color-background-alt: #f8fafc;
+            --color-background-card: #ffffff;
+            --color-background-elevated: #f1f5f9;
             
             /* Text Colors */
-            --color-text: #ffffff;
-            --color-text-secondary: #b3b3b3;
-            --color-text-muted: #666666;
-            --color-text-inverse: #000000;
+            --color-text: #1a202c;
+            --color-text-secondary: #4a5568;
+            --color-text-muted: #a0aec0;
+            --color-text-inverse: #ffffff;
             
             /* Border Colors */
-            --color-border: #333333;
-            --color-border-light: #444444;
+            --color-border: #e2e8f0;
+            --color-border-light: #f1f5f9;
             --color-border-focus: var(--color-primary);
             
             /* Gradient Colors */
-            --gradient-primary: linear-gradient(135deg, #00d4aa 0%, #6c5ce7 100%);
-            --gradient-secondary: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
-            --gradient-tertiary: linear-gradient(135deg, #fdcb6e 0%, #6c5ce7 100%);
-            --gradient-quaternary: linear-gradient(135deg, #e84393 0%, #6c5ce7 100%);
-            --gradient-flutter: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
-            --gradient-dark: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --gradient-secondary: linear-gradient(135deg, #10b981 0%, #f59e0b 100%);
+            --gradient-tech: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
             
             /* Typography */
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -71,18 +68,16 @@
             
             /* Transitions */
             --transition-fast: 0.15s ease;
-            --transition-normal: 0.3s ease;
-            --transition-slow: 0.5s ease;
+            --transition-normal: 0.2s ease;
+            --transition-slow: 0.3s ease;
             
-            /* Shadows - Dark Mode */
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
-            --shadow-glow: 0 0 20px rgba(0, 212, 170, 0.3);
-            --shadow-glow-hover: 0 0 30px rgba(0, 212, 170, 0.5);
-            --shadow-glow-flutter: 0 0 20px rgba(67, 97, 238, 0.3);
-            --shadow-glow-flutter-hover: 0 0 30px rgba(67, 97, 238, 0.5);
+            /* Shadows - Light Mode */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15);
+            --shadow-glow-hover: 0 0 30px rgba(59, 130, 246, 0.25);
             
             /* Border Radius */
             --radius-sm: 0.25rem;
@@ -91,9 +86,9 @@
             --radius-xl: 1.5rem;
             --radius-full: 9999px;
             
-            /* Glass Effect */
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            /* Glass Effect - Light Mode */
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(226, 232, 240, 0.8);
             --glass-backdrop: blur(10px);
         }
 
@@ -202,7 +197,7 @@
             display: inline-block;
             margin-bottom: var(--space-8);
             font-size: 2.25rem;
-            background: var(--gradient-flutter);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -215,7 +210,7 @@
             left: 0;
             width: 60px;
             height: 4px;
-            background: var(--gradient-flutter);
+            background: var(--gradient-primary);
             border-radius: var(--radius-full);
         }
 
@@ -254,14 +249,14 @@
 
         .btn-primary {
             background: var(--gradient-primary);
-            color: var(--color-text);
+            color: var(--color-text-inverse);
             box-shadow: var(--shadow-glow);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-glow-hover);
-            color: var(--color-text);
+            color: var(--color-text-inverse);
         }
 
         .btn-secondary {
@@ -275,18 +270,18 @@
             border-color: var(--color-accent);
             color: var(--color-accent);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-glow-flutter);
+            box-shadow: var(--shadow-glow);
         }
 
         .btn-flutter {
-            background: var(--gradient-flutter);
+            background: var(--gradient-primary);
             color: var(--color-text);
-            box-shadow: var(--shadow-glow-flutter);
+            box-shadow: var(--shadow-glow);
         }
 
         .btn-flutter:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-glow-flutter-hover);
+            box-shadow: var(--shadow-glow-hover);
             color: var(--color-text);
         }
 
@@ -304,7 +299,7 @@
         }
 
         .header.scrolled {
-            background: rgba(10, 10, 10, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             box-shadow: var(--shadow-lg);
         }
 
@@ -364,7 +359,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--gradient-flutter);
+            background: var(--gradient-primary);
             transition: width var(--transition-normal);
         }
 
@@ -471,7 +466,7 @@
         .project-title {
             font-size: 3rem;
             margin-bottom: var(--space-5);
-            background: var(--gradient-flutter);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -499,14 +494,14 @@
         .coming-soon-badge {
             display: inline-flex;
             align-items: center;
-            background: var(--gradient-flutter);
-            color: var(--color-text);
+            background: var(--gradient-primary);
+            color: var(--color-text-inverse);
             padding: var(--space-2) var(--space-4);
             border-radius: var(--radius-full);
             font-weight: 600;
             font-size: 0.875rem;
             margin-bottom: var(--space-4);
-            box-shadow: var(--shadow-glow-flutter);
+            box-shadow: var(--shadow-glow);
             text-transform: uppercase;
             letter-spacing: 1px;
             gap: var(--space-2);
@@ -603,7 +598,7 @@
 
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-glow-flutter);
+            box-shadow: var(--shadow-glow);
             border-color: var(--color-accent);
         }
 
@@ -614,11 +609,11 @@
             width: 60px;
             height: 60px;
             border-radius: var(--radius-full);
-            background: var(--gradient-flutter);
+            background: var(--gradient-primary);
             color: var(--color-text-inverse);
             font-size: 1.5rem;
             margin-bottom: var(--space-4);
-            box-shadow: var(--shadow-glow-flutter);
+            box-shadow: var(--shadow-glow);
         }
 
         .feature-card h3 {
@@ -648,7 +643,7 @@
             bottom: 0;
             left: 50%;
             width: 2px;
-            background: var(--gradient-flutter);
+            background: var(--gradient-primary);
             transform: translateX(-50%);
         }
 
@@ -675,7 +670,7 @@
 
         .timeline-content:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-glow-flutter);
+            box-shadow: var(--shadow-glow);
             border-color: var(--color-accent);
         }
 
@@ -699,13 +694,13 @@
             transform: translateY(-50%);
             width: 120px;
             padding: var(--space-2) var(--space-3);
-            background: var(--gradient-flutter);
+            background: var(--gradient-primary);
             color: var(--color-text);
             border-radius: var(--radius-full);
             text-align: center;
             font-weight: 600;
             font-size: 0.875rem;
-            box-shadow: var(--shadow-glow-flutter);
+            box-shadow: var(--shadow-glow);
         }
 
         .timeline-item:nth-child(odd) .timeline-date {
@@ -724,8 +719,8 @@
             width: 20px;
             height: 20px;
             border-radius: var(--radius-full);
-            background: var(--gradient-flutter);
-            box-shadow: var(--shadow-glow-flutter);
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-glow);
         }
 
         .timeline-title {
@@ -785,7 +780,7 @@
         .form-input:focus {
             outline: none;
             border-color: var(--color-accent);
-            box-shadow: var(--shadow-glow-flutter);
+            box-shadow: var(--shadow-glow);
         }
 
         .form-input::placeholder {
@@ -1370,7 +1365,7 @@
             timelineContents.forEach(content => {
                 content.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-5px)';
-                    this.style.boxShadow = 'var(--shadow-glow-flutter)';
+                    this.style.boxShadow = 'var(--shadow-glow)';
                     this.style.borderColor = 'var(--color-accent)';
                 });
                 
