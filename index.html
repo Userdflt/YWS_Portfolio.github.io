@@ -14,8 +14,7 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Removed AOS Animation Library to prevent animation conflicts -->
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/main-styles.css">
@@ -66,11 +65,11 @@
         
         <div class="container">
             <div class="hero-content">
-                <div class="hero-text" data-aos="fade-up" data-aos-delay="400">
-                    <div class="hero-greeting" data-aos="fade-up" data-aos-delay="500">Hello, I'm Young Woo Song</div>
-                    <h1 class="hero-title" data-aos="fade-up" data-aos-delay="600">Generative AI Professional</h1>
-                    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="700">Passionate about exploring, learning, and implementing new and advanced technologies to design intelligent systems that streamline workflows, solve complex problems, and deliver meaningful impact.</p>
-                    <div class="hero-buttons" data-aos="fade-up" data-aos-delay="800">
+                <div class="hero-text">
+                    <div class="hero-greeting">Hello, I'm Young Woo Song</div>
+                    <h1 class="hero-title">Generative AI Professional</h1>
+                    <p class="hero-subtitle">Passionate about exploring, learning, and implementing new and advanced technologies to design intelligent systems that streamline workflows, solve complex problems, and deliver meaningful impact.</p>
+                    <div class="hero-buttons">
                         <a href="#projects" class="btn btn-primary">
                             <i class="fas fa-rocket"></i>
                             <span>View Projects</span>
@@ -81,7 +80,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="hero-image" data-aos="fade-up" data-aos-delay="400">
+                <div class="hero-image">
                     <img src="images/me_light.png" alt="Young Woo Song" />
                 </div>
             </div>
@@ -92,7 +91,7 @@
         <section id="about" class="about">
             <div class="container">
                 <div class="about-content">
-                    <div class="about-text" data-aos="fade-right">
+                    <div class="about-text">
                         <h2 class="section-title">About Me</h2>
                         <p>I offer structured problem-solving, analytical thinking, and attention to detail to AI-driven applications. Having completed both the AUT-accredited Data Science and AI Certification (Institute of Data) and IBM's AI and Generative AI Engineering Professional Certificates, I have hands-on experience in implementing AI solutions.</p>
                         
@@ -105,7 +104,7 @@
                         
                         <p>I am seeking an entry-level or junior AI/GenAI opportunity to help solve real-world challenges and contribute to impactful projects.</p>
                     </div>
-                    <div class="about-skills" data-aos="fade-left">
+                    <div class="about-skills">
                         <div class="skill-category">
                             <h3>AI & Machine Learning</h3>
                             <div class="skill-bars">
@@ -148,9 +147,9 @@
     <!-- Technologies Section -->
     <section id="technologies" class="technologies">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Technology Stacks</h2>
+            <h2 class="section-title">Technology Stacks</h2>
             <div class="tech-grid">
-                <div class="tech-category" data-aos="fade-up" data-aos-delay="100">
+                <div class="tech-category">
                     <div class="tech-icon">
                         <i class="fas fa-code"></i>
                     </div>
@@ -168,7 +167,7 @@
                     </div>
                 </div>
                 
-                <div class="tech-category" data-aos="fade-up" data-aos-delay="200">
+                <div class="tech-category">
                     <div class="tech-icon">
                         <i class="fas fa-cogs"></i>
                     </div>
@@ -181,7 +180,7 @@
                     </div>
                 </div>
                 
-                <div class="tech-category" data-aos="fade-up" data-aos-delay="300">
+                <div class="tech-category">
                     <div class="tech-icon">
                         <i class="fas fa-brain"></i>
                     </div>
@@ -195,7 +194,7 @@
                     </div>
                 </div>
                 
-                <div class="tech-category" data-aos="fade-up" data-aos-delay="400">
+                <div class="tech-category">
                     <div class="tech-icon">
                         <i class="fas fa-cloud"></i>
                     </div>
@@ -218,7 +217,7 @@
         <div class="skills-grid">
 
         <!-- Machine Learning -->
-        <div class="skill-category" data-aos="fade-up">
+        <div class="skill-category">
             <div class="skill-icon">
             <i class="fas fa-brain"></i>
             </div>
@@ -235,7 +234,7 @@
         </div>
 
         <!-- Data & Cloud -->
-        <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+        <div class="skill-category">
             <div class="skill-icon">
             <i class="fas fa-database"></i>
             </div>
@@ -251,7 +250,7 @@
         </div>
 
         <!-- AI Tools & Frameworks -->
-        <div class="skill-category" data-aos="fade-up" data-aos-delay="300">
+        <div class="skill-category">
             <div class="skill-icon">
             <i class="fas fa-cogs"></i>
             </div>
@@ -280,7 +279,7 @@
             <h2 class="section-title">Featured Projects</h2>
             
             <!-- Project Filters -->
-            <div class="project-filters" data-aos="fade-up">
+            <div class="project-filters">
                 <button class="filter-btn active" data-filter="all"><span>All</span></button>
                 <button class="filter-btn" data-filter="ai-rag"><span>AI & RAG</span></button>
                 <button class="filter-btn" data-filter="computer-vision"><span>Computer Vision</span></button>
@@ -290,7 +289,7 @@
             
             <div class="projects-grid">
                 <!-- Priority AI/RAG Projects -->
-                <a href="projects/n8n_rag.html" class="project-card" data-category="ai-rag" data-aos="fade-up" data-aos-delay="50">
+                <a href="projects/n8n_rag.html" class="project-card" data-category="ai-rag">
                     <div class="project-image">
                         <img src="images/n8n.png" alt="n8n Multi-Agent RAG System" />
                     </div>
@@ -309,7 +308,7 @@
                     </div>
                 </a>
 
-                <a href="projects/notion_mcp.html" class="project-card" data-category="ai-rag" data-aos="fade-up" data-aos-delay="100">
+                <a href="projects/notion_mcp.html" class="project-card" data-category="ai-rag">
                     <div class="project-image">
                         <img src="images/mcp_logo.png" alt="Notion MCP Agent" />
                     </div>
@@ -329,7 +328,7 @@
                     </div>
                 </a>
 
-                <a href="projects/stablediffusion.html" class="project-card" data-category="computer-vision" data-aos="fade-up" data-aos-delay="150">
+                <a href="projects/stablediffusion.html" class="project-card" data-category="computer-vision">
                     <div class="project-image">
                         <img src="images/stable_sketch.png" alt="GenAI Image Generation" />
                     </div>
@@ -347,7 +346,7 @@
                     </div>
                 </a>
 
-                <a href="projects/vision_model.html" class="project-card" data-category="ai-rag" data-aos="fade-up" data-aos-delay="200">
+                <a href="projects/vision_model.html" class="project-card" data-category="ai-rag">
                     <div class="project-image">
                         <img src="images/building_code.png" alt="Vision Model RAG" />
                     </div>
@@ -366,7 +365,7 @@
                     </div>
                 </a>
 
-                <a href="projects/llm.html" class="project-card" data-category="ai-rag" data-aos="fade-up" data-aos-delay="250">
+                <a href="projects/llm.html" class="project-card" data-category="ai-rag">
                     <div class="project-image">
                         <img src="images/LLM.png" alt="LLM RAG System" />
                     </div>
@@ -382,7 +381,7 @@
                     </div>
                 </a>
 
-                <a href="projects/cv.html" class="project-card" data-category="computer-vision" data-aos="fade-up" data-aos-delay="300">
+                <a href="projects/cv.html" class="project-card" data-category="computer-vision">
                     <div class="project-image">
                         <img src="images/cv.png" alt="Computer Vision Safety" />
                     </div>
@@ -400,7 +399,7 @@
                     </div>
                 </a>
 
-                <a href="projects/coming_soon.html" class="project-card" data-category="app-development" data-aos="fade-up" data-aos-delay="350">
+                <a href="projects/coming_soon.html" class="project-card" data-category="app-development">
                     <div class="project-image">
                         <img src="images/comingsoon.png" alt="CodeVision Flutter App" />
                     </div>
@@ -420,7 +419,7 @@
                 </a>
 
                 <!-- Data Science & Analytics Projects -->
-                <a href="projects/youtube-analytics.html" class="project-card" data-category="data-science" data-aos="fade-up" data-aos-delay="400">
+                <a href="projects/youtube-analytics.html" class="project-card" data-category="data-science">
                     <div class="project-image">
                         <img src="images/youtube_analytics.png" alt="YouTube Analytics" />
                     </div>
@@ -440,7 +439,7 @@
                 </a>
 
                 <!-- Data Science & ML Projects -->
-                <a href="projects/nasa-outgassing.html" class="project-card" data-category="data-science" data-aos="fade-up" data-aos-delay="450">
+                <a href="projects/nasa-outgassing.html" class="project-card" data-category="data-science">
                     <div class="project-image">
                         <img src="images/nasa_outgassing.png" alt="NASA Outgassing Analysis" />
                     </div>
@@ -459,7 +458,7 @@
                     </div>
                 </a>
 
-                <a href="projects/ai-detection.html" class="project-card" data-category="data-science" data-aos="fade-up" data-aos-delay="500">
+                <a href="projects/ai-detection.html" class="project-card" data-category="data-science">
                     <div class="project-image">
                         <img src="images/ai_detection.png" alt="AI Content Detection" />
                     </div>
@@ -478,7 +477,7 @@
                     </div>
                 </a>
 
-                <a href="projects/wind-energy.html" class="project-card" data-category="data-science" data-aos="fade-up" data-aos-delay="550">
+                <a href="projects/wind-energy.html" class="project-card" data-category="data-science">
                     <div class="project-image">
                         <img src="images/wind_energy.png" alt="Wind Energy Prediction" />
                     </div>
@@ -546,7 +545,6 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="js/main-scripts.js"></script>
 </body>
 </html>

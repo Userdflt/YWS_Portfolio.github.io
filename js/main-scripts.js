@@ -1,13 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize AOS
-    if (typeof AOS !== 'undefined') {
-        AOS.init({
-            duration: 800,
-            easing: 'ease-out-cubic',
-            once: true,
-            offset: 100
-        });
-    }
+    // Removed AOS animations to prevent conflicts
 
     // Mobile Menu Toggle
     const mobileToggle = document.querySelector('.mobile-toggle');
@@ -103,25 +95,16 @@ document.addEventListener('DOMContentLoaded', function() {
         skillObserver.observe(bar);
     });
 
-    // Professional project card click animation
+    // Simple project card click navigation
     const projectCards = document.querySelectorAll('.project-card');
     projectCards.forEach((card, index) => {
-        // Snappy fade-away animation
+        // Direct navigation without animation
         card.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Prevent multiple clicks during animation
-            if (this.classList.contains('clicking')) return;
-            
-            // Add clicking class for fade-away animation
-            this.classList.add('clicking');
-            
-            // Navigate after fade-away completes
-            setTimeout(() => {
-                if (this.href) {
-                    window.location.href = this.href;
-                }
-            }, 280);
+            if (this.href) {
+                window.location.href = this.href;
+            }
         });
     });
 
@@ -152,53 +135,30 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Smooth reveal animation for sections
-    const revealSections = document.querySelectorAll('section');
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, { threshold: 0.1 });
+    // Removed smooth reveal animations for sections
 
-    revealSections.forEach(section => {
-        section.style.opacity = '0';
-        section.style.transform = 'translateY(30px)';
-        section.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-        revealObserver.observe(section);
-    });
-
-    // Project Filtering System
+    // Simple Project Filtering System (No Animations)
     const filterButtons = document.querySelectorAll('.filter-btn');
     const filterableCards = document.querySelectorAll('.project-card');
     
     if (filterButtons.length > 0 && filterableCards.length > 0) {
         console.log(`Found ${filterButtons.length} filter buttons and ${filterableCards.length} project cards`);
         
-        // Initialize all cards as visible and reset any animation classes
-        filterableCards.forEach((card, index) => {
-            // Clean up all animation classes
-            card.classList.remove('fade-out', 'hidden', 'initial-hidden', 'initial-visible');
-            card.classList.add('fade-in');
+        // Initialize all cards as visible - clean and simple
+        filterableCards.forEach((card) => {
+            // Remove all animation classes
+            card.classList.remove('fade-out', 'fade-in', 'hidden', 'initial-hidden', 'initial-visible', 'clicking');
             
-            // Set proper display and visibility
+            // Set all cards to visible
             card.style.display = 'block';
             card.style.opacity = '1';
             card.style.visibility = 'visible';
-            
-            // Add staggered entrance animation
-            card.style.animationDelay = `${index * 0.1}s`;
+            card.style.removeProperty('animation-delay');
         });
         
-        // Ensure "All" button is active by default
+        // Set "All" button as active by default
         filterButtons.forEach(btn => {
             btn.classList.remove('active');
-            btn.style.removeProperty('color');
-            btn.style.removeProperty('border-color');
-            btn.style.removeProperty('transform');
-            btn.style.removeProperty('box-shadow');
         });
         
         const allButton = document.querySelector('.filter-btn[data-filter="all"]');
@@ -206,26 +166,22 @@ document.addEventListener('DOMContentLoaded', function() {
             allButton.classList.add('active');
         }
         
+        // Add click handlers to filter buttons
         filterButtons.forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 const filter = this.getAttribute('data-filter');
                 console.log(`Filter clicked: ${filter}`);
                 
-                // Update active button with explicit removal
+                // Update active button
                 filterButtons.forEach(btn => {
                     btn.classList.remove('active');
-                    btn.style.removeProperty('color');
-                    btn.style.removeProperty('border-color');
-                    btn.style.removeProperty('transform');
-                    btn.style.removeProperty('box-shadow');
                 });
                 
-                // Add active class to clicked button
                 this.classList.add('active');
                 console.log(`Active button set to: ${this.textContent}`);
                 
-                // Filter projects with smooth animation
+                // Filter projects immediately
                 filterProjects(filter);
             });
         });
@@ -235,29 +191,21 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(`Filtering projects by category: ${category}`);
         let visibleCount = 0;
         
-        filterableCards.forEach((card, index) => {
+        filterableCards.forEach((card) => {
             const cardCategory = card.getAttribute('data-category');
             const shouldShow = category === 'all' || cardCategory === category;
             
             if (shouldShow) {
                 visibleCount++;
-                // Show card with staggered animation
-                card.classList.remove('fade-out', 'hidden');
+                // Show card immediately
                 card.style.display = 'block';
+                card.style.opacity = '1';
                 card.style.visibility = 'visible';
-                setTimeout(() => {
-                    card.classList.add('fade-in');
-                    card.style.opacity = '1';
-                }, index * 50);
             } else {
-                // Hide card
-                card.classList.remove('fade-in');
-                card.classList.add('fade-out');
-                setTimeout(() => {
-                    card.classList.add('hidden');
-                    card.style.display = 'none';
-                    card.style.opacity = '0';
-                }, 300);
+                // Hide card immediately
+                card.style.display = 'none';
+                card.style.opacity = '0';
+                card.style.visibility = 'hidden';
             }
         });
         
