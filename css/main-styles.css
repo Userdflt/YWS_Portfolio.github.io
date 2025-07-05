@@ -829,61 +829,13 @@ p {
     background-color: var(--color-background-alt);
 }
 
-.project-filters {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-8);
-}
-
-.filter-btn {
-    padding: var(--space-2) var(--space-4);
-    border: 2px solid var(--color-border);
-    background: var(--glass-bg);
-    color: var(--color-text-secondary);
-    border-radius: var(--radius-full);
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-normal);
-}
-
-.filter-btn:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-glow);
-}
-
-.filter-btn.active {
-    background: var(--gradient-primary);
-    border-color: var(--color-primary);
-    color: var(--color-text-inverse);
-    box-shadow: var(--shadow-glow);
-}
-
 .projects-grid {
     display: grid;
-    /* FIXED: 3-column layout with controlled max width */
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     justify-content: center;
-    gap: var(--space-6);
-    /* ENHANCED: GPU acceleration and stability for ultra-smooth filtering */
-    transform: translate3d(0, 0, 0);
-    will-change: min-height;
-    min-height: 400px;
+    gap: var(--space-4); /* IMPROVED: Better spacing - 1rem instead of 2rem */
     align-items: stretch;
-    /* Ultra-smooth grid adjustments during filtering */
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-/* OPTIMIZED: Ultra-smooth grid behavior during filtering */
-.projects-grid.filtering {
-    /* Slightly increased min-height during filtering to prevent layout jumps */
-    min-height: 450px;
-    /* Enhanced stability during transitions */
-    transform: translate3d(0, 0, 0) scale(1);
+    margin-top: var(--space-6);
 }
 
 .project-card {
@@ -891,31 +843,27 @@ p {
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     color: inherit;
     position: relative;
     cursor: pointer;
-    /* OPTIMIZED: Enhanced performance for smooth filtering animations */
-    will-change: transform, opacity, box-shadow;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden; /* Prevent flickering during animations */
     
-    /* FIXED: Consistent sizing - prevent oversized single cards */
     height: 480px;
     width: 100%;
-    max-width: 400px; /* FIXED: Prevent cards from getting too wide */
-    min-width: 300px; /* Minimum width for consistency */
+    max-width: 400px;
+    min-width: 300px;
     display: flex;
     flex-direction: column;
-    
-    /* Default state for smooth filtering */
-    opacity: 1;
-    visibility: visible;
-    transform: translate3d(0, 0, 0) scale(1);
 }
 
-/* REMOVED: Replaced with optimized hover state below to prevent conflicts */
+.project-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 20px rgba(59, 130, 246, 0.1);
+    border-color: var(--color-primary);
+}
 
 .project-card:hover .project-image img {
     transform: scale(1.05);
@@ -929,80 +877,6 @@ p {
 .project-card:active {
     transform: translateY(-4px) scale(0.98);
     transition: all 0.05s ease;
-}
-
-/* OPTIMIZED: Smooth two-phase filtering animation system */
-
-/* SEAMLESS FILTERING: No reordering animation - smooth fade out/in only */
-
-/* Phase 1: Fade out ALL cards (prevents seeing reordering) */
-.project-card.global-fade-out {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) scale(0.98);
-    pointer-events: none;
-    transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Phase 2: Hidden cards are removed from layout (no animation visible) */
-.project-card.filtered-out {
-    display: none !important;
-    /* Completely remove from grid flow - happens while all cards are invisible */
-}
-
-/* Phase 3: Prepare filtered cards for fade-in (invisible but positioned) */
-.project-card.prepare-fade-in {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) scale(0.95);
-    pointer-events: none;
-    transition: none; /* No transition for positioning */
-}
-
-/* Phase 4: Smooth fade-in of remaining cards */
-.project-card.filtered-in {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-    pointer-events: auto;
-    transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
-                transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-/* Legacy classes for compatibility */
-.project-card.filtering-out {
-    opacity: 0;
-    transform: translate3d(0, -5px, 0) scale(0.96);
-    pointer-events: none;
-    transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.project-card.filtering-in {
-    opacity: 0;
-    transform: translate3d(0, 5px, 0) scale(0.94);
-    pointer-events: none;
-    transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
-                transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-/* ACCESSIBILITY: Faster animations for users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-    .project-card.global-fade-out,
-    .project-card.filtering-out,
-    .project-card.filtering-in,
-    .project-card.filtered-in {
-        transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-}
-
-/* Optimized hover states that don't conflict with filtering */
-.project-card:not(.filtering-out):not(.filtering-in):hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.1),
-        0 0 20px rgba(59, 130, 246, 0.1);
-    border-color: var(--color-primary);
-    /* Ultra-smooth hover transition */
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .project-card.initial-hidden {
@@ -1225,16 +1099,15 @@ p {
     }
 
     .projects-grid {
-        /* FIXED: Maintain 2-3 columns on tablet */
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: var(--space-5);
+        gap: var(--space-3); /* Smaller gap for tablet */
         justify-content: center;
     }
 
     .project-card {
-        height: 480px; /* FIXED: Consistent height across all breakpoints */
-        max-width: 380px; /* FIXED: Prevent oversized cards on tablet */
-        min-width: 300px; /* Maintain consistency */
+        height: 480px;
+        max-width: 380px;
+        min-width: 300px;
     }
 }
 
@@ -1312,29 +1185,18 @@ p {
     }
 
     .projects-grid {
-        /* FIXED: Single column layout on mobile with consistent sizing */
         grid-template-columns: 1fr;
         max-width: 100%;
         margin: 0 auto;
-        min-height: 200px;
         padding: 0 var(--space-4);
-    }
-
-    .project-filters {
-        gap: var(--space-2);
-        margin-bottom: var(--space-6);
-    }
-
-    .filter-btn {
-        font-size: 0.8rem;
-        padding: var(--space-2) var(--space-3);
+        gap: var(--space-3); /* Consistent gap for mobile */
     }
 
     .project-card {
-        height: 480px; /* FIXED: Consistent height across all breakpoints */
-        width: 100%; /* FIXED: Full width on mobile within container */
-        max-width: 360px; /* FIXED: Prevent oversized cards on mobile */
-        min-width: 280px; /* Slightly smaller min for mobile */
+        height: 480px;
+        width: 100%;
+        max-width: 360px;
+        min-width: 280px;
     }
 }
 
