@@ -279,9 +279,18 @@
         <div class="container">
             <h2 class="section-title">Featured Projects</h2>
             
+            <!-- Project Filters -->
+            <div class="project-filters" data-aos="fade-up">
+                <button class="filter-btn active" data-filter="all"><span>All</span></button>
+                <button class="filter-btn" data-filter="ai-rag"><span>AI & RAG</span></button>
+                <button class="filter-btn" data-filter="computer-vision"><span>Computer Vision</span></button>
+                <button class="filter-btn" data-filter="data-science"><span>Data Science</span></button>
+                <button class="filter-btn" data-filter="app-development"><span>App Development</span></button>
+            </div>
+            
             <div class="projects-grid">
                 <!-- Priority AI/RAG Projects -->
-                <a href="projects/n8n_rag.html" class="project-card" data-aos="fade-up" data-aos-delay="50">
+                <a href="projects/n8n_rag.html" class="project-card" data-category="ai-rag" data-aos="fade-up" data-aos-delay="50">
                     <div class="project-image">
                         <img src="images/n8n.png" alt="n8n Multi-Agent RAG System" />
                     </div>
@@ -300,7 +309,7 @@
                     </div>
                 </a>
 
-                <a href="projects/notion_mcp.html" class="project-card" data-aos="fade-up" data-aos-delay="100">
+                <a href="projects/notion_mcp.html" class="project-card" data-category="ai-rag" data-aos="fade-up" data-aos-delay="100">
                     <div class="project-image">
                         <img src="images/mcp_logo.png" alt="Notion MCP Agent" />
                     </div>
@@ -320,7 +329,7 @@
                     </div>
                 </a>
 
-                <a href="projects/stablediffusion.html" class="project-card" data-aos="fade-up" data-aos-delay="150">
+                <a href="projects/stablediffusion.html" class="project-card" data-category="computer-vision" data-aos="fade-up" data-aos-delay="150">
                     <div class="project-image">
                         <img src="images/stable_sketch.png" alt="GenAI Image Generation" />
                     </div>
@@ -338,7 +347,7 @@
                     </div>
                 </a>
 
-                <a href="projects/vision_model.html" class="project-card" data-aos="fade-up" data-aos-delay="200">
+                <a href="projects/vision_model.html" class="project-card" data-category="ai-rag" data-aos="fade-up" data-aos-delay="200">
                     <div class="project-image">
                         <img src="images/building_code.png" alt="Vision Model RAG" />
                     </div>
@@ -357,7 +366,7 @@
                     </div>
                 </a>
 
-                <a href="projects/llm.html" class="project-card" data-aos="fade-up" data-aos-delay="250">
+                <a href="projects/llm.html" class="project-card" data-category="ai-rag" data-aos="fade-up" data-aos-delay="250">
                     <div class="project-image">
                         <img src="images/LLM.png" alt="LLM RAG System" />
                     </div>
@@ -373,7 +382,7 @@
                     </div>
                 </a>
 
-                <a href="projects/cv.html" class="project-card" data-aos="fade-up" data-aos-delay="300">
+                <a href="projects/cv.html" class="project-card" data-category="computer-vision" data-aos="fade-up" data-aos-delay="300">
                     <div class="project-image">
                         <img src="images/cv.png" alt="Computer Vision Safety" />
                     </div>
@@ -391,7 +400,7 @@
                     </div>
                 </a>
 
-                <a href="projects/coming_soon.html" class="project-card" data-aos="fade-up" data-aos-delay="350">
+                <a href="projects/coming_soon.html" class="project-card" data-category="app-development" data-aos="fade-up" data-aos-delay="350">
                     <div class="project-image">
                         <img src="images/comingsoon.png" alt="CodeVision Flutter App" />
                     </div>
@@ -411,7 +420,7 @@
                 </a>
 
                 <!-- Data Science & Analytics Projects -->
-                <a href="projects/youtube-analytics.html" class="project-card" data-aos="fade-up" data-aos-delay="400">
+                <a href="projects/youtube-analytics.html" class="project-card" data-category="data-science" data-aos="fade-up" data-aos-delay="400">
                     <div class="project-image">
                         <img src="images/youtube_analytics.png" alt="YouTube Analytics" />
                     </div>
@@ -431,7 +440,7 @@
                 </a>
 
                 <!-- Data Science & ML Projects -->
-                <a href="projects/nasa-outgassing.html" class="project-card" data-aos="fade-up" data-aos-delay="450">
+                <a href="projects/nasa-outgassing.html" class="project-card" data-category="data-science" data-aos="fade-up" data-aos-delay="450">
                     <div class="project-image">
                         <img src="images/nasa_outgassing.png" alt="NASA Outgassing Analysis" />
                     </div>
@@ -450,7 +459,7 @@
                     </div>
                 </a>
 
-                <a href="projects/ai-detection.html" class="project-card" data-aos="fade-up" data-aos-delay="500">
+                <a href="projects/ai-detection.html" class="project-card" data-category="data-science" data-aos="fade-up" data-aos-delay="500">
                     <div class="project-image">
                         <img src="images/ai_detection.png" alt="AI Content Detection" />
                     </div>
@@ -469,7 +478,7 @@
                     </div>
                 </a>
 
-                <a href="projects/wind-energy.html" class="project-card" data-aos="fade-up" data-aos-delay="550">
+                <a href="projects/wind-energy.html" class="project-card" data-category="data-science" data-aos="fade-up" data-aos-delay="550">
                     <div class="project-image">
                         <img src="images/wind_energy.png" alt="Wind Energy Prediction" />
                     </div>

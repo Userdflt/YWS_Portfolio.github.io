@@ -178,6 +178,72 @@ document.addEventListener('DOMContentLoaded', function() {
         revealObserver.observe(section);
     });
 
+    // Project Filtering System
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const filterableCards = document.querySelectorAll('.project-card');
+    
+    if (filterButtons.length > 0 && filterableCards.length > 0) {
+        console.log(`Found ${filterButtons.length} filter buttons and ${filterableCards.length} project cards`);
+        
+        // Initialize all cards as visible
+        filterableCards.forEach(card => {
+            card.classList.remove('fade-out', 'hidden');
+            card.classList.add('fade-in');
+        });
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const filter = this.getAttribute('data-filter');
+                console.log(`Filter clicked: ${filter}`);
+                
+                // Update active button with explicit removal
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.style.removeProperty('color');
+                    btn.style.removeProperty('border-color');
+                    btn.style.removeProperty('transform');
+                    btn.style.removeProperty('box-shadow');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                console.log(`Active button set to: ${this.textContent}`);
+                
+                // Filter projects with smooth animation
+                filterProjects(filter);
+            });
+        });
+    }
+    
+    function filterProjects(category) {
+        console.log(`Filtering projects by category: ${category}`);
+        let visibleCount = 0;
+        
+        filterableCards.forEach((card, index) => {
+            const cardCategory = card.getAttribute('data-category');
+            const shouldShow = category === 'all' || cardCategory === category;
+            
+            if (shouldShow) {
+                visibleCount++;
+                // Show card with staggered animation
+                card.classList.remove('fade-out', 'hidden');
+                setTimeout(() => {
+                    card.classList.add('fade-in');
+                }, index * 50);
+            } else {
+                // Hide card
+                card.classList.remove('fade-in');
+                card.classList.add('fade-out');
+                setTimeout(() => {
+                    card.classList.add('hidden');
+                }, 300);
+            }
+        });
+        
+        console.log(`${visibleCount} projects will be visible`);
+    }
+
     console.log('🚀 Portfolio website initialized successfully!');
 
 
