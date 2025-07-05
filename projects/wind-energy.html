@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wind Energy Prediction - Young Woo Song</title>
+    <meta name="description" content="Machine learning system for predicting wind turbine power output using environmental data, weather patterns, and advanced regression models for renewable energy optimization">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body class="wind-energy-theme">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#data-analysis">Data Analysis</a></li>
+                        <li><a href="#modeling">Modeling</a></li>
+                        <li><a href="#optimization">Optimization</a></li>
+                        <li><a href="#technology">Technology</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">Renewable Energy & ML</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">Wind Energy Prediction</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">Advanced machine learning system for predicting wind turbine power output using comprehensive environmental data analysis. Integrates weather patterns, turbine specifications, and operational parameters to optimize renewable energy generation and support grid management decisions.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <img src="../images/wind_energy.png" alt="Wind Energy Prediction System" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Overview</h2>
+            </div>
+            <div class="section-content">
+                <p>This project develops sophisticated machine learning models to predict wind turbine power output based on comprehensive environmental and operational data. The system addresses critical challenges in renewable energy management by providing accurate forecasting capabilities that enable optimal grid integration and operational planning.</p>
+
+                <p>By analyzing complex relationships between meteorological conditions, turbine characteristics, and power generation patterns, the project contributes to improved efficiency and reliability of wind energy systems, supporting the transition to sustainable energy infrastructure.</p>
+
+                <h3>Key Objectives</h3>
+                <ul class="feature-list">
+                    <li><strong>Power Forecasting</strong> – Accurate prediction of wind turbine electrical output under varying conditions</li>
+                    <li><strong>Efficiency Optimization</strong> – Identify optimal operating parameters for maximum energy yield</li>
+                    <li><strong>Grid Integration</strong> – Support smart grid management with reliable renewable energy forecasts</li>
+                    <li><strong>Maintenance Planning</strong> – Enable predictive maintenance based on performance patterns</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Analysis Section -->
+    <section id="data-analysis" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Data Analysis Framework</h2>
+                <p>Comprehensive analysis of environmental and operational parameters</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <h3>Wind Characteristics</h3>
+                    <p>Detailed analysis of wind speed, direction, turbulence intensity, and wind shear profiles. Includes temporal variations, seasonal patterns, and correlation with geographic and topographic factors affecting turbine performance.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-thermometer-half"></i>
+                    </div>
+                    <h3>Environmental Conditions</h3>
+                    <p>Comprehensive meteorological data processing including temperature, humidity, atmospheric pressure, air density calculations, and their impact on turbine efficiency and power conversion rates.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>Turbine Parameters</h3>
+                    <p>Analysis of turbine specifications including rotor diameter, hub height, rated capacity, power curve characteristics, and operational status affecting energy conversion efficiency.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Performance Metrics</h3>
+                    <p>Evaluation of capacity factors, availability rates, power quality metrics, and efficiency indicators to establish baseline performance and identify optimization opportunities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modeling Section -->
+    <section id="modeling" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Predictive Modeling</h2>
+                <p>Advanced machine learning approaches for energy prediction</p>
+            </div>
+            <div class="architecture-grid">
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-chart-area"></i>
+                        </div>
+                        <h3 class="component-title">Regression Models</h3>
+                    </div>
+                    <p class="component-description">Sophisticated regression techniques for continuous power output prediction with high accuracy and reliability.</p>
+                    <ul class="component-features">
+                        <li>Multiple Linear Regression with feature selection</li>
+                        <li>Polynomial Regression for non-linear relationships</li>
+                        <li>Ridge and Lasso regularization techniques</li>
+                        <li>Support Vector Regression for complex patterns</li>
+                    </ul>
+                </div>
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="100">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h3 class="component-title">Ensemble Methods</h3>
+                    </div>
+                    <p class="component-description">Powerful ensemble approaches combining multiple algorithms for improved prediction accuracy and robustness.</p>
+                    <ul class="component-features">
+                        <li>Random Forest for feature importance ranking</li>
+                        <li>Gradient Boosting with XGBoost optimization</li>
+                        <li>AdaBoost for weighted ensemble learning</li>
+                        <li>Voting regressors for consensus predictions</li>
+                    </ul>
+                </div>
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="150">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="component-title">Neural Networks</h3>
+                    </div>
+                    <p class="component-description">Deep learning architectures for capturing complex non-linear relationships in wind energy data.</p>
+                    <ul class="component-features">
+                        <li>Multi-layer Perceptrons for pattern recognition</li>
+                        <li>LSTM networks for temporal sequence modeling</li>
+                        <li>CNN architectures for spatial pattern analysis</li>
+                        <li>Hybrid models combining multiple approaches</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Optimization Section -->
+    <section id="optimization" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Optimization & Applications</h2>
+            </div>
+            <div class="section-content two-column">
+                <div>
+                    <h3>Feature Engineering</h3>
+                    <ul class="feature-list">
+                        <li><strong>Wind Power Density</strong> – Calculated from wind speed and air density</li>
+                        <li><strong>Turbulence Intensity</strong> – Impact on power quality and generation</li>
+                        <li><strong>Wind Shear Coefficient</strong> – Vertical wind profile analysis</li>
+                        <li><strong>Seasonal Indicators</strong> – Temporal pattern recognition</li>
+                        <li><strong>Performance Ratios</strong> – Efficiency metrics and comparisons</li>
+                    </ul>
+                    
+                    <h3>Model Validation</h3>
+                    <ul class="feature-list">
+                        <li>Cross-validation with temporal splitting</li>
+                        <li>Performance metrics (MAE, RMSE, R²)</li>
+                        <li>Residual analysis and error distribution</li>
+                        <li>Prediction interval estimation</li>
+                        <li>Model interpretability and feature importance</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Practical Applications</h3>
+                    <ul class="feature-list">
+                        <li><strong>Energy Trading</strong> – Accurate forecasts for market participation</li>
+                        <li><strong>Grid Balancing</strong> – Real-time generation prediction</li>
+                        <li><strong>Maintenance Scheduling</strong> – Optimal downtime planning</li>
+                        <li><strong>Site Assessment</strong> – Wind resource evaluation</li>
+                        <li><strong>Performance Monitoring</strong> – Anomaly detection and alerts</li>
+                    </ul>
+                    
+                    <h3>Economic Impact</h3>
+                    <ul class="feature-list">
+                        <li>Improved capacity factor through optimization</li>
+                        <li>Reduced operational costs via predictive maintenance</li>
+                        <li>Enhanced revenue through better market strategies</li>
+                        <li>Risk mitigation in renewable energy investments</li>
+                        <li>Support for sustainable energy transition goals</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Technology Stack</h2>
+                <p>Advanced tools for renewable energy data analysis and prediction</p>
+            </div>
+            <div class="section-content two-column">
+                <div>
+                    <h3>Data Processing</h3>
+                    <ul class="feature-list">
+                        <li>Pandas - Time series data manipulation</li>
+                        <li>NumPy - Numerical computations and array operations</li>
+                        <li>SciPy - Scientific computing and statistics</li>
+                        <li>Datetime - Temporal data handling and analysis</li>
+                        <li>Pytz - Timezone-aware datetime processing</li>
+                    </ul>
+                    
+                    <h3>Machine Learning</h3>
+                    <ul class="feature-list">
+                        <li>Scikit-learn - Regression algorithms and metrics</li>
+                        <li>XGBoost - Gradient boosting framework</li>
+                        <li>TensorFlow - Deep learning and neural networks</li>
+                        <li>Keras - High-level neural network API</li>
+                        <li>GridSearchCV - Hyperparameter optimization</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Visualization</h3>
+                    <ul class="feature-list">
+                        <li>Matplotlib - Statistical plotting and charts</li>
+                        <li>Seaborn - Advanced statistical visualizations</li>
+                        <li>Plotly - Interactive time series plots</li>
+                        <li>Bokeh - Real-time dashboard creation</li>
+                        <li>Folium - Geographic wind farm mapping</li>
+                    </ul>
+                    
+                    <h3>Evaluation & Deployment</h3>
+                    <ul class="feature-list">
+                        <li>Cross-validation - Model performance assessment</li>
+                        <li>Joblib - Model serialization and deployment</li>
+                        <li>Flask - API development for predictions</li>
+                        <li>Docker - Containerized deployment</li>
+                        <li>MLflow - Experiment tracking and versioning</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/project-scripts.js"></script>
+</body>
+</html> 

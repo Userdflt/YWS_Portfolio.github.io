@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Computer Vision Safety - Young Woo Song</title>
+    <meta name="description" content="Object Detection for Safety Compliance on Construction Sites using YOLOv9 for real-time monitoring and hazard prevention">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Project Styles -->
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body class="cv-theme">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#workflow">Workflow</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#detection">Detection</a></li>
+                        <li><a href="#performance">Performance</a></li>
+                        <li><a href="#tools">Tools</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">Computer Vision & Safety AI</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">Computer Vision Safety</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">Object Detection for Safety Compliance on Construction Sites using YOLOv9
+Advanced real-time monitoring system that detects PPE compliance, identifies safety violations, and enhances site safety through fine-tuned YOLOv9 with image normalization, custom training, and ByteTrack-based video tracking integration.</p>
+                    <div class="project-links" data-aos="fade-up" data-aos-delay="700">
+                        <a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model" class="btn btn-primary">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                        
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <img src="../images/output8.png" alt="Computer Vision Safety System" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Overview</h2>
+            </div>
+            <div class="section-content">
+                <p>The Computer Vision Safety system enhances construction site monitoring by leveraging a fine-tuned YOLOv9 model. This robust solution offers real-time detection of safety compliance by identifying the presence or absence of critical personal protective equipment (PPE) such as hardhats, masks, safety vests, and spotting potential safety violations.</p>
+
+                <p>Utilizing anchor-free detection and CSPDarknet backbone architecture, the model accurately detects 10 PPE-related classes and non-compliant conditions in normalized 640×640 images. It integrates video tracking via ByteTrack to enable real-time multi-object monitoring, providing actionable insights and visual outputs to support compliance and improve on-site safety performance.</p>
+                <br>
+                <br>
+                <h3>Safety Impact</h3>
+                <ul class="feature-list">
+                    <li>Real-time detection of 10 PPE and hazard-related classes</li>
+                    <li>Fine-tuned YOLOv9 model with 70 training epochs and normalization</li>
+                    <li>Integrated ByteTrack-based video tracking for movement analysis</li>
+                    <li>Visualization and logging of inference results for auditing</li>
+                    <li>Custom safety detection pipeline using Google Drive integration</li>
+                    <li>Training metrics and loss trends exported for continuous evaluation</li>
+                    <li>Supports deployment-ready export formats such as ONNX</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="section-title">Detection Workflow</h2>
+            </div>
+            <div class="section-content two-column">
+                <div class="workflow-images">
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="200">
+                        <img src="../images/output1.png" alt="YOLOv9 Detection Pipeline" class="feature-image" />
+                    </div>
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="300">
+                        <img src="../gifs/construction_workers.gif" alt="Real-time Safety Monitoring" class="feature-image" />
+                    </div>
+                </div>
+                <div class="workflow-steps">
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="200">
+                        <h3>1. Image & Video Preprocessing</h3>
+                        <p>Images and video frames are normalized to 640×640 resolution and scaled to [0,1] range for consistent YOLOv9 inference. Preprocessing includes format checks and channel validation to ensure compatibility.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="300">
+                        <h3>2. YOLOv9 Object Detection</h3>
+                        <p>Fine-tuned YOLOv9 model detects 10 PPE-related classes, including compliant and non-compliant states. Outputs include bounding boxes, confidence scores, and class predictions with anchor-free detection.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="400">
+                        <h3>3. Tracking & Inference Analysis</h3>
+                        <p>ByteTrack-based video tracking maintains consistent object IDs across frames, enabling movement analysis and persistent monitoring of safety gear usage and potential violations over time.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="500">
+                        <h3>4. Visualization & Reporting</h3>
+                        <p>Inference results and training metrics are logged and visualized. Outputs include annotated detection images, performance charts (e.g., box loss, cls loss), and exportable CSVs for auditing and improvement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Advanced Features</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <h3>PPE Detection</h3>
+                    <p>Detection of 10 PPE-related classes including Hardhat, Mask, Safety Vest, and their non-compliant counterparts, using a fine-tuned YOLOv9 model trained on construction site imagery.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Non-Compliance Identification</h3>
+                    <p>Real-time identification of PPE absence such as NO-Hardhat, NO-Mask, and NO-Safety Vest, enabling actionable detection of safety violations directly from image or video input.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Real-time Monitoring</h3>
+                    <p>Low-latency detection with normalized 640x640 resolution inputs and ByteTrack-based tracking, providing frame-by-frame object monitoring in video footage.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Visual Alerts</h3>
+                    <p>Visual inference overlays with bounding boxes and class confidence, enabling reviewers to instantly assess compliance conditions and support safety enforcement.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Training Analytics</h3>
+                    <p>Tracking of training metrics such as box loss, classification loss, and DFL loss over epochs, with CSV export and visual plots to evaluate model performance.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>Flexible Configuration</h3>
+                    <p>Supports customization of class filtering, confidence thresholds, and device settings for inference on CPU or GPU, adaptable for deployment and evaluation needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detection Classes Section -->
+    <section id="detection" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Detection Classes</h2>
+                <p>Comprehensive object detection capabilities covering all essential safety equipment and potential hazards on construction sites.</p>
+            </div>
+            <div class="detection-grid">
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <div class="detection-title">Hardhat</div>
+                    <div class="detection-description">Detection of compliant hardhat usage for on-site personnel</div>
+                    <div class="detection-accuracy">96% ACCURACY</div>
+                </div>
+
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-user-slash"></i>
+                    </div>
+                    <div class="detection-title">NO-Hardhat</div>
+                    <div class="detection-description">Identification of individuals without proper head protection</div>
+                    <div class="detection-accuracy">94% ACCURACY</div>
+                </div>
+
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-mask"></i>
+                    </div>
+                    <div class="detection-title">Mask</div>
+                    <div class="detection-description">Detection of mask-wearing for protection compliance</div>
+                    <div class="detection-accuracy">93% ACCURACY</div>
+                </div>
+
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-head-side-mask"></i>
+                    </div>
+                    <div class="detection-title">NO-Mask</div>
+                    <div class="detection-description">Detection of non-compliance with required mask use</div>
+                    <div class="detection-accuracy">92% ACCURACY</div>
+                </div>
+
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-vest"></i>
+                    </div>
+                    <div class="detection-title">Safety Vest</div>
+                    <div class="detection-description">Recognition of high-visibility safety vests</div>
+                    <div class="detection-accuracy">95% ACCURACY</div>
+                </div>
+
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-user-slash"></i>
+                    </div>
+                    <div class="detection-title">NO-Safety Vest</div>
+                    <div class="detection-description">Detection of individuals without safety vests in required zones</div>
+                    <div class="detection-accuracy">93% ACCURACY</div>
+                </div>
+
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="detection-title">Person</div>
+                    <div class="detection-description">Identification of all on-site personnel</div>
+                    <div class="detection-accuracy">98% ACCURACY</div>
+                </div>
+
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="detection-title">Safety Cone</div>
+                    <div class="detection-description">Detection of safety cones for hazard zone boundary validation</div>
+                    <div class="detection-accuracy">90% ACCURACY</div>
+                </div>
+
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-truck-pickup"></i>
+                    </div>
+                    <div class="detection-title">Vehicle</div>
+                    <div class="detection-description">Detection of trucks, vans, and mobile machinery on-site</div>
+                    <div class="detection-accuracy">95% ACCURACY</div>
+                </div>
+
+                <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
+                    <div class="detection-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="detection-title">Machinery</div>
+                    <div class="detection-description">Identify of heavy equipment and moving machinery</div>
+                    <div class="detection-accuracy">91% ACCURACY</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Tools & Technologies Section -->
+    <section id="tools" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-aos="fade-up" data-aos-delay="200">Tools & Technologies</h2>
+            </div>
+            <div class="section-content">
+                <div class="tools-table">
+                    <div class="table-responsive" data-aos="fade-up" data-aos-delay="300">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Technology</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Object Detection</td>
+                                    <td>YOLOv9 (Ultralytics)</td>
+                                </tr>
+                                <tr>
+                                    <td>Deep Learning</td>
+                                    <td>PyTorch</td>
+                                </tr>
+                                <tr>
+                                    <td>Computer Vision</td>
+                                    <td>OpenCV, PIL, matplotlib</td>
+                                </tr>
+                                <tr>
+                                    <td>Data Processing</td>
+                                    <td>NumPy, Pandas, glob, YAML</td>
+                                </tr>
+                                <tr>
+                                    <td>Video Processing</td>
+                                    <td>FFmpeg, OpenCV</td>
+                                </tr>
+                                <tr>
+                                    <td>Model Training</td>
+                                    <td>Ultralytics YOLO API</td>
+                                </tr>
+                                <tr>
+                                    <td>Tracking</td>
+                                    <td>ByteTrack</td>
+                                </tr>
+                                <tr>
+                                    <td>Platform</td>
+                                    <td>Google Colab, Google Drive</td>
+                                </tr>
+                                <tr>
+                                    <td>Export Format</td>
+                                    <td>ONNX</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/project-scripts.js"></script>
+</body>
+</html>

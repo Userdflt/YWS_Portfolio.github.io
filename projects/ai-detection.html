@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Content Detection - Young Woo Song</title>
+    <meta name="description" content="Natural language processing project for distinguishing human-written vs AI-generated news content using advanced machine learning techniques and text analysis">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body class="ai-detection-theme">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#methodology">Methodology</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#models">Models</a></li>
+                        <li><a href="#technology">Technology</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">NLP & AI Detection</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">AI Content Detection</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">Advanced natural language processing system for distinguishing human-written versus AI-generated news content. Employs sophisticated text analysis, feature engineering, and machine learning models to identify subtle patterns that differentiate authentic journalism from AI-produced articles.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <img src="../images/ai_detection.png" alt="AI Content Detection System" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Overview</h2>
+            </div>
+            <div class="section-content">
+                <p>This project addresses the critical challenge of distinguishing between human-authored and AI-generated news content in an era where AI writing tools are becoming increasingly sophisticated. The system combines advanced natural language processing techniques with machine learning to identify subtle linguistic patterns that characterize human versus artificial content creation.</p>
+
+                <p>With the proliferation of AI-generated content in journalism and digital media, this detection system serves as a crucial tool for maintaining content authenticity, supporting fact-checking initiatives, and preserving the integrity of news sources.</p>
+
+                <h3>Research Objectives</h3>
+                <ul class="feature-list">
+                    <li><strong>Pattern Recognition</strong> – Identify linguistic markers that distinguish human from AI-generated text</li>
+                    <li><strong>Feature Engineering</strong> – Extract meaningful textual features for classification purposes</li>
+                    <li><strong>Model Development</strong> – Build robust classifiers capable of accurate content attribution</li>
+                    <li><strong>Practical Application</strong> – Create deployable tools for content verification and authentication</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section id="methodology" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Methodology</h2>
+                <p>Comprehensive approach to text analysis and classification</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3>Data Collection</h3>
+                    <p>Systematic compilation of diverse news articles from human journalists and AI content generation systems, ensuring balanced representation across topics, styles, and publication sources for robust model training.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-text-width"></i>
+                    </div>
+                    <h3>Text Preprocessing</h3>
+                    <p>Advanced text cleaning and normalization including tokenization, stopword removal, lemmatization, and handling of special characters while preserving stylistic markers crucial for detection accuracy.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-area"></i>
+                    </div>
+                    <h3>Feature Extraction</h3>
+                    <p>Multi-dimensional feature engineering encompassing linguistic statistics, syntactic patterns, semantic analysis, readability metrics, and stylometric features to capture human writing characteristics.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Model Training</h3>
+                    <p>Implementation and evaluation of multiple machine learning algorithms including traditional classifiers and deep learning models, with cross-validation and performance optimization for reliable detection.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Key Features & Analysis</h2>
+                <p>Comprehensive text analysis dimensions for accurate classification</p>
+            </div>
+            <div class="section-content two-column">
+                <div>
+                    <h3>Linguistic Features</h3>
+                    <ul class="feature-list">
+                        <li>Lexical diversity and vocabulary richness</li>
+                        <li>Sentence length variation and complexity</li>
+                        <li>Part-of-speech distribution patterns</li>
+                        <li>Syntactic structure analysis</li>
+                        <li>Word frequency and rarity measures</li>
+                    </ul>
+                    
+                    <h3>Stylometric Analysis</h3>
+                    <ul class="feature-list">
+                        <li>Writing style fingerprinting</li>
+                        <li>Punctuation usage patterns</li>
+                        <li>Paragraph and sentence structure</li>
+                        <li>Transition word frequency</li>
+                        <li>Rhetorical device identification</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Semantic Features</h3>
+                    <ul class="feature-list">
+                        <li>Topic modeling and coherence analysis</li>
+                        <li>Sentiment and emotional tone patterns</li>
+                        <li>Named entity recognition and usage</li>
+                        <li>Semantic similarity measures</li>
+                        <li>Conceptual depth and abstraction levels</li>
+                    </ul>
+                    
+                    <h3>Readability Metrics</h3>
+                    <ul class="feature-list">
+                        <li>Flesch-Kincaid readability scores</li>
+                        <li>Automated Readability Index (ARI)</li>
+                        <li>Gunning Fog Index calculations</li>
+                        <li>SMOG readability formula</li>
+                        <li>Coleman-Liau Index assessment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Models Section -->
+    <section id="models" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Machine Learning Models</h2>
+            </div>
+            <div class="architecture-grid">
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h3 class="component-title">Traditional Classifiers</h3>
+                    </div>
+                    <p class="component-description">Ensemble of traditional machine learning algorithms optimized for text classification tasks.</p>
+                    <ul class="component-features">
+                        <li>Random Forest with feature importance analysis</li>
+                        <li>Support Vector Machines with RBF kernels</li>
+                        <li>Gradient Boosting for complex pattern detection</li>
+                        <li>Logistic Regression with L1/L2 regularization</li>
+                    </ul>
+                </div>
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="100">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="component-title">Deep Learning Models</h3>
+                    </div>
+                    <p class="component-description">Advanced neural networks for capturing complex linguistic patterns and dependencies.</p>
+                    <ul class="component-features">
+                        <li>LSTM networks for sequential pattern recognition</li>
+                        <li>Transformer-based models for context understanding</li>
+                        <li>CNN architectures for local feature detection</li>
+                        <li>Bidirectional RNNs for comprehensive analysis</li>
+                    </ul>
+                </div>
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="150">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3 class="component-title">Ensemble Methods</h3>
+                    </div>
+                    <p class="component-description">Sophisticated model combination strategies for enhanced detection accuracy and robustness.</p>
+                    <ul class="component-features">
+                        <li>Voting classifiers with weighted predictions</li>
+                        <li>Stacking ensemble for meta-learning</li>
+                        <li>Bagging approaches for variance reduction</li>
+                        <li>Cross-validation for model selection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Technology Stack</h2>
+                <p>Advanced NLP and machine learning technologies for content analysis</p>
+            </div>
+            <div class="section-content two-column">
+                <div>
+                    <h3>Natural Language Processing</h3>
+                    <ul class="feature-list">
+                        <li>NLTK - Comprehensive NLP toolkit</li>
+                        <li>spaCy - Industrial-strength NLP</li>
+                        <li>Transformers - Hugging Face pre-trained models</li>
+                        <li>Gensim - Topic modeling and similarity</li>
+                        <li>TextBlob - Simplified text processing</li>
+                    </ul>
+                    
+                    <h3>Machine Learning</h3>
+                    <ul class="feature-list">
+                        <li>Scikit-learn - Traditional ML algorithms</li>
+                        <li>TensorFlow - Deep learning framework</li>
+                        <li>PyTorch - Neural network development</li>
+                        <li>XGBoost - Gradient boosting</li>
+                        <li>Keras - High-level neural networks</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Feature Engineering</h3>
+                    <ul class="feature-list">
+                        <li>TF-IDF - Term frequency analysis</li>
+                        <li>Word2Vec - Word embeddings</li>
+                        <li>BERT - Contextual embeddings</li>
+                        <li>Count Vectorization - Feature extraction</li>
+                        <li>N-gram analysis - Sequence patterns</li>
+                    </ul>
+                    
+                    <h3>Evaluation & Visualization</h3>
+                    <ul class="feature-list">
+                        <li>Matplotlib - Statistical plotting</li>
+                        <li>Seaborn - Advanced visualizations</li>
+                        <li>Plotly - Interactive charts</li>
+                        <li>Confusion matrices - Performance analysis</li>
+                        <li>ROC curves - Model evaluation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/project-scripts.js"></script>
+</body>
+</html> 

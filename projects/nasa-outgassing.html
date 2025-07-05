@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NASA Outgassing Database Analysis - Young Woo Song</title>
+    <meta name="description" content="Machine learning application for NASA outgassing materials analysis, featuring data processing, EDA, and predictive modeling for space-grade material evaluation">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body class="nasa-theme">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#data-processing">Data Processing</a></li>
+                        <li><a href="#modeling">ML Modeling</a></li>
+                        <li><a href="#results">Results</a></li>
+                        <li><a href="#technology">Technology</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">Space Technology & ML</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">NASA Outgassing Analysis</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">Comprehensive machine learning application for NASA outgassing materials database analysis. Develops predictive models for material performance evaluation using TML, CVCM, and WVR metrics to optimize space-grade material selection and quality control processes.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/Userdflt/NASA-Outgassing-DB" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <img src="../images/nasa_outgassing.png" alt="NASA Outgassing Materials Analysis" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Overview</h2>
+            </div>
+            <div class="section-content">
+                <p>This project develops machine learning models to evaluate and predict material performance for space applications using NASA's outgassing materials database. The analysis focuses on critical material quality metrics that determine suitability for high-vacuum space environments.</p>
+
+                <p>The project encompasses comprehensive data processing, exploratory data analysis, feature engineering, and implementation of both regression and classification models to support material selection and quality control decisions for space missions.</p>
+
+                <h3>Key Objectives</h3>
+                <ul class="feature-list">
+                    <li><strong>Performance Prediction</strong> – Develop linear regression models to evaluate material performance scores</li>
+                    <li><strong>Quality Classification</strong> – Implement classification models to assess material reliability categories</li>
+                    <li><strong>Material Optimization</strong> – Enable data-driven material selection for specific space applications</li>
+                    <li><strong>Quality Control</strong> – Support proactive quality assessment to prevent mission failures</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Processing Section -->
+    <section id="data-processing" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Data Processing Pipeline</h2>
+                <p>Comprehensive data cleaning and preprocessing workflow</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Data Collection</h3>
+                    <p>Systematic extraction and compilation of NASA outgassing materials data, organizing critical performance metrics including TML, CVCM, WVR, and material specifications for comprehensive analysis.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h3>Outlier Management</h3>
+                    <p>Applied quantile-based and IQR methods to identify and handle extreme outliers in TML, CVCM, WVR, and Space Code metrics, ensuring data quality while preserving meaningful variance.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Missing Value Treatment</h3>
+                    <p>Systematic handling of missing values with strategic column and row removal for 'Cure', 'Material Usage', and 'Space Code' fields, optimizing dataset completeness for machine learning applications.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <h3>Data Validation</h3>
+                    <p>Comprehensive duplicate detection and removal processes, final dataset validation, and preparation of clean data for exploratory analysis and machine learning model development.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modeling Section -->
+    <section id="modeling" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Machine Learning Models</h2>
+                <p>Advanced predictive modeling for material performance evaluation</p>
+            </div>
+            <div class="architecture-grid">
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="component-title">Regression Models</h3>
+                    </div>
+                    <p class="component-description">Predictive models for continuous performance score evaluation based on material quality metrics.</p>
+                    <ul class="component-features">
+                        <li>Linear Regression for supplier performance prediction</li>
+                        <li>Random Forest Regressor as alternative approach</li>
+                        <li>Performance score calculation using TML, CVCM, WVR</li>
+                        <li>Model evaluation and selection based on accuracy metrics</li>
+                    </ul>
+                </div>
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="100">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h3 class="component-title">Classification Models</h3>
+                    </div>
+                    <p class="component-description">Classification systems for categorical material reliability assessment and quality control.</p>
+                    <ul class="component-features">
+                        <li>Logistic Regression for performance categorization</li>
+                        <li>Random Forest Classifier for robust classification</li>
+                        <li>Support Vector Machine (SVM) implementation</li>
+                        <li>Multi-class performance category prediction</li>
+                    </ul>
+                </div>
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="150">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3 class="component-title">Feature Engineering</h3>
+                    </div>
+                    <p class="component-description">Advanced feature creation and transformation for enhanced model performance and realistic scenario simulation.</p>
+                    <ul class="component-features">
+                        <li>Supplier performance score calculation</li>
+                        <li>Noise addition for realistic scenario simulation</li>
+                        <li>Quality metric normalization and scaling</li>
+                        <li>Categorical feature encoding and transformation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Key Insights & Applications</h2>
+            </div>
+            <div class="section-content two-column">
+                <div>
+                    <h3>Material Quality Metrics</h3>
+                    <ul class="feature-list">
+                        <li><strong>TML (Total Mass Loss)</strong> - Percentage of material mass lost during vacuum testing</li>
+                        <li><strong>CVCM (Collected Volatile Condensable Materials)</strong> - Volatile material condensation measurement</li>
+                        <li><strong>WVR (Water Vapor Regained)</strong> - Water vapor absorption after testing</li>
+                        <li><strong>Performance Optimization</strong> - Lower values indicate better space environment suitability</li>
+                    </ul>
+                    
+                    <h3>Model Performance</h3>
+                    <ul class="feature-list">
+                        <li>Linear Regression selected for performance prediction</li>
+                        <li>Logistic Regression chosen for classification tasks</li>
+                        <li>Comprehensive model evaluation and comparison</li>
+                        <li>Robust validation using multiple metrics</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Practical Applications</h3>
+                    <ul class="feature-list">
+                        <li><strong>Material Selection</strong> - Optimized selection for specific space applications</li>
+                        <li><strong>Quality Control</strong> - Proactive assessment to prevent mission failures</li>
+                        <li><strong>R&D Support</strong> - Data-driven insights for material improvement research</li>
+                        <li><strong>Risk Mitigation</strong> - Early identification of material performance issues</li>
+                    </ul>
+                    
+                    <h3>Future Enhancements</h3>
+                    <ul class="feature-list">
+                        <li>Dataset expansion for improved model performance</li>
+                        <li>Additional classification model experimentation</li>
+                        <li>Categorical feature integration for deeper analysis</li>
+                        <li>Real-time prediction pipeline development</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Technology Stack</h2>
+                <p>Advanced tools and frameworks for space-grade material analysis</p>
+            </div>
+            <div class="section-content two-column">
+                <div>
+                    <h3>Data Processing</h3>
+                    <ul class="feature-list">
+                        <li>Pandas - Data manipulation and cleaning</li>
+                        <li>NumPy - Numerical computations and array operations</li>
+                        <li>Matplotlib - Statistical visualization and plotting</li>
+                        <li>Seaborn - Advanced statistical visualizations</li>
+                    </ul>
+                    
+                    <h3>Machine Learning</h3>
+                    <ul class="feature-list">
+                        <li>Scikit-learn - ML algorithms and preprocessing</li>
+                        <li>Linear Regression - Performance prediction modeling</li>
+                        <li>Logistic Regression - Classification tasks</li>
+                        <li>Random Forest - Ensemble methods</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Development Environment</h3>
+                    <ul class="feature-list">
+                        <li>Jupyter Notebook - Interactive development</li>
+                        <li>Python 3.x - Core programming language</li>
+                        <li>Git - Version control and collaboration</li>
+                        <li>GitHub - Repository management</li>
+                    </ul>
+                    
+                    <h3>Analysis & Validation</h3>
+                    <ul class="feature-list">
+                        <li>Cross-validation - Model performance assessment</li>
+                        <li>Statistical testing - Hypothesis validation</li>
+                        <li>Performance metrics - Accuracy evaluation</li>
+                        <li>Feature importance - Model interpretability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/project-scripts.js"></script>
+</body>
+</html> 
