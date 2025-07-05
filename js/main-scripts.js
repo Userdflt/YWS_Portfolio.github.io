@@ -103,17 +103,9 @@ document.addEventListener('DOMContentLoaded', function() {
         skillObserver.observe(bar);
     });
 
-    // Professional project card animations
+    // Professional project card click animation
     const projectCards = document.querySelectorAll('.project-card');
     projectCards.forEach((card, index) => {
-        // Clean staggered entrance animation with classes
-        card.classList.add('initial-hidden');
-        
-        setTimeout(() => {
-            card.classList.remove('initial-hidden');
-            card.classList.add('initial-visible');
-        }, index * 200 + 300);
-
         // Snappy fade-away animation
         card.addEventListener('click', function(e) {
             e.preventDefault();
@@ -185,11 +177,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (filterButtons.length > 0 && filterableCards.length > 0) {
         console.log(`Found ${filterButtons.length} filter buttons and ${filterableCards.length} project cards`);
         
-        // Initialize all cards as visible
-        filterableCards.forEach(card => {
-            card.classList.remove('fade-out', 'hidden');
+        // Initialize all cards as visible and reset any animation classes
+        filterableCards.forEach((card, index) => {
+            // Clean up all animation classes
+            card.classList.remove('fade-out', 'hidden', 'initial-hidden', 'initial-visible');
             card.classList.add('fade-in');
+            
+            // Set proper display and visibility
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+            
+            // Add staggered entrance animation
+            card.style.animationDelay = `${index * 0.1}s`;
         });
+        
+        // Ensure "All" button is active by default
+        filterButtons.forEach(btn => {
+            btn.classList.remove('active');
+            btn.style.removeProperty('color');
+            btn.style.removeProperty('border-color');
+            btn.style.removeProperty('transform');
+            btn.style.removeProperty('box-shadow');
+        });
+        
+        const allButton = document.querySelector('.filter-btn[data-filter="all"]');
+        if (allButton) {
+            allButton.classList.add('active');
+        }
         
         filterButtons.forEach(button => {
             button.addEventListener('click', function(e) {
@@ -228,8 +243,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 visibleCount++;
                 // Show card with staggered animation
                 card.classList.remove('fade-out', 'hidden');
+                card.style.display = 'block';
+                card.style.visibility = 'visible';
                 setTimeout(() => {
                     card.classList.add('fade-in');
+                    card.style.opacity = '1';
                 }, index * 50);
             } else {
                 // Hide card
@@ -237,6 +255,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.classList.add('fade-out');
                 setTimeout(() => {
                     card.classList.add('hidden');
+                    card.style.display = 'none';
+                    card.style.opacity = '0';
                 }, 300);
             }
         });
