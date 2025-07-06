@@ -601,38 +601,43 @@
         }
 
         /* Table Styles */
+        .tools-table {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
         .table-responsive {
             overflow-x: auto;
-            margin-top: var(--space-6);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            backdrop-filter: var(--glass-backdrop);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            backdrop-filter: var(--glass-backdrop);
         }
 
-        th, td {
-            padding: var(--space-4);
+        table th, table td {
+            padding: var(--space-3) var(--space-4);
             text-align: left;
             border-bottom: 1px solid var(--color-border);
         }
 
-        th {
-            background: var(--color-background-elevated);
+        table th {
+            background: var(--glass-bg);
             font-weight: 600;
             color: var(--color-text);
         }
 
-        td {
+        table td {
             color: var(--color-text-secondary);
         }
 
-        tr:last-child td {
+        table tr:last-child td {
             border-bottom: none;
         }
 
@@ -1008,7 +1013,120 @@
             overflow: hidden;
         }
 
-        /* n8n-demo component styling */
+        /* Mermaid container styling */
+        .mermaid-container {
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            background: var(--color-background-elevated);
+            padding: var(--space-4);
+            min-height: 600px;
+            height: auto;
+            overflow: auto;
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .mermaid-container .mermaid {
+            width: 100%;
+            height: auto;
+            min-height: 600px;
+            display: block;
+            overflow: visible;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+        }
+
+        .mermaid-container .mermaid:active {
+            cursor: grabbing;
+        }
+
+        .mermaid-container .mermaid svg {
+            width: auto !important;
+            height: auto !important;
+            max-width: none !important;
+            max-height: none !important;
+            min-width: 1200px !important;
+            min-height: 600px !important;
+        }
+
+        /* Zoom controls */
+        .zoom-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            z-index: 10;
+        }
+
+        .zoom-btn {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all var(--transition-normal);
+        }
+
+        .zoom-btn:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .zoom-info {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            z-index: 10;
+        }
+
+        /* Mermaid diagram styling - Black text for readability */
+        .mermaid .node text {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            font-family: var(--font-sans) !important;
+            fill: #000000 !important;
+            color: #000000 !important;
+        }
+
+        .mermaid .edge-label {
+            font-size: 12px !important;
+            font-family: var(--font-sans) !important;
+            fill: #000000 !important;
+            color: #000000 !important;
+        }
+
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node ellipse,
+        .mermaid .node polygon {
+            stroke-width: 2px;
+        }
+
+        /* Force black text in all elements */
+        .mermaid text,
+        .mermaid .label text,
+        .mermaid .nodeLabel,
+        .mermaid .edgeLabel {
+            fill: #000000 !important;
+            color: #000000 !important;
+            font-weight: 600 !important;
+        }
+
+        /* n8n-demo component styling (fallback) */
         n8n-demo {
             width: 100%;
             height: 400px;
@@ -2224,20 +2342,79 @@
                             <h4><i class="fas fa-brain"></i> Code Orchestration Agent Workflow</h4>
                             <p>Complete multi-agent orchestration system with 7 specialized Building Code agents</p>
                         </div>
-                        <div class="n8n-demo-container">
-                            <div class="workflow-loading">
-                                <div class="loading-spinner"></div>
-                                <p>Loading orchestration workflow...</p>
+                        <div class="mermaid-container">
+                            <div class="zoom-controls">
+                                <button class="zoom-btn" onclick="zoomIn(this)" title="Zoom In">+</button>
+                                <button class="zoom-btn" onclick="zoomOut(this)" title="Zoom Out">−</button>
+                                <button class="zoom-btn" onclick="resetZoom(this)" title="Reset Zoom">⌂</button>
                             </div>
-                            <n8n-demo 
-                                id="orch-demo" 
-                                frame="true" 
-                                theme="dark"
-                                clicktointeract="false"
-                                disableinteractivity="false"
-                                hidecanvaserrors="true"
-                                workflow='{}'>
-                            </n8n-demo>
+                            <div class="zoom-info">Use mouse wheel to zoom, drag to pan</div>
+                            <div class="mermaid" id="orch-mermaid">
+                                graph TD
+                                    A["🔔 Chat Trigger<br/>When message received<br/>Webhook endpoint"] --> ORCH["🧠 Orchestration Agent<br/>GPT-4.1 Main Controller<br/>Query analysis & routing"]
+                                    
+                                    B["🤖 OpenAI GPT-4.1<br/>Language Model<br/>Temperature: 0.4"] --> ORCH
+                                    C["💾 PostgreSQL Memory<br/>Chat History Storage<br/>Table: orch_agent_history"] --> ORCH
+                                    
+                                    ORCH --> D["🏗️ Code-B Tool<br/>Stability & Durability<br/>Structural integrity, loads,<br/>seismic, materials"]
+                                    ORCH --> E["🔥 Code-C Tool<br/>Protection from Fire<br/>Fire prevention, spread,<br/>evacuation, firefighting"]
+                                    ORCH --> F["♿ Code-D Tool<br/>Access Routes<br/>Accessibility, movement,<br/>disabilities, lifts"]
+                                    ORCH --> G["💧 Code-E Tool<br/>Moisture Management<br/>Surface water, external,<br/>internal moisture"]
+                                    ORCH --> H["🛡️ Code-F Tool<br/>Safety of Users<br/>Hazards, falling, warnings,<br/>emergency systems"]
+                                    ORCH --> I["🔧 Code-G Tool<br/>Services & Facilities<br/>Hygiene, ventilation,<br/>utilities, lighting"]
+                                    ORCH --> J["🌡️ Code-H Tool<br/>Energy Efficiency<br/>Thermal resistance,<br/>HVAC, hot water"]
+                                    
+                                    D --> D1["🔍 Code-B Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    E --> E1["🔍 Code-C Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    F --> F1["🔍 Code-D Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    G --> G1["🔍 Code-E Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    H --> H1["🔍 Code-F Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    I --> I1["🔍 Code-G Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    J --> J1["🔍 Code-H Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    
+                                    D1 --> D2["📊 Supabase Vector Store<br/>Code-B Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    E1 --> E2["📊 Supabase Vector Store<br/>Code-C Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    F1 --> F2["📊 Supabase Vector Store<br/>Code-D Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    G1 --> G2["📊 Supabase Vector Store<br/>Code-E Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    H1 --> H2["📊 Supabase Vector Store<br/>Code-F Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    I1 --> I2["📊 Supabase Vector Store<br/>Code-G Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    J1 --> J2["📊 Supabase Vector Store<br/>Code-H Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    
+                                    D2 --> RESP["💬 Specialized Response<br/>Building Code compliant<br/>Context-aware answer"]
+                                    E2 --> RESP
+                                    F2 --> RESP
+                                    G2 --> RESP
+                                    H2 --> RESP
+                                    I2 --> RESP
+                                    J2 --> RESP
+                                    
+                                    style A fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+                                    style ORCH fill:#fff3e0,stroke:#f57c00,stroke-width:4px
+                                    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+                                    style C fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+                                    style D fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+                                    style E fill:#ffebee,stroke:#c62828,stroke-width:2px
+                                    style F fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+                                    style G fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+                                    style H fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+                                    style I fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+                                    style J fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+                                    style D1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style E1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style F1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style G1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style H1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style I1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style J1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style D2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style E2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style F2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style G2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style H2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style I2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style J2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style RESP fill:#e8f5e8,stroke:#2e7d32,stroke-width:4px
+                            </div>
                         </div>
                     </div>
 
@@ -2247,20 +2424,74 @@
                             <h4><i class="fas fa-upload"></i> RAG Document Ingestion Pipeline</h4>
                             <p>Automated document processing with OCR, chunking, and vector storage across all Building Code sections</p>
                         </div>
-                        <div class="n8n-demo-container">
-                            <div class="workflow-loading">
-                                <div class="loading-spinner"></div>
-                                <p>Loading RAG ingestion workflow...</p>
+                        <div class="mermaid-container">
+                            <div class="zoom-controls">
+                                <button class="zoom-btn" onclick="zoomIn(this)" title="Zoom In">+</button>
+                                <button class="zoom-btn" onclick="zoomOut(this)" title="Zoom Out">−</button>
+                                <button class="zoom-btn" onclick="resetZoom(this)" title="Reset Zoom">⌂</button>
                             </div>
-                            <n8n-demo 
-                                id="rag-demo" 
-                                frame="true" 
-                                theme="dark"
-                                clicktointeract="false"
-                                disableinteractivity="false"
-                                hidecanvaserrors="true"
-                                workflow='{}'>
-                            </n8n-demo>
+                            <div class="zoom-info">Use mouse wheel to zoom, drag to pan</div>
+                            <div class="mermaid" id="rag-mermaid">
+                                graph TD
+                                    START["📁 Google Drive Trigger<br/>Monitor Building Code folders<br/>Auto-detect new PDFs"] --> DOC["📄 Document Detection<br/>New file uploaded<br/>Trigger processing pipeline"]
+                                    
+                                    DOC --> OCR["🔍 Mistral OCR Engine<br/>mistral-ocr-latest<br/>Text extraction & image annotation<br/>Bounding box processing"]
+                                    
+                                    OCR --> EXTRACT["📝 Content Extraction<br/>Page-by-page processing<br/>Text & image separation<br/>Metadata preservation"]
+                                    
+                                    EXTRACT --> SPLIT["✂️ Text Chunking<br/>LangChain RecursiveCharacterTextSplitter<br/>Context-aware splitting<br/>Optimal chunk sizes"]
+                                    EXTRACT --> IMG["🖼️ Image Processing<br/>Supabase Storage upload<br/>Caption generation<br/>Metadata tagging"]
+                                    
+                                    SPLIT --> EMBED_TEXT["🔢 Text Embeddings<br/>OpenAI text-embedding-3-large<br/>High-dimensional semantic vectors<br/>1536 dimensions"]
+                                    IMG --> EMBED_IMG["📊 Image Embeddings<br/>Caption vectorization<br/>Visual content representation<br/>Searchable image metadata"]
+                                    
+                                    EMBED_TEXT --> STORE_B["📊 Code-B Vector Store<br/>Stability & Durability<br/>Supabase pgvector<br/>Structural requirements"]
+                                    EMBED_TEXT --> STORE_C["📊 Code-C Vector Store<br/>Protection from Fire<br/>Supabase pgvector<br/>Fire safety standards"]
+                                    EMBED_TEXT --> STORE_D["📊 Code-D Vector Store<br/>Access Routes<br/>Supabase pgvector<br/>Accessibility standards"]
+                                    EMBED_TEXT --> STORE_E["📊 Code-E Vector Store<br/>Moisture Management<br/>Supabase pgvector<br/>Water protection"]
+                                    EMBED_TEXT --> STORE_F["📊 Code-F Vector Store<br/>Safety of Users<br/>Supabase pgvector<br/>User safety requirements"]
+                                    EMBED_TEXT --> STORE_G["📊 Code-G Vector Store<br/>Services & Facilities<br/>Supabase pgvector<br/>Building services"]
+                                    EMBED_TEXT --> STORE_H["📊 Code-H Vector Store<br/>Energy Efficiency<br/>Supabase pgvector<br/>Energy performance"]
+                                    
+                                    EMBED_IMG --> STORE_B
+                                    EMBED_IMG --> STORE_C
+                                    EMBED_IMG --> STORE_D
+                                    EMBED_IMG --> STORE_E
+                                    EMBED_IMG --> STORE_F
+                                    EMBED_IMG --> STORE_G
+                                    EMBED_IMG --> STORE_H
+                                    
+                                    STORE_B --> READY["✅ Knowledge Base Ready<br/>Multi-modal RAG system<br/>Text + Image vectors<br/>Section-specific expertise"]
+                                    STORE_C --> READY
+                                    STORE_D --> READY
+                                    STORE_E --> READY
+                                    STORE_F --> READY
+                                    STORE_G --> READY
+                                    STORE_H --> READY
+                                    
+                                    READY --> SYNC["🔄 Real-time Sync<br/>Google Drive monitoring<br/>Automatic updates<br/>Version control"]
+                                    
+                                    SYNC --> RETRIEVAL["🔍 Ready for Queries<br/>Semantic search enabled<br/>Agent tool integration<br/>Building Code expertise"]
+                                    
+                                    style START fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
+                                    style DOC fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+                                    style OCR fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+                                    style EXTRACT fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+                                    style SPLIT fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+                                    style IMG fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+                                    style EMBED_TEXT fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
+                                    style EMBED_IMG fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+                                    style STORE_B fill:#ffebee,stroke:#c62828,stroke-width:2px
+                                    style STORE_C fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+                                    style STORE_D fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+                                    style STORE_E fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+                                    style STORE_F fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+                                    style STORE_G fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+                                    style STORE_H fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+                                    style READY fill:#f1f8e9,stroke:#689f38,stroke-width:3px
+                                    style SYNC fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style RETRIEVAL fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2557,23 +2788,14 @@
                         
 
                         
-                        // If it's the visual tab, ensure n8n-demo components are properly loaded
+                        // If it's the visual tab, ensure Mermaid diagrams are properly rendered
                         if (targetWorkflow === 'visual') {
                             console.log('Visual workflow tab clicked');
                             
-                            // Try immediate initialization
+                            // Initialize Mermaid diagrams
                             setTimeout(() => {
-                                initializeN8nDemos();
+                                initializeMermaidDiagrams();
                             }, 100);
-                            
-                            // Backup initialization after longer delay
-                            setTimeout(() => {
-                                if (!document.querySelector('#orch-demo')?.getAttribute('workflow') || 
-                                    !document.querySelector('#rag-demo')?.getAttribute('workflow')) {
-                                    console.log('Workflows not loaded, retrying...');
-                                    initializeN8nDemos();
-                                }
-                            }, 2000);
                         }
                     }
                 });
@@ -2595,142 +2817,173 @@
 
 
 
-        // Initialize n8n demo components
-        function initializeN8nDemos() {
-            console.log('Initializing n8n demo components...');
+        // Initialize Mermaid diagrams
+        function initializeMermaidDiagrams() {
+            console.log('Initializing Mermaid diagrams...');
             
-            // Wait for web components to be ready
-            if (window.customElements && customElements.get('n8n-demo')) {
-                console.log('n8n-demo component found, loading workflows...');
-                loadWorkflows();
+            if (typeof mermaid !== 'undefined') {
+                try {
+                    // Initialize Mermaid if not already done
+                    if (!mermaid.mermaidAPI.defaultConfig) {
+                        mermaid.initialize({
+                            startOnLoad: false,
+                            theme: 'default',
+                            securityLevel: 'loose',
+                            themeVariables: {
+                                primaryColor: '#3b82f6',
+                                primaryTextColor: '#000000',
+                                primaryBorderColor: '#2563eb',
+                                lineColor: '#6b7280',
+                                sectionBkgColor: 'transparent',
+                                altSectionBkgColor: 'transparent',
+                                gridColor: '#e5e7eb',
+                                secondaryColor: '#f59e0b',
+                                tertiaryColor: '#10b981',
+                                fontSize: '14px'
+                            },
+                            flowchart: {
+                                useMaxWidth: false,
+                                htmlLabels: true,
+                                curve: 'basis',
+                                nodeSpacing: 60,
+                                rankSpacing: 80,
+                                padding: 20
+                            },
+                            fontFamily: 'Inter, sans-serif'
+                        });
+                    }
+                    
+                    // Run Mermaid on all diagrams
+                    const diagrams = document.querySelectorAll('.mermaid');
+                    if (diagrams.length > 0) {
+                        mermaid.run({
+                            nodes: Array.from(diagrams)
+                        });
+                        console.log('✅ Mermaid diagrams rendered successfully');
+                        
+                        // Initialize zoom and pan for each diagram after rendering
+                        setTimeout(() => {
+                            initializeZoomPan();
+                        }, 500);
+                    }
+                } catch (error) {
+                    console.error('❌ Error initializing Mermaid:', error);
+                }
             } else {
-                console.log('n8n-demo component not yet loaded, retrying...');
-                setTimeout(() => {
-                    initializeN8nDemos();
-                }, 1000);
+                console.warn('Mermaid library not loaded');
             }
         }
 
-        // Load actual workflow data
-        async function loadWorkflows() {
-            try {
-                // Load orchestration workflow
-                await loadOrchestrationWorkflow();
-                
-                // Load RAG ingestion workflow
-                await loadRAGWorkflow();
-                
-                console.log('All workflows loaded successfully');
-            } catch (error) {
-                console.error('Error loading workflows:', error);
-            }
-        }
+        // Zoom and Pan functionality
+        let currentZoom = 1;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let lastX = 0;
+        let lastY = 0;
 
-        async function loadOrchestrationWorkflow() {
-            const orchDemo = document.getElementById('orch-demo');
-            const orchContainer = orchDemo.parentElement;
+        function initializeZoomPan() {
+            const diagrams = document.querySelectorAll('.mermaid');
             
-            if (!orchDemo) {
-                console.error('Orchestration demo element not found');
-                return;
-            }
-
-            try {
-                // Load the actual exported workflow JSON file
-                console.log('Fetching Code_Orch_Agent.json...');
-                const response = await fetch('../n8n/Code_Orch_Agent.json');
-                if (!response.ok) {
-                    throw new Error(`Failed to load workflow: ${response.statusText}`);
-                }
-                const orchWorkflow = await response.json();
-                console.log('✅ Loaded orchestration workflow:', orchWorkflow.name);
-
-                // Set workflow using the actual exported JSON
-                orchDemo.setAttribute('workflow', JSON.stringify(orchWorkflow));
+            diagrams.forEach(diagram => {
+                // Mouse wheel zoom
+                diagram.addEventListener('wheel', function(e) {
+                    e.preventDefault();
+                    const rect = this.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    
+                    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                    zoom(this, delta, mouseX, mouseY);
+                });
                 
-                // Wait for component to be ready
-                setTimeout(() => {
-                    orchContainer.classList.add('workflow-loaded');
-                    console.log('🚀 Orchestration workflow rendered successfully');
-                }, 500);
+                // Mouse drag pan
+                diagram.addEventListener('mousedown', function(e) {
+                    isDragging = true;
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                    this.style.cursor = 'grabbing';
+                });
                 
-                // Add timeout fallback
-                setTimeout(() => {
-                    if (!orchContainer.querySelector('n8n-demo')?.shadowRoot) {
-                        console.log('Component not fully loaded, showing fallback');
-                        showWorkflowFallback(orchContainer, 'Orchestration');
+                diagram.addEventListener('mousemove', function(e) {
+                    if (isDragging) {
+                        const deltaX = e.clientX - lastX;
+                        const deltaY = e.clientY - lastY;
+                        
+                        panX += deltaX;
+                        panY += deltaY;
+                        
+                        updateTransform(this);
+                        
+                        lastX = e.clientX;
+                        lastY = e.clientY;
                     }
-                }, 8000);
-            } catch (error) {
-                console.error('❌ Error loading orchestration workflow:', error);
-                showWorkflowFallback(orchContainer, 'Orchestration');
-            }
+                });
+                
+                diagram.addEventListener('mouseup', function() {
+                    isDragging = false;
+                    this.style.cursor = 'grab';
+                });
+                
+                diagram.addEventListener('mouseleave', function() {
+                    isDragging = false;
+                    this.style.cursor = 'grab';
+                });
+                
+                // Initialize transform
+                updateTransform(diagram);
+                updateZoomInfo(diagram);
+            });
         }
 
-        async function loadRAGWorkflow() {
-            const ragDemo = document.getElementById('rag-demo');
-            const ragContainer = ragDemo.parentElement;
+        function zoom(element, factor, mouseX = null, mouseY = null) {
+            const newZoom = Math.max(0.1, Math.min(3, currentZoom * factor));
             
-            if (!ragDemo) {
-                console.error('RAG demo element not found');
-                return;
+            if (mouseX !== null && mouseY !== null) {
+                // Zoom towards mouse position
+                const zoomFactor = newZoom / currentZoom;
+                panX = mouseX - (mouseX - panX) * zoomFactor;
+                panY = mouseY - (mouseY - panY) * zoomFactor;
             }
+            
+            currentZoom = newZoom;
+            updateTransform(element);
+            updateZoomInfo(element);
+        }
 
-            try {
-                // Load the actual exported RAG workflow JSON file
-                console.log('Fetching RAG_Ingest.json...');
-                const response = await fetch('../n8n/RAG_Ingest.json');
-                if (!response.ok) {
-                    throw new Error(`Failed to load workflow: ${response.statusText}`);
-                }
-                const ragWorkflow = await response.json();
-                console.log('✅ Loaded RAG workflow:', ragWorkflow.name);
+        function updateTransform(element) {
+            element.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+        }
 
-                // Set workflow using the actual exported JSON
-                ragDemo.setAttribute('workflow', JSON.stringify(ragWorkflow));
-                
-                // Wait for component to be ready
-                setTimeout(() => {
-                    ragContainer.classList.add('workflow-loaded');
-                    console.log('🚀 RAG ingestion workflow rendered successfully');
-                }, 500);
-                
-                // Add timeout fallback
-                setTimeout(() => {
-                    if (!ragContainer.querySelector('n8n-demo')?.shadowRoot) {
-                        console.log('Component not fully loaded, showing fallback');
-                        showWorkflowFallback(ragContainer, 'RAG Ingestion');
-                    }
-                }, 8000);
-            } catch (error) {
-                console.error('❌ Error loading RAG workflow:', error);
-                showWorkflowFallback(ragContainer, 'RAG Ingestion');
+        function updateZoomInfo(element) {
+            const container = element.closest('.mermaid-container');
+            const zoomInfo = container.querySelector('.zoom-info');
+            if (zoomInfo) {
+                zoomInfo.textContent = `Zoom: ${Math.round(currentZoom * 100)}% | Use mouse wheel to zoom, drag to pan`;
             }
         }
 
-        function showWorkflowFallback(container, workflowName) {
-            const loading = container.querySelector('.workflow-loading');
-            if (loading) {
-                loading.innerHTML = `
-                    <div style="text-align: center; color: var(--color-text-secondary);">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem; color: var(--color-warning);"></i>
-                        <h4>Workflow Preview Loading</h4>
-                        <p>The ${workflowName} workflow is being processed...</p>
-                        <p style="font-size: 0.9rem; margin-top: 1rem;">
-                            This may take a few moments to initialize the visual workflow components.
-                        </p>
-                        <button onclick="location.reload()" style="
-                            background: var(--color-primary);
-                            color: white;
-                            border: none;
-                            padding: 8px 16px;
-                            border-radius: 4px;
-                            margin-top: 1rem;
-                            cursor: pointer;
-                        ">Refresh Page</button>
-                    </div>
-                `;
-            }
+        // Zoom control functions
+        function zoomIn(button) {
+            const container = button.closest('.mermaid-container');
+            const diagram = container.querySelector('.mermaid');
+            zoom(diagram, 1.2);
+        }
+
+        function zoomOut(button) {
+            const container = button.closest('.mermaid-container');
+            const diagram = container.querySelector('.mermaid');
+            zoom(diagram, 0.8);
+        }
+
+        function resetZoom(button) {
+            const container = button.closest('.mermaid-container');
+            const diagram = container.querySelector('.mermaid');
+            currentZoom = 1;
+            panX = 0;
+            panY = 0;
+            updateTransform(diagram);
+            updateZoomInfo(diagram);
         }
 
 
