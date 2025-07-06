@@ -121,6 +121,13 @@ body.wind-energy-theme {
         radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
 }
 
+body.n8n-theme {
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
+}
+
 a {
     color: var(--color-primary);
     text-decoration: none;
@@ -388,6 +395,216 @@ li {
 
 .wind-energy-theme .project-hero::before {
     background: radial-gradient(circle at center, rgba(34, 197, 94, 0.1), transparent 70%);
+}
+
+.n8n-theme .project-hero::before {
+    background: radial-gradient(circle at center, rgba(0, 212, 170, 0.1), transparent 70%);
+}
+
+/* Architecture Cards */
+.architecture-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+.arch-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    text-align: center;
+    transition: all var(--transition-normal);
+    backdrop-filter: var(--glass-backdrop);
+}
+
+.arch-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.arch-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-4);
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.arch-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+}
+
+.arch-card p {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+}
+
+.arch-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+}
+
+.arch-tech span {
+    background: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+    padding: 4px 12px;
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.architecture-flow {
+    margin-top: var(--space-8);
+}
+
+.architecture-flow h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: var(--space-6);
+    color: var(--color-text);
+}
+
+/* Workflow Preview Enhancements */
+.workflow-preview-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+    backdrop-filter: var(--glass-backdrop);
+}
+
+.workflow-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-4);
+}
+
+.workflow-card-header h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.workflow-card-header p {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin: var(--space-2) 0 0 0;
+}
+
+.workflow-badge {
+    flex-shrink: 0;
+}
+
+.badge-label {
+    background: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+    padding: 4px 12px;
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.workflow-preview-loading {
+    background: var(--color-background-elevated);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    text-align: center;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-content {
+    max-width: 500px;
+}
+
+.loading-icon {
+    font-size: 3rem;
+    color: var(--color-warning);
+    margin-bottom: var(--space-4);
+}
+
+.loading-content h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+}
+
+.loading-content p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-3);
+    line-height: 1.6;
+}
+
+.loading-note {
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.loading-fallback {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    background: var(--color-background-alt);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+}
+
+.loading-fallback a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.loading-fallback a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .architecture-cards {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .arch-card {
+        padding: var(--space-4);
+    }
+    
+    .arch-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+    
+    .workflow-card-header {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+    
+    .workflow-preview-loading {
+        padding: var(--space-6);
+        min-height: 300px;
+    }
 }
 
 .project-hero-content {
@@ -1232,5 +1449,1020 @@ li {
     
     .result-value {
         font-size: 1.5rem;
+    }
+}
+
+/* n8n Project Specific Styles */
+
+/* Workflow Section Styles */
+.workflow-controls {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    flex-wrap: wrap;
+}
+
+.workflow-btn {
+    transition: all var(--transition-normal);
+}
+
+.workflow-btn.active {
+    background: var(--gradient-primary);
+    color: var(--color-text-inverse);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.workflow-content {
+    display: none;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.workflow-content.active {
+    display: block;
+}
+
+.workflow-overview {
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+
+.workflow-overview h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+}
+
+.workflow-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-6);
+    margin-bottom: var(--space-10);
+    flex-wrap: wrap;
+}
+
+.agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-4);
+}
+
+.agent-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    backdrop-filter: var(--glass-backdrop);
+    transition: all var(--transition-normal);
+}
+
+.agent-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--color-primary);
+}
+
+.agent-card.orchestrator {
+    border: 2px solid var(--color-primary);
+    background: linear-gradient(135deg, rgba(0, 212, 170, 0.1), rgba(108, 92, 231, 0.1));
+}
+
+.agent-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.agent-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-primary);
+    color: var(--color-text-inverse);
+    font-size: 1.2rem;
+}
+
+.agent-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--color-text);
+}
+
+.agent-card p {
+    margin-bottom: var(--space-4);
+    font-size: 0.9rem;
+}
+
+.agent-tech {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.tech-badge {
+    background: var(--color-background-elevated);
+    color: var(--color-text-secondary);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid var(--color-border);
+}
+
+/* JSON Styles */
+.json-container {
+    background: var(--color-background-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.json-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4);
+    background: var(--color-background-alt);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.json-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--color-text);
+}
+
+.copy-btn {
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.875rem;
+}
+
+/* Code Styles */
+pre {
+    margin: 0;
+    padding: var(--space-4);
+    overflow-x: auto;
+    background: var(--color-background-elevated);
+}
+
+code {
+    font-family: 'Fira Code', 'Monaco', 'Cascadia Code', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+}
+
+/* Mermaid Diagram Styles */
+.diagram-container {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    backdrop-filter: var(--glass-backdrop);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.diagram-container h3 {
+    text-align: center;
+    margin-bottom: var(--space-6);
+    color: var(--color-text);
+}
+
+.diagram-controls {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    display: flex;
+    gap: var(--space-2);
+    z-index: 10;
+}
+
+.diagram-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--color-text);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    backdrop-filter: var(--glass-backdrop);
+    font-size: 16px;
+}
+
+.diagram-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    transform: translateY(-2px);
+}
+
+.mermaid-wrapper {
+    position: relative;
+    width: 100%;
+    height: 800px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-background-elevated);
+}
+
+.mermaid-diagram {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    padding: var(--space-6);
+    transform-origin: center center;
+    transition: transform 0.3s ease;
+    cursor: grab;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mermaid-diagram:active {
+    cursor: grabbing;
+}
+
+.mermaid {
+    background: transparent;
+    font-size: 16px;
+    width: auto;
+    height: auto;
+    min-width: 1600px;
+    min-height: 700px;
+}
+
+.mermaid svg {
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    min-width: 1600px !important;
+    min-height: 700px !important;
+}
+
+.zoom-info {
+    position: absolute;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    backdrop-filter: var(--glass-backdrop);
+}
+
+/* Visual Workflows Styles */
+.visual-workflows-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+
+.visual-workflows-header h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+}
+
+.visual-workflows-header p {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+.workflow-previews {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+.workflow-preview-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    backdrop-filter: var(--glass-backdrop);
+    transition: all var(--transition-normal);
+}
+
+.workflow-preview-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--color-primary);
+}
+
+.workflow-card-header {
+    margin-bottom: var(--space-6);
+    text-align: center;
+}
+
+.workflow-card-header h4 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+}
+
+.workflow-card-header p {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+.n8n-demo-container {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-background-elevated);
+    padding: var(--space-4);
+    min-height: 400px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* n8n-demo component styling */
+n8n-demo {
+    width: 100%;
+    height: 400px;
+    display: block;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    /* Disable selection and interaction */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+n8n-demo::part(container) {
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+}
+
+/* Loading state for n8n demos */
+.n8n-demo-container:not(:has(n8n-demo:defined)) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background-elevated);
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.n8n-demo-container:not(:has(n8n-demo:defined))::before {
+    content: "Loading workflow preview...";
+}
+
+/* Readonly indicator for n8n workflows */
+.n8n-demo-container::after {
+    content: "🔒 View Only";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    z-index: 10;
+    pointer-events: none;
+    font-weight: 500;
+}
+
+/* Loading spinner styles */
+.workflow-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    background: var(--color-background-elevated);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--color-border);
+    border-top: 4px solid var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--space-3);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.workflow-loading p {
+    font-style: italic;
+    margin: 0;
+}
+
+.workflow-loaded .workflow-loading {
+    display: none;
+}
+
+/* Fallback Architecture Styles */
+.fallback-architecture {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-4);
+}
+
+.fallback-architecture h4 {
+    text-align: center;
+    margin-bottom: var(--space-6);
+    color: var(--color-text);
+}
+
+.flow-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.flow-step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    width: 100%;
+    backdrop-filter: var(--glass-backdrop);
+    transition: all var(--transition-normal);
+}
+
+.flow-step:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--color-primary);
+}
+
+.step-icon {
+    font-size: 2rem;
+    min-width: 50px;
+    text-align: center;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content strong {
+    color: var(--color-text);
+    font-size: 1.1rem;
+}
+
+.step-content p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.flow-arrow {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    font-weight: bold;
+    margin: var(--space-2) 0;
+}
+
+/* Force larger node sizes for better readability */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon {
+    stroke-width: 2px;
+}
+
+.mermaid .node text {
+    font-size: 14px !important;
+    font-weight: 500;
+}
+
+/* Fullscreen mode adjustments */
+.mermaid-wrapper:fullscreen {
+    background: var(--color-background);
+}
+
+.mermaid-wrapper:fullscreen .diagram-controls {
+    background: rgba(0, 0, 0, 0.8);
+    padding: var(--space-2);
+    border-radius: var(--radius-lg);
+    top: var(--space-6);
+    right: var(--space-6);
+}
+
+.mermaid-wrapper:fullscreen .zoom-info {
+    background: rgba(0, 0, 0, 0.8);
+    bottom: var(--space-6);
+    left: var(--space-6);
+}
+
+/* Media Queries for n8n Workflow Section */
+@media (max-width: 768px) {
+    .workflow-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .workflow-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .agents-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .json-header {
+        flex-direction: column;
+        gap: var(--space-3);
+        text-align: center;
+    }
+
+    .diagram-container {
+        padding: var(--space-4);
+        max-width: 100%;
+    }
+
+    .mermaid-diagram {
+        min-height: 600px;
+        padding: var(--space-2);
+    }
+
+    .mermaid {
+        font-size: 16px;
+        min-height: 600px;
+        transform: scale(1.0);
+    }
+
+    .mermaid svg {
+        min-height: 600px;
+    }
+
+    .diagram-controls {
+        top: var(--space-2);
+        right: var(--space-2);
+        flex-wrap: wrap;
+    }
+
+    .diagram-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+
+    .mermaid-wrapper {
+        height: 600px;
+    }
+
+    .zoom-info {
+        bottom: var(--space-2);
+        left: var(--space-2);
+        font-size: 0.75rem;
+        padding: var(--space-1) var(--space-2);
+    }
+
+    .mermaid {
+        min-width: 1200px;
+        min-height: 600px;
+        font-size: 14px;
+    }
+
+    .mermaid svg {
+        min-width: 1200px !important;
+        min-height: 600px !important;
+    }
+
+    /* Visual workflows mobile adjustments */
+    .workflow-previews {
+        gap: var(--space-6);
+    }
+
+    .workflow-preview-card {
+        padding: var(--space-4);
+    }
+
+    .n8n-demo-container {
+        min-height: 300px;
+        padding: var(--space-2);
+    }
+
+    n8n-demo {
+        height: 300px;
+    }
+
+    .workflow-card-header h4 {
+        font-size: 1.1rem;
+        flex-direction: column;
+        gap: var(--space-1);
+    }
+}
+
+@media (max-width: 480px) {
+    .diagram-container {
+        padding: var(--space-3);
+    }
+
+    .mermaid-diagram {
+        min-height: 500px;
+        padding: var(--space-1);
+    }
+
+    .mermaid {
+        font-size: 14px;
+        min-height: 500px;
+        transform: scale(0.9);
+    }
+
+    .mermaid svg {
+        min-height: 500px;
+    }
+}
+
+/* n8n Demo Workflow Styles */
+.workflow-demos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+.workflow-demo-card {
+    background: var(--color-background-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.workflow-demo-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.workflow-stats {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-top: var(--space-3);
+}
+
+.stat-badge {
+    background: var(--color-primary);
+    color: white;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.n8n-demo-container {
+    min-height: 500px;
+    background: var(--color-background-alt);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.demo-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 500px;
+    color: var(--color-text-secondary);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--space-4);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+n8n-demo {
+    width: 100%;
+    height: 500px;
+    display: block;
+}
+
+/* Hide loading when demo is loaded */
+.n8n-demo-container:has(n8n-demo) .demo-loading {
+    display: none;
+}
+
+.workflow-preview-content {
+    padding: var(--space-6);
+    background: var(--color-background-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+}
+
+.workflow-preview-content:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.workflow-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.workflow-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
+.stat-item {
+    text-align: center;
+    padding: var(--space-4);
+    background: var(--color-background-alt);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-normal);
+}
+
+.stat-item:hover {
+    background: var(--color-background-elevated);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-item strong {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--space-1);
+}
+
+.stat-item span {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.workflow-description {
+    margin-bottom: var(--space-6);
+}
+
+.workflow-description h5 {
+    color: var(--color-text);
+    font-size: 1.1rem;
+    margin-bottom: var(--space-4);
+    font-weight: 600;
+}
+
+.workflow-description ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.workflow-description li {
+    padding: var(--space-3);
+    margin-bottom: var(--space-2);
+    background: var(--color-background-alt);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--color-primary);
+    transition: all var(--transition-normal);
+}
+
+.workflow-description li:hover {
+    background: var(--color-background-elevated);
+    transform: translateX(4px);
+}
+
+.workflow-description li strong {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.workflow-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.workflow-instructions {
+    margin-top: var(--space-8);
+    padding: var(--space-6);
+    background: var(--color-background-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+}
+
+.workflow-instructions h4 {
+    color: var(--color-text);
+    font-size: 1.25rem;
+    margin-bottom: var(--space-6);
+    text-align: center;
+    font-weight: 600;
+}
+
+.instruction-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-4);
+}
+
+.instruction-card {
+    padding: var(--space-4);
+    background: var(--color-background-alt);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    text-align: center;
+    transition: all var(--transition-normal);
+}
+
+.instruction-card:hover {
+    background: var(--color-background-elevated);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.instruction-card h5 {
+    color: var(--color-primary);
+    font-size: 1rem;
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+}
+
+.instruction-card p {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Mobile adjustments for workflow demo styles */
+@media (max-width: 768px) {
+    .workflow-demos {
+        gap: var(--space-6);
+    }
+
+    .workflow-demo-card {
+        margin: 0 calc(-1 * var(--space-4));
+    }
+
+    .workflow-card-header {
+        padding: var(--space-4);
+    }
+
+    .workflow-card-header h4 {
+        font-size: 1.1rem;
+    }
+
+    .workflow-stats {
+        gap: var(--space-1);
+    }
+
+    .stat-badge {
+        font-size: 0.7rem;
+        padding: 2px var(--space-2);
+    }
+
+    .n8n-demo-container {
+        min-height: 400px;
+    }
+
+    .demo-loading {
+        height: 400px;
+    }
+
+    n8n-demo {
+        height: 400px;
+    }
+
+    .workflow-actions {
+        flex-direction: column;
+        align-items: center;
+        padding: var(--space-4);
+        gap: var(--space-3);
+    }
+
+    .instruction-cards {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+
+    .workflow-preview-content {
+        padding: var(--space-4);
+    }
+
+    .workflow-instructions {
+        padding: var(--space-4);
+    }
+}
+
+@media (max-width: 480px) {
+    .workflow-demo-card {
+        margin: 0 calc(-1 * var(--space-3));
+    }
+
+    .workflow-card-header {
+        padding: var(--space-3);
+    }
+
+    .workflow-card-header h4 {
+        font-size: 1rem;
+    }
+
+    .workflow-card-header p {
+        font-size: 0.85rem;
+    }
+
+    .workflow-stats {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-1);
+    }
+
+    .stat-badge {
+        font-size: 0.65rem;
+        padding: 1px var(--space-1);
+    }
+
+    .n8n-demo-container {
+        min-height: 350px;
+    }
+
+    .demo-loading {
+        height: 350px;
+        padding: var(--space-3);
+    }
+
+    .demo-loading p {
+        font-size: 0.9rem;
+    }
+
+    n8n-demo {
+        height: 350px;
+    }
+
+    .workflow-actions {
+        padding: var(--space-3);
+        gap: var(--space-2);
+    }
+
+    .workflow-instructions {
+        padding: var(--space-3);
+    }
+
+    .workflow-instructions h4 {
+        font-size: 1.1rem;
+    }
+
+    .instruction-card {
+        padding: var(--space-3);
+    }
+
+    .instruction-card h5 {
+        font-size: 0.9rem;
+    }
+
+    .instruction-card p {
+        font-size: 0.8rem;
     }
 } 

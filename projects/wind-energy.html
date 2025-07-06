@@ -86,16 +86,22 @@
                 <h2 class="section-title">Project Overview</h2>
             </div>
             <div class="section-content">
-                <p>This project develops sophisticated machine learning models to predict wind turbine power output based on comprehensive environmental and operational data. The system addresses critical challenges in renewable energy management by providing accurate forecasting capabilities that enable optimal grid integration and operational planning.</p>
+                <p>This project develops a machine learning model to forecast wind turbine power output using historical environmental and temporal data over a three-year period. By employing regression techniques, the system aims to predict continuous values of power output based on features such as wind speed, temperature, pressure, and time-related variables.</p>
 
-                <p>By analyzing complex relationships between meteorological conditions, turbine characteristics, and power generation patterns, the project contributes to improved efficiency and reliability of wind energy systems, supporting the transition to sustainable energy infrastructure.</p>
+                <p>Accurate power forecasting is crucial for efficient energy management, cost reduction, and optimizing operations in the energy sector. The project addresses the variability in environmental conditions that can lead to fluctuations in power generation, providing energy companies and grid operators with precise forecasts to balance supply and demand.</p>
+
+                <h3>Business Question</h3>
+                <p>How can we accurately predict power output using historical environmental and temporal data over a three-year period?</p>
+
+                <h3>Data Question</h3>
+                <p>Which features significantly influence power output, and how can we preprocess and model the data to achieve optimal predictive performance?</p>
 
                 <h3>Key Objectives</h3>
                 <ul class="feature-list">
-                    <li><strong>Power Forecasting</strong> – Accurate prediction of wind turbine electrical output under varying conditions</li>
-                    <li><strong>Efficiency Optimization</strong> – Identify optimal operating parameters for maximum energy yield</li>
-                    <li><strong>Grid Integration</strong> – Support smart grid management with reliable renewable energy forecasts</li>
-                    <li><strong>Maintenance Planning</strong> – Enable predictive maintenance based on performance patterns</li>
+                    <li><strong>Power Forecasting</strong> – Predict continuous power output values based on environmental conditions</li>
+                    <li><strong>Feature Analysis</strong> – Identify which variables significantly influence power generation</li>
+                    <li><strong>Model Optimization</strong> – Develop and evaluate multiple regression models for best performance</li>
+                    <li><strong>Operational Efficiency</strong> – Enable optimized energy production schedules and grid reliability</li>
                 </ul>
             </div>
         </div>
@@ -105,37 +111,86 @@
     <section id="data-analysis" class="project-section bg-light">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Data Analysis Framework</h2>
-                <p>Comprehensive analysis of environmental and operational parameters</p>
+                <h2 class="section-title">Data Analysis & Preprocessing</h2>
+                <p>Comprehensive data preparation and exploratory analysis workflow</p>
             </div>
-            <div class="features-grid">
-                <div class="feature-card" data-aos="fade-up">
-                    <div class="feature-icon">
-                        <i class="fas fa-wind"></i>
+            <div class="section-content">
+                <h3>Data Overview</h3>
+                <ul class="feature-list">
+                    <li><strong>Train.csv</strong> - Training dataset containing historical records over three years</li>
+                    <li><strong>Test.csv</strong> - Testing dataset for evaluating model performance</li>
+                    <li><strong>column_info.csv</strong> - Descriptions of variables in the datasets</li>
+                </ul>
+
+                <h3>Key Variables</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Temporal Features</h4>
+                        <ul class="feature-list">
+                            <li>Time (converted to datetime format)</li>
+                            <li>Month (extracted from time)</li>
+                            <li>Year (extracted from time)</li>
+                            <li>TimeOfDay (hour of the day)</li>
+                        </ul>
+                        
+                        <h4>Environmental Variables</h4>
+                        <ul class="feature-list">
+                            <li>WS_10m (wind speed at 10m height)</li>
+                            <li>WS_100m (wind speed at 100m height)</li>
+                            <li>Temperature</li>
+                            <li>Pressure</li>
+                        </ul>
                     </div>
-                    <h3>Wind Characteristics</h3>
-                    <p>Detailed analysis of wind speed, direction, turbulence intensity, and wind shear profiles. Includes temporal variations, seasonal patterns, and correlation with geographic and topographic factors affecting turbine performance.</p>
+                    <div>
+                        <h4>Data Quality Assessment</h4>
+                        <ul class="feature-list">
+                            <li>Zero null values found in datasets</li>
+                            <li>Zero duplicate records identified</li>
+                            <li>High data quality confirmed</li>
+                        </ul>
+                        
+                        <h4>Feature Engineering</h4>
+                        <ul class="feature-list">
+                            <li>Time feature transformation to datetime</li>
+                            <li>Extraction of temporal components</li>
+                            <li>Correlation analysis for feature selection</li>
+                            <li>MinMaxScaler applied for normalization</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-icon">
-                        <i class="fas fa-thermometer-half"></i>
+
+                <h3>Exploratory Data Analysis</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Distribution Analysis</h4>
+                        <ul class="feature-list">
+                            <li>Histograms plotted for all features</li>
+                            <li>Most features showed normal distribution</li>
+                            <li>Suitable for regression modeling</li>
+                        </ul>
+                        
+                        <h4>Correlation Analysis</h4>
+                        <ul class="feature-list">
+                            <li>Strong correlation between wind speeds and power output</li>
+                            <li>TimeOfDay showed positive correlation with power</li>
+                            <li>DP_2m feature removed due to high correlation</li>
+                        </ul>
                     </div>
-                    <h3>Environmental Conditions</h3>
-                    <p>Comprehensive meteorological data processing including temperature, humidity, atmospheric pressure, air density calculations, and their impact on turbine efficiency and power conversion rates.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-icon">
-                        <i class="fas fa-cog"></i>
+                    <div>
+                        <h4>Temporal Analysis</h4>
+                        <ul class="feature-list">
+                            <li>Power output patterns by time of day</li>
+                            <li>Monthly power generation variations</li>
+                            <li>Temporal dependencies identified</li>
+                        </ul>
+                        
+                        <h4>Wind Speed Analysis</h4>
+                        <ul class="feature-list">
+                            <li>Monthly average wind speeds analyzed</li>
+                            <li>Higher wind speeds correlated with higher power</li>
+                            <li>Wind speed at different heights compared</li>
+                        </ul>
                     </div>
-                    <h3>Turbine Parameters</h3>
-                    <p>Analysis of turbine specifications including rotor diameter, hub height, rated capacity, power curve characteristics, and operational status affecting energy conversion efficiency.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Performance Metrics</h3>
-                    <p>Evaluation of capacity factors, availability rates, power quality metrics, and efficiency indicators to establish baseline performance and identify optimization opportunities.</p>
                 </div>
             </div>
         </div>
@@ -145,54 +200,132 @@
     <section id="modeling" class="project-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Predictive Modeling</h2>
-                <p>Advanced machine learning approaches for energy prediction</p>
+                <h2 class="section-title">Model Training & Evaluation</h2>
+                <p>Comprehensive regression model development and performance analysis</p>
             </div>
-            <div class="architecture-grid">
-                <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
-                    <div class="component-header">
-                        <div class="component-icon">
-                            <i class="fas fa-chart-area"></i>
-                        </div>
-                        <h3 class="component-title">Regression Models</h3>
+            <div class="section-content">
+                <h3>Data Splitting</h3>
+                <p>The preprocessed data was split into training and testing sets with an 80-20 split to ensure proper model evaluation on unseen data and assess generalization capabilities.</p>
+
+                <h3>Models Evaluated</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <ul class="feature-list">
+                            <li>Linear Regression</li>
+                            <li>Lasso Regression</li>
+                            <li>Ridge Regression</li>
+                            <li>K-Nearest Neighbors (KNN) Regressor</li>
+                        </ul>
                     </div>
-                    <p class="component-description">Sophisticated regression techniques for continuous power output prediction with high accuracy and reliability.</p>
-                    <ul class="component-features">
-                        <li>Multiple Linear Regression with feature selection</li>
-                        <li>Polynomial Regression for non-linear relationships</li>
-                        <li>Ridge and Lasso regularization techniques</li>
-                        <li>Support Vector Regression for complex patterns</li>
-                    </ul>
+                    <div>
+                        <ul class="feature-list">
+                            <li>Decision Tree Regressor</li>
+                            <li>Random Forest Regressor</li>
+                            <li>AdaBoost Regressor</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="architecture-component" data-aos="fade-up" data-aos-delay="100">
-                    <div class="component-header">
-                        <div class="component-icon">
-                            <i class="fas fa-tree"></i>
-                        </div>
-                        <h3 class="component-title">Ensemble Methods</h3>
+
+                <h3>Evaluation Metrics</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <ul class="feature-list">
+                            <li><strong>Mean Absolute Error (MAE)</strong> - Measures average magnitude of prediction errors</li>
+                            <li><strong>R-squared (R²) Score</strong> - Indicates proportion of variance predictable from features</li>
+                        </ul>
                     </div>
-                    <p class="component-description">Powerful ensemble approaches combining multiple algorithms for improved prediction accuracy and robustness.</p>
-                    <ul class="component-features">
-                        <li>Random Forest for feature importance ranking</li>
-                        <li>Gradient Boosting with XGBoost optimization</li>
-                        <li>AdaBoost for weighted ensemble learning</li>
-                        <li>Voting regressors for consensus predictions</li>
-                    </ul>
+                    <div>
+                        <ul class="feature-list">
+                            <li>Training performance assessment</li>
+                            <li>Test performance evaluation</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="architecture-component" data-aos="fade-up" data-aos-delay="150">
-                    <div class="component-header">
-                        <div class="component-icon">
-                            <i class="fas fa-brain"></i>
-                        </div>
-                        <h3 class="component-title">Neural Networks</h3>
+
+                <h3>Model Performance Results</h3>
+                <div class="section-content">
+                    <table style="width: 100%; border-collapse: collapse; margin: 2rem 0;">
+                        <thead>
+                            <tr style="background-color: var(--color-background-elevated); border-bottom: 2px solid var(--color-border);">
+                                <th style="padding: 1rem; text-align: left; border: 1px solid var(--color-border);">Model</th>
+                                <th style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">Training MAE</th>
+                                <th style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">Training R²</th>
+                                <th style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">Test MAE</th>
+                                <th style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">Test R²</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Linear Regression</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1384</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.505355</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1403</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.492294</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Lasso Regression</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.2125</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.000000</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.2122</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">-0.000039</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Ridge Regression</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1384</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.505339</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1403</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.492322</td>
+                            </tr>
+                            <tr style="background-color: var(--color-background-alt); border-bottom: 1px solid var(--color-border); font-weight: bold;">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">K-Nearest Neighbors</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0538</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.897932</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0731</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.824192</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Decision Tree</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0000</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">1.000000</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1118</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.561457</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Random Forest</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0318</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.969111</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0858</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.777471</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">AdaBoost</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1494</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.498542</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1500</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.492723</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Best Model: K-Nearest Neighbors Regressor</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Performance Highlights</h4>
+                        <ul class="feature-list">
+                            <li><strong>Test R² Score:</strong> 82.42%</li>
+                            <li><strong>Test MAE:</strong> 0.0731</li>
+                            <li><strong>Mean Difference:</strong> 0.0012</li>
+                        </ul>
                     </div>
-                    <p class="component-description">Deep learning architectures for capturing complex non-linear relationships in wind energy data.</p>
-                    <ul class="component-features">
-                        <li>Multi-layer Perceptrons for pattern recognition</li>
-                        <li>LSTM networks for temporal sequence modeling</li>
-                        <li>CNN architectures for spatial pattern analysis</li>
-                        <li>Hybrid models combining multiple approaches</li>
-                    </ul>
+                    <div>
+                        <h4>Key Insights</h4>
+                        <ul class="feature-list">
+                            <li>Superior performance among all models tested</li>
+                            <li>Local patterns and nearest neighbors significant for prediction</li>
+                            <li>Minimal bias with highly accurate predictions</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -202,46 +335,96 @@
     <section id="optimization" class="project-section bg-light">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Optimization & Applications</h2>
+                <h2 class="section-title">Key Insights & Business Impact</h2>
+                <p>Feature analysis, model insights, and practical applications</p>
             </div>
-            <div class="section-content two-column">
-                <div>
-                    <h3>Feature Engineering</h3>
-                    <ul class="feature-list">
-                        <li><strong>Wind Power Density</strong> – Calculated from wind speed and air density</li>
-                        <li><strong>Turbulence Intensity</strong> – Impact on power quality and generation</li>
-                        <li><strong>Wind Shear Coefficient</strong> – Vertical wind profile analysis</li>
-                        <li><strong>Seasonal Indicators</strong> – Temporal pattern recognition</li>
-                        <li><strong>Performance Ratios</strong> – Efficiency metrics and comparisons</li>
-                    </ul>
-                    
-                    <h3>Model Validation</h3>
-                    <ul class="feature-list">
-                        <li>Cross-validation with temporal splitting</li>
-                        <li>Performance metrics (MAE, RMSE, R²)</li>
-                        <li>Residual analysis and error distribution</li>
-                        <li>Prediction interval estimation</li>
-                        <li>Model interpretability and feature importance</li>
-                    </ul>
+            <div class="section-content">
+                <h3>Feature Importance Analysis</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Most Influential Features</h4>
+                        <ul class="feature-list">
+                            <li><strong>Wind Speeds (WS_10m, WS_100m)</strong> - Primary drivers of power output</li>
+                            <li><strong>TimeOfDay</strong> - Strong positive correlation with power generation</li>
+                            <li><strong>Month</strong> - Seasonal patterns affecting energy production</li>
+                            <li><strong>Temperature and Pressure</strong> - Environmental conditions impacting performance</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Data Quality Insights</h4>
+                        <ul class="feature-list">
+                            <li>Zero null values and duplicates confirmed data integrity</li>
+                            <li>Normal distribution of features suitable for regression</li>
+                            <li>Strong correlation patterns identified through analysis</li>
+                            <li>Successful multicollinearity reduction with feature removal</li>
+                        </ul>
+                    </div>
                 </div>
-                <div>
-                    <h3>Practical Applications</h3>
-                    <ul class="feature-list">
-                        <li><strong>Energy Trading</strong> – Accurate forecasts for market participation</li>
-                        <li><strong>Grid Balancing</strong> – Real-time generation prediction</li>
-                        <li><strong>Maintenance Scheduling</strong> – Optimal downtime planning</li>
-                        <li><strong>Site Assessment</strong> – Wind resource evaluation</li>
-                        <li><strong>Performance Monitoring</strong> – Anomaly detection and alerts</li>
-                    </ul>
-                    
-                    <h3>Economic Impact</h3>
-                    <ul class="feature-list">
-                        <li>Improved capacity factor through optimization</li>
-                        <li>Reduced operational costs via predictive maintenance</li>
-                        <li>Enhanced revenue through better market strategies</li>
-                        <li>Risk mitigation in renewable energy investments</li>
-                        <li>Support for sustainable energy transition goals</li>
-                    </ul>
+
+                <h3>Model Performance Analysis</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>KNN Regressor Success Factors</h4>
+                        <ul class="feature-list">
+                            <li>Local patterns in feature space highly significant</li>
+                            <li>Nearest neighbor relationships captured complex dependencies</li>
+                            <li>Mean prediction difference of only 0.0012</li>
+                            <li>Explains 82.42% of variance in power output</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Model Comparison Insights</h4>
+                        <ul class="feature-list">
+                            <li>Linear models showed moderate but consistent performance</li>
+                            <li>Lasso regression underperformed due to feature elimination</li>
+                            <li>Decision Tree exhibited overfitting with perfect training scores</li>
+                            <li>Random Forest provided good alternative but less accurate than KNN</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Business Applications & Impact</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Operational Benefits</h4>
+                        <ul class="feature-list">
+                            <li><strong>Energy Production Optimization</strong> - Improved scheduling based on accurate forecasts</li>
+                            <li><strong>Grid Reliability</strong> - Better supply and demand balancing</li>
+                            <li><strong>Cost Reduction</strong> - Efficient resource allocation and planning</li>
+                            <li><strong>Informed Decision Making</strong> - Data-driven operational strategies</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Strategic Advantages</h4>
+                        <ul class="feature-list">
+                            <li><strong>Competitive Edge</strong> - Superior forecasting accuracy in energy sector</li>
+                            <li><strong>Risk Mitigation</strong> - Reduced uncertainty in power generation</li>
+                            <li><strong>Scalability</strong> - Model applicable to larger datasets and real-time data</li>
+                            <li><strong>Integration Ready</strong> - Prepared for deployment in operational systems</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Future Enhancements</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Model Improvements</h4>
+                        <ul class="feature-list">
+                            <li>KNN hyperparameter tuning for n_neighbors optimization</li>
+                            <li>Cross-validation for optimal parameter selection</li>
+                            <li>Random Forest hyperparameter optimization</li>
+                            <li>Ensemble methods combining top-performing models</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Deployment Considerations</h4>
+                        <ul class="feature-list">
+                            <li>Real-time prediction system integration</li>
+                            <li>Continuous model monitoring and updating</li>
+                            <li>Performance tracking in production environment</li>
+                            <li>Adaptation for streaming data processing</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -252,46 +435,77 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Technology Stack</h2>
-                <p>Advanced tools for renewable energy data analysis and prediction</p>
+                <p>Tools and libraries used for wind turbine power prediction analysis</p>
             </div>
-            <div class="section-content two-column">
-                <div>
-                    <h3>Data Processing</h3>
-                    <ul class="feature-list">
-                        <li>Pandas - Time series data manipulation</li>
-                        <li>NumPy - Numerical computations and array operations</li>
-                        <li>SciPy - Scientific computing and statistics</li>
-                        <li>Datetime - Temporal data handling and analysis</li>
-                        <li>Pytz - Timezone-aware datetime processing</li>
-                    </ul>
-                    
-                    <h3>Machine Learning</h3>
-                    <ul class="feature-list">
-                        <li>Scikit-learn - Regression algorithms and metrics</li>
-                        <li>XGBoost - Gradient boosting framework</li>
-                        <li>TensorFlow - Deep learning and neural networks</li>
-                        <li>Keras - High-level neural network API</li>
-                        <li>GridSearchCV - Hyperparameter optimization</li>
-                    </ul>
+            <div class="section-content">
+                <div class="section-content two-column">
+                    <div>
+                        <h3>Data Processing & Analysis</h3>
+                        <ul class="feature-list">
+                            <li><strong>Pandas</strong> - Data manipulation and time series processing</li>
+                            <li><strong>NumPy</strong> - Numerical computations and array operations</li>
+                            <li><strong>Datetime</strong> - Time feature transformation and extraction</li>
+                            <li><strong>MinMaxScaler</strong> - Feature normalization and scaling</li>
+                        </ul>
+                        
+                        <h3>Machine Learning</h3>
+                        <ul class="feature-list">
+                            <li><strong>Scikit-learn</strong> - Machine learning algorithms and evaluation</li>
+                            <li><strong>Linear Regression</strong> - Baseline regression model</li>
+                            <li><strong>Lasso & Ridge Regression</strong> - Regularized regression techniques</li>
+                            <li><strong>K-Nearest Neighbors</strong> - Best performing regression model</li>
+                            <li><strong>Decision Tree Regressor</strong> - Tree-based modeling</li>
+                            <li><strong>Random Forest Regressor</strong> - Ensemble learning method</li>
+                            <li><strong>AdaBoost Regressor</strong> - Adaptive boosting algorithm</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Model Evaluation</h3>
+                        <ul class="feature-list">
+                            <li><strong>Mean Absolute Error (MAE)</strong> - Primary evaluation metric</li>
+                            <li><strong>R-squared (R²) Score</strong> - Variance explanation measure</li>
+                            <li><strong>Train-Test Split</strong> - 80-20 data splitting for validation</li>
+                            <li><strong>Residual Analysis</strong> - Prediction accuracy assessment</li>
+                        </ul>
+                        
+                        <h3>Data Visualization & Analysis</h3>
+                        <ul class="feature-list">
+                            <li><strong>Matplotlib</strong> - Statistical plotting and visualization</li>
+                            <li><strong>Correlation Matrix</strong> - Feature relationship analysis</li>
+                            <li><strong>Histograms</strong> - Distribution analysis</li>
+                            <li><strong>Pair Plots</strong> - Feature relationship visualization</li>
+                            <li><strong>Temporal Analysis</strong> - Time-based pattern identification</li>
+                        </ul>
+                        
+                        <h3>Development Environment</h3>
+                        <ul class="feature-list">
+                            <li><strong>Jupyter Notebook</strong> - Interactive development environment</li>
+                            <li><strong>Python</strong> - Core programming language</li>
+                            <li><strong>CSV Data Processing</strong> - Structured data handling</li>
+                        </ul>
+                    </div>
                 </div>
-                <div>
-                    <h3>Visualization</h3>
-                    <ul class="feature-list">
-                        <li>Matplotlib - Statistical plotting and charts</li>
-                        <li>Seaborn - Advanced statistical visualizations</li>
-                        <li>Plotly - Interactive time series plots</li>
-                        <li>Bokeh - Real-time dashboard creation</li>
-                        <li>Folium - Geographic wind farm mapping</li>
-                    </ul>
-                    
-                    <h3>Evaluation & Deployment</h3>
-                    <ul class="feature-list">
-                        <li>Cross-validation - Model performance assessment</li>
-                        <li>Joblib - Model serialization and deployment</li>
-                        <li>Flask - API development for predictions</li>
-                        <li>Docker - Containerized deployment</li>
-                        <li>MLflow - Experiment tracking and versioning</li>
-                    </ul>
+
+                <h3>Project Implementation</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Data Pipeline</h4>
+                        <ul class="feature-list">
+                            <li>Automated data loading from CSV files</li>
+                            <li>Time feature extraction and transformation</li>
+                            <li>Correlation-based feature selection</li>
+                            <li>Standardized preprocessing workflow</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Model Development</h4>
+                        <ul class="feature-list">
+                            <li>Systematic model comparison framework</li>
+                            <li>Standardized evaluation metrics</li>
+                            <li>Performance tracking and analysis</li>
+                            <li>Ready for production deployment</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

@@ -19,6 +19,184 @@
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="../css/project-styles.css">
+    
+    <style>
+        /* Presentation Styles */
+        .presentation-container {
+            background: var(--glass-bg, rgba(255, 255, 255, 0.8));
+            border: 1px solid var(--glass-border, rgba(226, 232, 240, 0.8));
+            border-radius: var(--radius-lg, 1rem);
+            padding: var(--space-4, 1rem);
+            backdrop-filter: var(--glass-backdrop, blur(10px));
+            box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+            transition: all var(--transition-normal, 0.2s ease);
+        }
+        
+        .presentation-container:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+        }
+        
+        .presentation-container iframe {
+            border-radius: var(--radius-md, 0.5rem);
+            width: 100%;
+            min-height: 600px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .presentation-container {
+                padding: var(--space-2, 0.5rem);
+            }
+            
+            .presentation-container iframe {
+                min-height: 400px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .presentation-container iframe {
+                min-height: 300px;
+            }
+        }
+        
+        /* Layout Uniformity Improvements */
+        .section-content.two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        
+        /* Navigation Bar Spacing Improvements */
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+            padding: 0 1rem;
+        }
+        
+        .logo {
+            white-space: nowrap;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            transition: all var(--transition-normal);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        
+        .main-nav {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            margin: 0 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links a {
+            position: relative;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            transition: color var(--transition-normal);
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .nav-links {
+                gap: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 0.5rem;
+            }
+            
+            .main-nav {
+                margin: 0 1rem;
+            }
+        }
+        
+        /* End Navigation Improvements */
+        
+        .section-content.two-column > div {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .section-content.two-column h3 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            color: var(--color-text);
+            font-weight: 600;
+        }
+        
+        .section-content.two-column h3:not(:first-child) {
+            margin-top: 2.5rem;
+        }
+        
+        .section-content.two-column .feature-list {
+            margin-bottom: 2rem;
+        }
+        
+        .section-content.two-column .feature-list li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: var(--color-text-secondary);
+        }
+        
+        .section-content.two-column .feature-list li strong {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+        
+        /* Ensure consistent spacing between sections */
+        #results .section-content.two-column > div:first-child {
+            padding-right: 1rem;
+        }
+        
+        #results .section-content.two-column > div:last-child {
+            padding-left: 1rem;
+        }
+        
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .section-content.two-column {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .section-content.two-column h3:not(:first-child) {
+                margin-top: 2rem;
+            }
+            
+            #results .section-content.two-column > div:first-child,
+            #results .section-content.two-column > div:last-child {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+    </style>
 </head>
 <body class="nasa-theme">
     <!-- Header -->
@@ -33,6 +211,7 @@
                         <li><a href="#overview">Overview</a></li>
                         <li><a href="#data-processing">Data Processing</a></li>
                         <li><a href="#modeling">ML Modeling</a></li>
+                        <li><a href="#presentation">Presentation</a></li>
                         <li><a href="#results">Results</a></li>
                         <li><a href="#technology">Technology</a></li>
                     </ul>
@@ -87,9 +266,8 @@
             </div>
             <div class="section-content">
                 <p>This project develops machine learning models to evaluate and predict material performance for space applications using NASA's outgassing materials database. The analysis focuses on critical material quality metrics that determine suitability for high-vacuum space environments.</p>
-
                 <p>The project encompasses comprehensive data processing, exploratory data analysis, feature engineering, and implementation of both regression and classification models to support material selection and quality control decisions for space missions.</p>
-
+                <br>
                 <h3>Key Objectives</h3>
                 <ul class="feature-list">
                     <li><strong>Performance Prediction</strong> – Develop linear regression models to evaluate material performance scores</li>
@@ -194,6 +372,27 @@
                         <li>Categorical feature encoding and transformation</li>
                     </ul>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Presentation Section -->
+    <section id="presentation" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Presentation</h2>
+                <p>Comprehensive analysis and findings from the NASA outgassing materials study</p>
+            </div>
+            <div class="presentation-container" data-aos="fade-up" data-aos-delay="200">
+                <iframe 
+                    src="https://docs.google.com/presentation/d/1eLjKQL-qADiG0ghYJBFTMOlsHNPNDCkT0KmYe-5Rn-0/embed?start=false&loop=false&delayms=3000" 
+                    frameborder="0" 
+                    width="100%" 
+                    height="600" 
+                    allowfullscreen="true" 
+                    mozallowfullscreen="true" 
+                    webkitallowfullscreen="true">
+                </iframe>
             </div>
         </div>
     </section>

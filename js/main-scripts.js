@@ -1,5 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Removed AOS animations to prevent conflicts
+    // Initialize AOS animations
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100
+        });
+    }
 
     // Mobile Menu Toggle
     const mobileToggle = document.querySelector('.mobile-toggle');

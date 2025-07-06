@@ -2234,7 +2234,7 @@
                                 frame="true" 
                                 theme="dark"
                                 clicktointeract="false"
-                                readonly="true"
+                                disableinteractivity="false"
                                 hidecanvaserrors="true"
                                 workflow='{}'>
                             </n8n-demo>
@@ -2257,7 +2257,7 @@
                                 frame="true" 
                                 theme="dark"
                                 clicktointeract="false"
-                                readonly="true"
+                                disableinteractivity="false"
                                 hidecanvaserrors="true"
                                 workflow='{}'>
                             </n8n-demo>
@@ -2568,8 +2568,8 @@
                             
                             // Backup initialization after longer delay
                             setTimeout(() => {
-                                if (!document.querySelector('#orch-demo')?.workflow || 
-                                    !document.querySelector('#rag-demo')?.workflow) {
+                                if (!document.querySelector('#orch-demo')?.getAttribute('workflow') || 
+                                    !document.querySelector('#rag-demo')?.getAttribute('workflow')) {
                                     console.log('Workflows not loaded, retrying...');
                                     initializeN8nDemos();
                                 }
@@ -2638,7 +2638,7 @@
             try {
                 // Load the actual exported workflow JSON file
                 console.log('Fetching Code_Orch_Agent.json...');
-                const response = await fetch('n8n/Code_Orch_Agent.json');
+                const response = await fetch('../n8n/Code_Orch_Agent.json');
                 if (!response.ok) {
                     throw new Error(`Failed to load workflow: ${response.statusText}`);
                 }
@@ -2646,7 +2646,7 @@
                 console.log('✅ Loaded orchestration workflow:', orchWorkflow.name);
 
                 // Set workflow using the actual exported JSON
-                orchDemo.workflow = JSON.stringify(orchWorkflow);
+                orchDemo.setAttribute('workflow', JSON.stringify(orchWorkflow));
                 
                 // Wait for component to be ready
                 setTimeout(() => {
@@ -2679,7 +2679,7 @@
             try {
                 // Load the actual exported RAG workflow JSON file
                 console.log('Fetching RAG_Ingest.json...');
-                const response = await fetch('n8n/RAG_Ingest.json');
+                const response = await fetch('../n8n/RAG_Ingest.json');
                 if (!response.ok) {
                     throw new Error(`Failed to load workflow: ${response.statusText}`);
                 }
@@ -2687,7 +2687,7 @@
                 console.log('✅ Loaded RAG workflow:', ragWorkflow.name);
 
                 // Set workflow using the actual exported JSON
-                ragDemo.workflow = JSON.stringify(ragWorkflow);
+                ragDemo.setAttribute('workflow', JSON.stringify(ragWorkflow));
                 
                 // Wait for component to be ready
                 setTimeout(() => {
