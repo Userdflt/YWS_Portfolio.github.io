@@ -60,31 +60,42 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="floating-shape"></div>
-        <div class="floating-shape"></div>
-        <div class="floating-shape"></div>
+        <!-- Background elements -->
+        <div class="hero-background">
+            <div class="gradient-overlay"></div>
+
+        </div>
+        
+
         
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <div class="hero-greeting" data-aos="fade-up" data-aos-delay="100">Hello, I'm Young Woo Song</div>
-                    <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">Generative AI Professional</h1>
-                    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="300">Passionate about exploring, learning, and implementing new and advanced technologies to design intelligent systems that streamline workflows, solve complex problems, and deliver meaningful impact.</p>
-                    <div class="hero-buttons" data-aos="fade-up" data-aos-delay="400">
+                    <div class="hero-subtitle-top typewriter" data-text="Hello, I'm Young Woo Song"></div>
+                    <h1 class="hero-title">
+                        <span class="title-line typewriter" data-text="Generative AI" data-delay="1.2"></span>
+                        <span class="title-line typewriter" data-text="Professional" data-delay="1.8"></span>
+                    </h1>
+                    <p class="hero-subtitle typewriter" data-text="Passionate about exploring, learning, and implementing new and advanced technologies to design intelligent systems" data-delay="2.5"></p>
+                    <div class="hero-buttons" style="visibility: hidden;">
                         <a href="#projects" class="btn btn-primary">
-                            <i class="fas fa-rocket"></i>
                             <span>View Projects</span>
                         </a>
-                        <a href="#contact" class="btn btn-secondary">
-                            <i class="fas fa-envelope"></i>
-                            <span>Get In Touch</span>
+                        <a href="#about" class="btn btn-secondary">
+                            <span>Learn More</span>
                         </a>
                     </div>
                 </div>
-                <div class="hero-image" data-aos="fade-left" data-aos-delay="500">
-                    <img src="images/me_light.png" alt="Young Woo Song" />
+            </div>
+            
+            <!-- Scroll Down Indicator -->
+            <div class="scroll-indicator">
+                <div class="scroll-text">Scroll Down</div>
+                <div class="scroll-arrow">
+                    <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
+
         </div>
     </section>
 
@@ -548,5 +559,90 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="js/main-scripts.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+        
+        // Typewriter Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const typewriterElements = document.querySelectorAll('.typewriter');
+            let totalAnimationTime = 0;
+            
+            typewriterElements.forEach(element => {
+                const text = element.getAttribute('data-text');
+                const delay = parseFloat(element.getAttribute('data-delay')) || 0;
+                const typingTime = text.length * 35; // 35ms per character (slightly slower)
+                const elementEndTime = (delay * 1000) + typingTime;
+                
+                // Track the longest animation time
+                if (elementEndTime > totalAnimationTime) {
+                    totalAnimationTime = elementEndTime;
+                }
+                
+                element.textContent = '';
+                element.style.opacity = '1';
+                
+                setTimeout(() => {
+                    typeText(element, text, 35);
+                }, delay * 1000);
+            });
+            
+            // Show buttons after all typewriting is complete
+            setTimeout(() => {
+                const buttons = document.querySelector('.hero-buttons');
+                if (buttons) {
+                    buttons.style.opacity = '0';
+                    buttons.style.transform = 'translateY(20px)';
+                    buttons.style.transition = 'all 0.8s ease';
+                    buttons.style.visibility = 'visible';
+                    
+                    // Trigger the fade-in animation
+                    setTimeout(() => {
+                        buttons.style.opacity = '1';
+                        buttons.style.transform = 'translateY(0)';
+                    }, 100);
+                }
+            }, totalAnimationTime + 500); // Add 500ms buffer after typing completes
+        });
+        
+        function typeText(element, text, speed) {
+            let i = 0;
+            element.classList.add('typing');
+            
+            function type() {
+                if (i < text.length) {
+                    const currentText = text.substring(0, i + 1);
+                    element.innerHTML = currentText + '<span class="cursor" style="margin-left: 2px; color: rgba(255, 255, 255, 0.8);">|</span>';
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    element.classList.remove('typing');
+                    // Remove cursor immediately after typing is complete
+                    element.textContent = text;
+                }
+            }
+            
+            type();
+        }
+        
+        // Scroll Down Indicator Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollIndicator) {
+                scrollIndicator.addEventListener('click', function() {
+                    const aboutSection = document.querySelector('#about');
+                    if (aboutSection) {
+                        aboutSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
