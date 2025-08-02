@@ -114,9 +114,9 @@
             line-height: 1.6;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 20% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(253, 121, 168, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
             background-attachment: fixed;
         }
 
@@ -331,7 +331,7 @@
             display: flex;
             list-style: none;
             gap: var(--space-6);
-            margin-top: 20px;
+
         }
 
         .nav-links a {
@@ -427,7 +427,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(253, 121, 168, 0.1), transparent 70%);
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1), transparent 70%);
             z-index: 1;
         }
 
@@ -448,7 +448,7 @@
         .project-category {
             font-size: 1rem;
             font-weight: 600;
-            color: var(--color-accent);
+            color: var(--color-primary);
             margin-bottom: var(--space-2);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -457,7 +457,7 @@
         .project-title {
             font-size: 3rem;
             margin-bottom: var(--space-5);
-            background: var(--gradient-secondary);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -529,7 +529,7 @@
 
         .workflow-step h3 {
             margin-bottom: var(--space-3);
-            color: var(--color-accent);
+            color: var(--color-primary);
         }
 
         .feature-list {
@@ -548,7 +548,7 @@
             content: '→';
             position: absolute;
             left: 0;
-            color: var(--color-accent);
+            color: var(--color-primary);
         }
 
         .feature-list ul {
@@ -633,7 +633,7 @@
         .feature-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-glow);
-            border-color: var(--color-accent);
+            border-color: var(--color-primary);
         }
 
         .feature-icon {
@@ -643,11 +643,11 @@
             width: 60px;
             height: 60px;
             border-radius: var(--radius-full);
-            background: var(--gradient-secondary);
+            background: var(--gradient-primary);
             color: var(--color-text-inverse);
             font-size: 1.5rem;
             margin-bottom: var(--space-4);
-            box-shadow: 0 0 20px rgba(253, 121, 168, 0.3);
+            box-shadow: var(--shadow-glow);
         }
 
         .feature-card h3 {
@@ -682,7 +682,7 @@
         .demo-item:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-glow);
-            border-color: var(--color-accent);
+            border-color: var(--color-primary);
         }
 
         .demo-image {

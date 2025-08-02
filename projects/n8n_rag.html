@@ -1099,14 +1099,14 @@
             font-weight: 600 !important;
             font-family: var(--font-sans) !important;
             fill: #000000 !important;
-            color: #000000 !important;
+                            color: var(--color-text) !important;
         }
 
         .mermaid .edge-label {
             font-size: 12px !important;
             font-family: var(--font-sans) !important;
             fill: #000000 !important;
-            color: #000000 !important;
+                            color: var(--color-text) !important;
         }
 
         .mermaid .node rect,
@@ -1122,7 +1122,7 @@
         .mermaid .nodeLabel,
         .mermaid .edgeLabel {
             fill: #000000 !important;
-            color: #000000 !important;
+                            color: var(--color-text) !important;
             font-weight: 600 !important;
         }
 
@@ -1848,7 +1848,7 @@
                             <div style="font-size: 0.9rem; color: var(--color-text-secondary);">Processing</div>
                         </div>
                         <div style="text-align: center; padding: var(--space-3); background: rgba(108, 92, 231, 0.1); border-radius: var(--radius-md);">
-                            <div style="font-size: 1.5rem; font-weight: bold; color: #6c5ce7;">Image-Ready</div>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-secondary);">Image-Ready</div>
                             <div style="font-size: 0.9rem; color: var(--color-text-secondary);">Vector Storage</div>
                         </div>
                         <div style="text-align: center; padding: var(--space-3); background: rgba(0, 212, 170, 0.1); border-radius: var(--radius-md);">
@@ -1894,7 +1894,7 @@
                                 </div>
                                 
                                 <div class="flow-step" style="background: rgba(108, 92, 231, 0.05); border: 1px solid rgba(108, 92, 231, 0.2); border-radius: var(--radius-md); padding: var(--space-4); height: 140px; display: flex; flex-direction: column;">
-                                    <div style="font-weight: 600; color: #6c5ce7; margin-bottom: var(--space-2); font-size: 1rem;">4. Vector Embedding</div>
+                                    <div style="font-weight: 600; color: var(--color-secondary); margin-bottom: var(--space-2); font-size: 1rem;">4. Vector Embedding</div>
                                     <div style="font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.4; flex-grow: 1;">OpenAI text-embedding-3-large generates high-dimensional semantic vectors for search</div>
                                 </div>
                                 
@@ -1949,7 +1949,7 @@
                     <!-- Text Processing Pipeline -->
                     <div class="pipeline-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); backdrop-filter: var(--glass-backdrop);">
                         <div class="pipeline-header" style="display: flex; align-items: center; margin-bottom: var(--space-4);">
-                            <div style="background: linear-gradient(135deg, #10b981, #14b8a6); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
+                            <div style="background: var(--gradient-secondary); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
                                 <i class="fas fa-file-alt" style="color: white; font-size: 1.5rem;"></i>
                             </div>
                             <div>
@@ -2018,7 +2018,7 @@
                 <!-- Advanced Multi-Agent Orchestration System - Major Feature -->
                 <h3 style="margin-top: 4rem; margin-bottom: 1rem; color: var(--color-primary); font-size: 1.5rem;">
                     <i class="fas fa-brain"></i> Advanced Multi-Agent Orchestration System
-                    <span style="font-size: 0.7rem; background: var(--color-secondary, #10b981); color: white; padding: 2px 8px; border-radius: 12px; margin-left: 10px;">CORE FEATURE</span>
+                    <span style="font-size: 0.7rem; background: var(--color-secondary); color: white; padding: 2px 8px; border-radius: 12px; margin-left: 10px;">CORE FEATURE</span>
                 </h3>
                 <p style="margin-bottom: 2rem; color: var(--color-text-secondary); font-size: 1.1rem;">
                     Intelligent query routing and coordination system managing specialized Building Code agents with advanced memory management and context preservation.
@@ -2031,7 +2031,7 @@
                     </h4>
                     <div class="orchestration-highlights" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-4);">
                         <div style="text-align: center; padding: var(--space-3); background: rgba(108, 92, 231, 0.1); border-radius: var(--radius-md);">
-                            <div style="font-size: 1.5rem; font-weight: bold; color: #6c5ce7;">Multi-Agent</div>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-secondary);">Multi-Agent</div>
                             <div style="font-size: 0.9rem; color: var(--color-text-secondary);">Specialist Network</div>
                         </div>
                         <div style="text-align: center; padding: var(--space-3); background: rgba(0, 212, 170, 0.1); border-radius: var(--radius-md);">
@@ -2043,7 +2043,7 @@
                             <div style="font-size: 0.9rem; color: var(--color-text-secondary);">Routing Precision</div>
                         </div>
                         <div style="text-align: center; padding: var(--space-3); background: rgba(108, 92, 231, 0.1); border-radius: var(--radius-md);">
-                            <div style="font-size: 1.5rem; font-weight: bold; color: #6c5ce7;">Prompt-Tuned</div>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-secondary);">Prompt-Tuned</div>
                             <div style="font-size: 0.9rem; color: var(--color-text-secondary);">Agent System</div>
                         </div>
                     </div>
@@ -2055,7 +2055,7 @@
                     <!-- Central Orchestrator -->
                     <div class="component-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); backdrop-filter: var(--glass-backdrop);">
                         <div class="component-header" style="display: flex; align-items: center; margin-bottom: var(--space-4);">
-                            <div style="background: linear-gradient(135deg, #8b5cf6, #a855f7); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
+                            <div style="background: var(--gradient-primary); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
                                 <i class="fas fa-brain" style="color: white; font-size: 1.8rem;"></i>
                             </div>
                             <div>
@@ -2146,7 +2146,7 @@
                     <!-- Memory Management System -->
                     <div class="component-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); backdrop-filter: var(--glass-backdrop);">
                         <div class="component-header" style="display: flex; align-items: center; margin-bottom: var(--space-4);">
-                            <div style="background: linear-gradient(135deg, #10b981, #059669); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
+                            <div style="background: var(--gradient-secondary); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
                                 <i class="fas fa-memory" style="color: white; font-size: 1.5rem;"></i>
                             </div>
                             <div>
@@ -2200,7 +2200,7 @@
                 <div class="agents-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4);">
                     <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
                         <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
-                            <div style="background: linear-gradient(135deg, #f59e0b, #ea580c); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                            <div style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent)); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
                                 <i class="fas fa-building" style="color: white; font-size: 1.2rem;"></i>
                             </div>
                             <div>
@@ -2212,14 +2212,14 @@
                             Specialized in structural integrity, load calculations, seismic requirements, and material durability standards across construction phases.
                         </p>
                         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                            <span style="background: rgba(245, 158, 11, 0.1); color: #ea580c; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
-                            <span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
                         </div>
                     </div>
 
                     <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
                         <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
-                            <div style="background: linear-gradient(135deg, #f59e0b, #ea580c); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                            <div style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent)); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
                                 <i class="fas fa-fire" style="color: white; font-size: 1.2rem;"></i>
                             </div>
                             <div>
@@ -2231,14 +2231,14 @@
                             Expert in fire safety systems, evacuation planning, sprinkler requirements, and passive fire protection across all building types.
                         </p>
                         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                            <span style="background: rgba(245, 158, 11, 0.1); color: #ea580c; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
-                            <span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
                         </div>
                     </div>
 
                     <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
                         <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
-                            <div style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                            <div style="background: var(--gradient-primary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
                                 <i class="fas fa-universal-access" style="color: white; font-size: 1.2rem;"></i>
                             </div>
                             <div>
@@ -2250,14 +2250,14 @@
                             Specializes in accessibility compliance, universal design principles, lift requirements, and barrier-free access solutions.
                         </p>
                         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                            <span style="background: rgba(139, 92, 246, 0.1); color: #7c3aed; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
-                            <span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                            <span style="background: rgba(139, 92, 246, 0.1); color: var(--color-secondary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
                         </div>
                     </div>
 
                     <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
                         <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
-                            <div style="background: linear-gradient(135deg, #06b6d4, #0891b2); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                            <div style="background: var(--gradient-tech); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
                                 <i class="fas fa-tint" style="color: white; font-size: 1.2rem;"></i>
                             </div>
                             <div>
@@ -2269,14 +2269,14 @@
                             Expert in waterproofing systems, vapor barriers, drainage solutions, and moisture control across building envelopes.
                         </p>
                         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                            <span style="background: rgba(6, 182, 212, 0.1); color: #0891b2; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
-                            <span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                            <span style="background: rgba(59, 130, 246, 0.15); color: var(--color-primary-dark); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
                         </div>
                     </div>
 
                     <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
                         <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
-                            <div style="background: linear-gradient(135deg, #10b981, #059669); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                            <div style="background: var(--gradient-secondary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
                                 <i class="fas fa-shield-alt" style="color: white; font-size: 1.2rem;"></i>
                             </div>
                             <div>
@@ -2288,14 +2288,14 @@
                             Specializes in occupational safety, hazard mitigation, fall protection, and emergency response systems for building users.
                         </p>
                         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                            <span style="background: rgba(16, 185, 129, 0.1); color: #059669; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
-                            <span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                            <span style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
                         </div>
                     </div>
 
                     <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
                         <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
-                            <div style="background: linear-gradient(135deg, #f59e0b, #d97706); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                            <div style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent)); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
                                 <i class="fas fa-thermometer-half" style="color: white; font-size: 1.2rem;"></i>
                             </div>
                             <div>
@@ -2307,14 +2307,14 @@
                             Expert in HVAC systems, plumbing standards, electrical safety, and building services integration across all facility types.
                         </p>
                         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                            <span style="background: rgba(245, 158, 11, 0.1); color: #d97706; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
-                            <span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                            <span style="background: rgba(245, 158, 11, 0.1); color: var(--color-accent); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
                         </div>
                     </div>
 
                     <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
                         <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
-                            <div style="background: linear-gradient(135deg, #84cc16, #65a30d); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                            <div style="background: var(--gradient-secondary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
                                 <i class="fas fa-home" style="color: white; font-size: 1.2rem;"></i>
                             </div>
                             <div>
@@ -2326,8 +2326,8 @@
                             Specializes in thermal performance, insulation standards, energy modeling, and sustainable building practices for residential projects.
                         </p>
                         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                            <span style="background: rgba(132, 204, 22, 0.1); color: #65a30d; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
-                            <span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                            <span style="background: rgba(16, 185, 129, 0.15); color: var(--color-success); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
                         </div>
                     </div>
                 </div>
@@ -2742,15 +2742,15 @@
                             theme: 'dark',
                             securityLevel: 'loose',
                             themeVariables: {
-                                primaryColor: '#00d4aa',
+                                primaryColor: '#3b82f6',
                                 primaryTextColor: '#ffffff',
-                                primaryBorderColor: '#00b894',
-                                lineColor: '#6c5ce7',
+                                primaryBorderColor: '#2563eb',
+                                lineColor: '#8b5cf6',
                                 sectionBkgColor: 'transparent',
                                 altSectionBkgColor: 'transparent',
                                 gridColor: '#333333',
-                                secondaryColor: '#fdcb6e',
-                                tertiaryColor: '#fd79a8',
+                                secondaryColor: '#f59e0b',
+                                tertiaryColor: '#10b981',
                                 fontSize: '16px'
                             },
                             flowchart: {
