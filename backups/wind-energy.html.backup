@@ -5,14 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wind Energy Prediction - Young Woo Song</title>
     <meta name="description" content="Machine learning system for predicting wind turbine power output using environmental data, weather patterns, and advanced regression models for renewable energy optimization">
-    <!-- E-ink Fonts -->
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        <!-- E-ink Theme Styles -->
-    <link rel="stylesheet" href="../css/main-styles.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="../css/project-styles.css">
 </head>
 <body class="wind-energy-theme">
@@ -21,7 +26,7 @@
         <div class="container">
             <div class="header-content">
                 <a href="../index.html" class="logo">
-                    <strong>Y_</strong><span>W_SONG</span>
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
                 </a>
                 <nav class="main-nav">
                     <ul class="nav-links">
@@ -51,6 +56,7 @@
             </div>
         </div>
     </header>
+
     <!-- Project Hero -->
     <section class="project-hero">
         <div class="container">
@@ -72,6 +78,7 @@
             </div>
         </div>
     </section>
+
     <!-- Overview Section -->
     <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
         <div class="container">
@@ -80,11 +87,15 @@
             </div>
             <div class="section-content">
                 <p>This project develops a machine learning model to forecast wind turbine power output using historical environmental and temporal data over a three-year period. By employing regression techniques, the system aims to predict continuous values of power output based on features such as wind speed, temperature, pressure, and time-related variables.</p>
+
                 <p>Accurate power forecasting is crucial for efficient energy management, cost reduction, and optimizing operations in the energy sector. The project addresses the variability in environmental conditions that can lead to fluctuations in power generation, providing energy companies and grid operators with precise forecasts to balance supply and demand.</p>
+
                 <h3>Business Question</h3>
                 <p>How can we accurately predict power output using historical environmental and temporal data over a three-year period?</p>
+
                 <h3>Data Question</h3>
                 <p>Which features significantly influence power output, and how can we preprocess and model the data to achieve optimal predictive performance?</p>
+
                 <h3>Key Objectives</h3>
                 <ul class="feature-list">
                     <li><strong>Power Forecasting</strong> – Predict continuous power output values based on environmental conditions</li>
@@ -95,6 +106,7 @@
             </div>
         </div>
     </section>
+
     <!-- Data Analysis Section -->
     <section id="data-analysis" class="project-section bg-light">
         <div class="container">
@@ -109,6 +121,7 @@
                     <li><strong>Test.csv</strong> - Testing dataset for evaluating model performance</li>
                     <li><strong>column_info.csv</strong> - Descriptions of variables in the datasets</li>
                 </ul>
+
                 <h3>Key Variables</h3>
                 <div class="section-content two-column">
                     <div>
@@ -119,6 +132,7 @@
                             <li>Year (extracted from time)</li>
                             <li>TimeOfDay (hour of the day)</li>
                         </ul>
+                        
                         <h4>Environmental Variables</h4>
                         <ul class="feature-list">
                             <li>WS_10m (wind speed at 10m height)</li>
@@ -134,6 +148,7 @@
                             <li>Zero duplicate records identified</li>
                             <li>High data quality confirmed</li>
                         </ul>
+                        
                         <h4>Feature Engineering</h4>
                         <ul class="feature-list">
                             <li>Time feature transformation to datetime</li>
@@ -143,6 +158,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <h3>Exploratory Data Analysis</h3>
                 <div class="section-content two-column">
                     <div>
@@ -152,6 +168,7 @@
                             <li>Most features showed normal distribution</li>
                             <li>Suitable for regression modeling</li>
                         </ul>
+                        
                         <h4>Correlation Analysis</h4>
                         <ul class="feature-list">
                             <li>Strong correlation between wind speeds and power output</li>
@@ -166,6 +183,7 @@
                             <li>Monthly power generation variations</li>
                             <li>Temporal dependencies identified</li>
                         </ul>
+                        
                         <h4>Wind Speed Analysis</h4>
                         <ul class="feature-list">
                             <li>Monthly average wind speeds analyzed</li>
@@ -177,6 +195,7 @@
             </div>
         </div>
     </section>
+
     <!-- Modeling Section -->
     <section id="modeling" class="project-section">
         <div class="container">
@@ -187,6 +206,7 @@
             <div class="section-content">
                 <h3>Data Splitting</h3>
                 <p>The preprocessed data was split into training and testing sets with an 80-20 split to ensure proper model evaluation on unseen data and assess generalization capabilities.</p>
+
                 <h3>Models Evaluated</h3>
                 <div class="section-content two-column">
                     <div>
@@ -205,6 +225,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <h3>Evaluation Metrics</h3>
                 <div class="section-content two-column">
                     <div>
@@ -220,6 +241,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <h3>Model Performance Results</h3>
                 <div class="section-content">
                     <table style="width: 100%; border-collapse: collapse; margin: 2rem 0;">
@@ -285,6 +307,7 @@
                         </tbody>
                     </table>
                 </div>
+
                 <h3>Best Model: K-Nearest Neighbors Regressor</h3>
                 <div class="section-content two-column">
                     <div>
@@ -307,6 +330,7 @@
             </div>
         </div>
     </section>
+
     <!-- Optimization Section -->
     <section id="optimization" class="project-section bg-light">
         <div class="container">
@@ -336,6 +360,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <h3>Model Performance Analysis</h3>
                 <div class="section-content two-column">
                     <div>
@@ -357,6 +382,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <h3>Business Applications & Impact</h3>
                 <div class="section-content two-column">
                     <div>
@@ -378,6 +404,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <h3>Future Enhancements</h3>
                 <div class="section-content two-column">
                     <div>
@@ -402,6 +429,7 @@
             </div>
         </div>
     </section>
+
     <!-- Technology Section -->
     <section id="technology" class="project-section">
         <div class="container">
@@ -419,6 +447,7 @@
                             <li><strong>Datetime</strong> - Time feature transformation and extraction</li>
                             <li><strong>MinMaxScaler</strong> - Feature normalization and scaling</li>
                         </ul>
+                        
                         <h3>Machine Learning</h3>
                         <ul class="feature-list">
                             <li><strong>Scikit-learn</strong> - Machine learning algorithms and evaluation</li>
@@ -438,6 +467,7 @@
                             <li><strong>Train-Test Split</strong> - 80-20 data splitting for validation</li>
                             <li><strong>Residual Analysis</strong> - Prediction accuracy assessment</li>
                         </ul>
+                        
                         <h3>Data Visualization & Analysis</h3>
                         <ul class="feature-list">
                             <li><strong>Matplotlib</strong> - Statistical plotting and visualization</li>
@@ -446,6 +476,7 @@
                             <li><strong>Pair Plots</strong> - Feature relationship visualization</li>
                             <li><strong>Temporal Analysis</strong> - Time-based pattern identification</li>
                         </ul>
+                        
                         <h3>Development Environment</h3>
                         <ul class="feature-list">
                             <li><strong>Jupyter Notebook</strong> - Interactive development environment</li>
@@ -454,6 +485,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <h3>Project Implementation</h3>
                 <div class="section-content two-column">
                     <div>
@@ -478,12 +510,13 @@
             </div>
         </div>
     </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <strong>Y_</strong><span>W_SONG</span>
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
                 </div>
                 <div class="footer-social">
                     <a href="https://github.com/Userdflt" aria-label="GitHub">
@@ -502,20 +535,9 @@
             </div>
         </div>
     </footer>
+
     <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="../js/project-scripts.js"></script>
-    <script>
-        // E-ink style page initialization
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("📖 Project Page - E-ink Style Loading...");
-            setTimeout(() => {
-                document.body.classList.add("e-ink-transition");
-                setTimeout(() => {
-                    document.body.classList.remove("e-ink-transition");
-                    console.log("📚 Project Page Ready");
-                }, 500);
-            }, 100);
-        });
-    </script>
 </body>
 </html> 

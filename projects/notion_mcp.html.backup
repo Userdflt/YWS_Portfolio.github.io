@@ -3,19 +3,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PROJECT_TITLE - Young Woo Song</title>
-    <meta name="description" content="PROJECT_DESCRIPTION">
+    <title>Notion MCP Agent - Young Woo Song</title>
+    <meta name="description" content="AI-driven knowledge hub for Notion workspace with real-time interaction capabilities using Model Context Protocol">
     
-    <!-- Fonts -->
+    <!-- E-ink Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- External Styles -->
+    <link rel="stylesheet" href="../css/main-styles.css">
+    <link rel="stylesheet" href="../css/project-styles.css">
     
     <!-- Custom Styles -->
     <style>
@@ -111,10 +113,9 @@
             line-height: 1.6;
             overflow-x: hidden;
             background-image: 
-                /* CUSTOMIZE: Change these colors to match your project theme */
                 radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
+                radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
             background-attachment: fixed;
         }
 
@@ -207,12 +208,71 @@
         .section-title::after {
             content: '';
             position: absolute;
-            bottom: -8px;
+            bottom: -10px;
             left: 0;
             width: 60px;
             height: 4px;
             background: var(--gradient-primary);
             border-radius: var(--radius-full);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+            border: none;
+            text-align: center;
+            gap: var(--space-2);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--color-text-inverse);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-hover);
+            color: var(--color-text-inverse);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-text);
+            border: 2px solid var(--color-border);
+            backdrop-filter: var(--glass-backdrop);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
         }
 
         /* Header */
@@ -221,15 +281,15 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: var(--glass-bg);
-            border-bottom: 1px solid var(--glass-border);
-            backdrop-filter: var(--glass-backdrop);
             z-index: 100;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-backdrop);
+            border-bottom: 1px solid var(--glass-border);
             transition: all var(--transition-normal);
         }
 
         .header.scrolled {
-            background: var(--color-background-card);
+            background: rgba(255, 255, 255, 0.95);
             box-shadow: var(--shadow-lg);
         }
 
@@ -242,35 +302,44 @@
 
         .logo {
             font-size: 1.5rem;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--color-text);
+            display: flex;
+            align-items: center;
+            transition: all var(--transition-normal);
             text-decoration: none;
         }
 
-        .logo span {
-            color: var(--color-text-muted);
-            font-weight: 400;
+        .logo:hover {
+            transform: scale(1.05);
+            color: var(--color-text);
+        }
+
+        .logo strong {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .main-nav {
             display: flex;
-            align-items: center;
         }
 
         .nav-links {
             display: flex;
-            align-items: center;
-            gap: var(--space-8);
             list-style: none;
-            margin: 0;
-            padding: 0;
+            gap: var(--space-6);
+
         }
 
         .nav-links a {
-            position: relative;
-            font-weight: 500;
             color: var(--color-text-secondary);
-            transition: color var(--transition-normal);
+            font-weight: 500;
+            position: relative;
+            padding: var(--space-2) 0;
+            transition: all var(--transition-normal);
+            text-decoration: none;
         }
 
         .nav-links a::after {
@@ -357,7 +426,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* CUSTOMIZE: Change this color to match your project theme */
             background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1), transparent 70%);
             z-index: 1;
         }
@@ -414,7 +482,7 @@
 
         /* Project Sections */
         .project-section {
-            padding: var(--space-12) 0;
+            padding: var(--space-10) 0;
         }
 
         .project-section.bg-light {
@@ -427,83 +495,129 @@
         }
 
         .section-content {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .section-content.two-column {
+            max-width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: var(--space-8);
-            max-width: 1200px;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
             align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-3) var(--space-5);
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            text-decoration: none;
-            transition: all var(--transition-normal);
-            cursor: pointer;
-            border: none;
-            font-size: 0.875rem;
         }
 
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: var(--color-text-inverse);
+        .workflow-images {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+
+        .workflow-image {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
             box-shadow: var(--shadow-md);
+            border: 1px solid var(--glass-border);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow-hover);
-            color: var(--color-text-inverse);
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
         }
 
-        .btn-secondary {
-            background: var(--color-background-card);
-            color: var(--color-text);
-            border: 1px solid var(--color-border);
+        .workflow-step h3 {
+            margin-bottom: var(--space-3);
+            color: var(--color-primary);
         }
 
-        .btn-secondary:hover {
-            background: var(--color-background-elevated);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            color: var(--color-text);
-        }
-
-        /* Feature Lists */
         .feature-list {
             list-style: none;
-            padding: 0;
+            padding-left: 0;
         }
 
         .feature-list li {
+            margin-bottom: var(--space-2);
             position: relative;
             padding-left: var(--space-5);
-            margin-bottom: var(--space-3);
+            color: var(--color-text-secondary);
         }
 
         .feature-list li::before {
-            content: '✓';
+            content: '→';
             position: absolute;
             left: 0;
-            color: var(--color-success);
-            font-weight: bold;
+            color: var(--color-primary);
         }
 
-        /* Feature Grid */
+        .feature-list ul {
+            margin-top: var(--space-2);
+            margin-left: var(--space-5);
+            list-style: none;
+        }
+
+        .feature-list ul li::before {
+            content: '•';
+        }
+
+        .image-container {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--glass-border);
+        }
+
+        .feature-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .tools-table {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            backdrop-filter: var(--glass-backdrop);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: var(--space-3) var(--space-4);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        table th {
+            background: var(--glass-bg);
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        table td {
+            color: var(--color-text-secondary);
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Features Grid */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: var(--space-6);
-            margin-top: var(--space-8);
         }
 
         .feature-card {
@@ -516,8 +630,9 @@
         }
 
         .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--color-primary);
         }
 
         .feature-icon {
@@ -531,132 +646,170 @@
             color: var(--color-text-inverse);
             font-size: 1.5rem;
             margin-bottom: var(--space-4);
+            box-shadow: var(--shadow-glow);
         }
 
-        /* Architecture Grid */
-        .architecture-grid {
+        .feature-card h3 {
+            margin-bottom: var(--space-3);
+            font-size: 1.25rem;
+            color: var(--color-text);
+        }
+
+        .feature-card p {
+            color: var(--color-text-secondary);
+            margin-bottom: 0;
+            font-size: 0.875rem;
+        }
+
+        /* Use Cases Grid */
+        .use-cases-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: var(--space-6);
             margin-top: var(--space-8);
         }
 
-        .architecture-component {
+        .use-case-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
-            padding: var(--space-6);
+            overflow: hidden;
             backdrop-filter: var(--glass-backdrop);
+            transition: all var(--transition-normal);
         }
 
-        .component-header {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            margin-bottom: var(--space-4);
+        .use-case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--color-primary);
         }
 
-        .component-icon {
+        .use-case-header {
+            padding: var(--space-5);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .use-case-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            background: var(--gradient-tech);
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-primary);
             color: var(--color-text-inverse);
-        }
-
-        .component-title {
-            margin: 0;
             font-size: 1.25rem;
-        }
-
-        .component-description {
-            color: var(--color-text-secondary);
             margin-bottom: var(--space-3);
+            box-shadow: var(--shadow-glow);
         }
 
-        .component-features {
+        .use-case-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: var(--space-2);
+        }
+
+        .use-case-content {
+            padding: var(--space-5);
+        }
+
+        .use-case-description {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-4);
+        }
+
+        .use-case-features {
             list-style: none;
-            padding: 0;
+            padding-left: 0;
         }
 
-        .component-features li {
+        .use-case-features li {
+            margin-bottom: var(--space-2);
             position: relative;
             padding-left: var(--space-4);
-            margin-bottom: var(--space-2);
+            color: var(--color-text-secondary);
             font-size: 0.875rem;
         }
 
-        .component-features li::before {
-            content: '▸';
+        .use-case-features li::before {
+            content: '✓';
             position: absolute;
             left: 0;
             color: var(--color-primary);
+            font-weight: bold;
         }
 
         /* Footer */
         .footer {
-            background-color: var(--color-background-elevated);
+            background: var(--color-background-alt);
             border-top: 1px solid var(--color-border);
-            padding: var(--space-8) 0;
-            text-align: center;
+            color: var(--color-text);
+            padding: var(--space-8) 0 var(--space-4);
         }
 
         .footer-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-6);
         }
 
         .footer-logo {
-            font-size: 1.25rem;
-            font-weight: 800;
+            font-size: 1.5rem;
+            font-weight: 700;
             color: var(--color-text);
         }
 
-        .footer-logo span {
-            color: var(--color-text-muted);
-            font-weight: 400;
+        .footer-logo strong {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .footer-social {
             display: flex;
-            gap: var(--space-3);
+            gap: var(--space-4);
         }
 
         .footer-social a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-full);
-            background: var(--color-background-card);
-            border: 1px solid var(--color-border);
             color: var(--color-text-secondary);
+            font-size: 1.25rem;
             transition: all var(--transition-normal);
+            padding: var(--space-2);
+            border-radius: var(--radius-full);
+            text-decoration: none;
         }
 
         .footer-social a:hover {
-            background: var(--color-primary);
-            color: var(--color-text-inverse);
+            color: var(--color-primary);
+            background: var(--glass-bg);
             transform: translateY(-2px);
         }
 
         .footer-bottom {
+            text-align: center;
             padding-top: var(--space-4);
             border-top: 1px solid var(--color-border);
-        }
-
-        .footer-bottom p {
+            font-size: 0.875rem;
             color: var(--color-text-muted);
-            margin: 0;
         }
 
-        /* Responsive Design */
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Media Queries */
         @media (max-width: 1024px) {
             h1 { font-size: 2.5rem; }
             h2 { font-size: 2rem; }
@@ -672,8 +825,8 @@
                 order: -1;
             }
 
-            .architecture-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            .use-cases-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -725,34 +878,18 @@
                 display: none;
             }
 
-            .footer-content {
-                flex-direction: column;
-                gap: var(--space-4);
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .architecture-grid {
-                grid-template-columns: 1fr;
+            .project-title {
+                font-size: 2rem;
             }
         }
 
         @media (max-width: 480px) {
-            .container {
-                padding: 0 var(--space-3);
+            .features-grid {
+                grid-template-columns: 1fr;
             }
-            
-            h1 { font-size: 2rem; }
-            .project-title { font-size: 1.875rem; }
-            
-            .project-hero {
-                padding: var(--space-8) 0;
-            }
-            
-            .project-section {
-                padding: var(--space-8) 0;
+
+            .use-cases-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -762,16 +899,16 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <a href="index.html" class="logo">
-                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                <a href="../index.html" class="logo">
+                    <strong>Y_</strong><span>W_SONG</span>
                 </a>
                 <nav class="main-nav">
                     <ul class="nav-links">
-                        <!-- CUSTOMIZE: Add your project-specific navigation sections -->
+                        
                         <li><a href="#overview">Overview</a></li>
+                        <li><a href="#workflow">Workflow</a></li>
                         <li><a href="#features">Features</a></li>
-                        <li><a href="#architecture">Architecture</a></li>
-                        <li><a href="#technology">Technology</a></li>
+                        <li><a href="#tools">Tools</a></li>
                     </ul>
                 </nav>
                 <div class="social-links">
@@ -799,26 +936,19 @@
         <div class="container">
             <div class="project-hero-content">
                 <div class="project-meta">
-                    <!-- CUSTOMIZE: Replace with your project details -->
-                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">Your Project Category</div>
-                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">Your Project Title</h1>
-                    <p data-aos="fade-up" data-aos-delay="600">Detailed description of your project that explains what it does, how it works, and what makes it special. This should be more comprehensive than the card description.</p>
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">AI Agent & Knowledge Management</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">Notion MCP Agent</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">AI-Powered Notion Assistant with Real-Time Interaction.Turn your Notion workspace into a live, intelligent hub using Model Context Protocol (MCP). Interact in real time via a local desktop app to append content, create tables, manage pages, and generate summaries—all powered by AI and local LLMs.</p>
                     <div class="project-links">
-                        <!-- CUSTOMIZE: Add your actual GitHub and demo links -->
-                        <a href="https://github.com/Userdflt/your-repo" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
+                        <a href="https://github.com/Userdflt/Notion-MCP-Agent" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
                             <i class="fab fa-github"></i>
                             <span>View Code</span>
                         </a>
-                        <!-- Optional: Add demo link if available -->
-                        <!-- <a href="https://your-demo-url.com" class="btn btn-secondary" data-aos="fade-up" data-aos-delay="750">
-                            <i class="fas fa-external-link-alt"></i>
-                            <span>Live Demo</span>
-                        </a> -->
+                        
                     </div>
                 </div>
                 <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
-                    <!-- CUSTOMIZE: Replace with your project hero image -->
-                    <img src="images/your-project-hero.png" alt="Your Project Name" />
+                    <img src="../images/mcp_logo.png" alt="Notion MCP Agent Interface" />
                 </div>
             </div>
         </div>
@@ -828,155 +958,174 @@
     <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Project Overview</h2>
+    <h2 class="section-title">Project Overview</h2>
             </div>
             <div class="section-content">
-                <!-- CUSTOMIZE: Replace with your project overview -->
-                <p>Provide a comprehensive overview of your project. Explain the problem it solves, your approach to solving it, and the key innovations or techniques you used. This section should give readers a clear understanding of what your project accomplishes.</p>
+                <p><strong>Notion-MCP-Agent</strong> is a desktop-based system that brings AI-powered interaction to your Notion workspace. Built on the Model Context Protocol (MCP), it enables real-time communication with Notion via a local FastMCP server and SSE, using local or cloud-based LLMs.</p>
 
-                <h3>Key Capabilities</h3>
+                <p>Users can interact through a simple GUI to append content, build tables, extract structured notes, and manage metadata—all via natural language. The system also supports text-to-speech generation using Coqui TTS, offering a seamless, local-first workflow.</p>
+                <br>
+                <h3>Core Capabilities</h3>
                 <ul class="feature-list">
-                    <!-- CUSTOMIZE: Replace with your project's key features -->
-                    <li><strong>Feature 1</strong> – Description of what this feature does and why it's important.</li>
-                    <li><strong>Feature 2</strong> – Description of what this feature does and why it's important.</li>
-                    <li><strong>Feature 3</strong> – Description of what this feature does and why it's important.</li>
-                    <li><strong>Feature 4</strong> – Description of what this feature does and why it's important.</li>
+                    <li><strong>Live Notion Integration</strong> – Real-time read/write via FastMCP and Server-Sent Events (SSE).</li>
+                    <li><strong>Structured AI Interaction</strong> – Summarizes, organizes, and interprets Notion content intelligently.</li>
+                    <li><strong>Content Automation</strong> – Appends Markdown, builds tables, and updates or creates pages.</li>
+                    <li><strong>Natural Language Commands</strong> – Query and control Notion using plain language prompts.</li>
+                    <li><strong>Search and Retrieval</strong> – Locate relevant pages and properties across the workspace.</li>
+                    <li><strong>Text-to-Speech</strong> – Converts Notion page content into audio files via Coqui TTS.</li>
                 </ul>
             </div>
         </div>
     </section>
 
+    <!-- Workflow Section -->
+    <section id="workflow" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="section-title">Agent Workflow</h2>
+            </div>
+            <div class="section-content two-column">
+                <div class="workflow-images">
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="200">
+                        <img src="../gifs/Table_Creation.gif" alt="MCP Protocol Integration" class="feature-image" />
+                    </div>
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="300">
+                        <img src="../gifs/writing_structured_notes.gif" alt="Notion API Interaction" class="feature-image" />
+                    </div>
+                </div>
+                <div class="workflow-steps">
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="200">
+                        <h3>1. Connection & Tool Registration</h3>
+                        <p>When the FastMCP server launches, it registers all custom tools (e.g., <code>append_content</code>, <code>create_table</code>, <code>get_page_text</code>) and exposes them via MCP endpoints. These tools are dynamically loaded by the LangGraph-based REACT agent at runtime.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="300">
+                        <h3>2. User Query via GUI</h3>
+                        <p>The user submits a natural language prompt through a local Tkinter-based desktop interface. This input is passed to the agent, which uses a selected LLM (e.g., GPT‑4o via OpenAI or a local Ollama model) to interpret the request.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="400">
+                        <h3>3. Planning & Tool Selection</h3>
+                        <p>The agent selects the appropriate MCP tools to fulfill the user's request. This may include reading Notion content, generating structured notes, appending Markdown blocks, or creating subpages and tables.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="500">
+                        <h3>4. Execution via FastMCP</h3>
+                        <p>Each tool call is routed through the FastMCP server, which interfaces directly with the Notion API or Coqui TTS engine. Actions like content writing, search, or speech synthesis are executed and results returned.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="600">
+                        <h3>5. Streaming & Response Delivery</h3>
+                        <p>Responses are streamed back to the GUI in real time using Server-Sent Events (SSE). The agent displays structured outputs and optionally provides downloadable MP3 files for text-to-speech results.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Features Section -->
-    <section id="features" class="project-section bg-light">
+    <section id="features" class="project-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Key Features</h2>
-                <p>Explore the main capabilities and functionalities of this project.</p>
+                <h2 class="section-title" data-aos="fade-up">Key Features</h2>
             </div>
             <div class="features-grid">
-                <!-- CUSTOMIZE: Replace with your project's features -->
                 <div class="feature-card" data-aos="fade-up">
                     <div class="feature-icon">
-                        <i class="fas fa-rocket"></i> <!-- CUSTOMIZE: Choose appropriate icon -->
+                        <i class="fas fa-robot"></i>
                     </div>
-                    <h3>Feature Name 1</h3>
-                    <p>Detailed description of this feature and how it benefits users or solves a specific problem.</p>
+                    <h3>Interactive Agent</h3>
+                    <p>LangGraph-powered AI agent interprets user prompts and executes Notion operations using local or cloud LLMs in real time.</p>
                 </div>
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i> <!-- CUSTOMIZE: Choose appropriate icon -->
+                        <i class="fas fa-plug"></i>
                     </div>
-                    <h3>Feature Name 2</h3>
-                    <p>Detailed description of this feature and how it benefits users or solves a specific problem.</p>
+                    <h3>MCP Tooling</h3>
+                    <p>Custom Model Context Protocol tools enable structured read/write access to Notion content, metadata, and user data via FastMCP.</p>
                 </div>
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="feature-icon">
-                        <i class="fas fa-brain"></i> <!-- CUSTOMIZE: Choose appropriate icon -->
+                        <i class="fas fa-sync-alt"></i>
                     </div>
-                    <h3>Feature Name 3</h3>
-                    <p>Detailed description of this feature and how it benefits users or solves a specific problem.</p>
+                    <h3>Live Streaming</h3>
+                    <p>Server-Sent Events (SSE) stream AI-generated responses instantly to the desktop GUI, maintaining fluid interaction throughout sessions.</p>
                 </div>
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="feature-icon">
-                        <i class="fas fa-cogs"></i> <!-- CUSTOMIZE: Choose appropriate icon -->
+                        <i class="fas fa-search"></i>
                     </div>
-                    <h3>Feature Name 4</h3>
-                    <p>Detailed description of this feature and how it benefits users or solves a specific problem.</p>
+                    <h3>Semantic Search</h3>
+                    <p>Leverages Notion's native API to locate relevant pages and properties using context-aware queries powered by language models.</p>
                 </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Content Automation</h3>
+                    <p>Automates Markdown appending, table creation, metadata updates, and even TTS generation for audio-based note review.</p>
+                </div>
+                
             </div>
         </div>
     </section>
 
-    <!-- Architecture Section -->
-    <section id="architecture" class="project-section">
+    <!-- Tools & Technologies Section -->
+    <section id="tools" class="project-section bg-light">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">System Architecture</h2>
-                <p>Explore the technical components and design decisions behind this project.</p>
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title" data-aos-delay="200">Tools & Technologies</h2>
             </div>
-            <div class="architecture-grid">
-                <!-- CUSTOMIZE: Replace with your project's architecture components -->
-                <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
-                    <div class="component-header">
-                        <div class="component-icon">
-                            <i class="fas fa-database"></i> <!-- CUSTOMIZE: Choose appropriate icon -->
-                        </div>
-                        <h3 class="component-title">Component 1</h3>
+            <div class="section-content">
+                <div class="tools-table">
+                    <div class="table-responsive" data-aos="fade-up" data-aos-delay="300">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Technology</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Protocol</strong></td>
+                                    <td>Model Context Protocol (MCP)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>API Integration</strong></td>
+                                    <td>Notion API, Coqui TTS (via local Python bindings)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Language Models</strong></td>
+                                    <td>GPT‑4o (OpenAI), Ollama (local LLMs)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Framework</strong></td>
+                                    <td>LangGraph (REACT agent), Pure Python (no LangChain runtime)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Backend</strong></td>
+                                    <td>Python, FastMCP (FastAPI-based)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Database</strong></td>
+                                    <td>Notion workspace (no external DB)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Authentication</strong></td>
+                                    <td>.env-secured Notion API Token and OpenAI Key</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Interface</strong></td>
+                                    <td>Tkinter Desktop GUI</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Transport</strong></td>
+                                    <td>Server-Sent Events (SSE)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Deployment</strong></td>
+                                    <td>Offline-capable, local-first (no external cloud dependencies)</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <p class="component-description">Brief description of this architectural component and its role.</p>
-                    <ul class="component-features">
-                        <li>Key feature or capability of this component</li>
-                        <li>Another important aspect or technology used</li>
-                    </ul>
-                </div>
-                <div class="architecture-component" data-aos="fade-up" data-aos-delay="100">
-                    <div class="component-header">
-                        <div class="component-icon">
-                            <i class="fas fa-server"></i> <!-- CUSTOMIZE: Choose appropriate icon -->
-                        </div>
-                        <h3 class="component-title">Component 2</h3>
-                    </div>
-                    <p class="component-description">Brief description of this architectural component and its role.</p>
-                    <ul class="component-features">
-                        <li>Key feature or capability of this component</li>
-                        <li>Another important aspect or technology used</li>
-                    </ul>
-                </div>
-                <div class="architecture-component" data-aos="fade-up" data-aos-delay="150">
-                    <div class="component-header">
-                        <div class="component-icon">
-                            <i class="fas fa-network-wired"></i> <!-- CUSTOMIZE: Choose appropriate icon -->
-                        </div>
-                        <h3 class="component-title">Component 3</h3>
-                    </div>
-                    <p class="component-description">Brief description of this architectural component and its role.</p>
-                    <ul class="component-features">
-                        <li>Key feature or capability of this component</li>
-                        <li>Another important aspect or technology used</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Technology Section -->
-    <section id="technology" class="project-section bg-light">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Technology Stack</h2>
-                <p>The technologies, frameworks, and tools that power this project.</p>
-            </div>
-            <div class="section-content two-column">
-                <div>
-                    <!-- CUSTOMIZE: Replace with your technology categories -->
-                    <h3>Frontend & UI</h3>
-                    <ul class="feature-list">
-                        <li>Technology 1 - Brief description</li>
-                        <li>Technology 2 - Brief description</li>
-                        <li>Technology 3 - Brief description</li>
-                    </ul>
-                    
-                    <h3>Backend & Processing</h3>
-                    <ul class="feature-list">
-                        <li>Technology 1 - Brief description</li>
-                        <li>Technology 2 - Brief description</li>
-                        <li>Technology 3 - Brief description</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>AI & Machine Learning</h3>
-                    <ul class="feature-list">
-                        <li>Technology 1 - Brief description</li>
-                        <li>Technology 2 - Brief description</li>
-                        <li>Technology 3 - Brief description</li>
-                    </ul>
-                    
-                    <h3>Data & Storage</h3>
-                    <ul class="feature-list">
-                        <li>Technology 1 - Brief description</li>
-                        <li>Technology 2 - Brief description</li>
-                        <li>Technology 3 - Brief description</li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -987,7 +1136,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                    <strong>Y_</strong><span>W_SONG</span>
                 </div>
                 <div class="footer-social">
                     <a href="https://github.com/Userdflt" aria-label="GitHub">
@@ -1008,17 +1157,25 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/project-scripts.js"></script>
+    <script>
+        // E-ink style page initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("📖 Project Page - E-ink Style Loading...");
+            
+            setTimeout(() => {
+                document.body.classList.add("e-ink-transition");
+                setTimeout(() => {
+                    document.body.classList.remove("e-ink-transition");
+                    console.log("📚 Project Page Ready");
+                }, 500);
+            }, 100);
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize AOS
             if (typeof AOS !== 'undefined') {
-                AOS.init({
-                    duration: 800,
-                    easing: 'ease-out-cubic',
-                    once: true,
-                    offset: 100
-                });
             }
 
             // Mobile Menu Toggle
@@ -1079,28 +1236,20 @@
                 });
             });
 
-            // Active navigation highlighting
-            const sections = document.querySelectorAll('section[id]');
-            
-            function highlightNavigation() {
-                const scrollPosition = window.scrollY + 100;
-                
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.offsetHeight;
-                    const sectionId = section.getAttribute('id');
-                    const navLink = document.querySelector(`.nav-links a[href="#${sectionId}"]`);
-                    
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                        navLinks.forEach(link => link.classList.remove('active'));
-                        if (navLink) navLink.classList.add('active');
-                    }
+            // Use case cards hover effects
+            const useCaseCards = document.querySelectorAll('.use-case-card');
+            useCaseCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
                 });
-            }
-            
-            window.addEventListener('scroll', highlightNavigation);
-            highlightNavigation();
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            console.log('🤖 Notion MCP Agent page initialized successfully!');
         });
     </script>
 </body>
-</html> 
+</html>

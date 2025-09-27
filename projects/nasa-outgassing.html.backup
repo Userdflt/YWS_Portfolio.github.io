@@ -5,15 +5,197 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NASA Outgassing Database Analysis - Young Woo Song</title>
     <meta name="description" content="Machine learning application for NASA outgassing materials analysis, featuring data processing, EDA, and predictive modeling for space-grade material evaluation">
+    
     <!-- E-ink Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        <!-- E-ink Theme Styles -->
+    
+    
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="../css/main-styles.css">
     <link rel="stylesheet" href="../css/project-styles.css">
+    
+    <style>
+        /* Presentation Styles */
+        .presentation-container {
+            background: var(--glass-bg, rgba(255, 255, 255, 0.8));
+            border: 1px solid var(--glass-border, rgba(226, 232, 240, 0.8));
+            border-radius: var(--radius-lg, 1rem);
+            padding: var(--space-4, 1rem);
+            backdrop-filter: var(--glass-backdrop, blur(10px));
+            box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+            transition: all var(--transition-normal, 0.2s ease);
+        }
+        
+        .presentation-container:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+        }
+        
+        .presentation-container iframe {
+            border-radius: var(--radius-md, 0.5rem);
+            width: 100%;
+            min-height: 600px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .presentation-container {
+                padding: var(--space-2, 0.5rem);
+            }
+            
+            .presentation-container iframe {
+                min-height: 400px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .presentation-container iframe {
+                min-height: 300px;
+            }
+        }
+        
+        /* Layout Uniformity Improvements */
+        .section-content.two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        
+        /* Navigation Bar Spacing Improvements */
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+            padding: 0 1rem;
+        }
+        
+        .logo {
+            white-space: nowrap;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            transition: all var(--transition-normal);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        
+        .main-nav {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            margin: 0 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links a {
+            position: relative;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            transition: color var(--transition-normal);
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .nav-links {
+                gap: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 0.5rem;
+            }
+            
+            .main-nav {
+                margin: 0 1rem;
+            }
+        }
+        
+        /* End Navigation Improvements */
+        
+        .section-content.two-column > div {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .section-content.two-column h3 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            color: var(--color-text);
+            font-weight: 600;
+        }
+        
+        .section-content.two-column h3:not(:first-child) {
+            margin-top: 2.5rem;
+        }
+        
+        .section-content.two-column .feature-list {
+            margin-bottom: 2rem;
+        }
+        
+        .section-content.two-column .feature-list li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: var(--color-text-secondary);
+        }
+        
+        .section-content.two-column .feature-list li strong {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+        
+        /* Ensure consistent spacing between sections */
+        #results .section-content.two-column > div:first-child {
+            padding-right: 1rem;
+        }
+        
+        #results .section-content.two-column > div:last-child {
+            padding-left: 1rem;
+        }
+        
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .section-content.two-column {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .section-content.two-column h3:not(:first-child) {
+                margin-top: 2rem;
+            }
+            
+            #results .section-content.two-column > div:first-child,
+            #results .section-content.two-column > div:last-child {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+    </style>
 </head>
 <body class="nasa-theme">
     <!-- Header -->
@@ -52,6 +234,7 @@
             </div>
         </div>
     </header>
+
     <!-- Project Hero -->
     <section class="project-hero">
         <div class="container">
@@ -73,6 +256,7 @@
             </div>
         </div>
     </section>
+
     <!-- Overview Section -->
     <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
         <div class="container">
@@ -93,6 +277,7 @@
             </div>
         </div>
     </section>
+
     <!-- Data Processing Section -->
     <section id="data-processing" class="project-section bg-light">
         <div class="container">
@@ -132,6 +317,7 @@
             </div>
         </div>
     </section>
+
     <!-- Modeling Section -->
     <section id="modeling" class="project-section">
         <div class="container">
@@ -188,6 +374,7 @@
             </div>
         </div>
     </section>
+
     <!-- Presentation Section -->
     <section id="presentation" class="project-section">
         <div class="container">
@@ -208,6 +395,7 @@
             </div>
         </div>
     </section>
+
     <!-- Results Section -->
     <section id="results" class="project-section bg-light">
         <div class="container">
@@ -223,6 +411,7 @@
                         <li><strong>WVR (Water Vapor Regained)</strong> - Water vapor absorption after testing</li>
                         <li><strong>Performance Optimization</strong> - Lower values indicate better space environment suitability</li>
                     </ul>
+                    
                     <h3>Model Performance</h3>
                     <ul class="feature-list">
                         <li>Linear Regression selected for performance prediction</li>
@@ -239,6 +428,7 @@
                         <li><strong>R&D Support</strong> - Data-driven insights for material improvement research</li>
                         <li><strong>Risk Mitigation</strong> - Early identification of material performance issues</li>
                     </ul>
+                    
                     <h3>Future Enhancements</h3>
                     <ul class="feature-list">
                         <li>Dataset expansion for improved model performance</li>
@@ -250,6 +440,7 @@
             </div>
         </div>
     </section>
+
     <!-- Technology Section -->
     <section id="technology" class="project-section">
         <div class="container">
@@ -266,6 +457,7 @@
                         <li>Matplotlib - Statistical visualization and plotting</li>
                         <li>Seaborn - Advanced statistical visualizations</li>
                     </ul>
+                    
                     <h3>Machine Learning</h3>
                     <ul class="feature-list">
                         <li>Scikit-learn - ML algorithms and preprocessing</li>
@@ -282,6 +474,7 @@
                         <li>Git - Version control and collaboration</li>
                         <li>GitHub - Repository management</li>
                     </ul>
+                    
                     <h3>Analysis & Validation</h3>
                     <ul class="feature-list">
                         <li>Cross-validation - Model performance assessment</li>
@@ -293,6 +486,7 @@
             </div>
         </div>
     </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -317,12 +511,14 @@
             </div>
         </div>
     </footer>
+
     <!-- Scripts -->
     <script src="../js/project-scripts.js"></script>
     <script>
         // E-ink style page initialization
         document.addEventListener("DOMContentLoaded", function() {
             console.log("📖 Project Page - E-ink Style Loading...");
+            
             setTimeout(() => {
                 document.body.classList.add("e-ink-transition");
                 setTimeout(() => {

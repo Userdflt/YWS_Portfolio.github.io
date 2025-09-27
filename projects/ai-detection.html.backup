@@ -5,16 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fake News Detection - Young Woo Song</title>
     <meta name="description" content="Natural language processing project for distinguishing true vs fake news articles using advanced machine learning techniques, statistical analysis, and text classification">
+    
     <!-- Technical E-ink Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
     <!-- E-ink Project Styles -->
-        <!-- E-ink Theme Styles -->
     <link rel="stylesheet" href="../css/main-styles.css">
     <link rel="stylesheet" href="../css/project-styles.css">
+    
+    <style>
+        /* Presentation Styles */
+        .presentation-container {
+            background: var(--glass-bg, rgba(255, 255, 255, 0.8));
+            border: 1px solid var(--glass-border, rgba(226, 232, 240, 0.8));
+            border-radius: var(--radius-lg, 1rem);
+            padding: var(--space-4, 1rem);
+            backdrop-filter: var(--glass-backdrop, blur(10px));
+            box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+            transition: all var(--transition-normal, 0.2s ease);
+        }
+        
+        .presentation-container:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+        }
+        
+        .presentation-container iframe {
+            border-radius: var(--radius-md, 0.5rem);
+            width: 100%;
+            min-height: 600px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .presentation-container {
+                padding: var(--space-2, 0.5rem);
+            }
+            
+            .presentation-container iframe {
+                min-height: 400px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .presentation-container iframe {
+                min-height: 300px;
+            }
+        }
+    </style>
 </head>
 <body class="ai-detection-theme">
     <!-- Header -->
@@ -53,6 +96,7 @@
             </div>
         </div>
     </header>
+
     <!-- Project Hero -->
     <section class="project-hero">
         <div class="container">
@@ -74,6 +118,7 @@
             </div>
         </div>
     </section>
+
     <!-- Overview Section -->
     <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
         <div class="container">
@@ -82,7 +127,9 @@
             </div>
             <div class="section-content">
                 <p>This project tackles the critical challenge of distinguishing between true and fake news articles using advanced natural language processing and machine learning techniques. The system analyzes news content to identify patterns and characteristics that differentiate authentic journalism from misinformation.</p>
+
                 <p>With the increasing spread of misinformation in digital media, this classification system serves as an essential tool for news verification, supporting fact-checking initiatives, and helping maintain the integrity of information ecosystems.</p>
+
                 <h3>Project Objectives</h3>
                 <ul class="feature-list">
                     <li><strong>Data Preprocessing</strong> – Systematic text cleaning, tokenization, and feature preparation</li>
@@ -93,6 +140,7 @@
             </div>
         </div>
     </section>
+
     <!-- Data Preprocessing Section -->
     <section id="preprocessing" class="project-section bg-light">
         <div class="container">
@@ -134,6 +182,7 @@
             </div>
         </div>
     </section>
+
     <!-- Data Analysis Section -->
     <section id="analysis" class="project-section">
         <div class="container">
@@ -151,6 +200,7 @@
                             <li>Stop word removal and lemmatization</li>
                             <li>Special character handling and formatting</li>
                         </ul>
+                        
                         <h3>Feature Extraction</h3>
                         <ul class="feature-list">
                             <li>Word count analysis from text and titles</li>
@@ -167,6 +217,7 @@
                             <li>Emotional tone pattern identification</li>
                             <li>Sentiment distribution across true vs fake news</li>
                         </ul>
+                        
                         <h3>Statistical Testing</h3>
                         <ul class="feature-list">
                             <li>Shapiro-Wilk normality tests</li>
@@ -179,6 +230,7 @@
             </div>
         </div>
     </section>
+
     <!-- ML Modeling Section -->
     <section id="modeling" class="project-section bg-light">
         <div class="container">
@@ -235,6 +287,7 @@
                 </div>
             </div>
             </div>
+            
             <div class="section-content" style="margin-top: 3rem;">
                 <h3 style="text-align: center;">Model Evaluation Metrics</h3>
                 <div class="section-content two-column">
@@ -256,6 +309,7 @@
             </div>
         </div>
     </section>
+
     <!-- Presentation Section -->
     <section id="presentation" class="project-section">
         <div class="container">
@@ -278,6 +332,7 @@
             </div>
         </div>
     </section>
+
     <!-- Technology Section -->
     <section id="technology" class="project-section bg-light">
         <div class="container">
@@ -296,6 +351,7 @@
                             <li>TextBlob - Sentiment analysis and text processing</li>
                             <li>VADER - Sentiment analysis tool</li>
                         </ul>
+                        
                         <h3>Machine Learning</h3>
                         <ul class="feature-list">
                             <li>Scikit-learn - ML algorithms and evaluation</li>
@@ -313,6 +369,7 @@
                             <li>Mann-Whitney U test - Hypothesis testing</li>
                             <li>Statistical significance evaluation</li>
                         </ul>
+                        
                         <h3>Visualization & Evaluation</h3>
                         <ul class="feature-list">
                             <li>Matplotlib - Data visualization</li>
@@ -326,6 +383,7 @@
             </div>
         </div>
     </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -350,12 +408,14 @@
             </div>
         </div>
     </footer>
+
     <!-- E-ink Scripts -->
     <script src="../js/project-scripts.js"></script>
     <script>
         // E-ink style page initialization
         document.addEventListener("DOMContentLoaded", function() {
             console.log("📖 Project Page - E-ink Style Loading...");
+            
             setTimeout(() => {
                 document.body.classList.add("e-ink-transition");
                 setTimeout(() => {
@@ -366,5 +426,18 @@
         });
     </script>
     <script>
+        // E-ink style page initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📖 AI Detection - E-ink Style Loading...');
+            
+            setTimeout(() => {
+                document.body.classList.add('e-ink-transition');
+                setTimeout(() => {
+                    document.body.classList.remove('e-ink-transition');
+                    console.log('📚 AI Detection Page Ready');
+                }, 500);
+            }, 100);
+        });
+    </script>
 </body>
 </html> 

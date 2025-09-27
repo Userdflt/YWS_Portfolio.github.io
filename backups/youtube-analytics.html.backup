@@ -5,14 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YouTube Analytics - Young Woo Song</title>
     <meta name="description" content="YouTube Statistics Analysis project examining trends in data science and AI-related videos using API data collection, preprocessing, and statistical testing">
-    <!-- E-ink Fonts -->
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        <!-- E-ink Theme Styles -->
-    <link rel="stylesheet" href="../css/main-styles.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="../css/project-styles.css">
 </head>
 <body class="youtube-theme">
@@ -21,7 +26,7 @@
         <div class="container">
             <div class="header-content">
                 <a href="../index.html" class="logo">
-                    <strong>Y_</strong><span>W_SONG</span>
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
                 </a>
                 <nav class="main-nav">
                     <ul class="nav-links">
@@ -51,6 +56,7 @@
             </div>
         </div>
     </header>
+
     <!-- Project Hero -->
     <section class="project-hero">
         <div class="container">
@@ -72,6 +78,7 @@
             </div>
         </div>
     </section>
+
     <!-- Overview Section -->
     <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
         <div class="container">
@@ -80,7 +87,9 @@
             </div>
             <div class="section-content">
                 <p>This project investigates trends in data science and AI-related videos on YouTube through comprehensive statistical analysis. Using the YouTube API, I collected and analyzed video statistics to answer the primary research question: "Has there been any change in the trend of data science and AI-related videos on YouTube?"</p>
+
                 <p>The analysis combines data collection, preprocessing, exploratory data analysis, and rigorous statistical testing to provide evidence-based insights into content performance and viewer engagement patterns over time.</p>
+
                 <h3>Research Question</h3>
                 <ul class="feature-list">
                     <li><strong>Primary Question</strong> – Has there been any change in the trend of data science and AI-related videos on YouTube?</li>
@@ -91,6 +100,7 @@
             </div>
         </div>
     </section>
+
     <!-- Methodology Section -->
     <section id="methodology" class="project-section bg-light">
         <div class="container">
@@ -130,6 +140,7 @@
             </div>
         </div>
     </section>
+
     <!-- Analysis Section -->
     <section id="analysis" class="project-section">
         <div class="container">
@@ -146,6 +157,7 @@
                         <li>Correlation analysis between views, likes, and comments</li>
                         <li>Outlier detection and treatment strategies</li>
                     </ul>
+                    
                     <h3>Temporal Analysis</h3>
                     <ul class="feature-list">
                         <li>Yearly and monthly trend visualization</li>
@@ -162,6 +174,7 @@
                         <li>Engagement pattern classification</li>
                         <li>Performance ranking and segmentation</li>
                     </ul>
+                    
                     <h3>Statistical Validation</h3>
                     <ul class="feature-list">
                         <li>Hypothesis formulation and testing</li>
@@ -173,6 +186,7 @@
             </div>
         </div>
     </section>
+
     <!-- Findings Section -->
     <section id="findings" class="project-section bg-light">
         <div class="container">
@@ -225,6 +239,7 @@
             </div>
         </div>
     </section>
+
     <!-- Technology Section -->
     <section id="technology" class="project-section">
         <div class="container">
@@ -240,6 +255,7 @@
                         <li>Python Requests - API interaction and authentication</li>
                         <li>JSON Processing - Data format handling</li>
                     </ul>
+                    
                     <h3>Data Processing</h3>
                     <ul class="feature-list">
                         <li>Pandas - Data manipulation and cleaning</li>
@@ -254,6 +270,7 @@
                         <li>Statsmodels - Advanced statistical modeling</li>
                         <li>Scikit-learn - Data preprocessing utilities</li>
                     </ul>
+                    
                     <h3>Visualization</h3>
                     <ul class="feature-list">
                         <li>Matplotlib - Statistical plotting and charts</li>
@@ -264,12 +281,13 @@
             </div>
         </div>
     </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <strong>Y_</strong><span>W_SONG</span>
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
                 </div>
                 <div class="footer-social">
                     <a href="https://github.com/Userdflt" aria-label="GitHub">
@@ -288,20 +306,9 @@
             </div>
         </div>
     </footer>
+
     <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="../js/project-scripts.js"></script>
-    <script>
-        // E-ink style page initialization
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("📖 Project Page - E-ink Style Loading...");
-            setTimeout(() => {
-                document.body.classList.add("e-ink-transition");
-                setTimeout(() => {
-                    document.body.classList.remove("e-ink-transition");
-                    console.log("📚 Project Page Ready");
-                }, 500);
-            }, 100);
-        });
-    </script>
 </body>
 </html> 

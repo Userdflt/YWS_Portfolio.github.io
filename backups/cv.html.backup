@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Computer Vision Safety - Young Woo Song</title>
     <meta name="description" content="Object Detection for Safety Compliance on Construction Sites using YOLOv9 for real-time monitoring and hazard prevention">
+    
     <!-- Technical E-ink Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
     <!-- E-ink Project Styles -->
-        <!-- E-ink Theme Styles -->
     <link rel="stylesheet" href="../css/main-styles.css">
     <link rel="stylesheet" href="../css/project-styles.css">
 </head>
@@ -22,10 +24,11 @@
         <div class="container">
             <div class="header-content">
                 <a href="../index.html" class="logo">
-                    <strong>Y_</strong><span>W_SONG</span>
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
                 </a>
                 <nav class="main-nav">
                     <ul class="nav-links">
+                        
                         <li><a href="#overview">Overview</a></li>
                         <li><a href="#workflow">Workflow</a></li>
                         <li><a href="#features">Features</a></li>
@@ -53,6 +56,7 @@
             </div>
         </div>
     </header>
+
     <!-- Project Hero -->
     <section class="project-hero">
         <div class="container">
@@ -67,6 +71,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                             <i class="fab fa-github"></i>
                             <span>View Code</span>
                         </a>
+                        
                     </div>
                 </div>
                 <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
@@ -75,6 +80,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
             </div>
         </div>
     </section>
+
     <!-- Overview Section -->
     <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
         <div class="container">
@@ -83,6 +89,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
             </div>
             <div class="section-content">
                 <p>The Computer Vision Safety system enhances construction site monitoring by leveraging a fine-tuned YOLOv9 model. This robust solution offers real-time detection of safety compliance by identifying the presence or absence of critical personal protective equipment (PPE) such as hardhats, masks, safety vests, and spotting potential safety violations.</p>
+
                 <p>Utilizing anchor-free detection and CSPDarknet backbone architecture, the model accurately detects 10 PPE-related classes and non-compliant conditions in normalized 640×640 images. It integrates video tracking via ByteTrack to enable real-time multi-object monitoring, providing actionable insights and visual outputs to support compliance and improve on-site safety performance.</p>
                 <br>
                 <br>
@@ -99,6 +106,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
             </div>
         </div>
     </section>
+
     <!-- Workflow Section -->
     <section id="workflow" class="project-section bg-light">
         <div class="container">
@@ -135,6 +143,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
             </div>
         </div>
     </section>
+
     <!-- Features Section -->
     <section id="features" class="project-section">
         <div class="container">
@@ -187,6 +196,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
             </div>
         </div>
     </section>
+
     <!-- Detection Classes Section -->
     <section id="detection" class="project-section bg-light">
         <div class="container">
@@ -203,6 +213,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                     <div class="detection-description">Detection of compliant hardhat usage for on-site personnel</div>
                     <div class="detection-accuracy">96% ACCURACY</div>
                 </div>
+
                 <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
                     <div class="detection-icon">
                         <i class="fas fa-user-slash"></i>
@@ -211,6 +222,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                     <div class="detection-description">Identification of individuals without proper head protection</div>
                     <div class="detection-accuracy">94% ACCURACY</div>
                 </div>
+
                 <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
                     <div class="detection-icon">
                         <i class="fas fa-mask"></i>
@@ -219,6 +231,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                     <div class="detection-description">Detection of mask-wearing for protection compliance</div>
                     <div class="detection-accuracy">93% ACCURACY</div>
                 </div>
+
                 <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
                     <div class="detection-icon">
                         <i class="fas fa-head-side-mask"></i>
@@ -227,6 +240,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                     <div class="detection-description">Detection of non-compliance with required mask use</div>
                     <div class="detection-accuracy">92% ACCURACY</div>
                 </div>
+
                 <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
                     <div class="detection-icon">
                         <i class="fas fa-vest"></i>
@@ -235,6 +249,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                     <div class="detection-description">Recognition of high-visibility safety vests</div>
                     <div class="detection-accuracy">95% ACCURACY</div>
                 </div>
+
                 <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
                     <div class="detection-icon">
                         <i class="fas fa-user-slash"></i>
@@ -243,6 +258,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                     <div class="detection-description">Detection of individuals without safety vests in required zones</div>
                     <div class="detection-accuracy">93% ACCURACY</div>
                 </div>
+
                 <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
                     <div class="detection-icon">
                         <i class="fas fa-user"></i>
@@ -251,6 +267,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                     <div class="detection-description">Identification of all on-site personnel</div>
                     <div class="detection-accuracy">98% ACCURACY</div>
                 </div>
+
                 <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
                     <div class="detection-icon">
                         <i class="fas fa-bullseye"></i>
@@ -259,6 +276,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                     <div class="detection-description">Detection of safety cones for hazard zone boundary validation</div>
                     <div class="detection-accuracy">90% ACCURACY</div>
                 </div>
+
                 <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
                     <div class="detection-icon">
                         <i class="fas fa-truck-pickup"></i>
@@ -267,6 +285,7 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
                     <div class="detection-description">Detection of trucks, vans, and mobile machinery on-site</div>
                     <div class="detection-accuracy">95% ACCURACY</div>
                 </div>
+
                 <div class="detection-class" data-aos="fade-up" data-aos-delay="50">
                     <div class="detection-icon">
                         <i class="fas fa-tools"></i>
@@ -278,6 +297,9 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
             </div>
         </div>
     </section>
+
+    
+
     <!-- Tools & Technologies Section -->
     <section id="tools" class="project-section">
         <div class="container">
@@ -338,12 +360,13 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
             </div>
         </div>
     </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <strong>Y_</strong><span>W_SONG</span>
+                    <strong>YOUNG_</strong> <span>WOO SONG</span>
                 </div>
                 <div class="footer-social">
                     <a href="https://github.com/Userdflt" aria-label="GitHub">
@@ -362,20 +385,9 @@ Advanced real-time monitoring system that detects PPE compliance, identifies saf
             </div>
         </div>
     </footer>
+
     <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="../js/project-scripts.js"></script>
-    <script>
-        // E-ink style page initialization
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("📖 Project Page - E-ink Style Loading...");
-            setTimeout(() => {
-                document.body.classList.add("e-ink-transition");
-                setTimeout(() => {
-                    document.body.classList.remove("e-ink-transition");
-                    console.log("📚 Project Page Ready");
-                }, 500);
-            }, 100);
-        });
-    </script>
 </body>
 </html>
