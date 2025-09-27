@@ -4,7 +4,7 @@
 ### Aspiring AI Professional  
 Bringing a unique blend of creativity, technical precision, and problem-solving skills to the future of artificial intelligence.
 
-![Portfolio Screenshot](images/portfolio_screenshot.png)
+
 
 [**CV / Resume**](https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f?pvs=74)
 
