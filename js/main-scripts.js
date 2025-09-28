@@ -302,11 +302,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 index++;
                 
                 // E-ink style irregular timing
-                const delay = Math.random() * 50 + 30;
+                const delay = Math.random() * 20 + 30;
                 setTimeout(typeText, delay);
                 
                 // Occasional flicker effect
-                if (Math.random() < 0.1) {
+                if (Math.random() < 0.2) {
                     heroTitle.classList.add('e-ink-transition');
                     setTimeout(() => heroTitle.classList.remove('e-ink-transition'), 200);
                 }
