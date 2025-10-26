@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Architectural Visualizations - Young Woo Song</title>
+    <meta name="description" content="AI-powered architectural visualizations showcasing sketch-to-render, plan-to-render, and generative design capabilities.">
+    
+    <!-- Technical E-ink Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../css/main-styles.css">
+    <style>
+        /* AI Visualizations Specific Styles */
+        .ai-viz-hero {
+            min-height: 40vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-12) 0 var(--space-8);
+            background: var(--color-background);
+            border-bottom: var(--border-width-thick) solid var(--color-border);
+            margin-top: 80px;
+        }
+
+        .ai-viz-hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .ai-viz-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-4);
+        }
+
+        .ai-viz-hero p {
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-6);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-background-card);
+            border: var(--border-width) solid var(--color-border);
+            color: var(--color-text);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            transition: all var(--transition-normal);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            
+        }
+
+        .back-btn:hover {
+            background: var(--color-text);
+            color: var(--color-text-inverse);
+            border-color: var(--color-text);
+            text-decoration: none;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            padding: var(--space-8) 0 var(--space-12);
+            background: var(--color-background);
+        }
+
+        /* Tab Filters */
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-8);
+            flex-wrap: wrap;
+            padding: 0 var(--space-4);
+        }
+
+        .gallery-filter-btn {
+            background: var(--color-background-card);
+            border: var(--border-width) solid var(--color-border);
+            color: var(--color-text-secondary);
+            padding: var(--space-3) var(--space-5);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .gallery-filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--color-text);
+            transition: left var(--transition-normal);
+            z-index: 0;
+        }
+
+        .gallery-filter-btn:hover::before,
+        .gallery-filter-btn.active::before {
+            left: 0;
+        }
+
+        .gallery-filter-btn:hover,
+        .gallery-filter-btn.active {
+            color: var(--color-text-inverse);
+            border-color: var(--color-text);
+        }
+
+        .gallery-filter-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Photography Portfolio Grid Layout */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-4);
+            padding: 0 var(--space-4);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            background: var(--color-background-card);
+            border: var(--border-width) solid var(--color-border);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-item:hover {
+            border-color: var(--color-text);
+            box-shadow: var(--shadow-page);
+            transform: translateY(-4px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: all var(--transition-normal);
+            filter: contrast(1.1) brightness(0.95);
+        }
+
+        .gallery-item:hover img {
+            filter: contrast(1.2) brightness(0.9);
+            transform: scale(1.05);
+        }
+
+        .gallery-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: var(--space-4);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .gallery-item:hover .gallery-item-overlay {
+            opacity: 1;
+        }
+
+        .gallery-item-title {
+            color: var(--color-text-inverse);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .gallery-item-category {
+            color: rgba(255,255,255,0.7);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            margin-top: var(--space-1);
+        }
+
+        /* Hidden state for filtering */
+        .gallery-item.hidden {
+            display: none;
+        }
+
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(253, 253, 248, 0.95);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            border: var(--border-width-thick) solid var(--color-text);
+            background: var(--color-background-card);
+            box-shadow: var(--shadow-lifted);
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            display: block;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: var(--color-text);
+            color: var(--color-text-inverse);
+            border: none;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-normal);
+            font-family: var(--font-mono);
+        }
+
+        .lightbox-close:hover {
+            background: var(--color-text-secondary);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--color-text);
+            color: var(--color-text-inverse);
+            border: none;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-normal);
+            z-index: 10;
+        }
+
+        .lightbox-nav:hover {
+            background: var(--color-text-secondary);
+        }
+
+        .lightbox-prev {
+            left: var(--space-4);
+        }
+
+        .lightbox-next {
+            right: var(--space-4);
+        }
+
+        .lightbox-caption {
+            background: var(--color-background-card);
+            padding: var(--space-4);
+            border-top: var(--border-width) solid var(--color-border);
+        }
+
+        .lightbox-caption h3 {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            margin: 0 0 var(--space-2);
+            color: var(--color-text);
+            text-transform: uppercase;
+        }
+
+        .lightbox-caption p {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            margin: 0;
+            color: var(--color-text-secondary);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .ai-viz-hero h1 {
+                font-size: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: var(--space-3);
+            }
+
+            .gallery-filters {
+                gap: var(--space-2);
+            }
+
+            .gallery-filter-btn {
+                padding: var(--space-2) var(--space-4);
+                font-size: 0.8rem;
+            }
+
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .lightbox-prev {
+                left: var(--space-2);
+            }
+
+            .lightbox-next {
+                right: var(--space-2);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>Y_</strong><span>W_SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="../index.html#home">Home</a></li>
+                        <li><a href="../index.html#about">About</a></li>
+                        <li><a href="../index.html#technologies">Technologies</a></li>
+                        <li><a href="../index.html#skills">Skills</a></li>
+                        <li><a href="../index.html#projects">Projects</a></li>
+                        <li><a href="../index.html#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="ai-viz-hero">
+        <div class="container">
+            <div class="ai-viz-hero-content">
+                <a href="../index.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Home</span>
+                </a>
+                <h1>AI Architectural Visualizations</h1>
+                <p>Exploring the intersection of artificial intelligence and architectural design through generative visualization techniques.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section">
+        <div class="container">
+            <!-- Gallery Filters -->
+            <div class="gallery-filters">
+                <button class="gallery-filter-btn active" data-filter="all">
+                    <span>All</span>
+                </button>
+                <button class="gallery-filter-btn" data-filter="sketch_to_render">
+                    <span>Sketch to Render</span>
+                </button>
+                <button class="gallery-filter-btn" data-filter="plan_to_render">
+                    <span>Plan to Render</span>
+                </button>
+                <button class="gallery-filter-btn" data-filter="text_to_render">
+                    <span>Text to Render</span>
+                </button>
+                <button class="gallery-filter-btn" data-filter="masterplan_render">
+                    <span>Masterplan Render</span>
+                </button>
+                <button class="gallery-filter-btn" data-filter="bg_add_render">
+                    <span>Background & Context</span>
+                </button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Sketch to Render Images -->
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1.jpg">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1.jpg" alt="Sketch 1 Original">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 1 - Original</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_2.png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_2.png" alt="Sketch 1 Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 1 - Render 2</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_3.png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_3.png" alt="Sketch 1 Render 3">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 1 - Render 3</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_4.png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_4.png" alt="Sketch 1 Render 4">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 1 - Render 4</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_5.png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_5.png" alt="Sketch 1 Render 5">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 1 - Render 5</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_2.jpg">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_2.jpg" alt="Sketch 2 Original">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 2 - Original</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-1 (3).png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-1 (3).png" alt="Sketch 2 Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 2 - Render 1</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-22.png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-22.png" alt="Sketch 2 Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 2 - Render 2</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_3/sketch_3.jpg">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_3/sketch_3.jpg" alt="Sketch 3 Original">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 3 - Original</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_1.png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_1.png" alt="Sketch 3 Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 3 - Render 1</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_2.png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_2.png" alt="Sketch 3 Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 3 - Render 2</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_3.png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_3.png" alt="Sketch 3 Render 3">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 3 - Render 3</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <!-- Plan to Render Images -->
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_1.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_1.png" alt="Plan 1 Original">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan 1 - Original</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_1_render_1.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_1_render_1.png" alt="Plan 1 Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan 1 - Render 1</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_1_render_2.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_1_render_2.png" alt="Plan 1 Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan 1 - Render 2</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_1.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_1.png" alt="Plan Interior Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan Interior - Render 1</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_2.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_2.png" alt="Plan Interior Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan Interior - Render 2</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_3.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_3.png" alt="Plan Interior Render 3">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan Interior - Render 3</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_2.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_2.png" alt="Plan 2 Original">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan 2 - Original</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_2_render_2.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_2_render_2.png" alt="Plan 2 Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan 2 - Render 2</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_3.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_3.png" alt="Plan 3 Original">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan 3 - Original</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_3_render_2.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_3_render_2.png" alt="Plan 3 Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan 3 - Render 2</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_4.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_4.png" alt="Plan 4 Original">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan 4 - Original</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_4_render_1.png">
+                    <img src="../images/ai_visual_images/plan_to_render/plan_4_render_1.png" alt="Plan 4 Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Plan 4 - Render 1</h3>
+                        <p class="gallery-item-category">Plan to Render</p>
+                    </div>
+                </div>
+
+                <!-- Text to Render Images -->
+                <div class="gallery-item" data-category="text_to_render" data-src="../images/ai_visual_images/text_to_render/render_1.png">
+                    <img src="../images/ai_visual_images/text_to_render/render_1.png" alt="Text to Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Text to Render 1</h3>
+                        <p class="gallery-item-category">Text to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="text_to_render" data-src="../images/ai_visual_images/text_to_render/render_2.png">
+                    <img src="../images/ai_visual_images/text_to_render/render_2.png" alt="Text to Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Text to Render 2</h3>
+                        <p class="gallery-item-category">Text to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="text_to_render" data-src="../images/ai_visual_images/text_to_render/interior_render_1.png">
+                    <img src="../images/ai_visual_images/text_to_render/interior_render_1.png" alt="Interior Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 1</h3>
+                        <p class="gallery-item-category">Text to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="text_to_render" data-src="../images/ai_visual_images/text_to_render/interior_render_2.png">
+                    <img src="../images/ai_visual_images/text_to_render/interior_render_2.png" alt="Interior Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 2</h3>
+                        <p class="gallery-item-category">Text to Render</p>
+                    </div>
+                </div>
+
+                <!-- Masterplan Render Images -->
+                <div class="gallery-item" data-category="masterplan_render" data-src="../images/ai_visual_images/masterplan_render/masterplan_1.png">
+                    <img src="../images/ai_visual_images/masterplan_render/masterplan_1.png" alt="Masterplan 1 Original">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Masterplan 1 - Original</h3>
+                        <p class="gallery-item-category">Masterplan Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="masterplan_render" data-src="../images/ai_visual_images/masterplan_render/masterplan_1_render_1.png">
+                    <img src="../images/ai_visual_images/masterplan_render/masterplan_1_render_1.png" alt="Masterplan 1 Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Masterplan 1 - Render 1</h3>
+                        <p class="gallery-item-category">Masterplan Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="masterplan_render" data-src="../images/ai_visual_images/masterplan_render/masterplan_1_render_2.png">
+                    <img src="../images/ai_visual_images/masterplan_render/masterplan_1_render_2.png" alt="Masterplan 1 Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Masterplan 1 - Render 2</h3>
+                        <p class="gallery-item-category">Masterplan Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="masterplan_render" data-src="../images/ai_visual_images/masterplan_render/materplan_1_render_3.png">
+                    <img src="../images/ai_visual_images/masterplan_render/materplan_1_render_3.png" alt="Masterplan 1 Render 3">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Masterplan 1 - Render 3</h3>
+                        <p class="gallery-item-category">Masterplan Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="masterplan_render" data-src="../images/ai_visual_images/masterplan_render/masterplan_1_render_4.png">
+                    <img src="../images/ai_visual_images/masterplan_render/masterplan_1_render_4.png" alt="Masterplan 1 Render 4">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Masterplan 1 - Render 4</h3>
+                        <p class="gallery-item-category">Masterplan Render</p>
+                    </div>
+                </div>
+
+                <!-- Background & Context Images -->
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/bg.png">
+                    <img src="../images/ai_visual_images/bg_add_render/bg.png" alt="Background">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Background Original</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/first_concept.png">
+                    <img src="../images/ai_visual_images/bg_add_render/first_concept.png" alt="First Concept">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">First Concept</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/first_concept_w_ppl.png">
+                    <img src="../images/ai_visual_images/bg_add_render/first_concept_w_ppl.png" alt="First Concept with People">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">First Concept with People</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/first_concept_modified.png">
+                    <img src="../images/ai_visual_images/bg_add_render/first_concept_modified.png" alt="First Concept Modified">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">First Concept Modified</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/concept_1.png">
+                    <img src="../images/ai_visual_images/bg_add_render/concept_1.png" alt="Concept 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Concept 1</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/concept_2.png">
+                    <img src="../images/ai_visual_images/bg_add_render/concept_2.png" alt="Concept 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Concept 2</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/concept_2_w_ppl.png">
+                    <img src="../images/ai_visual_images/bg_add_render/concept_2_w_ppl.png" alt="Concept 2 with People">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Concept 2 with People</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_1.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_1.png" alt="Interior Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 1</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_2.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_2.png" alt="Interior Render 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 2</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_3.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_3.png" alt="Interior Render 3">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 3</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_4.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_4.png" alt="Interior Render 4">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 4</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_5.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_5.png" alt="Interior Render 5">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 5</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_6.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_6.png" alt="Interior Render 6">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 6</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_7.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_7.png" alt="Interior Render 7">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 7</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_8.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_8.png" alt="Interior Render 8">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 8</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_9.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_9.png" alt="Interior Render 9">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 9</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_10.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_10.png" alt="Interior Render 10">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 10</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bg_add_render" data-src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_11.png">
+                    <img src="../images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_11.png" alt="Interior Render 11">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Interior Render 11</h3>
+                        <p class="gallery-item-category">Background & Context</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" aria-label="Close">&times;</button>
+            <button class="lightbox-nav lightbox-prev" aria-label="Previous">&#10094;</button>
+            <img id="lightboxImage" src="" alt="">
+            <button class="lightbox-nav lightbox-next" aria-label="Next">&#10095;</button>
+            <div class="lightbox-caption">
+                <h3 id="lightboxTitle"></h3>
+                <p id="lightboxCategory"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>Y_W_SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const mainNav = document.querySelector('.main-nav');
+            
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    mainNav.classList.toggle('active');
+                });
+            }
+
+            // Gallery filtering
+            const filterButtons = document.querySelectorAll('.gallery-filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const filterValue = this.getAttribute('data-filter');
+
+                    galleryItems.forEach(item => {
+                        if (filterValue === 'all') {
+                            item.classList.remove('hidden');
+                        } else {
+                            if (item.getAttribute('data-category') === filterValue) {
+                                item.classList.remove('hidden');
+                            } else {
+                                item.classList.add('hidden');
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Lightbox functionality
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightboxImage');
+            const lightboxTitle = document.getElementById('lightboxTitle');
+            const lightboxCategory = document.getElementById('lightboxCategory');
+            const lightboxClose = document.querySelector('.lightbox-close');
+            const lightboxPrev = document.querySelector('.lightbox-prev');
+            const lightboxNext = document.querySelector('.lightbox-next');
+
+            let currentImageIndex = 0;
+            let visibleImages = [];
+
+            // Update visible images array
+            function updateVisibleImages() {
+                visibleImages = Array.from(document.querySelectorAll('.gallery-item:not(.hidden)'));
+            }
+
+            // Open lightbox
+            galleryItems.forEach((item, index) => {
+                item.addEventListener('click', function() {
+                    updateVisibleImages();
+                    currentImageIndex = visibleImages.indexOf(this);
+                    showImage(currentImageIndex);
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            // Close lightbox
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            function closeLightbox() {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Show image
+            function showImage(index) {
+                if (visibleImages.length === 0) return;
+                
+                const item = visibleImages[index];
+                const src = item.getAttribute('data-src');
+                const title = item.querySelector('.gallery-item-title').textContent;
+                const category = item.querySelector('.gallery-item-category').textContent;
+
+                lightboxImage.src = src;
+                lightboxTitle.textContent = title;
+                lightboxCategory.textContent = category;
+            }
+
+            // Previous image
+            lightboxPrev.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currentImageIndex = (currentImageIndex - 1 + visibleImages.length) % visibleImages.length;
+                showImage(currentImageIndex);
+            });
+
+            // Next image
+            lightboxNext.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currentImageIndex = (currentImageIndex + 1) % visibleImages.length;
+                showImage(currentImageIndex);
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (!lightbox.classList.contains('active')) return;
+
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowLeft') {
+                    lightboxPrev.click();
+                } else if (e.key === 'ArrowRight') {
+                    lightboxNext.click();
+                }
+            });
+
+            // Header scroll effect
+            const header = document.querySelector('.header');
+            let lastScroll = 0;
+
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                
+                lastScroll = currentScroll;
+            });
+
+            // E-ink page refresh effect
+            console.log('📖 AI Visualizations Loading...');
+            setTimeout(() => {
+                document.body.classList.add('e-ink-page-refresh');
+                setTimeout(() => {
+                    document.body.classList.remove('e-ink-page-refresh');
+                    console.log('📚 AI Visualizations Ready');
+                }, 800);
+            }, 100);
+        });
+    </script>
+</body>
+</html>
+
