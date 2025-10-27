@@ -97,32 +97,14 @@
             font-weight: 500;
             cursor: pointer;
             transition: all var(--transition-normal);
-            position: relative;
-            overflow: hidden;
             font-family: var(--font-mono);
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        .gallery-filter-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--color-text);
-            transition: left var(--transition-normal);
-            z-index: 0;
-        }
-
-        .gallery-filter-btn:hover::before,
-        .gallery-filter-btn.active::before {
-            left: 0;
-        }
-
         .gallery-filter-btn:hover,
         .gallery-filter-btn.active {
+            background: var(--color-text);
             color: var(--color-text-inverse);
             border-color: var(--color-text);
         }
@@ -354,6 +336,33 @@
             .gallery-grid {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* E-ink Transition Effects */
+        @keyframes eInkFlicker {
+            0% { 
+                opacity: 1;
+                background-color: transparent;
+            }
+            30% { 
+                opacity: 0.97;
+                background-color: rgba(0,0,0,0.01);
+            }
+            60% { 
+                opacity: 0.99;
+                background-color: rgba(240,240,235,0.3);
+            }
+            100% { 
+                opacity: 1;
+                background-color: transparent;
+            }
+        }
+
+        /* Apply e-ink transition to interactive elements */
+        .back-btn:hover,
+        .gallery-filter-btn:hover,
+        .gallery-item:hover {
+            animation: eInkFlicker 0.2s ease-out;
         }
     </style>
 </head>
@@ -680,22 +689,6 @@
                     <img src="../images/ai_visual_images/plan_to_render/plan_3_render_2.png" alt="Plan 3 Render 2">
                     <div class="gallery-item-overlay">
                         <h3 class="gallery-item-title">Plan 3 - Render 2</h3>
-                        <p class="gallery-item-category">Plan to Render</p>
-                    </div>
-                </div>
-
-                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_4.png">
-                    <img src="../images/ai_visual_images/plan_to_render/plan_4.png" alt="Plan 4 Original">
-                    <div class="gallery-item-overlay">
-                        <h3 class="gallery-item-title">Plan 4 - Original</h3>
-                        <p class="gallery-item-category">Plan to Render</p>
-                    </div>
-                </div>
-
-                <div class="gallery-item" data-category="plan_to_render" data-src="../images/ai_visual_images/plan_to_render/plan_4_render_1.png">
-                    <img src="../images/ai_visual_images/plan_to_render/plan_4_render_1.png" alt="Plan 4 Render 1">
-                    <div class="gallery-item-overlay">
-                        <h3 class="gallery-item-title">Plan 4 - Render 1</h3>
                         <p class="gallery-item-category">Plan to Render</p>
                     </div>
                 </div>
