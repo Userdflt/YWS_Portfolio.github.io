@@ -6,18 +6,17 @@
     <title>NASA Outgassing Database Analysis - Young Woo Song</title>
     <meta name="description" content="Machine learning application for NASA outgassing materials analysis, featuring data processing, EDA, and predictive modeling for space-grade material evaluation">
     
-    <!-- Fonts -->
+    <!-- E-ink Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <!-- Custom Styles -->
+    <link rel="stylesheet" href="../css/main-styles.css">
     <link rel="stylesheet" href="../css/project-styles.css">
     
     <style>
@@ -204,7 +203,7 @@
         <div class="container">
             <div class="header-content">
                 <a href="../index.html" class="logo">
-                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                    <strong>Y_</strong><span>W_SONG</span>
                 </a>
                 <nav class="main-nav">
                     <ul class="nav-links">
@@ -493,7 +492,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <strong>YOUNG_</strong> <span>WOO SONG</span>
+                    <strong>Y_</strong><span>W_SONG</span>
                 </div>
                 <div class="footer-social">
                     <a href="https://github.com/Userdflt" aria-label="GitHub">
@@ -514,7 +513,20 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="../js/project-scripts.js"></script>
+    <script>
+        // E-ink style page initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("📖 Project Page - E-ink Style Loading...");
+            
+            setTimeout(() => {
+                document.body.classList.add("e-ink-transition");
+                setTimeout(() => {
+                    document.body.classList.remove("e-ink-transition");
+                    console.log("📚 Project Page Ready");
+                }, 500);
+            }, 100);
+        });
+    </script>
 </body>
 </html> 

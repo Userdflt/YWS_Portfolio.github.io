@@ -413,6 +413,20 @@
     <script src="../js/project-scripts.js"></script>
     <script>
         // E-ink style page initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("📖 Project Page - E-ink Style Loading...");
+            
+            setTimeout(() => {
+                document.body.classList.add("e-ink-transition");
+                setTimeout(() => {
+                    document.body.classList.remove("e-ink-transition");
+                    console.log("📚 Project Page Ready");
+                }, 500);
+            }, 100);
+        });
+    </script>
+    <script>
+        // E-ink style page initialization
         document.addEventListener('DOMContentLoaded', function() {
             console.log('📖 AI Detection - E-ink Style Loading...');
             

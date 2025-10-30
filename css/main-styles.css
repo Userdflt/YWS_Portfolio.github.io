@@ -933,9 +933,13 @@ p {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     justify-content: center;
+    justify-items: center;
     gap: var(--space-6);
     align-items: stretch;
     margin-top: var(--space-6);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .project-card {
@@ -1246,6 +1250,8 @@ p {
     .projects-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: var(--space-4);
+        justify-content: center;
+        justify-items: center;
     }
 
     .project-card {
