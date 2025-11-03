@@ -338,6 +338,179 @@
             }
         }
 
+        /* Featured Section Styles */
+        .featured-section {
+            padding: var(--space-8) 0;
+            background: var(--color-background);
+            border-bottom: var(--border-width) solid var(--color-border);
+        }
+
+        .featured-section h2,
+        .gallery-section h2 {
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-text);
+        }
+
+        .featured-slider {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+
+        .featured-slider-container {
+            position: relative;
+            overflow: hidden;
+            border: var(--border-width-thick) solid var(--color-border);
+            background: var(--color-background-card);
+        }
+
+        .featured-slider-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .featured-slide {
+            min-width: 100%;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 16/10;
+        }
+
+        .featured-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: all var(--transition-normal);
+            filter: contrast(1.1) brightness(0.95);
+        }
+
+        .featured-slide:hover img {
+            filter: contrast(1.2) brightness(0.9);
+            transform: scale(1.02);
+        }
+
+        .featured-slide-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: var(--space-5);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .featured-slide:hover .featured-slide-overlay {
+            opacity: 1;
+        }
+
+        .featured-slide-title {
+            color: var(--color-text-inverse);
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            margin: 0 0 var(--space-2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .featured-slide-category {
+            color: rgba(255,255,255,0.8);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Slider Navigation */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--color-text);
+            color: var(--color-text-inverse);
+            border: none;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-normal);
+            z-index: 10;
+            font-family: var(--font-mono);
+        }
+
+        .slider-nav:hover {
+            background: var(--color-text-secondary);
+        }
+
+        .slider-prev {
+            left: var(--space-4);
+        }
+
+        .slider-next {
+            right: var(--space-4);
+        }
+
+        /* Slider Indicators */
+        .slider-indicators {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-2);
+            margin-top: var(--space-4);
+        }
+
+        .slider-indicator {
+            width: 12px;
+            height: 12px;
+            border: var(--border-width) solid var(--color-border);
+            background: var(--color-background);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .slider-indicator.active {
+            background: var(--color-text);
+            border-color: var(--color-text);
+        }
+
+        /* Responsive adjustments for featured section */
+        @media (max-width: 768px) {
+            .featured-slider {
+                max-width: 100%;
+            }
+            
+            .featured-slide {
+                aspect-ratio: 4/3;
+            }
+
+            .slider-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .slider-prev {
+                left: var(--space-2);
+            }
+
+            .slider-next {
+                right: var(--space-2);
+            }
+        }
+
         /* E-ink Transition Effects */
         @keyframes eInkFlicker {
             0% { 
@@ -361,7 +534,8 @@
         /* Apply e-ink transition to interactive elements */
         .back-btn:hover,
         .gallery-filter-btn:hover,
-        .gallery-item:hover {
+        .gallery-item:hover,
+        .featured-slide:hover {
             animation: eInkFlicker 0.2s ease-out;
         }
     </style>
@@ -413,9 +587,83 @@
         </div>
     </section>
 
+    <!-- Featured ComfyUI Workflow Section -->
+    <section class="featured-section">
+        <div class="container">
+            <h2>Featured AI Visualizations</h2>
+            <div class="featured-slider">
+                <div class="featured-slider-container">
+                    <div class="featured-slider-track" id="featuredSliderTrack">
+                        <div class="featured-slide" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.png">
+                            <img src="../images/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.png" alt="Cabin Sample Model">
+                            <div class="featured-slide-overlay">
+                                <h3 class="featured-slide-title">Cabin Sample Model</h3>
+                                <p class="featured-slide-category">ComfyUI Workflow</p>
+                            </div>
+                        </div>
+                        
+                        <div class="featured-slide" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.jpg">
+                            <img src="../images/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.jpg" alt="Cabin High Quality Render">
+                            <div class="featured-slide-overlay">
+                                <h3 class="featured-slide-title">Cabin High Quality Render</h3>
+                                <p class="featured-slide-category">ComfyUI Workflow</p>
+                            </div>
+                        </div>
+                        
+                        <div class="featured-slide" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.png">
+                            <img src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.png" alt="ComfyUI Workflow Output 1">
+                            <div class="featured-slide-overlay">
+                                <h3 class="featured-slide-title">ComfyUI Workflow Output 1</h3>
+                                <p class="featured-slide-category">ComfyUI Workflow</p>
+                            </div>
+                        </div>
+                        
+                        <div class="featured-slide" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.png">
+                            <img src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.png" alt="ComfyUI Workflow Output 2">
+                            <div class="featured-slide-overlay">
+                                <h3 class="featured-slide-title">ComfyUI Workflow Output 2</h3>
+                                <p class="featured-slide-category">ComfyUI Workflow</p>
+                            </div>
+                        </div>
+                        
+                        <div class="featured-slide" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.png">
+                            <img src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.png" alt="ComfyUI Workflow Output 3">
+                            <div class="featured-slide-overlay">
+                                <h3 class="featured-slide-title">ComfyUI Workflow Output 3</h3>
+                                <p class="featured-slide-category">ComfyUI Workflow</p>
+                            </div>
+                        </div>
+                        
+                        <div class="featured-slide" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.png">
+                            <img src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.png" alt="ComfyUI Workflow Output 4">
+                            <div class="featured-slide-overlay">
+                                <h3 class="featured-slide-title">ComfyUI Workflow Output 4</h3>
+                                <p class="featured-slide-category">ComfyUI Workflow</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slider Navigation -->
+                    <button class="slider-nav slider-prev" id="sliderPrev" aria-label="Previous">&#10094;</button>
+                    <button class="slider-nav slider-next" id="sliderNext" aria-label="Next">&#10095;</button>
+                </div>
+                
+                <!-- Slider Indicators -->
+                <div class="slider-indicators" id="sliderIndicators">
+                    <div class="slider-indicator active" data-slide="0"></div>
+                    <div class="slider-indicator" data-slide="1"></div>
+                    <div class="slider-indicator" data-slide="2"></div>
+                    <div class="slider-indicator" data-slide="3"></div>
+                    <div class="slider-indicator" data-slide="4"></div>
+                    <div class="slider-indicator" data-slide="5"></div>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- Gallery Section -->
     <section class="gallery-section">
         <div class="container">
+            <h2>More AI Visualizations</h2>
             <!-- Gallery Filters -->
             <div class="gallery-filters">
                 <button class="gallery-filter-btn active" data-filter="all">
@@ -439,10 +687,61 @@
                 <button class="gallery-filter-btn" data-filter="bg_add_render">
                     <span>Background & Context</span>
                 </button>
+                <button class="gallery-filter-btn" data-filter="comfyui_workflow">
+                    <span>ComfyUI Workflow</span>
+                </button>
             </div>
 
             <!-- Gallery Grid -->
             <div class="gallery-grid" id="galleryGrid">
+                <!-- ComfyUI Workflow Images -->
+                <div class="gallery-item" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.png">
+                    <img src="../images/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.png" alt="Cabin Sample Model">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Cabin Sample Model</h3>
+                        <p class="gallery-item-category">ComfyUI Workflow</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.jpg">
+                    <img src="../images/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.jpg" alt="Cabin High Quality Render">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Cabin High Quality Render</h3>
+                        <p class="gallery-item-category">ComfyUI Workflow</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.png">
+                    <img src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.png" alt="ComfyUI Workflow Output 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">ComfyUI Workflow Output 1</h3>
+                        <p class="gallery-item-category">ComfyUI Workflow</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.png">
+                    <img src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.png" alt="ComfyUI Workflow Output 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">ComfyUI Workflow Output 2</h3>
+                        <p class="gallery-item-category">ComfyUI Workflow</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.png">
+                    <img src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.png" alt="ComfyUI Workflow Output 3">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">ComfyUI Workflow Output 3</h3>
+                        <p class="gallery-item-category">ComfyUI Workflow</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="comfyui_workflow" data-src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.png">
+                    <img src="../images/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.png" alt="ComfyUI Workflow Output 4">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">ComfyUI Workflow Output 4</h3>
+                        <p class="gallery-item-category">ComfyUI Workflow</p>
+                    </div>
+                </div>
                 <!-- Sketch to Render Images -->
                 <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1.jpg">
                     <img src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1.jpg" alt="Sketch 1 Original">
@@ -1009,12 +1308,24 @@
 
             // Update visible images array
             function updateVisibleImages() {
-                visibleImages = Array.from(document.querySelectorAll('.gallery-item:not(.hidden)'));
+                visibleImages = Array.from(document.querySelectorAll('.gallery-item:not(.hidden), .featured-slide'));
             }
 
-            // Open lightbox
+            // Open lightbox for gallery items
             galleryItems.forEach((item, index) => {
                 item.addEventListener('click', function() {
+                    updateVisibleImages();
+                    currentImageIndex = visibleImages.indexOf(this);
+                    showImage(currentImageIndex);
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            // Open lightbox for featured slides
+            const featuredSlides = document.querySelectorAll('.featured-slide');
+            featuredSlides.forEach((slide, index) => {
+                slide.addEventListener('click', function() {
                     updateVisibleImages();
                     currentImageIndex = visibleImages.indexOf(this);
                     showImage(currentImageIndex);
@@ -1042,8 +1353,15 @@
                 
                 const item = visibleImages[index];
                 const src = item.getAttribute('data-src');
-                const title = item.querySelector('.gallery-item-title').textContent;
-                const category = item.querySelector('.gallery-item-category').textContent;
+                
+                let title, category;
+                if (item.classList.contains('featured-slide')) {
+                    title = item.querySelector('.featured-slide-title').textContent;
+                    category = item.querySelector('.featured-slide-category').textContent;
+                } else {
+                    title = item.querySelector('.gallery-item-title').textContent;
+                    category = item.querySelector('.gallery-item-category').textContent;
+                }
 
                 lightboxImage.src = src;
                 lightboxTitle.textContent = title;
@@ -1092,6 +1410,70 @@
                 
                 lastScroll = currentScroll;
             });
+
+            // Featured Slider functionality
+            const sliderTrack = document.getElementById('featuredSliderTrack');
+            const sliderPrev = document.getElementById('sliderPrev');
+            const sliderNext = document.getElementById('sliderNext');
+            const sliderIndicators = document.querySelectorAll('.slider-indicator');
+            const slides = document.querySelectorAll('.featured-slide');
+            
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function updateSlider() {
+                const translateX = -currentSlide * 100;
+                sliderTrack.style.transform = `translateX(${translateX}%)`;
+                
+                // Update indicators
+                sliderIndicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currentSlide);
+                });
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateSlider();
+            }
+
+            function goToSlide(slideIndex) {
+                currentSlide = slideIndex;
+                updateSlider();
+            }
+
+            // Event listeners for slider controls
+            if (sliderNext) {
+                sliderNext.addEventListener('click', nextSlide);
+            }
+            
+            if (sliderPrev) {
+                sliderPrev.addEventListener('click', prevSlide);
+            }
+
+            // Event listeners for indicators
+            sliderIndicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => goToSlide(index));
+            });
+
+            // Auto-play slider (optional)
+            let autoPlayInterval = setInterval(nextSlide, 5000);
+
+            // Pause auto-play on hover
+            const sliderContainer = document.querySelector('.featured-slider-container');
+            if (sliderContainer) {
+                sliderContainer.addEventListener('mouseenter', () => {
+                    clearInterval(autoPlayInterval);
+                });
+
+                sliderContainer.addEventListener('mouseleave', () => {
+                    autoPlayInterval = setInterval(nextSlide, 5000);
+                });
+            }
 
             // E-ink page refresh effect
             console.log('📖 AI Visualizations Loading...');
