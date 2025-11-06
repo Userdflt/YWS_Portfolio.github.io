@@ -5,6 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gemini Vision Studio - Young Woo Song</title>
     <link rel="stylesheet" href="../css/project-styles.css">
+    <style>
+        /* Enhanced Gemini Vision Studio Styles */
+        
+        
+        .job-section {
+            margin-bottom: var(--space-4);
+        }
+        
+        .job-section h5 {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0 0 var(--space-2);
+            color: var(--color-text);
+        }
+        
+        .job-prompt {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--color-text-secondary);
+            background: var(--color-background-hover);
+            padding: var(--space-3);
+            border-left: 3px solid var(--color-accent);
+            margin: 0;
+        }
+        
+        /* File Structure Styles */
+        .file-structure {
+            margin-bottom: var(--space-6);
+        }
+        
+        .file-structure h3 {
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+            color: var(--color-text);
+        }
+        
+        .file-tree {
+            background: var(--color-background-card);
+            border: var(--border-width) solid var(--color-border);
+            padding: var(--space-4);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+        
+        .file-tree-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-1) 0;
+            color: var(--color-text);
+        }
+        
+        .file-tree-item.level-1 {
+            padding-left: var(--space-4);
+        }
+        
+        .file-tree-item.level-2 {
+            padding-left: var(--space-8);
+        }
+        
+        .file-tree-item.level-3 {
+            padding-left: var(--space-12);
+        }
+        
+        .file-tree-item i {
+            color: var(--color-accent);
+            width: 16px;
+        }
+        
+        .file-tree-item span {
+            font-weight: 500;
+        }
+        
+        .file-tree-item small {
+            color: var(--color-text-secondary);
+            font-size: 0.8rem;
+            margin-left: var(--space-2);
+        }
+        
+        /* Workflow Substeps */
+        .workflow-substeps {
+            margin-top: var(--space-3);
+        }
+        
+        .workflow-substeps p {
+            margin-bottom: var(--space-2);
+        }
+        
+        .workflow-substeps ul {
+            margin: var(--space-2) 0;
+            padding-left: var(--space-4);
+        }
+        
+        .workflow-substeps li {
+            margin-bottom: var(--space-1);
+            color: var(--color-text-secondary);
+        }
+        
+        /* Data Flow Cards */
+        .data-flow-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+        }
+        
+        .flow-card {
+            background: var(--color-background-card);
+            border: var(--border-width) solid var(--color-border);
+            padding: var(--space-5);
+            transition: all var(--transition-normal);
+        }
+        
+        .flow-card:hover {
+            border-color: var(--color-text);
+            transform: translateY(-2px);
+        }
+        
+        .flow-card h4 {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 var(--space-3);
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .flow-card h4 i {
+            color: var(--color-accent);
+        }
+        
+        .flow-card p {
+            margin: 0;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+        
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -232,8 +376,89 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Component Architecture</h2>
+                <p>The application follows a modern, component-based architecture with React. State management is centralized in the root App component, which acts as the orchestrator, passing data and callbacks down to presentational child components. Logic for API interaction and database persistence is cleanly separated into dedicated service modules.</p>
             </div>
             <div class="section-content">
+                <!-- File Structure -->
+                <div class="file-structure">
+                    <h3>Project Structure</h3>
+                    <div class="file-tree">
+                        <div class="file-tree-item">
+                            <i class="fas fa-folder-open"></i>
+                            <span>/</span>
+                        </div>
+                        <div class="file-tree-item level-1">
+                            <i class="fas fa-file-code"></i>
+                            <span>index.tsx</span>
+                            <small>(Entry Point)</small>
+                        </div>
+                        <div class="file-tree-item level-1">
+                            <i class="fas fa-file-code"></i>
+                            <span>App.tsx</span>
+                            <small>(Root Component & State Orchestrator)</small>
+                        </div>
+                        <div class="file-tree-item level-1">
+                            <i class="fas fa-folder-open"></i>
+                            <span>services/</span>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>geminiService.ts</span>
+                            <small>(Handles all Gemini API calls and agentic logic)</small>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>dbService.ts</span>
+                            <small>(Manages session persistence with IndexedDB)</small>
+                        </div>
+                        <div class="file-tree-item level-1">
+                            <i class="fas fa-folder-open"></i>
+                            <span>components/</span>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>PromptInput.tsx</span>
+                            <small>(Main form for all user text and image inputs)</small>
+                        </div>
+                        <div class="file-tree-item level-3">
+                            <i class="fas fa-file-code"></i>
+                            <span>ImageUploader.tsx</span>
+                            <small>(Reusable component for file uploads)</small>
+                        </div>
+                        <div class="file-tree-item level-3">
+                            <i class="fas fa-file-code"></i>
+                            <span>MaskEditor.tsx</span>
+                            <small>(Specialized component for image inpainting)</small>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>ResultsDisplay.tsx</span>
+                            <small>(Renders the list of all generation jobs)</small>
+                        </div>
+                        <div class="file-tree-item level-3">
+                            <i class="fas fa-file-code"></i>
+                            <span>ImageGrid.tsx</span>
+                            <small>(Displays the final generated images)</small>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>Gallery.tsx</span>
+                            <small>(Displays a static gallery of sample images)</small>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>ImageModal.tsx</span>
+                            <small>(Fullscreen view for a single selected image)</small>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>Loader.tsx</span>
+                            <small>(Reusable loading spinner)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Architecture Diagram -->
                 <div class="diagram-container">
                     <div class="mermaid-wrapper" id="component-wrapper">
                         <div class="diagram-controls">
@@ -254,62 +479,80 @@
                         <div class="mermaid-diagram" id="component-diagram">
                             <div class="mermaid">
 graph TD
-    subgraph "Application Core"
-        App[App.tsx<br/>Root Component]
-    end
+    App[App.tsx<br/>State Manager]
     
-    subgraph "Services"
-        GeminiService[geminiService.ts<br/>API Integration]
-        DBService[dbService.ts<br/>IndexedDB Storage]
-    end
+    GeminiService[geminiService.ts<br/>API Handler]
+    DBService[dbService.ts<br/>Data Storage]
     
-    subgraph "UI Components"
-        PromptInput[PromptInput.tsx<br/>Control Panel]
-        ResultsDisplay[ResultsDisplay.tsx<br/>Output Display]
-        ImageUploader[ImageUploader.tsx<br/>File Upload]
-        MaskEditor[MaskEditor.tsx<br/>Mask Drawing]
-        ImageGrid[ImageGrid.tsx<br/>Grid View]
-        ImageModal[ImageModal.tsx<br/>Preview Modal]
-        Loader[Loader.tsx<br/>Loading State]
-    end
+    PromptInput[PromptInput.tsx<br/>User Input]
+    ResultsDisplay[ResultsDisplay.tsx<br/>Job Results]
     
-    App -->|Manages State| PromptInput
-    App -->|Manages State| ResultsDisplay
-    App -->|API Calls| GeminiService
-    App -->|Persistence| DBService
-    PromptInput -->|Contains| ImageUploader
-    PromptInput -->|Contains| MaskEditor
-    ResultsDisplay -->|Contains| ImageGrid
-    ImageGrid -->|Triggers| ImageModal
+    ImageUploader[ImageUploader.tsx]
+    MaskEditor[MaskEditor.tsx]
+    ImageGrid[ImageGrid.tsx]
+    ImageModal[ImageModal.tsx]
     
-    style App fill:#1a1a1a,stroke:#333,stroke-width:2px,color:#fdfdf8
+    App --> GeminiService
+    App --> DBService
+    App --> PromptInput
+    App --> ResultsDisplay
+    
+    PromptInput --> ImageUploader
+    PromptInput --> MaskEditor
+    ResultsDisplay --> ImageGrid
+    ImageGrid --> ImageModal
+    
+    style App fill:#1a1a1a,stroke:#333,stroke-width:3px,color:#fdfdf8
     style GeminiService fill:#2d2d2d,stroke:#666,stroke-width:2px,color:#fdfdf8
     style DBService fill:#2d2d2d,stroke:#666,stroke-width:2px,color:#fdfdf8
-    style PromptInput fill:#333,stroke:#888,stroke-width:1px,color:#fdfdf8
-    style ResultsDisplay fill:#333,stroke:#888,stroke-width:1px,color:#fdfdf8
+    style PromptInput fill:#333,stroke:#888,stroke-width:2px,color:#fdfdf8
+    style ResultsDisplay fill:#333,stroke:#888,stroke-width:2px,color:#fdfdf8
     style ImageUploader fill:#4a4a4a,stroke:#888,stroke-width:1px,color:#fdfdf8
     style MaskEditor fill:#4a4a4a,stroke:#888,stroke-width:1px,color:#fdfdf8
     style ImageGrid fill:#4a4a4a,stroke:#888,stroke-width:1px,color:#fdfdf8
     style ImageModal fill:#4a4a4a,stroke:#888,stroke-width:1px,color:#fdfdf8
-    style Loader fill:#4a4a4a,stroke:#888,stroke-width:1px,color:#fdfdf8
                             </div>
                         </div>
                     </div>
                 </div>
                 <br>
             </br>
-                <h3>Component Descriptions</h3>
+                <h3>Core Components & Services</h3>
                 <div class="architecture-grid">
                     <div class="architecture-component">
                         <div class="component-header">
                             <div class="component-icon">
-                                <i class="fas fa-cogs"></i>
+                                <i class="fas fa-brain"></i>
                             </div>
                             <div>
-                                <h4 class="component-title">App.tsx</h4>
+                                <h4 class="component-title">App.tsx (Root Component)</h4>
                             </div>
                         </div>
-                        <p class="component-description">Root component holding primary state: brief, loading status, generated content, and images. Orchestrates core generation logic and integrates with services.</p>
+                        <p class="component-description">The brain of the application. It manages all application-level state, including user inputs, image files, and the list of generation jobs. It contains the primary logic for handling generation requests (handleGenerate) and orchestrates calls to the geminiService and dbService.</p>
+                    </div>
+
+                    <div class="architecture-component">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-cloud"></i>
+                            </div>
+                            <div>
+                                <h4 class="component-title">geminiService.ts (API Service)</h4>
+                            </div>
+                        </div>
+                        <p class="component-description">The sole interface to the Google Gemini API. It encapsulates all API call logic, including the multi-agent prompts, the two-stage "Planner" and "Writer" workflow (generatePowerPrompt), and the final image generation call (generateImages). It abstracts the complexity of the AI interactions away from the UI components.</p>
+                    </div>
+
+                    <div class="architecture-component">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div>
+                                <h4 class="component-title">dbService.ts (Database Service)</h4>
+                            </div>
+                        </div>
+                        <p class="component-description">Handles all interactions with the browser's IndexedDB. It provides simple saveSession and loadSession functions to persist and retrieve the user's input state, ensuring work is not lost between visits.</p>
                     </div>
 
                     <div class="architecture-component">
@@ -318,22 +561,22 @@ graph TD
                                 <i class="fas fa-keyboard"></i>
                             </div>
                             <div>
-                                <h4 class="component-title">PromptInput.tsx</h4>
+                                <h4 class="component-title">PromptInput.tsx (Input Form)</h4>
                             </div>
                         </div>
-                        <p class="component-description">Main control panel with text inputs, image uploaders, generation mode selectors, and the Generate action button.</p>
+                        <p class="component-description">A large, controlled component that renders the entire user input section. It receives state and callback functions from App.tsx and provides the UI for entering text briefs, uploading all types of images, and configuring generation settings.</p>
                     </div>
 
                     <div class="architecture-component">
                         <div class="component-header">
                             <div class="component-icon">
-                                <i class="fas fa-upload"></i>
+                                <i class="fas fa-list"></i>
                             </div>
                             <div>
-                                <h4 class="component-title">ImageUploader.tsx</h4>
+                                <h4 class="component-title">ResultsDisplay.tsx (Results List)</h4>
                             </div>
                         </div>
-                        <p class="component-description">Reusable drag-and-drop or file-dialog uploader for reference images, backgrounds, sketches, and more.</p>
+                        <p class="component-description">Renders the dynamic list of generation jobs. It maps over the jobs array from App.tsx and displays each job in a collapsible card, showing its status (running, completed, error) and final results.</p>
                     </div>
 
                     <div class="architecture-component">
@@ -342,34 +585,10 @@ graph TD
                                 <i class="fas fa-paint-brush"></i>
                             </div>
                             <div>
-                                <h4 class="component-title">MaskEditor.tsx</h4>
+                                <h4 class="component-title">MaskEditor.tsx (Inpainting UI)</h4>
                             </div>
                         </div>
-                        <p class="component-description">Interactive canvas for Image to Edit workflows. Supports mask drawing and dedicated inpainting brief field.</p>
-                    </div>
-
-                    <div class="architecture-component">
-                        <div class="component-header">
-                            <div class="component-icon">
-                                <i class="fas fa-desktop"></i>
-                            </div>
-                            <div>
-                                <h4 class="component-title">ResultsDisplay.tsx</h4>
-                            </div>
-                        </div>
-                        <p class="component-description">Renders outputs conditionally by generation mode: checklist, final prompt, and image grid display.</p>
-                    </div>
-
-                    <div class="architecture-component">
-                        <div class="component-header">
-                            <div class="component-icon">
-                                <i class="fas fa-th"></i>
-                            </div>
-                            <div>
-                                <h4 class="component-title">ImageGrid & Modal</h4>
-                            </div>
-                        </div>
-                        <p class="component-description">Present generated images in a responsive grid with fullscreen modal preview and download options.</p>
+                        <p class="component-description">A complex, specialized component that activates when a user wants to edit an image. It uses stacked HTML5 canvases to allow users to draw a mask over an image, then composites the original image and the mask into a single new image file that can be sent to the Gemini API for inpainting.</p>
                     </div>
                 </div>
             </div>
@@ -381,8 +600,10 @@ graph TD
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Workflow & Data Flow</h2>
+                <p>The application's data flow is unidirectional, flowing from the central App component down to child components. User events flow up from child components via callback functions.</p>
             </div>
             <div class="section-content">
+                <!-- Enhanced Sequence Diagram -->
                 <div class="diagram-container">
                     <div class="mermaid-wrapper" id="workflow-wrapper">
                         <div class="diagram-controls">
@@ -404,87 +625,115 @@ graph TD
                             <div class="mermaid">
 sequenceDiagram
     actor User
-    participant UI as PromptInput
-    participant App as App.tsx
-    participant GS as geminiService
+    participant App
+    participant Service as geminiService
     participant API as Gemini API
     
-    User->>UI: Enters brief & uploads images
-    User->>UI: Clicks Generate
-    UI->>App: onGenerate()
-    App->>App: Set isLoading = true
-    App->>GS: generatePowerPrompt(brief, images, context)
+    Note over User,API: Concurrent Generation Workflow
     
-    alt Full Workflow (Prompt & Image)
-        GS->>API: 1. Planner Agent Call
-        API-->>GS: Checklist
-        GS->>API: 2. Writer Agent Call (with Checklist)
-        API-->>GS: Final Prompt + Assumptions
-        GS-->>App: GeneratedContent
-        App->>App: Update state
-        App->>GS: generateImages(finalPrompt, images)
-        GS->>API: 3. Image Model Call
-        API-->>GS: Image Data
-        GS-->>App: Image URLs
-    else Prompt Only
-        GS->>API: Planner Agent
-        API-->>GS: Checklist
-        GS->>API: Writer Agent
-        API-->>GS: Final Prompt
-        GS-->>App: GeneratedContent
-    else Image Only (Fast)
-        App->>GS: generateImages(brief, images)
-        GS->>API: Direct Image Model Call
-        API-->>GS: Image Data
-        GS-->>App: Image URLs
+    User->>App: Enter brief & click Generate (Job 1)
+    App->>App: Create Job 1 (status: running)
+    App-->>User: UI remains interactive
+    
+    par Job 1 Processing
+        App->>Service: generatePowerPrompt() [Job 1]
+        Service->>API: Planner Agent
+        API-->>Service: Checklist
+        Service->>API: Writer Agent
+        API-->>Service: Final prompt
+        Service-->>App: Generated content [Job 1]
+        
+        App->>Service: generateImages() [Job 1]
+        Service->>API: Image generation
+        API-->>Service: Generated images
+        Service-->>App: Image results [Job 1]
+        App->>App: Update Job 1 (status: completed)
+    and User Starts Job 2
+        User->>App: Start another generation (Job 2)
+        App->>App: Create Job 2 (status: running)
+        App->>Service: generatePowerPrompt() [Job 2]
+        Note over Service,API: Job 2 runs in parallel
+    and User Starts Job 3
+        User->>App: Start third generation (Job 3)
+        App->>App: Create Job 3 (status: running)
+        Note over App,Service: Multiple jobs running concurrently
     end
     
-    App->>App: Set isLoading = false
-    App->>UI: Re-render with results
-    UI->>User: Display outputs
+    App->>User: Display all completed results
+    
+    Note over User,App: Non-blocking Re-generation
+    User->>App: Click "Generate Again" on any job
+    App->>App: Start new job with saved parameters
+    Note over App,User: Original jobs remain accessible
                             </div>
                         </div>
                     </div>
                 </div>
                 <br>
             </br>
-                <h3>Workflow Steps</h3>
+                <h3>Detailed Workflow Steps</h3>
                 <div class="workflow-steps">
                     <div class="workflow-step">
-                        <h4>1. User Input</h4>
-                        <p>The user provides a text brief, optionally uploads images (background, sketch, edit, etc.), selects a generation mode, and clicks Generate in PromptInput.tsx.</p>
+                        <h4>1. App Initialization & Session Loading</h4>
+                        <div class="workflow-substeps">
+                            <p><strong>Mount:</strong> The App component mounts and initially displays a loading state (isInitialized is false).</p>
+                            <p><strong>Load Data:</strong> A useEffect hook calls loadSession() from dbService.</p>
+                            <p><strong>DB Read:</strong> dbService asynchronously retrieves the last saved session data from IndexedDB.</p>
+                            <p><strong>State Hydration:</strong> If data is found, it's passed back to App.tsx, which uses it to populate its state variables (brief, referenceImages, generationMode, etc.).</p>
+                            <p><strong>Render UI:</strong> isInitialized is set to true, which removes the loader and renders the main application UI (PromptInput and any previous ResultsDisplay) with the restored data.</p>
+                        </div>
                     </div>
 
                     <div class="workflow-step">
-                        <h4>2. Trigger Generation</h4>
-                        <p>onGenerate in App.tsx sets isLoading = true and starts the flow.</p>
+                        <h4>2. Main Generation Workflow</h4>
+                        <div class="workflow-substeps">
+                            <p><strong>User Input:</strong> The user interacts with the PromptInput component. Because it is a "controlled component," every change (typing in the brief, uploading an image) immediately updates the state within the parent App.tsx component.</p>
+                            <p><strong>Trigger Generation:</strong> The user clicks the "Generate" button. This calls the handleGenerate function in App.tsx.</p>
+                            <p><strong>Create Job & Update UI:</strong> handleGenerate immediately:</p>
+                            <ul>
+                                <li>Creates a new GenerationJob object with a unique ID, a status of 'running', and a snapshot of all current user inputs (GenerationParams).</li>
+                                <li>Adds this new job to the top of the jobs state array.</li>
+                                <li>This state change triggers a re-render, and ResultsDisplay instantly shows a new collapsible card for this job with a loading spinner.</li>
+                            </ul>
+                            <p><strong>Call Power Prompt Service:</strong> handleGenerate calls generatePowerPrompt() in geminiService, passing the user's brief and any image files.</p>
+                            <p><strong>Multi-Agent Execution:</strong> Inside geminiService:</p>
+                            <ul>
+                                <li><strong>Planner Agent:</strong> An API call is made to gemini-2.5-flash with the user's brief and the PLANNER_AGENT_PROMPT.</li>
+                                <li><strong>Writer Agent:</strong> The Planner's response (a checklist) is received. A second API call is made to gemini-2.5-flash, this time with the user's brief, the planner's checklist, and the appropriate context-aware WRITER_AGENT_PROMPT (e.g., DEFAULT, FLOORPLAN, INPAINTING).</li>
+                                <li>The Writer's response is parsed into a structured GeneratedContent object (containing the finalPrompt, assumptions, etc.).</li>
+                            </ul>
+                            <p><strong>Call Image Generation Service:</strong> Back in App.tsx, handleGenerate receives the GeneratedContent and then calls generateImages() from geminiService, passing the finalPrompt.</p>
+                            <p><strong>Generate Images:</strong> geminiService makes parallel API calls to gemini-2.5-flash-image for the requested number of images. It returns an array of base64-encoded image strings.</p>
+                            <p><strong>Final State Update:</strong> handleGenerate receives the generated images. It finds the job in the jobs array by its ID and updates its status to 'completed', attaching the full GenerationResult (both the prompt content and the images).</p>
+                            <p><strong>Render Results:</strong> This final state change triggers a re-render. The JobResultCard for the completed job now replaces its loader with the detailed prompt information and the ImageGrid containing the final visuals.</p>
+                        </div>
                     </div>
 
                     <div class="workflow-step">
-                        <h4>3. Determine Context</h4>
-                        <p>App.tsx infers AgentContext (e.g., default, inpainting, floorplan) based on which image inputs are present.</p>
+                        <h4>3. "Generate Again" Workflow</h4>
+                        <div class="workflow-substeps">
+                            <p><strong>User Click:</strong> The user clicks "Generate Again" inside a completed JobResultCard.</p>
+                            <p><strong>Call Regenerate:</strong> This triggers the handleRegenerate function in App.tsx, passing in the entire GenerationJob object for that card.</p>
+                            <p><strong>Invoke Generate with Params:</strong> handleRegenerate calls the main handleGenerate function, but instead of using the current state from the UI, it passes the saved job.params from the old job.</p>
+                            <p><strong>Execute Workflow:</strong> The process then follows the Main Generation Workflow from Step 2, using the preserved parameters to ensure an exact re-run of the previous job.</p>
+                        </div>
                     </div>
-
-                    <div class="workflow-step">
-                        <h4>4. Service Layer Call</h4>
-                        <p>App.tsx calls geminiService with the brief, images, and context.</p>
+                </div>
+                <br>
+            </br>
+                <h3>Data Flow Architecture</h3>
+                <div class="data-flow-info">
+                    <div class="flow-card">
+                        <h4><i class="fas fa-arrow-down"></i> Downward Data Flow</h4>
+                        <p>State flows from App.tsx down to child components via props. All application state (user inputs, generation jobs, loading states) is managed centrally and passed down to presentational components.</p>
                     </div>
-
-                    <div class="workflow-step">
-                        <h4>5. Agent Orchestration</h4>
-                        <p><strong>Prompt & Image</strong> or <strong>Prompt Only:</strong> generatePowerPrompt runs Planner, then routes to the appropriate Writer. Returns checklist and final prompt.</p>
-                        <p><strong>Image Only (Fast):</strong> Skips agents and calls image generation directly with the user brief.</p>
+                    <div class="flow-card">
+                        <h4><i class="fas fa-arrow-up"></i> Upward Event Flow</h4>
+                        <p>User interactions flow up from child components to App.tsx via callback functions. Components like PromptInput use controlled component patterns to immediately update parent state.</p>
                     </div>
-
-                    <div class="workflow-step">
-                        <h4>6. Image Generation</h4>
-                        <p><strong>Prompt & Image:</strong> generateImages is called with the refined final prompt.</p>
-                        <p><strong>Image Only:</strong> generateImages receives the raw brief.</p>
-                    </div>
-
-                    <div class="workflow-step">
-                        <h4>7. State Update & Render</h4>
-                        <p>App.tsx updates generatedContent and/or generatedImages, sets isLoading = false, and ResultsDisplay renders the new outputs.</p>
+                    <div class="flow-card">
+                        <h4><i class="fas fa-layer-group"></i> Service Layer Abstraction</h4>
+                        <p>Complex logic for API interactions (geminiService) and data persistence (dbService) is abstracted into separate modules, keeping components focused on presentation.</p>
                     </div>
                 </div>
             </div>
@@ -713,13 +962,13 @@ sequenceDiagram
     </section>
 
     <!-- Results & Impact -->
-    <section id="results" class="project-section">
+    <section id="results" class="project-section bg-light">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Results & Impact</h2>
             </div>
             <div class="section-content">
-                <p>The structured, agent-driven approach ensures nuanced interpretation of briefs, precise prompt construction, and coherent final images using gemini-2.5-flash-image. The SPA architecture, Tailwind-based dark UI, and IndexedDB persistence provide a responsive and reliable user experience.</p>
+                <p>The enhanced Gemini Vision Studio now features concurrent generation capabilities, improved user experience with collapsible job management, and robust validation. The structured, agent-driven approach ensures nuanced interpretation of briefs, precise prompt construction, and coherent final images using gemini-2.5-flash-image.</p>
 
                 <div class="results-grid">
                     <div class="result-card">
@@ -728,8 +977,8 @@ sequenceDiagram
                     </div>
 
                     <div class="result-card">
-                        <div class="result-value">2-Stage</div>
-                        <div class="result-label">AI Pipeline</div>
+                        <div class="result-value">Concurrent</div>
+                        <div class="result-label">Multi-Job Support</div>
                     </div>
 
                     <div class="result-card">
@@ -738,13 +987,23 @@ sequenceDiagram
                     </div>
 
                     <div class="result-card">
-                        <div class="result-value">IndexedDB</div>
-                        <div class="result-label">Session Persistence</div>
+                        <div class="result-value">Enhanced</div>
+                        <div class="result-label">User Experience</div>
                     </div>
                 </div>
                 <br>
             </br>
-                <h3>Key Outcomes</h3>
+                <h3>Key Improvements</h3>
+                <ul class="feature-list">
+                    <li>Added concurrent generation support for parallel job processing</li>
+                    <li>Implemented collapsible job cards with timestamps and status tracking</li>
+                    <li>Fixed image preview positioning and background scroll prevention</li>
+                    <li>Enhanced input validation for image editing workflows</li>
+                    <li>Added individual re-generation buttons for each completed job</li>
+                    <li>Improved overall workflow with non-blocking interface design</li>
+                </ul>
+                
+                <h3>Original Outcomes</h3>
                 <ul class="feature-list">
                     <li>Eliminated trial-and-error prompting with structured AI agent pipeline</li>
                     <li>Improved prompt quality and detail through specialized Writer variants</li>
@@ -778,7 +1037,6 @@ sequenceDiagram
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>Built with passion for AI and modern web development</p>
             </div>
         </div>
     </footer>
