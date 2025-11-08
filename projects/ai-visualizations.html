@@ -486,6 +486,97 @@
             border-color: var(--color-text);
         }
 
+        /* AI Videos Section Styles */
+        .ai-videos-section {
+            padding: var(--space-8) 0;
+            background: var(--color-background);
+            border-bottom: var(--border-width) solid var(--color-border);
+        }
+
+        .ai-videos-section h2 {
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-text);
+        }
+
+        .videos-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+            padding: 0 var(--space-4);
+            max-width: 800px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .video-item {
+            position: relative;
+            background: var(--color-background-card);
+            border: var(--border-width) solid var(--color-border);
+            transition: all var(--transition-normal);
+            /* Let video determine the container size */
+            width: 100%;
+            max-width: 800px;
+            min-height: 300px;
+        }
+
+        .video-item:hover {
+            border-color: var(--color-text);
+            box-shadow: var(--shadow-page);
+            transform: translateY(-4px);
+        }
+
+        .video-item video {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: all var(--transition-normal);
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .video-item:hover video {
+            transform: scale(1.02);
+        }
+
+        .video-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: var(--space-4);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .video-item:hover .video-item-overlay {
+            opacity: 1;
+        }
+
+        .video-item-title {
+            color: var(--color-text-inverse);
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            margin: 0 0 var(--space-2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .video-item-description {
+            color: rgba(255,255,255,0.8);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            margin: 0;
+            line-height: 1.4;
+        }
+
         /* Responsive adjustments for featured section */
         @media (max-width: 768px) {
             .featured-slider {
@@ -508,6 +599,17 @@
 
             .slider-next {
                 right: var(--space-2);
+            }
+
+            .videos-grid {
+                max-width: 100%;
+                gap: var(--space-4);
+                padding: 0 var(--space-2);
+            }
+            
+            .video-item {
+                max-width: 100%;
+                min-height: 200px;
             }
         }
 
@@ -535,7 +637,8 @@
         .back-btn:hover,
         .gallery-filter-btn:hover,
         .gallery-item:hover,
-        .featured-slide:hover {
+        .featured-slide:hover,
+        .video-item:hover {
             animation: eInkFlicker 0.2s ease-out;
         }
     </style>
@@ -667,6 +770,26 @@
                     <div class="slider-indicator" data-slide="3"></div>
                     <div class="slider-indicator" data-slide="4"></div>
                     <div class="slider-indicator" data-slide="5"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Videos Section -->
+    <section class="ai-videos-section">
+        <div class="container">
+            <h2>AI Generated Video</h2>
+            <div class="videos-grid">
+                <div class="video-item">
+                    <video controls preload="metadata" playsinline webkit-playsinline id="cabinVideo">
+                        <source src="../Videos/cabin_construction.mp4" type="video/mp4">
+                        <source src="../Videos/cabin_construction.mov" type="video/quicktime">
+                        <p>Your browser does not support the video tag. <a href="../Videos/cabin_construction.mp4" download>Download the video</a> to view it.</p>
+                    </video>
+                    <div class="video-item-overlay">
+                        <h3 class="video-item-title">Cabin Construction Process</h3>
+                        <p class="video-item-description">AI-generated visualization showing the step-by-step construction process of a modern cabin design.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1515,6 +1638,31 @@
                     autoPlayInterval = setInterval(nextSlide, 5000);
                 });
             }
+
+            // Video handling with dynamic aspect ratio
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.addEventListener('error', function(e) {
+                    console.log('Video error:', e);
+                    const errorMsg = document.createElement('div');
+                    errorMsg.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--color-text-secondary);">Video format not supported in this browser. <a href="' + video.querySelector('source').src + '" download style="color: var(--color-text);">Download video</a></p>';
+                    video.parentNode.replaceChild(errorMsg, video);
+                });
+                
+                video.addEventListener('loadedmetadata', function() {
+                    console.log('Video loaded successfully');
+                    
+                    // Get video dimensions for logging
+                    const videoWidth = this.videoWidth;
+                    const videoHeight = this.videoHeight;
+                    const aspectRatio = videoWidth / videoHeight;
+                    
+                    console.log(`Video dimensions: ${videoWidth}x${videoHeight}, aspect ratio: ${aspectRatio}`);
+                    
+                    // Let the video determine its own size naturally
+                    // The CSS will handle proper scaling and containment
+                });
+            });
 
             // E-ink page refresh effect
             console.log('📖 AI Visualizations Loading...');
