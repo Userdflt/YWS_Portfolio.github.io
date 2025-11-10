@@ -505,13 +505,12 @@
         }
 
         .videos-grid {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: var(--space-6);
             padding: 0 var(--space-4);
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
-            align-items: center;
         }
 
         .video-item {
@@ -519,10 +518,11 @@
             background: var(--color-background-card);
             border: var(--border-width) solid var(--color-border);
             transition: all var(--transition-normal);
-            /* Let video determine the container size */
             width: 100%;
-            max-width: 800px;
-            min-height: 300px;
+            max-width: 700px;
+            min-height: 500px;
+            aspect-ratio: 16/9;
+            overflow: hidden;
         }
 
         .video-item:hover {
@@ -533,11 +533,11 @@
 
         .video-item video {
             width: 100%;
-            height: auto;
+            height: 100%;
             display: block;
             transition: all var(--transition-normal);
             max-width: 100%;
-            object-fit: contain;
+            object-fit: cover;
         }
 
         .video-item:hover video {
@@ -602,14 +602,14 @@
             }
 
             .videos-grid {
+                grid-template-columns: 1fr;
                 max-width: 100%;
                 gap: var(--space-4);
                 padding: 0 var(--space-2);
             }
             
             .video-item {
-                max-width: 100%;
-                min-height: 200px;
+                aspect-ratio: 16/9;
             }
         }
 
@@ -778,7 +778,7 @@
     <!-- AI Videos Section -->
     <section class="ai-videos-section">
         <div class="container">
-            <h2>AI Generated Video</h2>
+            <h2>AI Generated Videos</h2>
             <div class="videos-grid">
                 <div class="video-item">
                     <video controls preload="metadata" playsinline webkit-playsinline id="cabinVideo">
@@ -789,6 +789,17 @@
                     <div class="video-item-overlay">
                         <h3 class="video-item-title">Cabin Construction Process</h3>
                         <p class="video-item-description">AI-generated visualization showing the step-by-step construction process of a modern cabin design.</p>
+                    </div>
+                </div>
+                
+                <div class="video-item">
+                    <video controls preload="metadata" playsinline webkit-playsinline id="shoppingMallVideo">
+                        <source src="../Videos/shopping_mall.mp4" type="video/mp4">
+                        <p>Your browser does not support the video tag. <a href="../Videos/shopping_mall.mp4" download>Download the video</a> to view it.</p>
+                    </video>
+                    <div class="video-item-overlay">
+                        <h3 class="video-item-title">Shopping Mall Visualization</h3>
+                        <p class="video-item-description">AI-generated architectural visualization of a modern shopping mall complex with dynamic lighting and atmospheric effects.</p>
                     </div>
                 </div>
             </div>
@@ -907,6 +918,22 @@
                     </div>
                 </div>
                 <!-- Sketch to Render Images -->
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_4/20220705_175328.jpg">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_4/20220705_175328.jpg" alt="Sketch 4 Original">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 4 - Original</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_4/2025-11-09_10-23.png">
+                    <img src="../images/ai_visual_images/sketch_to_render/sketch_4/2025-11-09_10-23.png" alt="Sketch 4 Render 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Sketch 4 - Render 1</h3>
+                        <p class="gallery-item-category">Sketch to Render</p>
+                    </div>
+                </div>
+                
                 <div class="gallery-item" data-category="sketch_to_render" data-src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1.jpg">
                     <img src="../images/ai_visual_images/sketch_to_render/sketch_1/sketch_1.jpg" alt="Sketch 1 Original">
                     <div class="gallery-item-overlay">
@@ -1002,6 +1029,8 @@
                         <p class="gallery-item-category">Sketch to Render</p>
                     </div>
                 </div>
+
+                
 
                 <!-- Model to Render Images -->
                 <div class="gallery-item" data-category="model_to_render" data-src="../images/ai_visual_images/model_to_render/model_1.png">
