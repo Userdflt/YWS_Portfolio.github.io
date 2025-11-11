@@ -360,5 +360,218 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // ===== IMAGE OPTIMIZATION SYSTEM =====
+    
+    // Lazy Loading Implementation
+    function initLazyLoading() {
+        console.log('🖼️ Initializing lazy loading system...');
+        
+        // Create intersection observer for lazy loading
+        const lazyImageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    loadImage(img);
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px 0px', // Start loading 50px before image enters viewport
+            threshold: 0.01
+        });
+
+        // Find all images and set up lazy loading
+        const images = document.querySelectorAll('img[src]');
+        images.forEach(img => {
+            // Skip if already loaded or is critical above-fold image
+            if (img.complete || img.classList.contains('no-lazy')) {
+                return;
+            }
+            
+            // Store original src and replace with placeholder
+            img.dataset.src = img.src;
+            img.src = createPlaceholder(img.width || 400, img.height || 300);
+            img.classList.add('lazy-loading');
+            
+            // Observe for intersection
+            lazyImageObserver.observe(img);
+        });
+    }
+
+    // Create optimized placeholder
+    function createPlaceholder(width, height) {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        
+        // E-ink style placeholder
+        ctx.fillStyle = '#f7f7f2';
+        ctx.fillRect(0, 0, width, height);
+        
+        // Add subtle pattern
+        ctx.fillStyle = '#e8e8e8';
+        ctx.font = '14px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('Loading...', width/2, height/2);
+        
+        return canvas.toDataURL();
+    }
+
+    // Load image with WebP fallback
+    function loadImage(img) {
+        const originalSrc = img.dataset.src;
+        if (!originalSrc) return;
+        
+        // Try WebP version first if supported
+        if (supportsWebP()) {
+            const webpSrc = originalSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+            
+            // Test if WebP version exists
+            const testImg = new Image();
+            testImg.onload = () => {
+                // WebP version exists, use it
+                img.src = webpSrc;
+                img.classList.remove('lazy-loading');
+                img.classList.add('lazy-loaded');
+            };
+            testImg.onerror = () => {
+                // WebP doesn't exist, use original
+                loadOriginalImage(img, originalSrc);
+            };
+            testImg.src = webpSrc;
+        } else {
+            // Browser doesn't support WebP, use original
+            loadOriginalImage(img, originalSrc);
+        }
+    }
+
+    // Load original image
+    function loadOriginalImage(img, src) {
+        const newImg = new Image();
+        newImg.onload = () => {
+            img.src = src;
+            img.classList.remove('lazy-loading');
+            img.classList.add('lazy-loaded');
+            
+            // E-ink style fade-in effect
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 0.3s ease-out';
+            setTimeout(() => {
+                img.style.opacity = '1';
+            }, 50);
+        };
+        newImg.onerror = () => {
+            console.warn('Failed to load image:', src);
+            img.classList.add('lazy-error');
+        };
+        newImg.src = src;
+    }
+
+    // Check WebP support
+    function supportsWebP() {
+        if (typeof supportsWebP.result !== 'undefined') {
+            return supportsWebP.result;
+        }
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = 1;
+        canvas.height = 1;
+        
+        supportsWebP.result = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        return supportsWebP.result;
+    }
+
+    // Preload critical images
+    function preloadCriticalImages() {
+        const criticalImages = [
+            'images/me_light.png', // Hero image
+            'images/Vision Studio logo.png' // If on project page
+        ];
+        
+        criticalImages.forEach(src => {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = src;
+            document.head.appendChild(link);
+        });
+    }
+
+    // Responsive image loading
+    function setupResponsiveImages() {
+        const images = document.querySelectorAll('img[data-responsive]');
+        
+        images.forEach(img => {
+            const baseSrc = img.dataset.responsive;
+            const sizes = {
+                small: baseSrc.replace(/(\.[^.]+)$/, '_small$1'),
+                medium: baseSrc.replace(/(\.[^.]+)$/, '_medium$1'),
+                large: baseSrc
+            };
+            
+            // Determine appropriate size based on viewport
+            const viewportWidth = window.innerWidth;
+            let selectedSrc;
+            
+            if (viewportWidth <= 768) {
+                selectedSrc = sizes.small;
+            } else if (viewportWidth <= 1200) {
+                selectedSrc = sizes.medium;
+            } else {
+                selectedSrc = sizes.large;
+            }
+            
+            img.src = selectedSrc;
+        });
+    }
+
+    // Image compression for uploads (if any)
+    function compressImage(file, maxWidth = 1200, quality = 0.8) {
+        return new Promise((resolve) => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = () => {
+                const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
+                canvas.width = img.width * ratio;
+                canvas.height = img.height * ratio;
+                
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                canvas.toBlob(resolve, 'image/jpeg', quality);
+            };
+            
+            img.src = URL.createObjectURL(file);
+        });
+    }
+
+    // Initialize image optimization system
+    function initImageOptimization() {
+        console.log('🚀 Starting image optimization system...');
+        
+        // Preload critical images first
+        preloadCriticalImages();
+        
+        // Set up lazy loading
+        initLazyLoading();
+        
+        // Set up responsive images
+        setupResponsiveImages();
+        
+        // Handle window resize for responsive images
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(setupResponsiveImages, 250);
+        });
+        
+        console.log('✅ Image optimization system initialized');
+    }
+
+    // Start image optimization
+    initImageOptimization();
+
     console.log('📚 E-ink Portfolio interactions initialized successfully!');
 });

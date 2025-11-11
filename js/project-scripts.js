@@ -249,5 +249,113 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300);
     }, 100);
 
+    // ===== IMAGE OPTIMIZATION SYSTEM FOR PROJECT PAGES =====
+    
+    // Lazy Loading Implementation
+    function initLazyLoading() {
+        console.log('🖼️ Initializing project page lazy loading...');
+        
+        const lazyImageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    loadImage(img);
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px 0px',
+            threshold: 0.01
+        });
+
+        const images = document.querySelectorAll('img[src]');
+        images.forEach(img => {
+            if (img.complete || img.classList.contains('no-lazy')) {
+                return;
+            }
+            
+            img.dataset.src = img.src;
+            img.src = createPlaceholder(img.width || 400, img.height || 300);
+            img.classList.add('lazy-loading');
+            
+            lazyImageObserver.observe(img);
+        });
+    }
+
+    function createPlaceholder(width, height) {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        
+        ctx.fillStyle = '#f7f7f2';
+        ctx.fillRect(0, 0, width, height);
+        
+        ctx.fillStyle = '#e8e8e8';
+        ctx.font = '14px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('Loading...', width/2, height/2);
+        
+        return canvas.toDataURL();
+    }
+
+    function loadImage(img) {
+        const originalSrc = img.dataset.src;
+        if (!originalSrc) return;
+        
+        if (supportsWebP()) {
+            const webpSrc = originalSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+            
+            const testImg = new Image();
+            testImg.onload = () => {
+                img.src = webpSrc;
+                img.classList.remove('lazy-loading');
+                img.classList.add('lazy-loaded');
+            };
+            testImg.onerror = () => {
+                loadOriginalImage(img, originalSrc);
+            };
+            testImg.src = webpSrc;
+        } else {
+            loadOriginalImage(img, originalSrc);
+        }
+    }
+
+    function loadOriginalImage(img, src) {
+        const newImg = new Image();
+        newImg.onload = () => {
+            img.src = src;
+            img.classList.remove('lazy-loading');
+            img.classList.add('lazy-loaded');
+            
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 0.3s ease-out';
+            setTimeout(() => {
+                img.style.opacity = '1';
+            }, 50);
+        };
+        newImg.onerror = () => {
+            console.warn('Failed to load image:', src);
+            img.classList.add('lazy-error');
+        };
+        newImg.src = src;
+    }
+
+    function supportsWebP() {
+        if (typeof supportsWebP.result !== 'undefined') {
+            return supportsWebP.result;
+        }
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = 1;
+        canvas.height = 1;
+        
+        supportsWebP.result = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        return supportsWebP.result;
+    }
+
+    // Initialize image optimization for project pages
+    initLazyLoading();
+
     console.log('📄 E-ink Project Page Scripts Initialized Successfully!');
 });

@@ -14,6 +14,10 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
+    <!-- Preload Critical Images -->
+    <link rel="preload" as="image" href="images/optimized/me_light.webp" type="image/webp">
+    <link rel="preload" as="image" href="images/me_light.png" type="image/png">
+    
     <!-- E-ink styles - No external animation libraries needed -->
     
     <!-- Custom Styles -->
@@ -71,7 +75,10 @@
             <div class="hero-content">
                 <div class="hero-text">
                     <div class="hero-profile-image">
-                        <img src="images/me_light.png" alt="Young Woo Song" />
+                        <picture>
+                            <source srcset="images/optimized/me_light.webp" type="image/webp">
+                            <img src="images/me_light.png" alt="Young Woo Song" class="no-lazy critical-image" />
+                        </picture>
                     </div>
                     <div class="hero-subtitle-top">Hello, I'm Young Woo Song</div>
                     <h1 class="hero-title">
