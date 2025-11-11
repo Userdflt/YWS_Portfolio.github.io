@@ -270,8 +270,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const images = document.querySelectorAll('img[src]');
         images.forEach(img => {
-            if (img.complete || img.classList.contains('no-lazy')) {
+            if (img.complete || img.classList.contains('no-lazy') || img.classList.contains('critical-image')) {
                 return;
+            }
+            
+            // Skip images that are already in viewport (above fold)
+            const rect = img.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.top > 0) {
+                return; // Already visible, let it load normally
             }
             
             img.dataset.src = img.src;
@@ -304,15 +310,25 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!originalSrc) return;
         
         if (supportsWebP()) {
-            const webpSrc = originalSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+            // Create WebP path - handle both main images and ai_visual_images
+            let webpSrc;
+            if (originalSrc.includes('ai_visual_images/')) {
+                // For ai_visual_images, replace images/ with images/optimized/
+                webpSrc = originalSrc.replace('images/', 'images/optimized/').replace(/\.(jpg|jpeg|png)$/i, '.webp');
+            } else {
+                // For main images, add optimized folder
+                webpSrc = originalSrc.replace('images/', 'images/optimized/').replace(/\.(jpg|jpeg|png)$/i, '.webp');
+            }
             
             const testImg = new Image();
             testImg.onload = () => {
                 img.src = webpSrc;
                 img.classList.remove('lazy-loading');
                 img.classList.add('lazy-loaded');
+                console.log(`✅ Loaded WebP: ${webpSrc.split('/').pop()}`);
             };
             testImg.onerror = () => {
+                console.log(`⚠️ WebP not found, using original: ${originalSrc.split('/').pop()}`);
                 loadOriginalImage(img, originalSrc);
             };
             testImg.src = webpSrc;

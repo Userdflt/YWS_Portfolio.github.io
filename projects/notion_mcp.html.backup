@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notion MCP Agent - Young Woo Song</title>
+    <meta name="description" content="AI-driven knowledge hub for Notion workspace with real-time interaction capabilities using Model Context Protocol">
+    <!-- E-ink Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <!-- E-ink Theme Styles -->
+    <link rel="stylesheet" href="../css/main-styles.css">
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>Y_</strong><span>W_SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#workflow">Workflow</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#tools">Tools</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">AI Agent & Knowledge Management</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">Notion MCP Agent</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">AI-Powered Notion Assistant with Real-Time Interaction.Turn your Notion workspace into a live, intelligent hub using Model Context Protocol (MCP). Interact in real time via a local desktop app to append content, create tables, manage pages, and generate summaries—all powered by AI and local LLMs.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/Userdflt/Notion-MCP-Agent" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <picture><source srcset="../images/optimized/mcp_logo.webp" type="image/webp"><picture><source srcset="../images/optimized/mcp_logo.webp" type="image/webp"><picture><source srcset="../images/optimized/mcp_logo.webp" type="image/webp"><img src="../images/mcp_logo.png" alt="Notion MCP Agent Interface" /></picture>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Overview Section -->
+    <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <div class="section-header">
+    <h2 class="section-title">Project Overview</h2>
+            </div>
+            <div class="section-content">
+                <p><strong>Notion-MCP-Agent</strong> is a desktop-based system that brings AI-powered interaction to your Notion workspace. Built on the Model Context Protocol (MCP), it enables real-time communication with Notion via a local FastMCP server and SSE, using local or cloud-based LLMs.</p>
+                <p>Users can interact through a simple GUI to append content, build tables, extract structured notes, and manage metadata—all via natural language. The system also supports text-to-speech generation using Coqui TTS, offering a seamless, local-first workflow.</p>
+                <br>
+                <h3>Core Capabilities</h3>
+                <ul class="feature-list">
+                    <li><strong>Live Notion Integration</strong> – Real-time read/write via FastMCP and Server-Sent Events (SSE).</li>
+                    <li><strong>Structured AI Interaction</strong> – Summarizes, organizes, and interprets Notion content intelligently.</li>
+                    <li><strong>Content Automation</strong> – Appends Markdown, builds tables, and updates or creates pages.</li>
+                    <li><strong>Natural Language Commands</strong> – Query and control Notion using plain language prompts.</li>
+                    <li><strong>Search and Retrieval</strong> – Locate relevant pages and properties across the workspace.</li>
+                    <li><strong>Text-to-Speech</strong> – Converts Notion page content into audio files via Coqui TTS.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Workflow Section -->
+    <section id="workflow" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="section-title">Agent Workflow</h2>
+            </div>
+            <div class="section-content two-column">
+                <div class="workflow-images">
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="200">
+                        <img src="../gifs/Table_Creation.gif" alt="MCP Protocol Integration" class="feature-image" />
+                    </div>
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="300">
+                        <img src="../gifs/writing_structured_notes.gif" alt="Notion API Interaction" class="feature-image" />
+                    </div>
+                </div>
+                <div class="workflow-steps">
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="200">
+                        <h3>1. Connection & Tool Registration</h3>
+                        <p>When the FastMCP server launches, it registers all custom tools (e.g., <code>append_content</code>, <code>create_table</code>, <code>get_page_text</code>) and exposes them via MCP endpoints. These tools are dynamically loaded by the LangGraph-based REACT agent at runtime.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="300">
+                        <h3>2. User Query via GUI</h3>
+                        <p>The user submits a natural language prompt through a local Tkinter-based desktop interface. This input is passed to the agent, which uses a selected LLM (e.g., GPT‑4o via OpenAI or a local Ollama model) to interpret the request.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="400">
+                        <h3>3. Planning & Tool Selection</h3>
+                        <p>The agent selects the appropriate MCP tools to fulfill the user's request. This may include reading Notion content, generating structured notes, appending Markdown blocks, or creating subpages and tables.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="500">
+                        <h3>4. Execution via FastMCP</h3>
+                        <p>Each tool call is routed through the FastMCP server, which interfaces directly with the Notion API or Coqui TTS engine. Actions like content writing, search, or speech synthesis are executed and results returned.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="600">
+                        <h3>5. Streaming & Response Delivery</h3>
+                        <p>Responses are streamed back to the GUI in real time using Server-Sent Events (SSE). The agent displays structured outputs and optionally provides downloadable MP3 files for text-to-speech results.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Features Section -->
+    <section id="features" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-aos="fade-up">Key Features</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Interactive Agent</h3>
+                    <p>LangGraph-powered AI agent interprets user prompts and executes Notion operations using local or cloud LLMs in real time.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3>MCP Tooling</h3>
+                    <p>Custom Model Context Protocol tools enable structured read/write access to Notion content, metadata, and user data via FastMCP.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>Live Streaming</h3>
+                    <p>Server-Sent Events (SSE) stream AI-generated responses instantly to the desktop GUI, maintaining fluid interaction throughout sessions.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Semantic Search</h3>
+                    <p>Leverages Notion's native API to locate relevant pages and properties using context-aware queries powered by language models.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Content Automation</h3>
+                    <p>Automates Markdown appending, table creation, metadata updates, and even TTS generation for audio-based note review.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Tools & Technologies Section -->
+    <section id="tools" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title" data-aos-delay="200">Tools & Technologies</h2>
+            </div>
+            <div class="section-content">
+                <div class="tools-table">
+                    <div class="table-responsive" data-aos="fade-up" data-aos-delay="300">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Technology</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Protocol</strong></td>
+                                    <td>Model Context Protocol (MCP)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>API Integration</strong></td>
+                                    <td>Notion API, Coqui TTS (via local Python bindings)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Language Models</strong></td>
+                                    <td>GPT‑4o (OpenAI), Ollama (local LLMs)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Framework</strong></td>
+                                    <td>LangGraph (REACT agent), Pure Python (no LangChain runtime)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Backend</strong></td>
+                                    <td>Python, FastMCP (FastAPI-based)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Database</strong></td>
+                                    <td>Notion workspace (no external DB)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Authentication</strong></td>
+                                    <td>.env-secured Notion API Token and OpenAI Key</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Interface</strong></td>
+                                    <td>Tkinter Desktop GUI</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Transport</strong></td>
+                                    <td>Server-Sent Events (SSE)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Deployment</strong></td>
+                                    <td>Offline-capable, local-first (no external cloud dependencies)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>Y_W_SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="../js/project-scripts.js"></script>
+    <script>
+        // E-ink style page initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("📖 Project Page - E-ink Style Loading...");
+            setTimeout(() => {
+                document.body.classList.add("e-ink-transition");
+                setTimeout(() => {
+                    document.body.classList.remove("e-ink-transition");
+                    console.log("📚 Project Page Ready");
+                }, 500);
+            }, 100);
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            if (typeof AOS !== 'undefined') {
+            }
+            // Mobile Menu Toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const mainNav = document.querySelector('.main-nav');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    mainNav.classList.toggle('active');
+                    document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+                });
+            }
+            // Close mobile menu when clicking on a link
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mobileToggle) {
+                        mobileToggle.classList.remove('active');
+                        mainNav.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            // Header Scroll Effect
+            const header = document.querySelector('.header');
+            function handleScroll() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+            // Smooth scrolling for anchor links
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerHeight = header.offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            // Use case cards hover effects
+            const useCaseCards = document.querySelectorAll('.use-case-card');
+            useCaseCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            console.log('🤖 Notion MCP Agent page initialized successfully!');
+        });
+    </script>
+</body>
+</html>

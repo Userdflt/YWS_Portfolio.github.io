@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<!--
+    CodeVision - AI Building Code Assistant
+    Copyright (c) 2025 Young Woo Song. All Rights Reserved.
+    
+    PROPRIETARY AND CONFIDENTIAL
+    
+    This software and its documentation are proprietary to Young Woo Song and are protected by
+    copyright, trade secret, and other intellectual property laws. Any reproduction, distribution,
+    modification, or use of this software without express written permission is strictly prohibited
+    and may result in severe civil and criminal penalties.
+    
+    License: PROPRIETARY - All Rights Reserved
+    
+    UNAUTHORIZED USE, COPYING, MODIFICATION, DISTRIBUTION, OR REVERSE ENGINEERING IS PROHIBITED.
+    VIOLATORS WILL BE PROSECUTED TO THE FULL EXTENT OF THE LAW.
+    
+    For licensing inquiries, contact: [Your Contact Email]
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeVision - AI Building Code Assistant - Young Woo Song</title>
+    <meta name="description" content="CodeVision - AI-powered Building Code Assistant for instant, accurate answers to complex New Zealand Building Code (NZBC) questions. Streamline your compliance workflow.">
+    <meta name="copyright" content="Copyright (c) 2025 Young Woo Song. All Rights Reserved.">
+    <meta name="license" content="PROPRIETARY - All Rights Reserved">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <!-- Technical E-ink Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- E-ink Project Styles -->
+        <!-- E-ink Theme Styles -->
+    <link rel="stylesheet" href="../css/main-styles.css">
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body class="coming-soon-theme">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>Y_</strong><span>W_SONG</span>
+                </a>
+
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="coming-soon-badge pulse" data-aos="fade-up" data-aos-delay="400">
+                        <i class="fas fa-hammer"></i>
+                        <span>Work in Progress</span>
+                    </div>
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">AI & Construction Compliance</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">CodeVision</h1>
+                    <p class="project-subtitle" data-aos="fade-up" data-aos-delay="600">AI Building Code Assistant</p>
+                    <p class="project-description" data-aos="fade-up" data-aos-delay="650">Ready to streamline your NZ Building Code compliance? Get instant answers to complex NZBC questions with our AI assistant — from fire protection to structure, durability, moisture, safety of users, services and facilities, and energy efficiency.</p>
+                    <div class="project-links" data-aos="fade-up" data-aos-delay="700">
+                        <!-- <a href="https://github.com/Userdflt/codevision_app" class="btn btn-primary">
+                            <i class="fab fa-github"></i>
+                            <span>View on GitHub</span>
+                        </a> -->
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <img src="../images/code_vision.png" alt="Code Vision AI Building Code Assistant Preview" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demonstration Section -->
+    <section class="project-section demo-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>See CodeVision in Action</h2>
+                <p>Watch how CodeVision provides, accurate answers to New Zealand Building Code questions</p>
+            </div>
+            <div class="demo-content" data-aos="fade-up" data-aos-delay="200">
+                <div class="video-container">
+                    <video 
+                        controls 
+                        preload="metadata"
+                        poster="../images/code_vision.png"
+                        class="demo-video"
+                        aria-label="CodeVision demonstration video">
+                        <source src="../Videos/codeVision_test01.mp4" type="video/mp4">
+                        <p>Your browser doesn't support HTML video. <a href="../Videos/codeVision_test01.mp4">Download the video</a> instead.</p>
+                    </video>
+                </div>
+                <div class="demo-highlights" data-aos="fade-up" data-aos-delay="400">
+                    <h3>What You'll See:</h3>
+                    <ul class="demo-features">
+                        <li><i class="fas fa-play-circle"></i> Real-time query processing</li>
+                        <li><i class="fas fa-search"></i> Smart Building code searches</li>
+                        <li><i class="fas fa-check-circle"></i> Accurate compliance answers</li>
+                        <li><i class="fas fa-link"></i> Source references and citations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Code Vision -->
+    <section class="project-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Why Choose Code Vision</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI-Powered Building Code Assistant</h3>
+                    <p>Instant, accurate answers to complex New Zealand Building Code (NZBC) questions. From Protection from Fire to Structure and Durability, our AI assistant helps you navigate NZ regulations with confidence.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-list-check"></i>
+                    </div>
+                    <h3>Covered NZBC Sections</h3>
+                    <ul class="feature-list">
+                        <li>Structure & Durability</li>
+                        <li>Protection from Fire</li>
+                        <li>Access</li>
+                        <li>Moisture</li>
+                        <li>Safety of Users</li>
+                        <li>Services</li>
+                        <li>Energy</li>
+                    </ul>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Benefits</h3>
+                    <ul class="feature-list">
+                        <li><strong>Time Savings:</strong> Reduce research time from hours to seconds.</li>
+                        <li><strong>Accuracy:</strong> Verified answers with official source references.</li>
+                        <li><strong>Accessibility:</strong> Complex regulations made easy to understand, suitable for all experience levels.</li>
+                        <li><strong>Comprehensive:</strong> Complete coverage of all building code sections, with specialized AI agents.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced AI Technology -->
+    <section class="project-section alt-bg">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Advanced AI Technology for Building Code Compliance</h2>
+                <p>Our AI system processes complex building code documentation, extracts key information from diagrams and text, and provides instant, accurate guidance for New Zealand Building Code compliance.</p>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-feature" data-aos="fade-up" data-aos-delay="100">
+                    <div class="tech-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Advanced OCR & Document Analysis</h3>
+                    <ul>
+                        <li>Reads and understands technical diagrams, charts, and regulatory text.</li>
+                        <li>Extracts text from technical diagrams and blueprints.</li>
+                        <li>Processes complex charts and tables.</li>
+                        <li>Understands regulatory document structure and hierarchy.</li>
+                    </ul>
+                </div>
+                <div class="tech-feature" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tech-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Comprehensive Data Ingestion</h3>
+                    <ul>
+                        <li>Complete NZBC clauses, acceptable solutions, and verification methods.</li>
+                        <li>Cross-referenced compliance pathways.</li>
+                    </ul>
+                </div>
+                <div class="tech-feature" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tech-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Intelligent Query Processing</h3>
+                    <ul>
+                        <li>Specialized AI agents for each building code section.</li>
+                        <li>Cross-referential compliance checking.</li>
+                        <li>Contextual interpretation of regulatory requirements.</li>
+                    </ul>
+                </div>
+                <div class="tech-feature" data-aos="fade-up" data-aos-delay="400">
+                    <div class="tech-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Key Capabilities</h3>
+                    <ul>
+                        <li>Document Understanding</li>
+                        <li>Instant Search</li>
+                        <li>Compliance Pathways</li>
+                        <li>Verified Accuracy</li>
+                    </ul>
+                </div>
+            </div>
+            <br>
+            <div class="specialized-agents" data-aos="fade-up" data-aos-delay="500">
+                <h3>Specialized AI Agents</h3>
+                <div class="agents-features">
+                    <div class="agent-feature">
+                        <i class="fas fa-users"></i>
+                        <span>One for each NZBC section.</span>
+                    </div>
+                    <div class="agent-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Full coverage of all clauses and sub-sections.</span>
+                    </div>
+                    <div class="agent-feature">
+                        <i class="fas fa-bolt"></i>
+                        <span>Fast response times.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How Code Vision Works -->
+    <section class="project-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>How Code Vision Works</h2>
+            </div>
+            <div class="process-steps">
+                <div class="process-step" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Data Collection</h3>
+                        <p>Ingestion of NZ Building Code documentation, including diagrams and regulatory text. Incorporates compliance matrices and reference standards.</p>
+                        <br>
+                    </div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>OCR Processing</h3>
+                        <p>Extracts text and data from charts, diagrams, and structured documents. Performs cross-reference mapping and content validation.</p>
+                        <br>
+                    </div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>AI Training</h3>
+                        <p>Specialized agents trained on each section of the building code. Maps compliance pathways and cross-referential knowledge.</p>
+                        <br>
+                    </div>
+                </div>
+                <div class="process-step" data-aos="fade-up" data-aos-delay="400">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>Query Response</h3>
+                        <p>Provides accurate, source-referenced answers. Delivers compliance pathways and related regulations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Perfect For -->
+    <section class="project-section alt-bg">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Perfect For</h2>
+            </div>
+            <div class="target-audience">
+                <div class="audience-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="audience-icon">
+                        <i class="fas fa-drafting-compass"></i>
+                    </div>
+                    <h3>Architects & Engineers</h3>
+                    <p>Quick compliance checks during design. Structural requirements, fire safety, accessibility standards.</p>
+                </div>
+                <div class="audience-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="audience-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3>Building Consent Officers</h3>
+                    <p>Streamlined assessment and verification. Code interpretation, cross-referencing, compliance pathways.</p>
+                </div>
+                <div class="audience-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="audience-icon">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <h3>Construction Professionals</h3>
+                    <p>On-site guidance and clarification. Installation requirements, material specifications, safety protocols.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                   <span>Y_W_SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="copyright-notice">
+                    <p><strong>&copy; 2025 CodeVision by Young Woo Song. All Rights Reserved.</strong></p>
+                    <p class="legal-notice">
+                        <small>
+                            PROPRIETARY SOFTWARE - This application and its underlying technology are protected by copyright, 
+                            trade secret, and other intellectual property laws. Unauthorized use, copying, modification, 
+                            distribution, or reverse engineering is strictly prohibited and may result in severe civil 
+                            and criminal penalties. Protected under international copyright treaties including the Berne Convention.
+                        </small>
+                    </p>
+                    <p class="license-notice">
+                        <small>
+                            <strong>License:</strong> PROPRIETARY - All Rights Reserved | 
+                            <strong>Commercial Use:</strong> Forbidden without written license | 
+                            <strong>Contact:</strong> youngwoo930@gmail.com for licensing inquiries
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- E-ink Scripts -->
+    <script src="../js/project-scripts.js"></script>
+    <script>
+        // E-ink style page initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("📖 Project Page - E-ink Style Loading...");
+            setTimeout(() => {
+                document.body.classList.add("e-ink-transition");
+                setTimeout(() => {
+                    document.body.classList.remove("e-ink-transition");
+                    console.log("📚 Project Page Ready");
+                }, 500);
+            }, 100);
+        });
+    </script>  
+</body>
+</html>

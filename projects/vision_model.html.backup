@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vision Model RAG - Young Woo Song</title>
+    <meta name="description" content="Intelligent Building Code Retrieval system with dual-stream processing using Vision Models and RAG">
+    <!-- E-ink Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <!-- E-ink Theme Styles -->
+    <link rel="stylesheet" href="../css/main-styles.css">
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>Y_</strong><span>W_SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#workflow">Workflow</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#tools">Tools</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="300">AI & Computer Vision</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">Vision Model RAG</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">Intelligent Building Code Retrieval system with dual-data processing that combines visual and text-based retrieval for comprehensive building code compliance.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <img src="../images/codevision.png" alt="Vision Model RAG System" />
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Overview Section -->
+    <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Overview</h2>
+            </div>
+            <div class="section-content">
+                <p>CodeVision NZ is a fully local, multimodal Retrieval-Augmented Generation (RAG) application designed to make the New Zealand Building Code accessible through intelligent, chat-based search. Leveraging Ollama-powered local LLMs and ChromaDB vector storage, the system processes official NZBC PDFs to extract structured text and high-resolution architectural diagrams using unstructured. Users can then query the building code via a sleek Streamlit interface, receiving grounded answers drawn from both clauses and figures—with context and citations included. All processing occurs locally, ensuring data privacy and fast retrieval without the cloud.</p>
+                <br>
+                <br>
+                <h3>Key Objectives</h3>
+                <ul class="feature-list">
+                    <li><strong>Multimodal Retrieval</strong> – Extract both text and images using vision and language models.</li>
+                    <li><strong>Precise, Cited Answers</strong> – Return accurate responses with references to relevant clauses and diagrams.</li>
+                    <li><strong>Natural Language Querying</strong> – Ask questions in plain English and get clear, contextual answers.</li>
+                    <li><strong>Local & Secure Deployment</strong> – Run entirely offline using open-source tools to ensure full privacy.</li>
+                    <li><strong>Faster Compliance Checks</strong> – Accelerate code research for architects, engineers, and consultants.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Workflow Section -->
+    <section id="workflow" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="section-title">System Workflow</h2>
+            </div>
+            <div class="section-content two-column">
+                <div class="workflow-images">
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="200">
+                        <img src="../images/Workflow_Diagram.jpeg" alt="Vision Processing Pipeline" class="feature-image" />
+                    </div>
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="300">
+                        <img src="../images/Sample_extracted.png" alt="RAG Retrieval System" class="feature-image" />
+                    </div>
+                </div>
+                <div class="workflow-steps">
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="200">
+                        <h3>1. PDF Content Extraction</h3>
+                        <p>Extracts both text and diagrams from NZ Building Code PDFs using high-resolution parsing via <code>unstructured</code>. Images are converted to base64 and stored with metadata.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="250">
+                        <h3>2. Query Embedding</h3>
+                        <p>User questions are embedded with <code>mxbai-embed-large</code> via Ollama to represent intent for both text and image retrieval.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="300">
+                        <h3>3. Text & Image Retrieval</h3>
+                        <p>ChromaDB returns top-matching clauses, tables, and image metadata—using separate collections for documents and image descriptions.</p>
+                    </div>
+                    <div class="workflow-step" data-aos="fade-up" data-aos-delay="350">
+                        <h3>4. Answer Generation</h3>
+                        <p>A local LLM (e.g. LLaMA 3 via Ollama) synthesizes the retrieved content into a concise, clause-backed response with references.</p>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Features Section -->
+    <section id="features" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Key Features</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Visual Understanding</h3>
+                    <p>Extracts and processes diagrams from NZ Building Code PDFs using LLaMA3.2-Vision to generate searchable base64 metadata and image descriptions.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Intelligent Retrieval</h3>
+                    <p>Dual-mode RAG retrieves relevant clauses and image metadata from ChromaDB using custom embeddings generated via Ollama.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Natural Language Interface</h3>
+                    <p>Ask any building code question in plain English. Responses are generated locally by a conversational LLM with grounded references.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Compliance Focused</h3>
+                    <p>Quickly identifies relevant measurements, constraints, and figures for NZ Building Code compliance validation.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Real-Time Local Pipeline</h3>
+                    <p>Everything—from parsing to retrieval to LLM reasoning—runs offline with no cloud APIs, ensuring privacy and instant response.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>NZBC-Focused Database</h3>
+                    <p>All extracted clauses, diagrams, and metadata are stored and indexed locally in ChromaDB for fast, structured access.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Tools & Technologies Section -->
+    <section id="tools" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-aos="fade-up" data-aos-delay="200">Tools & Technologies</h2>
+            </div>
+            <div class="section-content">
+                <div class="tools-table">
+                    <div class="table-responsive" data-aos="fade-up" data-aos-delay="300">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Technology</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Vision Models</td>
+                                    <td>LLaMA 3.2 Vision via Ollama for image captioning, metadata extraction, and diagram understanding</td>
+                                </tr>
+                                <tr>
+                                    <td>Language Models</td>
+                                    <td>LLaMA 3.1/3.2 via Ollama for local question answering and final answer generation</td>
+                                </tr>
+                                <tr>
+                                    <td>Embeddings</td>
+                                    <td><code>mxbai-embed-large</code> via Ollama for text and image embedding</td>
+                                </tr>
+                                <tr>
+                                    <td>Vector Database</td>
+                                    <td>ChromaDB for storing and retrieving embeddings (text and image metadata)</td>
+                                </tr>
+                                <tr>
+                                    <td>Framework</td>
+                                    <td>LangGraph for workflow logic and LangChain Agents for modular tool-based reasoning</td>
+                                </tr>
+                                <tr>
+                                    <td>Image Processing</td>
+                                    <td>Pillow (PIL) for base64 encoding, previews, and Unstructured PDF image handling</td>
+                                </tr>
+                                <tr>
+                                    <td>PDF Parsing</td>
+                                    <td><code>unstructured</code> with hi-res + OCR fallback for extracting text, tables, and figures</td>
+                                </tr>
+                                <tr>
+                                    <td>User Interface</td>
+                                    <td>Streamlit for local chat interface with styled chat bubbles and file uploads</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>Y_W_SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="../js/project-scripts.js"></script>
+    <script>
+        // E-ink style page initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("📖 Project Page - E-ink Style Loading...");
+            setTimeout(() => {
+                document.body.classList.add("e-ink-transition");
+                setTimeout(() => {
+                    document.body.classList.remove("e-ink-transition");
+                    console.log("📚 Project Page Ready");
+                }, 500);
+            }, 100);
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            if (typeof AOS !== 'undefined') {
+            }
+            // Mobile Menu Toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const mainNav = document.querySelector('.main-nav');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    mainNav.classList.toggle('active');
+                    document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+                });
+            }
+            // Close mobile menu when clicking on a link
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mobileToggle) {
+                        mobileToggle.classList.remove('active');
+                        mainNav.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            // Header Scroll Effect
+            const header = document.querySelector('.header');
+            function handleScroll() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+            // Smooth scrolling for anchor links
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerHeight = header.offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            console.log('🚀 Vision Model RAG page initialized successfully!');
+        });
+    </script>
+</body>
+</html>

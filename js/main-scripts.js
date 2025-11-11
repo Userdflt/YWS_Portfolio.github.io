@@ -384,8 +384,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const images = document.querySelectorAll('img[src]');
         images.forEach(img => {
             // Skip if already loaded or is critical above-fold image
-            if (img.complete || img.classList.contains('no-lazy')) {
+            if (img.complete || img.classList.contains('no-lazy') || img.classList.contains('critical-image')) {
                 return;
+            }
+            
+            // Skip images that are already in viewport (above fold)
+            const rect = img.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.top > 0) {
+                return; // Already visible, let it load normally
             }
             
             // Store original src and replace with placeholder
@@ -425,7 +431,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Try WebP version first if supported
         if (supportsWebP()) {
-            const webpSrc = originalSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+            // Create WebP path - handle both main images and ai_visual_images
+            let webpSrc;
+            if (originalSrc.includes('ai_visual_images/')) {
+                // For ai_visual_images, replace images/ with images/optimized/
+                webpSrc = originalSrc.replace('images/', 'images/optimized/').replace(/\.(jpg|jpeg|png)$/i, '.webp');
+            } else {
+                // For main images, add optimized folder
+                webpSrc = originalSrc.replace('images/', 'images/optimized/').replace(/\.(jpg|jpeg|png)$/i, '.webp');
+            }
             
             // Test if WebP version exists
             const testImg = new Image();
@@ -434,9 +448,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 img.src = webpSrc;
                 img.classList.remove('lazy-loading');
                 img.classList.add('lazy-loaded');
+                console.log(`✅ Loaded WebP: ${webpSrc.split('/').pop()}`);
             };
             testImg.onerror = () => {
                 // WebP doesn't exist, use original
+                console.log(`⚠️ WebP not found, using original: ${originalSrc.split('/').pop()}`);
                 loadOriginalImage(img, originalSrc);
             };
             testImg.src = webpSrc;
@@ -554,8 +570,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Preload critical images first
         preloadCriticalImages();
         
-        // Set up lazy loading
-        initLazyLoading();
+        // Set up lazy loading after a short delay to let critical images load first
+        setTimeout(() => {
+            initLazyLoading();
+        }, 100);
         
         // Set up responsive images
         setupResponsiveImages();
@@ -566,6 +584,15 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(setupResponsiveImages, 250);
         });
+        
+        // Add performance monitoring
+        if (typeof performance !== 'undefined' && performance.mark) {
+            performance.mark('image-optimization-start');
+            window.addEventListener('load', () => {
+                performance.mark('image-optimization-complete');
+                performance.measure('image-optimization-duration', 'image-optimization-start', 'image-optimization-complete');
+            });
+        }
         
         console.log('✅ Image optimization system initialized');
     }

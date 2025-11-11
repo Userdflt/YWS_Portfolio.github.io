@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Young Woo Song - Portfolio</title>
+    <meta name="description" content="">
+    
+    <!-- Technical E-ink Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Preload Critical Images -->
+    <link rel="preload" as="image" href="images/optimized/me_light.webp" type="image/webp">
+    <link rel="preload" as="image" href="images/me_light.png" type="image/png">
+    
+    <!-- E-ink styles - No external animation libraries needed -->
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/main-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#home" class="logo">
+                    <strong>Y_</strong><span>W_SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#home" class="active">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#technologies">Technologies</a></li>
+                        <li><a href="#skills">Skills</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <!-- Background elements -->
+        <div class="hero-background">
+            <div class="gradient-overlay"></div>
+
+        </div>
+        
+
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-profile-image">
+                        <picture>
+                            <source srcset="images/optimized/me_light.webp" type="image/webp">
+                            <img src="images/me_light.png" alt="Young Woo Song" class="no-lazy critical-image" />
+                        </picture>
+                    </div>
+                    <div class="hero-subtitle-top">Hello, I'm Young Woo Song</div>
+                    <h1 class="hero-title">
+                        <span class="title-line">AI Tools & Content Builder</span>
+                    </h1>
+                    <p class="hero-subtitle">Blending creativity and technology to design smarter, more intuitive systems and workflows.</p>
+                    <div class="hero-buttons">
+                        <a href="#projects" class="btn btn-primary">
+                            <span>View Projects</span>
+                        </a>
+                        <a href="projects/ai-visualizations.html" class="btn btn-secondary">
+                            <span>AI Visualizations</span>
+                        </a>
+                        <a href="#about" class="btn btn-secondary">
+                            <span>Learn More</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scroll Down Indicator -->
+            <div class="scroll-indicator">
+                <div class="scroll-text">Scroll Down</div>
+                <div class="scroll-arrow">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">About Me</h2>
+                        <p>Architectural designer turned generative-AI creative technologist. I build AI-powered tools and prototypes with modern web stacks, then use them to generate content and demos.</p> 
+                        <p> I’ve completed the AUT-accredited Data Science & AI Certification (Institute of Data) and IBM’s AI Development and Generative AI Engineering Professional Certificates. Hands-on across the stack: data prep, API integration, prompt/RAG pipelines, evaluation, and UI delivery.</p>
+
+                        <h3>Key Strengths</h3>
+                        <ul class="strength-list">
+                        <li><strong>Analytical & Systems Thinking:</strong> From constraints to clear, testable solutions</li>
+                        <li><strong>Rapid Prototyping:</strong> Idea → demo → iteration with AI APIs and web tooling</li>
+                        <li><strong>Creative + Technical:</strong> Bridges UX thinking with model capabilities and evals</li>
+                        <li><strong>Detail & Reliability:</strong> Clean interfaces, measurable outcomes, reproducible workflows</li>
+                        </ul>
+                        
+            
+                    </div>
+                    <div class="about-skills">
+                        <div class="skill-category">
+                            <h3>Applied AI & Intelligent Systems</h3>
+                            <div class="skill-bars">
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">Multi-Agent RAG Systems</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">MCP (Model Context Protocol)</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">LLM Orchestration</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">RAG Systems</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">OCR & Document Processing</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">Computer Vision</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">Predictive Modeling & NLP</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <h3>Development Stack & Cloud</h3>
+                            <div class="skill-bars">
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">Next.js & TypeScript</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">FastAPI & Python</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">Firebase & Google Cloud</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">Supabase & Vector DBs</span>
+                                </div>
+                                <div class="skill-bar" style="--progress: 100%;">
+                                    <span class="skill-name">OpenAI Agents SDK</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- Technologies Section -->
+    <section id="technologies" class="technologies">
+        <div class="container">
+            <h2 class="section-title">Technology Stacks</h2>
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <div class="tech-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Programming & Frameworks</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Next.js</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">Flutter</span>
+                        <span class="tech-tag">Tkinter</span>
+                        <span class="tech-tag">Streamlit</span>
+                        <span class="tech-tag">PyTorch</span>
+                        <span class="tech-tag">Keras</span>
+                        <span class="tech-tag">LangChain</span>
+                        <span class="tech-tag">LangGraph</span>
+                        <span class="tech-tag">Hugging Face</span>
+                    </div>
+                </div>
+                
+                <div class="tech-category">
+                    <div class="tech-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Automation & Integration</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">n8n</span>
+                        <span class="tech-tag">Supabase</span>
+                        <span class="tech-tag">ChromaDB</span>
+                        <span class="tech-tag">Mistral OCR</span>
+                        <span class="tech-tag">FastMCP</span>
+                    </div>
+                </div>
+                
+                <div class="tech-category">
+                    <div class="tech-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Generative AI & Vision</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Multi-Agent Systems</span>
+                        <span class="tech-tag">Stable Diffusion</span>
+                        <span class="tech-tag">ControlNet</span>
+                        <span class="tech-tag">YOLO</span>
+                        <span class="tech-tag">RAG</span>
+                    </div>
+                </div>
+                
+                <div class="tech-category">
+                    <div class="tech-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>APIs & Platforms</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">OpenAI API</span>
+                        <span class="tech-tag">OpenAI Agents SDK</span>
+                        <span class="tech-tag">Google Gemini API</span>
+                        <span class="tech-tag">Google AI Studio</span>
+                        <span class="tech-tag">Ollama API</span>
+                    </div>
+                </div>
+                
+                <div class="tech-category">
+                    <div class="tech-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Cloud & Hosting</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Firebase Hosting</span>
+                        <span class="tech-tag">Google Cloud Run</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+    <div class="container">
+        <h2 class="section-title">Skills & Expertise</h2>
+        <div class="skills-grid">
+
+        <!-- Machine Learning -->
+        <div class="skill-category">
+            <div class="skill-icon">
+            <i class="fas fa-brain"></i>
+            </div>
+            <h3>Machine Learning</h3>
+            <ul class="skill-list">
+            <li>Multi-Agent RAG Systems with n8n Orchestration</li>
+            <li>Deep Learning with PyTorch</li>
+            <li>Object Detection with YOLO &amp; ByteTrack</li>
+            <li>Retrieval-Augmented Generation &amp; Self-Correction (LangGraph)</li>
+            <li>OCR Processing with Mistral &amp; Document Analysis</li>
+            <li>Generative Modeling (Stable Diffusion XL &amp; ControlNet)</li>
+            <li>Vision-Language Modeling with LLaMA 3.x Vision</li>
+            </ul>
+        </div>
+
+        <!-- Data & Cloud -->
+        <div class="skill-category">
+            <div class="skill-icon">
+            <i class="fas fa-database"></i>
+            </div>
+            <h3>Data &amp; Cloud</h3>
+            <ul class="skill-list">
+            <li>Data Processing with NumPy &amp; Pandas</li>
+            <li>Vector Storage with ChromaDB &amp; Supabase</li>
+            <li>Embedding Generation (mxbai-embed-large)</li>
+            <li>Document Storage &amp; Local-first Deployments (Notion MCP)</li>
+            <li>Cloud Database Integration &amp; Vector Search</li>
+            <li>Google Colab &amp; Drive Integration</li>
+            </ul>
+        </div>
+
+        <!-- Web Development & Deployment -->
+        <div class="skill-category">
+            <div class="skill-icon">
+            <i class="fas fa-globe"></i>
+            </div>
+            <h3>Web Development &amp; Deployment</h3>
+            <ul class="skill-list">
+            <li>Web-application Development with Next.js &amp; TypeScript</li>
+            <li>Backend API Development with FastAPI (Python 3.12)</li>
+            <li>Cloud Deployment with Firebase Hosting &amp; Google Cloud Run</li>
+            <li>AI Agent Integration with OpenAI Agents SDK</li>
+            <li>Real-time Database Integration (Supabase Auth + pgvector)</li>
+            <li>Responsive Web Design &amp; Modern UI/UX</li>
+            </ul>
+        </div>
+
+        <!-- AI Tools & Frameworks -->
+        <div class="skill-category">
+            <div class="skill-icon">
+            <i class="fas fa-cogs"></i>
+            </div>
+            <h3>AI Tools &amp; Frameworks</h3>
+            <ul class="skill-list">
+            <li>n8n Workflow Automation &amp; Multi-Agent Orchestration</li>
+            <li>Python &amp; FastAPI (FastMCP)</li>
+            <li>LangGraph &amp; LangChain Agents</li>
+            <li>Ollama (Local LLMs) &amp; OpenAI GPT-4o</li>
+            <li>Supabase Vector Database &amp; Real-time APIs</li>
+            <li>Hugging Face Diffusers with PyTorch, Pillow &amp; OpenCV</li>
+            <li>Ultralytics YOLOv9 API &amp; ONNX export</li>
+            <li>Tkinter GUI &amp; FFmpeg for video processing</li>
+            <li>ChromaDB PersistentClient &amp; Tavily Search API</li>
+            <li>Coqui TTS &amp; Server-Sent Events (SSE)</li>
+            </ul>
+        </div>
+
+        </div>
+    </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            
+            <!-- Project Filters -->
+            <div class="project-filters">
+                <button class="filter-btn active" data-filter="all"><span>All</span></button>
+                <button class="filter-btn" data-filter="ai-rag"><span>AI & RAG</span></button>
+                <button class="filter-btn" data-filter="computer-vision"><span>Computer Vision</span></button>
+                <button class="filter-btn" data-filter="data-science"><span>Data Science</span></button>
+                <button class="filter-btn" data-filter="app-development"><span>App Development</span></button>
+                <button class="filter-btn" data-filter="google-ai-studio"><span>Google AI Studio</span></button>
+            </div>
+
+            <div class="projects-grid">
+                <!--CodeVision App-->
+                <a href="projects/coming_soon.html" class="project-card" data-category="app-development">
+                <div class="project-image">
+                    <img src="images/code_vision.png" alt="CodeVision App"/>
+                </div>
+                <div class="project-content">
+                    <div class="project-category">App Development</div>
+                    <h3 class="project-title">CodeVision - Building Code Agent</h3>
+                    <p class="project-description">Coming Soon: Web application for real-time building code assistance, specialized AI Agents for building code assistance.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Next.js (TypeScript)</span>
+                        <span class="tech-tag">FastAPI (Python 3.12)</span>
+                        <span class="tech-tag">OpenAI Agents SDK</span>
+                        <span class="tech-tag">Supabase (Auth + pgvector)</span>
+                        <span class="tech-tag">ChromaDB</span>
+                        <span class="tech-tag">Firebase Hosting</span>
+                        <span class="tech-tag">Google Cloud Run</span>
+                    </div>
+                </div>
+            </a>
+
+                <!-- Vision Studio -->
+                <a href="projects/gemini-vision.html" class="project-card" data-category="google-ai-studio">
+                    <div class="project-image">
+                        <img src="images/Vision Studio logo.png" alt="Vision Studio"/>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Generative AI</div>
+                        <h3 class="project-title">Vision Studio</h3>
+                        <p class="project-description">Multi-agent AI system that transforms simple briefs into detailed prompts and professional visuals using Google's Gemini API. Features specialized agents for inpainting, floor plans, and scene generation.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React (TypeScript)</span>
+                            <span class="tech-tag">Tailwind CSS</span>
+                            <span class="tech-tag">Gemini 2.5 Flash</span>
+                            <span class="tech-tag">Multi-Agent System</span>
+                            <span class="tech-tag">IndexedDB</span>
+                            <span class="tech-tag">Google AI Studio</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Priority AI/RAG Projects -->
+                <a href="projects/n8n_rag.html" class="project-card" data-category="ai-rag">
+                    <div class="project-image">
+                        <img src="images/n8n.png" alt="n8n Multi-Agent RAG System" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Multi-Agent RAG</div>
+                        <h3 class="project-title">n8n Building Code RAG</h3>
+                        <p class="project-description">Sophisticated multi-agent Retrieval-Augmented Generation system for New Zealand Building Code built entirely in n8n. Features specialized agents, OCR processing, and intelligent query routing with Supabase vector storage.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">n8n</span>
+                            <span class="tech-tag">OpenAI GPT-4.1</span>
+                            <span class="tech-tag">Mistral OCR</span>
+                            <span class="tech-tag">Supabase</span>
+                            <span class="tech-tag">Multi-Agent</span>
+                            <span class="tech-tag">Vector Search</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="projects/notion_mcp.html" class="project-card" data-category="ai-rag">
+                    <div class="project-image">
+                        <img src="images/mcp_logo.png" alt="Notion MCP Agent" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">AI Agent</div>
+                        <h3 class="project-title">Notion MCP Agent</h3>
+                        <p class="project-description">Notion‑MCP‑Agent turns your Notion workspace into a live, AI‑driven knowledge hub — now with text‑to‑speech. 
+                            A FastMCP server exposes a rich toolbox for manipulating Notion pages.
+                            Using LangChain Agentic Framework and GPT‑4o orchestrates conversations, read, write, summarise, build tables, manage metadata, and even generate MP3s of your notes.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Tkinter</span>
+                            <span class="tech-tag">Notion API</span>
+                            <span class="tech-tag">TTS API</span>
+                            <span class="tech-tag">LangChain & LangGraph</span>
+                            <span class="tech-tag">FastMCP</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="projects/stablediffusion.html" class="project-card" data-category="computer-vision">
+                    <div class="project-image">
+                        <img src="images/stable_sketch.png" alt="GenAI Image Generation" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Generative AI</div>
+                        <h3 class="project-title">GenAI Image Generation</h3>
+                        <p class="project-description">Interactive Sketch to Image Tool using Stable Diffusion XL with ControlNet integration for precise image generation control.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Diffusers</span>
+                            <span class="tech-tag">Stable Diffusion</span>
+                            <span class="tech-tag">ControlNet</span>
+                            <span class="tech-tag">PyTorch</span>
+                            <span class="tech-tag">Tkinter</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="projects/vision_model.html" class="project-card" data-category="ai-rag">
+                    <div class="project-image">
+                        <img src="images/building_code.png" alt="Vision Model RAG" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">ViT & RAG</div>
+                        <h3 class="project-title">Vision Model RAG</h3>
+                        <p class="project-description">Vision Model RAG is a personal project designed to simplify information retrieval from the New Zealand Building Code documentation. Leveraging open-source technologies, it efficiently extracts, indexes, and retrieves textual and visual data from PDF documents.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">LangChain & LangGraph</span>
+                            <span class="tech-tag">Ollama</span>
+                            <span class="tech-tag">ChromaDB</span>
+                            <span class="tech-tag">Streamlit</span>
+                            <span class="tech-tag">Unstructured io API</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="projects/llm.html" class="project-card" data-category="ai-rag">
+                    <div class="project-image">
+                        <img src="images/LLM.png" alt="LLM RAG System" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Advanced RAG</div>
+                        <h3 class="project-title">LLM RAG System</h3>
+                        <p class="project-description">Self-Correcting Retrieval-Augmented Generation with autonomous decision-making for enhanced AI accuracy and reliability.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">LangChain & LangGraph</span>
+                            <span class="tech-tag">ChromaDB</span>
+                            <span class="tech-tag">Ollama</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="projects/cv.html" class="project-card" data-category="computer-vision">
+                    <div class="project-image">
+                        <img src="images/cv.png" alt="Computer Vision Safety" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Computer Vision</div>
+                        <h3 class="project-title">Computer Vision Safety</h3>
+                        <p class="project-description">Object Detection for Safety Compliance on Construction Sites using YOLOv9 for real-time monitoring and hazard prevention.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Pandas & Numpy</span>
+                            <span class="tech-tag">Matplotlib & Seaborn</span>
+                            <span class="tech-tag">OpenCV</span>
+                            <span class="tech-tag">PyTorch</span>
+                            <span class="tech-tag">Real-time</span>
+                        </div>
+                    </div>
+                </a>
+
+
+                <!-- Data Science & Analytics Projects -->
+                <a href="projects/youtube-analytics.html" class="project-card" data-category="data-science">
+                    <div class="project-image">
+                        <img src="images/youtube_analytics.png" alt="YouTube Analytics" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Data Science & Analytics</div>
+                        <h3 class="project-title">YouTube Analytics</h3>
+                        <p class="project-description">Comprehensive statistical analysis of YouTube data science and AI content trends using API data collection, preprocessing, EDA, and hypothesis testing to identify temporal patterns and engagement changes.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">YouTube API</span>
+                            <span class="tech-tag">Pandas</span>
+                            <span class="tech-tag">Statistical Analysis</span>
+                            <span class="tech-tag">ANOVA</span>
+                            <span class="tech-tag">Data Visualization</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Data Science & ML Projects -->
+                <a href="projects/nasa-outgassing.html" class="project-card" data-category="data-science">
+                    <div class="project-image">
+                        <img src="images/nasa_outgassing.png" alt="NASA Outgassing Analysis" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Data Science & ML</div>
+                        <h3 class="project-title">NASA Outgassing Analysis</h3>
+                        <p class="project-description">Machine learning application for NASA outgassing materials analysis. Develops predictive models using TML, CVCM, and WVR metrics for space-grade material evaluation and quality control.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Scikit-learn</span>
+                            <span class="tech-tag">Regression Models</span>
+                            <span class="tech-tag">Classification</span>
+                            <span class="tech-tag">Feature Engineering</span>
+                            <span class="tech-tag">Space Technology</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="projects/ai-detection.html" class="project-card" data-category="data-science">
+                    <div class="project-image">
+                        <img src="images/ai_detection.png" alt="AI Content Detection" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Data Science & ML</div>
+                        <h3 class="project-title">AI Content Detection</h3>
+                        <p class="project-description">Advanced NLP system for distinguishing human-written versus AI-generated news content using sophisticated text analysis, stylometric features, and machine learning models.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">NLP</span>
+                            <span class="tech-tag">NLTK</span>
+                            <span class="tech-tag">spaCy</span>
+                            <span class="tech-tag">Text Classification</span>
+                            <span class="tech-tag">Deep Learning</span>
+                            <span class="tech-tag">Feature Engineering</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="projects/wind-energy.html" class="project-card" data-category="data-science">
+                    <div class="project-image">
+                        <img src="images/wind_energy.png" alt="Wind Energy Prediction" />
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Data Science & ML</div>
+                        <h3 class="project-title">Wind Energy Prediction</h3>
+                        <p class="project-description">Machine learning system for predicting wind turbine power output using environmental data, weather patterns, and advanced regression models for renewable energy optimization.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Time Series</span>
+                            <span class="tech-tag">XGBoost</span>
+                            <span class="tech-tag">Neural Networks</span>
+                            <span class="tech-tag">Energy Systems</span>
+                            <span class="tech-tag">Regression Models</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title">Let's Work Together</h2>
+                <p>I'm always interested in discussing new opportunities, innovative projects, and collaborations in AI and technology. Let's connect and explore how we can create something amazing together.</p>
+                <div class="contact-buttons">
+                    <a href="mailto:youngwoo930@gmail.com" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i>
+                        <span>Send Email</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="btn btn-secondary">
+                        <i class="fab fa-linkedin"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>Y_W_SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- E-ink Scripts -->
+    <script src="js/main-scripts.js"></script>
+    <script>
+        // E-ink style page loading effect
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📖 E-ink Portfolio Loading...');
+            
+            // Apply initial e-ink refresh animation like real e-ink tablets
+            setTimeout(() => {
+                document.body.classList.add('e-ink-page-refresh');
+                setTimeout(() => {
+                    document.body.classList.remove('e-ink-page-refresh');
+                    console.log('📚 E-ink Portfolio Ready');
+                }, 800);
+            }, 100);
+        });
+    </script>
+</body>
+</html>

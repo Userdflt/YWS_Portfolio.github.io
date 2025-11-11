@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>n8n Multi-Agent RAG System - Young Woo Song</title>
+    <meta name="description" content="Multi-agent Retrieval-Augmented Generation system for New Zealand Building Code built entirely in n8n">
+    <!-- E-ink Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <!-- E-ink Theme Styles -->
+    <link rel="stylesheet" href="../css/main-styles.css">
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>Y_</strong><span>W_SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#demo">Demo</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#workflows">Workflows</a></li>
+                        <li><a href="#technology">Technology</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">Multi-Agent RAG System</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">n8n Building Code RAG</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">A sophisticated multi-agent Retrieval-Augmented Generation system for the New Zealand Building Code, built entirely in n8n. Each specialized agent handles specific code sections with dedicated vector stores, while an orchestration layer intelligently routes queries for accurate, code-compliant responses.</p>
+                    <div class="project-links">
+                        <a href="#overview" class="btn btn-primary">
+                            
+                            <span>Learn More</span>
+                        </a>
+                        <a href="#architecture" class="btn btn-secondary" data-aos="fade-up" data-aos-delay="750">
+                            <i class="fas fa-sitemap"></i>
+                            <span>Architecture</span>
+                        </a>
+                        <a href="https://github.com/Userdflt/n8n_RAG_Workflow" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <img src="../images/n8n.png" alt="n8n Multi-Agent RAG System" />
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Overview Section -->
+    <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Overview</h2>
+            </div>
+            <div class="section-content">
+                <p>This portfolio project demonstrates a <strong>production-grade multi-agent RAG system</strong> specifically designed for the New Zealand Building Code. Built entirely within <strong>n8n's visual workflow environment</strong>, it showcases advanced knowledge retrieval architecture using specialized agents, each responsible for different code sections (B, C, D, … H).</p>
+                <p>The system features intelligent document ingestion with OCR processing, vector embeddings for semantic search, and an orchestration layer that routes user queries to the most appropriate specialist agent. This approach ensures accurate, contextual responses while maintaining separation of concerns across different regulatory domains.</p>
+                <h3>Key Capabilities</h3>
+                <ul class="feature-list">
+                    <li><strong>Multi-Agent Architecture</strong> – Specialized agents for each Building Code section with dedicated knowledge bases and prompt-engineered expertise</li>
+                    <li><strong>Intelligent Query Routing</strong> – Orchestration agent with custom prompt engineering determines the most appropriate specialist for each query</li>
+                    <li><strong>Advanced Image Ingestion</strong> – Image processing that reformats text and images with annotations for vector storage, enabling LLM to render relevant images in chat responses</li>
+                    <li><strong>Automated Document Processing</strong> – OCR-powered ingestion pipeline with text and image extraction, maintaining visual context</li>
+                    <li><strong>Vector Search & Retrieval</strong> – Semantic search using OpenAI embeddings and Supabase vector storage for both text and image content</li>
+                    <li><strong>Real-Time Updates</strong> – Google Drive integration for automatic document synchronization</li>
+                    <li><strong>Contextual Memory</strong> – PostgreSQL-backed conversation memory for follow-up queries</li>
+                    <li><strong>Prompt-Engineered Agents</strong> – All agents including orchestration are specifically prompt-engineered for their specialized tasks</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Live Demo Section -->
+    <section id="demo" class="project-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Live Demo</h2>
+                <p>Watch the n8n multi-agent RAG system in action</p>
+            </div>
+            <div class="section-content" data-aos="fade-up" data-aos-delay="300">
+                <div class="demo-container" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); backdrop-filter: var(--glass-backdrop); margin-bottom: var(--space-6);">
+                    <div class="demo-header" style="text-align: center; margin-bottom: var(--space-6);">
+                        <p style="color: var(--color-text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                            Demonstration of intelligent multimodal query processing in action.
+                        </p>
+                    </div>
+                    <div class="video-wrapper" style="position: relative; background: var(--color-background-elevated); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-xl);">
+                        <video 
+                            controls 
+                            style="width: 100%; height: auto; display: block;" 
+                            poster="../images/n8n.png"
+                            preload="metadata"
+                        >
+                            <source src="../Videos/YouCut_20250729_161540173.mp4" type="video/mp4">
+                            <p style="padding: var(--space-4); text-align: center; color: var(--color-text-secondary);">
+                                Your browser does not support the video element. 
+                                <a href="../Videos/YouCut_20250729_161540173.mp4" style="color: var(--color-primary);">Download the video</a> to watch the demo.
+                            </p>
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Architecture Section -->
+    <section id="architecture" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="section-title">System Architecture</h2>
+            </div>
+            <div class="section-content">
+                <p data-aos="fade-up" data-aos-delay="300">The system employs a sophisticated multi-layered architecture with specialized components for document ingestion, vector storage, and intelligent query routing:</p>
+                <div class="architecture-grid">
+                    <div class="architecture-step" data-aos="fade-up" data-aos-delay="200">
+                        <div class="step-number">1</div>
+                        <h3>Document Ingestion</h3>
+                        <p>Google Drive triggers detect new PDFs, triggering parallel OCR processing via Mistral.ai for text extraction and image annotation with bounding boxes.</p>
+                    </div>
+                    <div class="architecture-step" data-aos="fade-up" data-aos-delay="300">
+                        <div class="step-number">2</div>
+                        <h3>Content Processing</h3>
+                        <p>Pages are split and processed, with text chunked using RecursiveCharacterTextSplitter and images uploaded to Supabase Storage with metadata preservation.</p>
+                    </div>
+                    <div class="architecture-step" data-aos="fade-up" data-aos-delay="400">
+                        <div class="step-number">3</div>
+                        <h3>Vector Embedding</h3>
+                        <p>OpenAI embeddings are generated for both text chunks and image captions, stored in clause-specific Supabase vector tables for efficient retrieval.</p>
+                    </div>
+                    <div class="architecture-step" data-aos="fade-up" data-aos-delay="500">
+                        <div class="step-number">4</div>
+                        <h3>Query Orchestration</h3>
+                        <p>The orchestration workflow analyzes user queries and routes them to appropriate clause agents using GPT-4.1 with conversation context preservation.</p>
+                    </div>
+                    <div class="architecture-step" data-aos="fade-up" data-aos-delay="600">
+                        <div class="step-number">5</div>
+                        <h3>Specialized Retrieval</h3>
+                        <p>Each clause agent performs semantic search within its dedicated vector store, retrieving the most relevant chunks for accurate, contextual responses.</p>
+                    </div>
+                    <div class="architecture-step" data-aos="fade-up" data-aos-delay="700">
+                        <div class="step-number">6</div>
+                        <h3>Response Generation</h3>
+                        <p>Retrieved context is synthesized by the specialist agent's OpenAI model to generate comprehensive, Building Code-compliant answers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Features Section -->
+    <section id="features" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-aos="fade-up">Key Features</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Multi-Agent System</h3>
+                    <p>Specialized agents for each Building Code section (B-H) with dedicated vector stores, ensuring focused expertise and preventing topic cross-contamination.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Prompt-Engineered Agents</h3>
+                    <p>All agents including the orchestration layer are specifically prompt-engineered for their specialized tasks, ensuring precise, domain-expert responses with optimal reasoning patterns.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h3>Advanced Image Ingestion</h3>
+                    <p>Sophisticated image processing that reformats text and images with annotations for vector storage, enabling the LLM to render relevant images directly in chat responses with full context preservation.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-vector-square"></i>
+                    </div>
+                    <h3>Vector Search</h3>
+                    <p>OpenAI embeddings with Supabase vector storage enable semantic search across both textual content and image descriptions for comprehensive retrieval.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3>Intelligent Query Routing</h3>
+                    <p>GPT-4.1 orchestration agent with custom prompt engineering analyzes query intent and routes to the most appropriate specialist, ensuring accurate domain-specific responses.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <i class="fas fa-memory"></i>
+                    </div>
+                    <h3>Conversation Memory</h3>
+                    <p>PostgreSQL-backed chat memory maintains context across interactions, enabling natural follow-up questions and complex query sequences.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Workflow Examples Section -->
+    <section id="workflows" class="project-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">n8n Workflow Examples</h2>
+                <p>Explore the actual n8n workflows that power this multi-agent RAG system</p>
+            </div>
+            <!-- Workflow Toggle Buttons -->
+            <div class="workflow-controls" data-aos="fade-up" data-aos-delay="200">
+                <button class="btn btn-secondary workflow-btn active" data-workflow="summary">
+                    <i class="fas fa-list"></i>
+                    Workflow Summary
+                </button>
+                <button class="btn btn-secondary workflow-btn" data-workflow="visual">
+                    <i class="fas fa-eye"></i>
+                    Visual Workflows
+                </button>
+            </div>
+            <!-- Workflow Summary View -->
+            <div id="workflow-summary" class="workflow-content active" data-aos="fade-up" data-aos-delay="300">
+                <div class="workflow-overview">
+                    <h3>Complete RAG Ingestion + Multi-Agent System</h3>
+                    <p>Comprehensive n8n workflows covering document ingestion, vector processing, and intelligent query routing across specialized Building Code agents</p>
+                </div>
+                <div class="workflow-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">Multiple</div>
+                        <div class="stat-label">Complex Workflows</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">Advanced</div>
+                        <div class="stat-label">Processing Nodes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">Dedicated</div>
+                        <div class="stat-label">Vector Stores</div>
+                    </div>
+                </div>
+                <!-- Advanced Data Ingestion Workflows - Major Feature -->
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--color-primary); font-size: 1.5rem;">
+                    <i class="fas fa-cogs"></i> Advanced Data Ingestion Workflows
+                    <span style="font-size: 0.7rem; background: var(--color-primary); color: white; padding: 2px 8px; border-radius: 12px; margin-left: 10px;">CORE FEATURE</span>
+                </h3>
+                <p style="margin-bottom: 2rem; color: var(--color-text-secondary); font-size: 1.1rem;">
+                    Sophisticated multi-modal document processing pipelines designed for enterprise-grade knowledge extraction and vector storage across all Building Code sections.
+                </p>
+                <!-- Workflow Architecture Overview -->
+                <div class="ingestion-overview" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-6); backdrop-filter: var(--glass-backdrop);">
+                    <h4 style="margin-bottom: var(--space-4); color: var(--color-text);">
+                        <i class="fas fa-network-wired"></i> Multi-Pipeline Architecture
+                    </h4>
+                    <div class="ingestion-highlights" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-4);">
+                        <div style="text-align: center; padding: var(--space-3); background: rgba(0, 212, 170, 0.1); border-radius: var(--radius-md);">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-primary);">Multi-Modal</div>
+                            <div style="font-size: 0.9rem; color: var(--color-text-secondary);">Processing</div>
+                        </div>
+                        <div style="text-align: center; padding: var(--space-3); background: rgba(108, 92, 231, 0.1); border-radius: var(--radius-md);">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-secondary);">Image-Ready</div>
+                            <div style="font-size: 0.9rem; color: var(--color-text-secondary);">Vector Storage</div>
+                        </div>
+                        <div style="text-align: center; padding: var(--space-3); background: rgba(0, 212, 170, 0.1); border-radius: var(--radius-md);">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-primary);">Real-time</div>
+                            <div style="font-size: 0.9rem; color: var(--color-text-secondary);">Processing</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Advanced Pipeline Details -->
+                <div class="ingestion-pipelines" style="display: grid; grid-template-columns: 1fr; gap: var(--space-6);">
+                    <!-- OCR & Image Processing Pipeline -->
+                    <div class="pipeline-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); backdrop-filter: var(--glass-backdrop);">
+                        <div class="pipeline-header" style="display: flex; align-items: center; margin-bottom: var(--space-4);">
+                            <div style="background: var(--gradient-primary); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
+                                <i class="fas fa-image" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; color: var(--color-text);">Advanced Image Ingestion & OCR Pipeline</h4>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Multi-modal document processing with image annotation and LLM-ready formatting</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-flow" style="margin-bottom: var(--space-4);">
+                            <h5 style="color: var(--color-primary); margin-bottom: var(--space-3);">
+                                <i class="fas fa-route"></i> Processing Flow
+                            </h5>
+                            <div class="flow-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4);">
+                                <div class="flow-step" style="background: rgba(0, 212, 170, 0.05); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: var(--radius-md); padding: var(--space-4); height: 140px; display: flex; flex-direction: column;">
+                                    <div style="font-weight: 600; color: var(--color-primary); margin-bottom: var(--space-2); font-size: 1rem; text-align: left;">1. Multi-Modal Document Detection</div>
+                                    <div style="font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.4; flex-grow: 1; text-align: left;">Google Drive triggers monitor code-specific folders for PDF/image uploads with intelligent pre-processing</div>
+                                </div>
+                                <div class="flow-step" style="background: rgba(0, 212, 170, 0.05); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: var(--radius-md); padding: var(--space-4); height: 140px; display: flex; flex-direction: column;">
+                                    <div style="font-weight: 600; color: var(--color-primary); margin-bottom: var(--space-2); font-size: 1rem; text-align: left;">2. Advanced Image Ingestion & OCR</div>
+                                    <div style="font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.4; flex-grow: 1; text-align: left;">Mistral OCR with image reformatting, text/image annotation, and vector storage optimization</div>
+                                </div>
+                                <div class="flow-step" style="background: rgba(0, 212, 170, 0.05); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: var(--radius-md); padding: var(--space-4); height: 140px; display: flex; flex-direction: column;">
+                                    <div style="font-weight: 600; color: var(--color-primary); margin-bottom: var(--space-2); font-size: 1rem; text-align: left;">3. Intelligent Chunking</div>
+                                    <div style="font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.4; flex-grow: 1; text-align: left;">Context-aware text splitting with optimized chunk sizes and semantic overlap preservation</div>
+                                </div>
+                                <div class="flow-step" style="background: rgba(108, 92, 231, 0.05); border: 1px solid rgba(108, 92, 231, 0.2); border-radius: var(--radius-md); padding: var(--space-4); height: 140px; display: flex; flex-direction: column;">
+                                    <div style="font-weight: 600; color: var(--color-secondary); margin-bottom: var(--space-2); font-size: 1rem; text-align: left;">4. Vector Embedding</div>
+                                    <div style="font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.4; flex-grow: 1; text-align: left;">OpenAI text-embedding-3-large generates high-dimensional semantic vectors for search</div>
+                                </div>
+                                <div class="flow-step" style="background: rgba(0, 212, 170, 0.05); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: var(--radius-md); padding: var(--space-4); height: 140px; display: flex; flex-direction: column;">
+                                    <div style="font-weight: 600; color: var(--color-primary); margin-bottom: var(--space-2); font-size: 1rem; text-align: left;">5. Supabase Storage</div>
+                                    <div style="font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.4; flex-grow: 1; text-align: left;">Section-specific vector stores with optimized indexing and similarity search capabilities</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="technical-specs" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4);">
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-2);">Technical Specifications</h6>
+                                <ul style="list-style: none; padding: 0; margin: 0;">
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>OCR Engine:</span>
+                                        <strong>Mistral-OCR-Latest</strong>
+                                    </li>
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>Supported Formats:</span>
+                                        <strong>PDF, Images</strong>
+                                    </li>
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>Image Annotation:</span>
+                                        <strong>Full Metadata Preservation</strong>
+                                    </li>
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>LLM Integration:</span>
+                                        <strong>Image Rendering in Chat</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-2);">Error Handling & Resilience</h6>
+                                <ul style="list-style: none; padding: 0; margin: 0;">
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>Health Monitoring:</span>
+                                        <strong>Real-time Alerts</strong>
+                                    </li>
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>Rollback Capability:</span>
+                                        <strong>Version Control</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Text Processing Pipeline -->
+                    <div class="pipeline-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); backdrop-filter: var(--glass-backdrop);">
+                        <div class="pipeline-header" style="display: flex; align-items: center; margin-bottom: var(--space-4);">
+                            <div style="background: var(--gradient-secondary); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
+                                <i class="fas fa-file-alt" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; color: var(--color-text);">Intelligent Text Processing Pipeline</h4>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Advanced semantic processing for structured documents</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4);">
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-3);">
+                                    <i class="fas fa-brain"></i> Semantic Processing Features
+                                </h6>
+                                <div style="space-y: var(--space-2);">
+                                    <div style="background: rgba(16, 185, 129, 0.05); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                                        <strong>Context-Aware Chunking</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            LangChain RecursiveCharacterTextSplitter preserves semantic meaning across chunk boundaries
+                                        </p>
+                                    </div>
+                                    <div style="background: rgba(16, 185, 129, 0.05); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                                        <strong>Metadata Enrichment</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Automatic extraction of document structure, section headers, and regulatory references
+                                        </p>
+                                    </div>
+                                    <div style="background: rgba(16, 185, 129, 0.05); padding: var(--space-3); border-radius: var(--radius-md);">
+                                        <strong>Quality Validation</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Content filtering, duplicate detection, and relevance scoring before storage
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-3);">
+                                    <i class="fas fa-database"></i> Vector Storage Optimization
+                                </h6>
+                                <div style="space-y: var(--space-2);">
+                                    <div style="background: rgba(59, 130, 246, 0.05); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                                        <strong>Section-Specific Stores</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Separate vector databases for each code section enabling optimal query performance
+                                        </p>
+                                    </div>
+                                    <div style="background: rgba(59, 130, 246, 0.05); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                                        <strong>Hybrid Search</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Combines semantic similarity with keyword matching for precise retrieval
+                                        </p>
+                                    </div>
+                                    <div style="background: rgba(59, 130, 246, 0.05); padding: var(--space-3); border-radius: var(--radius-md);">
+                                        <strong>Performance Tuning</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Custom indexing strategies and query optimization for ultra-fast response times
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Advanced Multi-Agent Orchestration System - Major Feature -->
+                <h3 style="margin-top: 4rem; margin-bottom: 1rem; color: var(--color-primary); font-size: 1.5rem;">
+                    <i class="fas fa-brain"></i> Advanced Multi-Agent Orchestration System
+                    <span style="font-size: 0.7rem; background: var(--color-secondary); color: white; padding: 2px 8px; border-radius: 12px; margin-left: 10px;">CORE FEATURE</span>
+                </h3>
+                <p style="margin-bottom: 2rem; color: var(--color-text-secondary); font-size: 1.1rem;">
+                    Intelligent query routing and coordination system managing specialized Building Code agents with advanced memory management and context preservation.
+                </p>
+                <!-- Orchestration Architecture Overview -->
+                <div class="orchestration-overview" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-6); backdrop-filter: var(--glass-backdrop);">
+                    <h4 style="margin-bottom: var(--space-4); color: var(--color-text);">
+                        <i class="fas fa-project-diagram"></i> Orchestration Architecture
+                    </h4>
+                    <div class="orchestration-highlights" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-4);">
+                        <div style="text-align: center; padding: var(--space-3); background: rgba(108, 92, 231, 0.1); border-radius: var(--radius-md);">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-secondary);">Multi-Agent</div>
+                            
+                        </div>
+                        <div style="text-align: center; padding: var(--space-3); background: rgba(0, 212, 170, 0.1); border-radius: var(--radius-md);">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-primary);">Fast-Routing</div>
+                            
+                        </div>
+                        <div style="text-align: center; padding: var(--space-3); background: rgba(0, 212, 170, 0.1); border-radius: var(--radius-md);">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-primary);">High-Quality</div>
+                            
+                        </div>
+                        <div style="text-align: center; padding: var(--space-3); background: rgba(108, 92, 231, 0.1); border-radius: var(--radius-md);">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--color-secondary);">Prompt-Tuned</div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- Orchestration Core Components -->
+                <div class="orchestration-components" style="display: grid; grid-template-columns: 1fr; gap: var(--space-6); margin-bottom: var(--space-6);">
+                    <!-- Central Orchestrator -->
+                    <div class="component-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); backdrop-filter: var(--glass-backdrop);">
+                        <div class="component-header" style="display: flex; align-items: center; margin-bottom: var(--space-4);">
+                            <div style="background: var(--gradient-primary); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
+                                <i class="fas fa-brain" style="color: white; font-size: 1.8rem;"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; color: var(--color-text); font-size: 1.3rem;">Central Orchestration Agent</h4>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 1rem;">Prompt-engineered AI system for query analysis and intelligent routing with specialized task optimization</p>
+                            </div>
+                        </div>
+                        <div class="orchestrator-capabilities" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-4);">
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-3);">
+                                    <i class="fas fa-search"></i> Query Analysis Engine
+                                </h6>
+                                <div style="space-y: var(--space-2);">
+                                    <div style="background: rgba(139, 92, 246, 0.05); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                                        <strong>Intent Recognition</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Advanced NLP analysis identifies query intent, topic domain, and complexity level using GPT-4.1
+                                        </p>
+                                    </div>
+                                    <div style="background: rgba(139, 92, 246, 0.05); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                                        <strong>Context Extraction</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Extracts Building Code section references, regulatory keywords, and cross-domain dependencies
+                                        </p>
+                                    </div>
+                                    <div style="background: rgba(139, 92, 246, 0.05); padding: var(--space-3); border-radius: var(--radius-md);">
+                                        <strong>Multi-Agent Coordination</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Orchestrates parallel agent queries for complex cross-sectional regulatory questions with prompt-engineered coordination logic
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-3);">
+                                    <i class="fas fa-route"></i> Intelligent Routing Logic
+                                </h6>
+                                <div style="space-y: var(--space-2);">
+                                    <div style="background: rgba(59, 130, 246, 0.05); padding: var(--space-3); border-radius: var(--radius-md);">
+                                        <strong>Response Synthesis</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Aggregates multi-agent responses with conflict resolution and coherence validation
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="orchestrator-specs" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4);">
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-2);">Technical Specifications</h6>
+                                <ul style="list-style: none; padding: 0; margin: 0;">
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>LLM Engine:</span>
+                                        <strong>GPT-4.1 (LLM of Choice)</strong>
+                                    </li>
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>Memory System:</span>
+                                        <strong>PostgreSQL Chat Memory</strong>
+                                    </li>
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; gap: 4rem;">
+                                        <span>Prompt Engineering:</span>
+                                        <strong>Task-Specific Optimization</strong>
+                                    </li>
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>Agent Specialization:</span>
+                                        <strong>Custom Prompt Templates</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-2);">Performance Capabilities</h6>
+                                <ul style="list-style: none; padding: 0; margin: 0;">
+                                    <li style="padding: var(--space-1) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between;">
+                                        <span>Response Time:</span>
+                                        <strong>Fast Processing</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Memory Management System -->
+                    <div class="component-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-6); backdrop-filter: var(--glass-backdrop);">
+                        <div class="component-header" style="display: flex; align-items: center; margin-bottom: var(--space-4);">
+                            <div style="background: var(--gradient-secondary); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-4);">
+                                <i class="fas fa-memory" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0; color: var(--color-text);">Advanced Memory Management</h4>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Persistent context and conversation state management</p>
+                            </div>
+                        </div>
+                        <div class="memory-features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4);">
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-3);">
+                                    <i class="fas fa-database"></i> PostgreSQL Chat Memory
+                                </h6>
+                                <div style="space-y: var(--space-2);">
+                                    <div style="background: rgba(16, 185, 129, 0.05); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                                        <strong>Session Tracking</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Maintains conversation context across multiple queries with automatic session management
+                                        </p>
+                                    </div>
+                                    <div style="background: rgba(16, 185, 129, 0.05); padding: var(--space-3); border-radius: var(--radius-md);">
+                                        <strong>Context Compression</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Intelligent summarization of long conversations to maintain relevant context within token limits
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 style="color: var(--color-primary); margin-bottom: var(--space-3);">
+                                    <i class="fas fa-clock"></i> Temporal Context Awareness
+                                </h6>
+                                <div style="space-y: var(--space-2);">
+                                    <div style="background: rgba(245, 158, 11, 0.05); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                                        <strong>Conversation Flow</strong>
+                                        <p style="margin: var(--space-1) 0 0 0; font-size: 0.9rem; color: var(--color-text-secondary);">
+                                            Tracks question progression and maintains semantic coherence across related queries
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Specialist Code Agents Grid -->
+                <h4 style="margin-bottom: var(--space-4); color: var(--color-text); text-align: center;">
+                    <i class="fas fa-users-cog"></i> Specialist Agent Network
+                </h4>
+                <div class="agents-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4);">
+                    <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
+                        <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
+                            <div style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent)); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                                <i class="fas fa-building" style="color: white; font-size: 1.2rem;"></i>
+                            </div>
+                            <div>
+                                <h5 style="margin: 0; color: var(--color-text);">Code B Agent</h5>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.8rem;">Stability & Durability</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-3);">
+                            Specialized in structural integrity, load calculations, seismic requirements, and material durability standards across construction phases.
+                        </p>
+                        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                        </div>
+                    </div>
+                    <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
+                        <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
+                            <div style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent)); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                                <i class="fas fa-fire" style="color: white; font-size: 1.2rem;"></i>
+                            </div>
+                            <div>
+                                <h5 style="margin: 0; color: var(--color-text);">Code C Agent</h5>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.8rem;">Protection from Fire</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-3);">
+                            Expert in fire safety systems, evacuation planning, sprinkler requirements, and passive fire protection across all building types.
+                        </p>
+                        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                        </div>
+                    </div>
+                    <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
+                        <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
+                            <div style="background: var(--gradient-primary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                                <i class="fas fa-universal-access" style="color: white; font-size: 1.2rem;"></i>
+                            </div>
+                            <div>
+                                <h5 style="margin: 0; color: var(--color-text);">Code D Agent</h5>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.8rem;">Access Routes</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-3);">
+                            Specializes in accessibility compliance, universal design principles, lift requirements, and barrier-free access solutions.
+                        </p>
+                        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                            <span style="background: rgba(139, 92, 246, 0.1); color: var(--color-secondary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                        </div>
+                    </div>
+                    <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
+                        <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
+                            <div style="background: var(--gradient-tech); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                                <i class="fas fa-tint" style="color: white; font-size: 1.2rem;"></i>
+                            </div>
+                            <div>
+                                <h5 style="margin: 0; color: var(--color-text);">Code E Agent</h5>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.8rem;">Moisture Management</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-3);">
+                            Expert in waterproofing systems, vapor barriers, drainage solutions, and moisture control across building envelopes.
+                        </p>
+                        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                            <span style="background: rgba(59, 130, 246, 0.15); color: var(--color-primary-dark); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                        </div>
+                    </div>
+                    <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
+                        <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
+                            <div style="background: var(--gradient-secondary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                                <i class="fas fa-shield-alt" style="color: white; font-size: 1.2rem;"></i>
+                            </div>
+                            <div>
+                                <h5 style="margin: 0; color: var(--color-text);">Code F Agent</h5>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.8rem;">Safety of Users</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-3);">
+                            Specializes in occupational safety, hazard mitigation, fall protection, and emergency response systems for building users.
+                        </p>
+                        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                            <span style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                        </div>
+                    </div>
+                    <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
+                        <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
+                            <div style="background: linear-gradient(135deg, var(--color-accent), var(--color-accent)); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                                <i class="fas fa-thermometer-half" style="color: white; font-size: 1.2rem;"></i>
+                            </div>
+                            <div>
+                                <h5 style="margin: 0; color: var(--color-text);">Code G Agent</h5>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.8rem;">Services & Facilities</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-3);">
+                            Expert in HVAC systems, plumbing standards, electrical safety, and building services integration across all facility types.
+                        </p>
+                        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                            <span style="background: rgba(245, 158, 11, 0.1); color: var(--color-accent); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                        </div>
+                    </div>
+                    <div class="agent-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-4); backdrop-filter: var(--glass-backdrop); transition: all var(--transition-normal);">
+                        <div class="agent-header" style="display: flex; align-items: center; margin-bottom: var(--space-3);">
+                            <div style="background: var(--gradient-secondary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: var(--space-3);">
+                                <i class="fas fa-home" style="color: white; font-size: 1.2rem;"></i>
+                            </div>
+                            <div>
+                                <h5 style="margin: 0; color: var(--color-text);">Code H Agent</h5>
+                                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.8rem;">Energy Efficiency</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: var(--space-3);">
+                            Specializes in thermal performance, insulation standards, energy modeling, and sustainable building practices for residential projects.
+                        </p>
+                        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                            <span style="background: rgba(16, 185, 129, 0.15); color: var(--color-success); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Vector Store</span>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: var(--color-primary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">GPT-4.1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Visual Workflows View -->
+            <div id="workflow-visual" class="workflow-content" data-aos="fade-up" data-aos-delay="300">
+                <div class="visual-workflows-header">
+                    <h3>Interactive n8n Workflow Previews</h3>
+                    <p>View-only visual representations of the actual n8n workflows powering this RAG system</p>
+                </div>
+                <div class="workflow-previews">
+                    <!-- Orchestration Agent Workflow -->
+                    <div class="workflow-preview-card">
+                        <div class="workflow-card-header">
+                            <h4><i class="fas fa-brain"></i> Code Orchestration Agent Workflow</h4>
+                            <p>Complete multi-agent orchestration system with 7 specialized Building Code agents</p>
+                        </div>
+                        <div class="mermaid-wrapper">
+                            <div class="diagram-controls">
+                                <button class="zoom-btn" onclick="zoomIn(this)" title="Zoom In">+</button>
+                                <button class="zoom-btn" onclick="zoomOut(this)" title="Zoom Out">−</button>
+                                <button class="zoom-btn" onclick="resetZoom(this)" title="Reset Zoom">⌂</button>
+                            </div>
+                            <div class="mermaid-diagram">
+                                <div class="mermaid" id="orch-mermaid">
+                                graph TD
+                                    A["🔔 Chat Trigger<br/>When message received<br/>Webhook endpoint"] --> ORCH["🧠 Orchestration Agent<br/>GPT-4.1 Main Controller<br/>Query analysis & routing"]
+                                    B["🤖 OpenAI GPT-4.1<br/>Language Model<br/>Temperature: 0.4"] --> ORCH
+                                    C["💾 PostgreSQL Memory<br/>Chat History Storage<br/>Table: orch_agent_history"] --> ORCH
+                                    ORCH --> D["🏗️ Code-B Tool<br/>Stability & Durability<br/>Structural integrity, loads,<br/>seismic, materials"]
+                                    ORCH --> E["🔥 Code-C Tool<br/>Protection from Fire<br/>Fire prevention, spread,<br/>evacuation, firefighting"]
+                                    ORCH --> F["♿ Code-D Tool<br/>Access Routes<br/>Accessibility, movement,<br/>disabilities, lifts"]
+                                    ORCH --> G["💧 Code-E Tool<br/>Moisture Management<br/>Surface water, external,<br/>internal moisture"]
+                                    ORCH --> H["🛡️ Code-F Tool<br/>Safety of Users<br/>Hazards, falling, warnings,<br/>emergency systems"]
+                                    ORCH --> I["🔧 Code-G Tool<br/>Services & Facilities<br/>Hygiene, ventilation,<br/>utilities, lighting"]
+                                    ORCH --> J["🌡️ Code-H Tool<br/>Energy Efficiency<br/>Thermal resistance,<br/>HVAC, hot water"]
+                                    D --> D1["🔍 Code-B Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    E --> E1["🔍 Code-C Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    F --> F1["🔍 Code-D Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    G --> G1["🔍 Code-E Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    H --> H1["🔍 Code-F Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    I --> I1["🔍 Code-G Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    J --> J1["🔍 Code-H Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+                                    D1 --> D2["📊 Supabase Vector Store<br/>Code-B Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    E1 --> E2["📊 Supabase Vector Store<br/>Code-C Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    F1 --> F2["📊 Supabase Vector Store<br/>Code-D Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    G1 --> G2["📊 Supabase Vector Store<br/>Code-E Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    H1 --> H2["📊 Supabase Vector Store<br/>Code-F Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    I1 --> I2["📊 Supabase Vector Store<br/>Code-G Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    J1 --> J2["📊 Supabase Vector Store<br/>Code-H Knowledge Base<br/>+ OpenAI Embeddings"]
+                                    D2 --> RESP["💬 Specialized Response<br/>Building Code compliant<br/>Context-aware answer"]
+                                    E2 --> RESP
+                                    F2 --> RESP
+                                    G2 --> RESP
+                                    H2 --> RESP
+                                    I2 --> RESP
+                                    J2 --> RESP
+                                    style A fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+                                    style ORCH fill:#fff3e0,stroke:#f57c00,stroke-width:4px
+                                    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+                                    style C fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+                                    style D fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+                                    style E fill:#ffebee,stroke:#c62828,stroke-width:2px
+                                    style F fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+                                    style G fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+                                    style H fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+                                    style I fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+                                    style J fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+                                    style D1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style E1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style F1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style G1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style H1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style I1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style J1 fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+                                    style D2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style E2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style F2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style G2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style H2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style I2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style J2 fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style RESP fill:#e8f5e8,stroke:#2e7d32,stroke-width:4px
+                                </div>
+                            </div>
+                            <div class="zoom-info">Use mouse wheel to zoom, drag to pan</div>
+                        </div>
+                    </div>
+                    <!-- RAG Ingestion Workflow -->
+                    <div class="workflow-preview-card">
+                        <div class="workflow-card-header">
+                            <h4><i class="fas fa-upload"></i> RAG Document Ingestion Pipeline</h4>
+                            <p>Automated document processing with OCR, chunking, and vector storage across all Building Code sections</p>
+                        </div>
+                        <div class="mermaid-wrapper">
+                            <div class="diagram-controls">
+                                <button class="zoom-btn" onclick="zoomIn(this)" title="Zoom In">+</button>
+                                <button class="zoom-btn" onclick="zoomOut(this)" title="Zoom Out">−</button>
+                                <button class="zoom-btn" onclick="resetZoom(this)" title="Reset Zoom">⌂</button>
+                            </div>
+                            <div class="mermaid-diagram">
+                                <div class="mermaid" id="rag-mermaid">
+                                graph TD
+                                    START["📁 Google Drive Trigger<br/>Monitor Building Code folders<br/>Auto-detect new PDFs"] --> DOC["📄 Document Detection<br/>New file uploaded<br/>Trigger processing pipeline"]
+                                    DOC --> OCR["🔍 Mistral OCR Engine<br/>mistral-ocr-latest<br/>Text extraction & image annotation<br/>Bounding box processing"]
+                                    OCR --> EXTRACT["📝 Content Extraction<br/>Page-by-page processing<br/>Text & image separation<br/>Metadata preservation"]
+                                    EXTRACT --> SPLIT["✂️ Text Chunking<br/>LangChain RecursiveCharacterTextSplitter<br/>Context-aware splitting<br/>Optimal chunk sizes"]
+                                    EXTRACT --> IMG["🖼️ Image Processing<br/>Supabase Storage upload<br/>Caption generation<br/>Metadata tagging"]
+                                    SPLIT --> EMBED_TEXT["🔢 Text Embeddings<br/>OpenAI text-embedding-3-large<br/>High-dimensional semantic vectors<br/>1536 dimensions"]
+                                    IMG --> EMBED_IMG["📊 Image Embeddings<br/>Caption vectorization<br/>Visual content representation<br/>Searchable image metadata"]
+                                    EMBED_TEXT --> STORE_B["📊 Code-B Vector Store<br/>Stability & Durability<br/>Supabase pgvector<br/>Structural requirements"]
+                                    EMBED_TEXT --> STORE_C["📊 Code-C Vector Store<br/>Protection from Fire<br/>Supabase pgvector<br/>Fire safety standards"]
+                                    EMBED_TEXT --> STORE_D["📊 Code-D Vector Store<br/>Access Routes<br/>Supabase pgvector<br/>Accessibility standards"]
+                                    EMBED_TEXT --> STORE_E["📊 Code-E Vector Store<br/>Moisture Management<br/>Supabase pgvector<br/>Water protection"]
+                                    EMBED_TEXT --> STORE_F["📊 Code-F Vector Store<br/>Safety of Users<br/>Supabase pgvector<br/>User safety requirements"]
+                                    EMBED_TEXT --> STORE_G["📊 Code-G Vector Store<br/>Services & Facilities<br/>Supabase pgvector<br/>Building services"]
+                                    EMBED_TEXT --> STORE_H["📊 Code-H Vector Store<br/>Energy Efficiency<br/>Supabase pgvector<br/>Energy performance"]
+                                    EMBED_IMG --> STORE_B
+                                    EMBED_IMG --> STORE_C
+                                    EMBED_IMG --> STORE_D
+                                    EMBED_IMG --> STORE_E
+                                    EMBED_IMG --> STORE_F
+                                    EMBED_IMG --> STORE_G
+                                    EMBED_IMG --> STORE_H
+                                    STORE_B --> READY["✅ Knowledge Base Ready<br/>Multi-modal RAG system<br/>Text + Image vectors<br/>Section-specific expertise"]
+                                    STORE_C --> READY
+                                    STORE_D --> READY
+                                    STORE_E --> READY
+                                    STORE_F --> READY
+                                    STORE_G --> READY
+                                    STORE_H --> READY
+                                    READY --> SYNC["🔄 Real-time Sync<br/>Google Drive monitoring<br/>Automatic updates<br/>Version control"]
+                                    SYNC --> RETRIEVAL["🔍 Ready for Queries<br/>Semantic search enabled<br/>Agent tool integration<br/>Building Code expertise"]
+                                    style START fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
+                                    style DOC fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+                                    style OCR fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+                                    style EXTRACT fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+                                    style SPLIT fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+                                    style IMG fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+                                    style EMBED_TEXT fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
+                                    style EMBED_IMG fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+                                    style STORE_B fill:#ffebee,stroke:#c62828,stroke-width:2px
+                                    style STORE_C fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+                                    style STORE_D fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+                                    style STORE_E fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+                                    style STORE_F fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+                                    style STORE_G fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+                                    style STORE_H fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+                                    style READY fill:#f1f8e9,stroke:#689f38,stroke-width:3px
+                                    style SYNC fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+                                    style RETRIEVAL fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
+                                </div>
+                            </div>
+                            <div class="zoom-info">Use mouse wheel to zoom, drag to pan</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Technology Stack Section -->
+    <section id="technology" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title" data-aos-delay="200">Technology Stack</h2>
+            </div>
+            <div class="section-content">
+                <div class="tools-table">
+                    <div class="table-responsive" data-aos="fade-up" data-aos-delay="300">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Layer</th>
+                                    <th>Technology</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Orchestration</strong></td>
+                                    <td>n8n (JavaScript workflows)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>LLM & Embeddings</strong></td>
+                                    <td>OpenAI GPT-4.1, OpenAI Embeddings API</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>OCR & Processing</strong></td>
+                                    <td>Mistral.ai OCR (mistral-ocr-latest)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vector Database</strong></td>
+                                    <td>Supabase Vector Store</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Storage</strong></td>
+                                    <td>Supabase Storage Buckets</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Memory</strong></td>
+                                    <td>PostgreSQL (n8n memoryPostgresChat)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Document Source</strong></td>
+                                    <td>Google Drive (triggered ingestion)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Code Processing</strong></td>
+                                    <td>n8n Code nodes (JS for markdown & images)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Text Splitting</strong></td>
+                                    <td>LangChain RecursiveCharacterTextSplitter</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Deployment</strong></td>
+                                    <td>Cloud-native with auto-scaling capabilities</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="section-content" style="margin-top: var(--space-8);" data-aos="fade-up" data-aos-delay="500">
+                <h3>Why This Architecture Matters</h3>
+                <ul class="feature-list">
+                    <li><strong>Scalability</strong> – Adding new Building Code sections requires simple workflow duplication</li>
+                    <li><strong>Separation of Concerns</strong> – Each agent maintains its own knowledge domain without cross-contamination</li>
+                    <li><strong>Extensibility</strong> – Modular design allows easy integration of new OCR providers, LLMs, or vector databases</li>
+                    <li><strong>Production-Ready</strong> – Automated monitoring and updates ensure system reliability for regulatory compliance</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>Y_W_SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="../js/project-scripts.js"></script>
+    <script>
+        // E-ink style page initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("📖 Project Page - E-ink Style Loading...");
+            setTimeout(() => {
+                document.body.classList.add("e-ink-transition");
+                setTimeout(() => {
+                    document.body.classList.remove("e-ink-transition");
+                    console.log("📚 Project Page Ready");
+                }, 500);
+            }, 100);
+        });
+    </script>
+    <script src="https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <!-- n8n Demo Web Component - Correct Installation -->
+    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.0.0/webcomponents-loader.js"></script>
+    <script src="https://www.unpkg.com/lit@2.0.0-rc.2/polyfill-support.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@n8n_io/n8n-demo-component/n8n-demo.bundled.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            if (typeof AOS !== 'undefined') {
+            }
+            // Mobile Menu Toggle
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const mainNav = document.querySelector('.main-nav');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    mainNav.classList.toggle('active');
+                    document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+                });
+            }
+            // Close mobile menu when clicking on a link
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mobileToggle) {
+                        mobileToggle.classList.remove('active');
+                        mainNav.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            // Header Scroll Effect
+            const header = document.querySelector('.header');
+            function handleScroll() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+            // Smooth scrolling for anchor links
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerHeight = header.offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            // Feature cards hover effects
+            const featureCards = document.querySelectorAll('.feature-card, .architecture-step');
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            // Initialize Mermaid with fallback
+            function initializeMermaid() {
+                if (typeof mermaid !== 'undefined') {
+                    try {
+                        mermaid.initialize({
+                            startOnLoad: false,
+                            theme: 'default',
+                            securityLevel: 'loose',
+                            themeVariables: {
+                                primaryColor: '#f8f9fa',
+                                primaryTextColor: '#1a1a1a',
+                                primaryBorderColor: '#2563eb',
+                                lineColor: '#6b7280',
+                                sectionBkgColor: 'transparent',
+                                altSectionBkgColor: 'transparent',
+                                gridColor: '#e5e7eb',
+                                secondaryColor: '#f59e0b',
+                                tertiaryColor: '#10b981',
+                                fontSize: '14px',
+                                fontFamily: 'JetBrains Mono, monospace'
+                            },
+                            flowchart: {
+                                useMaxWidth: true,
+                                htmlLabels: true,
+                                curve: 'basis',
+                                nodeSpacing: 80,
+                                rankSpacing: 100,
+                                padding: 20,
+                                diagramPadding: 20
+                            },
+                            fontFamily: 'JetBrains Mono, monospace',
+                            fontSize: 14
+                        });
+                        return true;
+                    } catch (error) {
+                        console.warn('Mermaid initialization failed:', error);
+                        return false;
+                    }
+                } else {
+                    console.warn('Mermaid library not loaded');
+                    return false;
+                }
+            }
+            function renderMermaidDiagram() {
+                const mermaidElement = document.getElementById('workflow-mermaid');
+                const fallbackElement = document.querySelector('.diagram-fallback');
+                if (typeof mermaid !== 'undefined' && mermaidElement) {
+                    try {
+                        mermaid.run({
+                            nodes: [mermaidElement]
+                        });
+                    } catch (error) {
+                        console.warn('Mermaid rendering failed:', error);
+                        showFallbackDiagram();
+                    }
+                } else {
+                    showFallbackDiagram();
+                }
+            }
+            function showFallbackDiagram() {
+                const mermaidDiagram = document.querySelector('.mermaid-diagram');
+                const fallbackDiagram = document.querySelector('.diagram-fallback');
+                if (mermaidDiagram && fallbackDiagram) {
+                    mermaidDiagram.style.display = 'none';
+                    fallbackDiagram.style.display = 'block';
+                }
+            }
+            // Initialize Mermaid
+            const mermaidReady = initializeMermaid();
+            // Workflow Tab Functionality
+            const workflowBtns = document.querySelectorAll('.workflow-btn');
+            const workflowContents = document.querySelectorAll('.workflow-content');
+            workflowBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetWorkflow = this.getAttribute('data-workflow');
+                    // Remove active class from all buttons and contents
+                    workflowBtns.forEach(b => b.classList.remove('active'));
+                    workflowContents.forEach(c => c.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    // Show corresponding content
+                    const targetContent = document.getElementById(`workflow-${targetWorkflow}`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                        // If it's the visual tab, ensure Mermaid diagrams are properly rendered
+                        if (targetWorkflow === 'visual') {
+                            console.log('Visual workflow tab clicked');
+                            // Initialize Mermaid diagrams
+                            setTimeout(() => {
+                                initializeMermaidDiagrams();
+                            }, 100);
+                        }
+                    }
+                });
+            });
+            // Wait for web components to be ready
+            if (window.WebComponents && window.WebComponents.ready) {
+                console.log('Web components already ready');
+            } else {
+                document.addEventListener('WebComponentsReady', function() {
+                    console.log('Web components ready event fired');
+                });
+            }
+            console.log('🏗️ n8n Building Code RAG system page initialized successfully!');
+        });
+        // Initialize Mermaid diagrams
+        function initializeMermaidDiagrams() {
+            console.log('Initializing Mermaid diagrams...');
+            if (typeof mermaid !== 'undefined') {
+                try {
+                    // Initialize Mermaid if not already done
+                    if (!mermaid.mermaidAPI.defaultConfig) {
+                        mermaid.initialize({
+                            startOnLoad: false,
+                            theme: 'default',
+                            securityLevel: 'loose',
+                            themeVariables: {
+                                primaryColor: '#f8f9fa',
+                                primaryTextColor: '#1a1a1a',
+                                primaryBorderColor: '#2563eb',
+                                lineColor: '#6b7280',
+                                sectionBkgColor: 'transparent',
+                                altSectionBkgColor: 'transparent',
+                                gridColor: '#e5e7eb',
+                                secondaryColor: '#f59e0b',
+                                tertiaryColor: '#10b981',
+                                fontSize: '14px',
+                                fontFamily: 'JetBrains Mono, monospace'
+                            },
+                            flowchart: {
+                                useMaxWidth: false,
+                                htmlLabels: true,
+                                curve: 'basis',
+                                nodeSpacing: 60,
+                                rankSpacing: 80,
+                                padding: 20
+                            },
+                            fontFamily: 'JetBrains Mono, monospace'
+                        });
+                    }
+                    // Run Mermaid on all diagrams
+                    const diagrams = document.querySelectorAll('.mermaid');
+                    if (diagrams.length > 0) {
+                        mermaid.run({
+                            nodes: Array.from(diagrams)
+                        });
+                        console.log('✅ Mermaid diagrams rendered successfully');
+                        // Initialize zoom and pan for each diagram after rendering
+                        setTimeout(() => {
+                            initializeZoomPan();
+                        }, 500);
+                    }
+                } catch (error) {
+                    console.error('❌ Error initializing Mermaid:', error);
+                }
+            } else {
+                console.warn('Mermaid library not loaded');
+            }
+        }
+        // Zoom and Pan functionality
+        let currentZoom = 1;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let lastX = 0;
+        let lastY = 0;
+        function initializeZoomPan() {
+            const diagrams = document.querySelectorAll('.mermaid');
+            diagrams.forEach(diagram => {
+                // Mouse wheel zoom
+                diagram.addEventListener('wheel', function(e) {
+                    e.preventDefault();
+                    const rect = this.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                    zoom(this, delta, mouseX, mouseY);
+                });
+                // Mouse drag pan
+                diagram.addEventListener('mousedown', function(e) {
+                    isDragging = true;
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                    this.style.cursor = 'grabbing';
+                });
+                diagram.addEventListener('mousemove', function(e) {
+                    if (isDragging) {
+                        const deltaX = e.clientX - lastX;
+                        const deltaY = e.clientY - lastY;
+                        panX += deltaX;
+                        panY += deltaY;
+                        updateTransform(this);
+                        lastX = e.clientX;
+                        lastY = e.clientY;
+                    }
+                });
+                diagram.addEventListener('mouseup', function() {
+                    isDragging = false;
+                    this.style.cursor = 'grab';
+                });
+                diagram.addEventListener('mouseleave', function() {
+                    isDragging = false;
+                    this.style.cursor = 'grab';
+                });
+                // Initialize transform
+                updateTransform(diagram);
+                updateZoomInfo(diagram);
+            });
+        }
+        function zoom(element, factor, mouseX = null, mouseY = null) {
+            const newZoom = Math.max(0.1, Math.min(3, currentZoom * factor));
+            if (mouseX !== null && mouseY !== null) {
+                // Zoom towards mouse position
+                const zoomFactor = newZoom / currentZoom;
+                panX = mouseX - (mouseX - panX) * zoomFactor;
+                panY = mouseY - (mouseY - panY) * zoomFactor;
+            }
+            currentZoom = newZoom;
+            updateTransform(element);
+            updateZoomInfo(element);
+        }
+        function updateTransform(element) {
+            // Apply transform but ensure the diagram stays within bounds
+            const wrapper = element.closest('.mermaid-wrapper');
+            const diagramWrapper = element.closest('.mermaid-diagram');
+            
+            if (wrapper && diagramWrapper) {
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const elementRect = element.getBoundingClientRect();
+                
+                // Constrain pan to keep diagram visible within wrapper
+                const maxPanX = Math.max(0, (elementRect.width * currentZoom - wrapperRect.width) / 2);
+                const maxPanY = Math.max(0, (elementRect.height * currentZoom - wrapperRect.height) / 2);
+                
+                panX = Math.max(-maxPanX, Math.min(maxPanX, panX));
+                panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
+            }
+            
+            element.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+            element.style.transformOrigin = 'center center';
+        }
+        function updateZoomInfo(element) {
+            const container = element.closest('.mermaid-wrapper');
+            const zoomInfo = container.querySelector('.zoom-info');
+            if (zoomInfo) {
+                zoomInfo.textContent = `Zoom: ${Math.round(currentZoom * 100)}% | Use mouse wheel to zoom, drag to pan`;
+            }
+        }
+        // Zoom control functions
+        function zoomIn(button) {
+            const container = button.closest('.mermaid-wrapper');
+            const diagram = container.querySelector('.mermaid');
+            zoom(diagram, 1.2);
+        }
+        function zoomOut(button) {
+            const container = button.closest('.mermaid-wrapper');
+            const diagram = container.querySelector('.mermaid');
+            zoom(diagram, 0.8);
+        }
+        function resetZoom(button) {
+            const container = button.closest('.mermaid-wrapper');
+            const diagram = container.querySelector('.mermaid');
+            currentZoom = 1;
+            panX = 0;
+            panY = 0;
+            updateTransform(diagram);
+            updateZoomInfo(diagram);
+        }
+    </script>
+</body>
+</html> 

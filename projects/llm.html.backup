@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLM RAG System - Young Woo Song</title>
+    <meta name="description" content="Self-Correcting Retrieval-Augmented Generation with autonomous decision-making for enhanced AI accuracy and reliability">
+    <!-- E-ink Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <!-- E-ink Theme Styles -->
+    <link rel="stylesheet" href="../css/main-styles.css">
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>Y_</strong><span>W_SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#workflow">Workflow</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#tools">Tools</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">Advanced RAG & LLM Systems</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">LLM RAG System</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">Self-Correcting Retrieval-Augmented Generation with autonomous decision-making capabilities. An advanced AI system that combines large language models with intelligent retrieval mechanisms and self-correction protocols for enhanced accuracy and reliability.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <picture><source srcset="../images/optimized/LLM.webp" type="image/webp"><picture><source srcset="../images/optimized/LLM.webp" type="image/webp"><picture><source srcset="../images/optimized/LLM.webp" type="image/webp"><img src="../images/LLM.png" alt="LLM RAG System Architecture" /></picture>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Overview Section -->
+    <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" >Project Overview</h2>
+            </div>
+            <div class="section-content">
+                <p>The Self-Correcting RAG System is a locally deployed assistant built using Python, Ollama (with llama3.1), and ChromaDB, designed to deliver factually grounded answers from regulatory PDFs like the Auckland Unitary Plan. It routes questions through a custom state graph that selects between local document retrieval and Tavily-powered web search. Responses are generated via a local LLM, then validated through relevance grading, hallucination detection, and reflection loops—regenerating when necessary.
+                    This fully automated system ensures accuracy and completeness, continuously improving responses with each interaction without manual oversight.</p>
+                <br>
+                <br>
+                <h3>Key Capabilities</h3>
+                <ul class="feature-list">
+                    <li><strong>Autonomous Decision-Making</strong> – Dynamically chooses vector retrieval or web search based on zoning and regulatory relevance.</li>
+                    <li><strong>Self-Correcting Answer Generation</strong> – Uses reflection and hallucination grading to refine responses without user input.</li>
+                    <li><strong>StateGraph-Controlled Workflow</strong> – Executes modular nodes for retrieval, generation, grading, reflection, and routing.</li>
+                    <li><strong>Chroma-Backed Relevance Retrieval</strong> – Retrieves and filters document chunks from ChromaDB using Ollama embeddings.</li>
+                    <li><strong>Iterative Output Validation</strong> – Detects missing info or hallucinations and triggers regeneration from updated context.</li>
+                    <li><strong>Fully Local & Privacy-First</strong> – Runs entirely offline with local LLMs and PDF data, preserving user privacy and control.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Workflow Section -->
+    <section id="workflow" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="section-title">Self-Correction Workflow</h2>
+            </div>
+            <div class="section-content two-column">
+                <div class="workflow-images">
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="200">
+                        <img src="../images/llm_flow_chart_1.jpeg" alt="RAG Pipeline Flow" class="feature-image" />
+                    </div>
+                    <div class="workflow-image" data-aos="fade-up" data-aos-delay="300">
+                        <img src="../images/llm_flow_chart_2.jpeg" alt="Self-Correction Loop" class="feature-image" />
+                    </div>
+                </div>
+                <div class="workflow-steps" data-aos="fade-up" data-aos-delay="200">
+                        <div class="workflow-step">
+                            <h3>1. Intelligent Routing via Indicator Node</h3>
+                            <p>A custom routing node determines whether the query is best answered via local ChromaDB retrieval or external Tavily web search, using topic-aware logic instead of keyword rules.</p>
+                        </div>
+                        <div class="workflow-step" data-aos="fade-up" data-aos-delay="300">
+                            <h3>2. Filtered Retrieval with Ollama Embeddings</h3>
+                            <p>Chunks are retrieved from ChromaDB using `mxbai-embed-large` embeddings and then passed through a relevance grading process to filter out off-topic results.</p>
+                        </div>
+                        <div class="workflow-step" data-aos="fade-up" data-aos-delay="400">
+                            <h3>3. Structured Generation and Reflection Loop</h3>
+                            <p>A local LLM (llama3.1 via Ollama) generates an initial response, which is then reflected upon to determine if any key content was omitted or could be improved contextually.</p>
+                        </div>
+                        <div class="workflow-step" data-aos="fade-up" data-aos-delay="500">
+                            <h3>4. Hallucination Detection and Iterative Correction</h3>
+                            <p>If hallucination is detected or the answer is incomplete, the system reuses or augments the retrieved documents and regenerates a grounded response, looping until completion.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Features Section -->
+    <section id="features" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Advanced Capabilities</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>Self-Correction Engine</h3>
+                    <p>Performs automated reflection and hallucination validation on locally generated answers, triggering regeneration using the same or revised context when needed.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>StateGraph-Based Orchestration</h3>
+                    <p>Uses a modular LangGraph state machine to control routing, retrieval, validation, and regeneration steps for robust, deterministic flow control.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <h3>PDF-Centric Retrieval</h3>
+                    <p>Uses ChromaDB with `mxbai-embed-large` embeddings to retrieve semantically relevant chunks from parsed regulatory PDFs (e.g., Auckland Unitary Plan).</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Grounding & Confidence Filter</h3>
+                    <p>Combines document grading, hallucination detection, and reflection to assess factual grounding before accepting a response as complete and reliable.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Architecture Section -->
+    <section id="architecture" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">System Architecture</h2>
+                <p>Explore the simplified architecture components enabling self-correction and intelligent local retrieval using a state-graph workflow.</p>
+            </div>
+            <div class="architecture-grid">
+                <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3 class="component-title">Vector Store</h3>
+                    </div>
+                    <p class="component-description">Local persistent database for storing and retrieving document embeddings.</p>
+                    <ul class="component-features">
+                        <li>Custom Ollama embeddings using <code>mxbai-embed-large</code></li>
+                        <li>Stored and accessed via ChromaDB (PersistentClient)</li>
+                    </ul>
+                    </div>
+                    <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h3 class="component-title">Retrieval Engine</h3>
+                        </div>
+                        <p class="component-description">Fetches relevant PDF chunks using semantic similarity and filters with relevance grading.</p>
+                        <ul class="component-features">
+                            <li>Vector similarity search using custom wrapper class</li>
+                            <li>Includes document-level relevance grading via local LLM</li>
+                        </ul>
+                    </div>
+                    <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3 class="component-title">LLM Interface</h3>
+                        </div>
+                        <p class="component-description">Local LLM interface using llama3.1 via Ollama for both generation and classification.</p>
+                        <ul class="component-features">
+                            <li>PromptTemplate-based structured generation</li>
+                            <li>Used for answer generation, grading, and reflection</li>
+                        </ul>
+                    </div>
+                    <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3 class="component-title">Validation Layer</h3>
+                        </div>
+                        <p class="component-description">Ensures answer quality by checking factual grounding and content completeness.</p>
+                        <ul class="component-features">
+                            <li>Hallucination detection via local model scoring</li>
+                            <li>Reflection module compares generation against documents</li>
+                        </ul>
+                    </div>
+                    <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-sync"></i>
+                            </div>
+                            <h3 class="component-title">Correction Module</h3>
+                        </div>
+                        <p class="component-description">Implements self-correction through a LangGraph state machine with conditional transitions.</p>
+                        <ul class="component-features">
+                            <li>Reflection → Hallucination check → Conditional regeneration</li>
+                            <li>Fully rule-based; no feedback learning or fine-tuning</li>
+                        </ul>
+                    </div>
+                    <div class="architecture-component" data-aos="fade-up" data-aos-delay="50">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h3 class="component-title">Web Search Integration</h3>
+                        </div>
+                        <p class="component-description">Fallback mechanism using Tavily API when local documents are insufficient or irrelevant.</p>
+                        <ul class="component-features">
+                            <li>Triggered by topic-based indicator or low relevance in retrieved documents</li>
+                            <li>Search results converted into synthetic documents for downstream generation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Tools & Technologies Section -->
+    <section id="tools" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-aos="fade-up" data-aos-delay="200">Tools & Technologies</h2>
+            </div>
+            <div class="section-content">
+                <div class="tools-table">
+                    <div class="table-responsive" data-aos="fade-up" data-aos-delay="300">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Technology</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Models</strong></td>
+                                    <td>Local LLM (llama3.1) via Ollama for generation, grading, and validation</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vector Database</strong></td>
+                                    <td>Chroma DB — local persistent storage using <code>PersistentClient</code> with collection-based access</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Embeddings</strong></td>
+                                    <td>Custom embedding with <code>mxbai-embed-large</code> model served via Ollama</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Framework</strong></td>
+                                    <td>Pure Python with LangGraph for state machine control; no LangChain chains used</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Search Engine</strong></td>
+                                    <td>Optional Tavily Search API — invoked when relevance or context fails locally</td>
+                                </tr>
+                                <tr>
+                                    <td>ML Libraries</td>
+                                    <td>Ollama, ChromaDB, and LangGraph; Hugging Face used only for auxiliary tasks</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>Y_W_SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="../js/project-scripts.js"></script>
+    <script>
+        // E-ink style page initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("📖 Project Page - E-ink Style Loading...");
+            setTimeout(() => {
+                document.body.classList.add("e-ink-transition");
+                setTimeout(() => {
+                    document.body.classList.remove("e-ink-transition");
+                    console.log("📚 Project Page Ready");
+                }, 500);
+            }, 100);
+        });
+    </script>
+</body>
+</html> 

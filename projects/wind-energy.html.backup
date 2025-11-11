@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wind Energy Prediction - Young Woo Song</title>
+    <meta name="description" content="Machine learning system for predicting wind turbine power output using environmental data, weather patterns, and advanced regression models for renewable energy optimization">
+    <!-- E-ink Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <!-- E-ink Theme Styles -->
+    <link rel="stylesheet" href="../css/main-styles.css">
+    <link rel="stylesheet" href="../css/project-styles.css">
+</head>
+<body class="wind-energy-theme">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    <strong>Y_</strong><span>W_SONG</span>
+                </a>
+                <nav class="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#data-analysis">Data Analysis</a></li>
+                        <li><a href="#modeling">Modeling</a></li>
+                        <li><a href="#optimization">Optimization</a></li>
+                        <li><a href="#technology">Technology</a></li>
+                    </ul>
+                </nav>
+                <div class="social-links">
+                    <a href="https://github.com/Userdflt" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" class="social-link" aria-label="Resume">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-meta">
+                    <div class="project-category" data-aos="fade-up" data-aos-delay="400">Renewable Energy & ML</div>
+                    <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">Wind Energy Prediction</h1>
+                    <p data-aos="fade-up" data-aos-delay="600">Advanced machine learning system for predicting wind turbine power output using comprehensive environmental data analysis. Integrates weather patterns, turbine specifications, and operational parameters to optimize renewable energy generation and support grid management decisions.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction" class="btn btn-primary" data-aos="fade-up" data-aos-delay="700">
+                            <i class="fab fa-github"></i>
+                            <span>View Code</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
+                    <picture><source srcset="../images/optimized/wind_energy.webp" type="image/webp"><picture><source srcset="../images/optimized/wind_energy.webp" type="image/webp"><picture><source srcset="../images/optimized/wind_energy.webp" type="image/webp"><img src="../images/wind_energy.png" alt="Wind Energy Prediction System" /></picture>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Overview Section -->
+    <section id="overview" class="project-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Overview</h2>
+            </div>
+            <div class="section-content">
+                <p>This project develops a machine learning model to forecast wind turbine power output using historical environmental and temporal data over a three-year period. By employing regression techniques, the system aims to predict continuous values of power output based on features such as wind speed, temperature, pressure, and time-related variables.</p>
+                <p>Accurate power forecasting is crucial for efficient energy management, cost reduction, and optimizing operations in the energy sector. The project addresses the variability in environmental conditions that can lead to fluctuations in power generation, providing energy companies and grid operators with precise forecasts to balance supply and demand.</p>
+                <h3>Business Question</h3>
+                <p>How can we accurately predict power output using historical environmental and temporal data over a three-year period?</p>
+                <h3>Data Question</h3>
+                <p>Which features significantly influence power output, and how can we preprocess and model the data to achieve optimal predictive performance?</p>
+                <h3>Key Objectives</h3>
+                <ul class="feature-list">
+                    <li><strong>Power Forecasting</strong> – Predict continuous power output values based on environmental conditions</li>
+                    <li><strong>Feature Analysis</strong> – Identify which variables significantly influence power generation</li>
+                    <li><strong>Model Optimization</strong> – Develop and evaluate multiple regression models for best performance</li>
+                    <li><strong>Operational Efficiency</strong> – Enable optimized energy production schedules and grid reliability</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Data Analysis Section -->
+    <section id="data-analysis" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Data Analysis & Preprocessing</h2>
+                <p>Comprehensive data preparation and exploratory analysis workflow</p>
+            </div>
+            <div class="section-content">
+                <h3>Data Overview</h3>
+                <ul class="feature-list">
+                    <li><strong>Train.csv</strong> - Training dataset containing historical records over three years</li>
+                    <li><strong>Test.csv</strong> - Testing dataset for evaluating model performance</li>
+                    <li><strong>column_info.csv</strong> - Descriptions of variables in the datasets</li>
+                </ul>
+                <h3>Key Variables</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Temporal Features</h4>
+                        <ul class="feature-list">
+                            <li>Time (converted to datetime format)</li>
+                            <li>Month (extracted from time)</li>
+                            <li>Year (extracted from time)</li>
+                            <li>TimeOfDay (hour of the day)</li>
+                        </ul>
+                        <h4>Environmental Variables</h4>
+                        <ul class="feature-list">
+                            <li>WS_10m (wind speed at 10m height)</li>
+                            <li>WS_100m (wind speed at 100m height)</li>
+                            <li>Temperature</li>
+                            <li>Pressure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Data Quality Assessment</h4>
+                        <ul class="feature-list">
+                            <li>Zero null values found in datasets</li>
+                            <li>Zero duplicate records identified</li>
+                            <li>High data quality confirmed</li>
+                        </ul>
+                        <h4>Feature Engineering</h4>
+                        <ul class="feature-list">
+                            <li>Time feature transformation to datetime</li>
+                            <li>Extraction of temporal components</li>
+                            <li>Correlation analysis for feature selection</li>
+                            <li>MinMaxScaler applied for normalization</li>
+                        </ul>
+                    </div>
+                </div>
+                <h3>Exploratory Data Analysis</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Distribution Analysis</h4>
+                        <ul class="feature-list">
+                            <li>Histograms plotted for all features</li>
+                            <li>Most features showed normal distribution</li>
+                            <li>Suitable for regression modeling</li>
+                        </ul>
+                        <h4>Correlation Analysis</h4>
+                        <ul class="feature-list">
+                            <li>Strong correlation between wind speeds and power output</li>
+                            <li>TimeOfDay showed positive correlation with power</li>
+                            <li>DP_2m feature removed due to high correlation</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Temporal Analysis</h4>
+                        <ul class="feature-list">
+                            <li>Power output patterns by time of day</li>
+                            <li>Monthly power generation variations</li>
+                            <li>Temporal dependencies identified</li>
+                        </ul>
+                        <h4>Wind Speed Analysis</h4>
+                        <ul class="feature-list">
+                            <li>Monthly average wind speeds analyzed</li>
+                            <li>Higher wind speeds correlated with higher power</li>
+                            <li>Wind speed at different heights compared</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Modeling Section -->
+    <section id="modeling" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Model Training & Evaluation</h2>
+                <p>Comprehensive regression model development and performance analysis</p>
+            </div>
+            <div class="section-content">
+                <h3>Data Splitting</h3>
+                <p>The preprocessed data was split into training and testing sets with an 80-20 split to ensure proper model evaluation on unseen data and assess generalization capabilities.</p>
+                <h3>Models Evaluated</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <ul class="feature-list">
+                            <li>Linear Regression</li>
+                            <li>Lasso Regression</li>
+                            <li>Ridge Regression</li>
+                            <li>K-Nearest Neighbors (KNN) Regressor</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="feature-list">
+                            <li>Decision Tree Regressor</li>
+                            <li>Random Forest Regressor</li>
+                            <li>AdaBoost Regressor</li>
+                        </ul>
+                    </div>
+                </div>
+                <h3>Evaluation Metrics</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <ul class="feature-list">
+                            <li><strong>Mean Absolute Error (MAE)</strong> - Measures average magnitude of prediction errors</li>
+                            <li><strong>R-squared (R²) Score</strong> - Indicates proportion of variance predictable from features</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="feature-list">
+                            <li>Training performance assessment</li>
+                            <li>Test performance evaluation</li>
+                        </ul>
+                    </div>
+                </div>
+                <h3>Model Performance Results</h3>
+                <div class="section-content">
+                    <table style="width: 100%; border-collapse: collapse; margin: 2rem 0;">
+                        <thead>
+                            <tr style="background-color: var(--color-background-elevated); border-bottom: 2px solid var(--color-border);">
+                                <th style="padding: 1rem; text-align: left; border: 1px solid var(--color-border);">Model</th>
+                                <th style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">Training MAE</th>
+                                <th style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">Training R²</th>
+                                <th style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">Test MAE</th>
+                                <th style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">Test R²</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Linear Regression</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1384</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.505355</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1403</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.492294</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Lasso Regression</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.2125</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.000000</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.2122</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">-0.000039</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Ridge Regression</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1384</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.505339</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1403</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.492322</td>
+                            </tr>
+                            <tr style="background-color: var(--color-background-alt); border-bottom: 1px solid var(--color-border); font-weight: bold;">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">K-Nearest Neighbors</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0538</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.897932</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0731</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.824192</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Decision Tree</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0000</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">1.000000</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1118</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.561457</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">Random Forest</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0318</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.969111</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.0858</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.777471</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--color-border);">
+                                <td style="padding: 1rem; border: 1px solid var(--color-border);">AdaBoost</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1494</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.498542</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.1500</td>
+                                <td style="padding: 1rem; text-align: center; border: 1px solid var(--color-border);">0.492723</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3>Best Model: K-Nearest Neighbors Regressor</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Performance Highlights</h4>
+                        <ul class="feature-list">
+                            <li><strong>Test R² Score:</strong> 82.42%</li>
+                            <li><strong>Test MAE:</strong> 0.0731</li>
+                            <li><strong>Mean Difference:</strong> 0.0012</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Key Insights</h4>
+                        <ul class="feature-list">
+                            <li>Superior performance among all models tested</li>
+                            <li>Local patterns and nearest neighbors significant for prediction</li>
+                            <li>Minimal bias with highly accurate predictions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Optimization Section -->
+    <section id="optimization" class="project-section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Key Insights & Business Impact</h2>
+                <p>Feature analysis, model insights, and practical applications</p>
+            </div>
+            <div class="section-content">
+                <h3>Feature Importance Analysis</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Most Influential Features</h4>
+                        <ul class="feature-list">
+                            <li><strong>Wind Speeds (WS_10m, WS_100m)</strong> - Primary drivers of power output</li>
+                            <li><strong>TimeOfDay</strong> - Strong positive correlation with power generation</li>
+                            <li><strong>Month</strong> - Seasonal patterns affecting energy production</li>
+                            <li><strong>Temperature and Pressure</strong> - Environmental conditions impacting performance</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Data Quality Insights</h4>
+                        <ul class="feature-list">
+                            <li>Zero null values and duplicates confirmed data integrity</li>
+                            <li>Normal distribution of features suitable for regression</li>
+                            <li>Strong correlation patterns identified through analysis</li>
+                            <li>Successful multicollinearity reduction with feature removal</li>
+                        </ul>
+                    </div>
+                </div>
+                <h3>Model Performance Analysis</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>KNN Regressor Success Factors</h4>
+                        <ul class="feature-list">
+                            <li>Local patterns in feature space highly significant</li>
+                            <li>Nearest neighbor relationships captured complex dependencies</li>
+                            <li>Mean prediction difference of only 0.0012</li>
+                            <li>Explains 82.42% of variance in power output</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Model Comparison Insights</h4>
+                        <ul class="feature-list">
+                            <li>Linear models showed moderate but consistent performance</li>
+                            <li>Lasso regression underperformed due to feature elimination</li>
+                            <li>Decision Tree exhibited overfitting with perfect training scores</li>
+                            <li>Random Forest provided good alternative but less accurate than KNN</li>
+                        </ul>
+                    </div>
+                </div>
+                <h3>Business Applications & Impact</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Operational Benefits</h4>
+                        <ul class="feature-list">
+                            <li><strong>Energy Production Optimization</strong> - Improved scheduling based on accurate forecasts</li>
+                            <li><strong>Grid Reliability</strong> - Better supply and demand balancing</li>
+                            <li><strong>Cost Reduction</strong> - Efficient resource allocation and planning</li>
+                            <li><strong>Informed Decision Making</strong> - Data-driven operational strategies</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Strategic Advantages</h4>
+                        <ul class="feature-list">
+                            <li><strong>Competitive Edge</strong> - Superior forecasting accuracy in energy sector</li>
+                            <li><strong>Risk Mitigation</strong> - Reduced uncertainty in power generation</li>
+                            <li><strong>Scalability</strong> - Model applicable to larger datasets and real-time data</li>
+                            <li><strong>Integration Ready</strong> - Prepared for deployment in operational systems</li>
+                        </ul>
+                    </div>
+                </div>
+                <h3>Future Enhancements</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Model Improvements</h4>
+                        <ul class="feature-list">
+                            <li>KNN hyperparameter tuning for n_neighbors optimization</li>
+                            <li>Cross-validation for optimal parameter selection</li>
+                            <li>Random Forest hyperparameter optimization</li>
+                            <li>Ensemble methods combining top-performing models</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Deployment Considerations</h4>
+                        <ul class="feature-list">
+                            <li>Real-time prediction system integration</li>
+                            <li>Continuous model monitoring and updating</li>
+                            <li>Performance tracking in production environment</li>
+                            <li>Adaptation for streaming data processing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Technology Section -->
+    <section id="technology" class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Technology Stack</h2>
+                <p>Tools and libraries used for wind turbine power prediction analysis</p>
+            </div>
+            <div class="section-content">
+                <div class="section-content two-column">
+                    <div>
+                        <h3>Data Processing & Analysis</h3>
+                        <ul class="feature-list">
+                            <li><strong>Pandas</strong> - Data manipulation and time series processing</li>
+                            <li><strong>NumPy</strong> - Numerical computations and array operations</li>
+                            <li><strong>Datetime</strong> - Time feature transformation and extraction</li>
+                            <li><strong>MinMaxScaler</strong> - Feature normalization and scaling</li>
+                        </ul>
+                        <h3>Machine Learning</h3>
+                        <ul class="feature-list">
+                            <li><strong>Scikit-learn</strong> - Machine learning algorithms and evaluation</li>
+                            <li><strong>Linear Regression</strong> - Baseline regression model</li>
+                            <li><strong>Lasso & Ridge Regression</strong> - Regularized regression techniques</li>
+                            <li><strong>K-Nearest Neighbors</strong> - Best performing regression model</li>
+                            <li><strong>Decision Tree Regressor</strong> - Tree-based modeling</li>
+                            <li><strong>Random Forest Regressor</strong> - Ensemble learning method</li>
+                            <li><strong>AdaBoost Regressor</strong> - Adaptive boosting algorithm</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Model Evaluation</h3>
+                        <ul class="feature-list">
+                            <li><strong>Mean Absolute Error (MAE)</strong> - Primary evaluation metric</li>
+                            <li><strong>R-squared (R²) Score</strong> - Variance explanation measure</li>
+                            <li><strong>Train-Test Split</strong> - 80-20 data splitting for validation</li>
+                            <li><strong>Residual Analysis</strong> - Prediction accuracy assessment</li>
+                        </ul>
+                        <h3>Data Visualization & Analysis</h3>
+                        <ul class="feature-list">
+                            <li><strong>Matplotlib</strong> - Statistical plotting and visualization</li>
+                            <li><strong>Correlation Matrix</strong> - Feature relationship analysis</li>
+                            <li><strong>Histograms</strong> - Distribution analysis</li>
+                            <li><strong>Pair Plots</strong> - Feature relationship visualization</li>
+                            <li><strong>Temporal Analysis</strong> - Time-based pattern identification</li>
+                        </ul>
+                        <h3>Development Environment</h3>
+                        <ul class="feature-list">
+                            <li><strong>Jupyter Notebook</strong> - Interactive development environment</li>
+                            <li><strong>Python</strong> - Core programming language</li>
+                            <li><strong>CSV Data Processing</strong> - Structured data handling</li>
+                        </ul>
+                    </div>
+                </div>
+                <h3>Project Implementation</h3>
+                <div class="section-content two-column">
+                    <div>
+                        <h4>Data Pipeline</h4>
+                        <ul class="feature-list">
+                            <li>Automated data loading from CSV files</li>
+                            <li>Time feature extraction and transformation</li>
+                            <li>Correlation-based feature selection</li>
+                            <li>Standardized preprocessing workflow</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Model Development</h4>
+                        <ul class="feature-list">
+                            <li>Systematic model comparison framework</li>
+                            <li>Standardized evaluation metrics</li>
+                            <li>Performance tracking and analysis</li>
+                            <li>Ready for production deployment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>Y_W_SONG</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/Userdflt" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/young-woo-song-145488217/" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youngwoosongcv.notion.site/Young-Woo-Song-1c964ba2209280bb954ad884c1a11b0f" aria-label="Notion">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Young Woo Song. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="../js/project-scripts.js"></script>
+    <script>
+        // E-ink style page initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("📖 Project Page - E-ink Style Loading...");
+            setTimeout(() => {
+                document.body.classList.add("e-ink-transition");
+                setTimeout(() => {
+                    document.body.classList.remove("e-ink-transition");
+                    console.log("📚 Project Page Ready");
+                }, 500);
+            }, 100);
+        });
+    </script>
+</body>
+</html> 

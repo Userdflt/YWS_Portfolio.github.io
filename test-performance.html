@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Performance Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .good { color: #28a745; }
+        .warning { color: #ffc107; }
+        .bad { color: #dc3545; }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Portfolio Image Performance Test</h1>
+    
+    <div class="test-section">
+        <h2>📊 Performance Metrics</h2>
+        <div id="metrics">
+            <div class="loading">Running performance tests...</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🖼️ Image Loading Analysis</h2>
+        <div id="image-analysis">
+            <div class="loading">Analyzing image loading...</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>💡 Recommendations</h2>
+        <div id="recommendations">
+            <div class="loading">Generating recommendations...</div>
+        </div>
+    </div>
+
+    <script>
+        // Performance testing script
+        class PerformanceTester {
+            constructor() {
+                this.metrics = {
+                    totalImages: 0,
+                    webpImages: 0,
+                    lazyImages: 0,
+                    loadedImages: 0,
+                    failedImages: 0,
+                    totalSize: 0,
+                    loadTimes: []
+                };
+                this.startTime = performance.now();
+            }
+
+            async runTests() {
+                console.log('🧪 Starting performance tests...');
+                
+                // Test main page
+                await this.testPage('/', 'Main Page');
+                
+                // Test AI visualizations page (the heavy one)
+                await this.testPage('/projects/ai-visualizations.html', 'AI Visualizations');
+                
+                // Test other project pages
+                const projectPages = [
+                    '/projects/gemini-vision.html',
+                    '/projects/cv.html',
+                    '/projects/llm.html'
+                ];
+                
+                for (const page of projectPages) {
+                    await this.testPage(page, page.split('/').pop().replace('.html', ''));
+                }
+                
+                this.displayResults();
+            }
+
+            async testPage(url, name) {
+                try {
+                    console.log(`📄 Testing ${name}...`);
+                    
+                    // Create iframe to test page loading
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                    
+                    return new Promise((resolve) => {
+                        iframe.onload = () => {
+                            try {
+                                const doc = iframe.contentDocument;
+                                const images = doc.querySelectorAll('img');
+                                
+                                images.forEach(img => {
+                                    this.metrics.totalImages++;
+                                    
+                                    if (img.src.includes('.webp')) {
+                                        this.metrics.webpImages++;
+                                    }
+                                    
+                                    if (img.classList.contains('lazy-loading') || img.classList.contains('lazy-image')) {
+                                        this.metrics.lazyImages++;
+                                    }
+                                });
+                                
+                                document.body.removeChild(iframe);
+                                resolve();
+                            } catch (e) {
+                                console.warn(`Could not analyze ${name}:`, e.message);
+                                document.body.removeChild(iframe);
+                                resolve();
+                            }
+                        };
+                        
+                        iframe.src = url;
+                        
+                        // Timeout after 5 seconds
+                        setTimeout(() => {
+                            if (iframe.parentNode) {
+                                document.body.removeChild(iframe);
+                            }
+                            resolve();
+                        }, 5000);
+                    });
+                } catch (e) {
+                    console.warn(`Failed to test ${name}:`, e.message);
+                }
+            }
+
+            displayResults() {
+                const metricsDiv = document.getElementById('metrics');
+                const analysisDiv = document.getElementById('image-analysis');
+                const recommendationsDiv = document.getElementById('recommendations');
+                
+                // Calculate percentages
+                const webpPercentage = this.metrics.totalImages > 0 ? 
+                    Math.round((this.metrics.webpImages / this.metrics.totalImages) * 100) : 0;
+                const lazyPercentage = this.metrics.totalImages > 0 ? 
+                    Math.round((this.metrics.lazyImages / this.metrics.totalImages) * 100) : 0;
+                
+                // Display metrics
+                metricsDiv.innerHTML = `
+                    <div class="metric">
+                        <span>Total Images Found:</span>
+                        <span class="${this.metrics.totalImages < 50 ? 'good' : this.metrics.totalImages < 100 ? 'warning' : 'bad'}">${this.metrics.totalImages}</span>
+                    </div>
+                    <div class="metric">
+                        <span>WebP Images:</span>
+                        <span class="${webpPercentage > 80 ? 'good' : webpPercentage > 50 ? 'warning' : 'bad'}">${this.metrics.webpImages} (${webpPercentage}%)</span>
+                    </div>
+                    <div class="metric">
+                        <span>Lazy Loaded Images:</span>
+                        <span class="${lazyPercentage > 70 ? 'good' : lazyPercentage > 40 ? 'warning' : 'bad'}">${this.metrics.lazyImages} (${lazyPercentage}%)</span>
+                    </div>
+                    <div class="metric">
+                        <span>Test Duration:</span>
+                        <span>${Math.round(performance.now() - this.startTime)}ms</span>
+                    </div>
+                `;
+                
+                // Display analysis
+                analysisDiv.innerHTML = `
+                    <p><strong>Image Optimization Status:</strong></p>
+                    <ul>
+                        <li>✅ Found ${this.metrics.totalImages} images across tested pages</li>
+                        <li>${webpPercentage > 50 ? '✅' : '⚠️'} ${webpPercentage}% of images use WebP format</li>
+                        <li>${lazyPercentage > 50 ? '✅' : '⚠️'} ${lazyPercentage}% of images use lazy loading</li>
+                        <li>🔍 Performance optimization ${webpPercentage > 70 && lazyPercentage > 70 ? 'EXCELLENT' : webpPercentage > 50 && lazyPercentage > 50 ? 'GOOD' : 'NEEDS IMPROVEMENT'}</li>
+                    </ul>
+                `;
+                
+                // Generate recommendations
+                const recommendations = [];
+                
+                if (webpPercentage < 80) {
+                    recommendations.push('🔧 Convert more images to WebP format for better compression');
+                }
+                
+                if (lazyPercentage < 70) {
+                    recommendations.push('⚡ Implement lazy loading for more images to improve initial load time');
+                }
+                
+                if (this.metrics.totalImages > 100) {
+                    recommendations.push('📦 Consider image pagination or virtual scrolling for large galleries');
+                }
+                
+                if (recommendations.length === 0) {
+                    recommendations.push('🎉 Excellent! Your image optimization is working well!');
+                    recommendations.push('💡 Continue monitoring performance as you add new content');
+                }
+                
+                recommendationsDiv.innerHTML = `
+                    <ul>
+                        ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>
+                `;
+                
+                console.log('✅ Performance test complete!');
+            }
+        }
+
+        // Run tests when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const tester = new PerformanceTester();
+            tester.runTests();
+        });
+    </script>
+</body>
+</html>
