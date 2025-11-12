@@ -1,2 +1,5 @@
 # update remaining projects
 .sh
+
+# backup files
+*.backup
