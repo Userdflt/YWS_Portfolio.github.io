@@ -2335,6 +2335,17 @@ code {
     background: var(--color-background-elevated);
 }
 
+/* Allow horizontal scrolling for architecture diagrams */
+#component-wrapper {
+    overflow: auto;
+}
+
+#component-wrapper .mermaid-diagram {
+    overflow: visible;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
 .mermaid-diagram {
     position: absolute;
     top: 0;
@@ -2368,10 +2379,19 @@ code {
 .mermaid svg {
     width: auto !important;
     height: auto !important;
-    max-width: 100% !important;
     max-height: 100% !important;
     min-width: 600px !important;
     min-height: 300px !important;
+}
+
+/* Specific handling for flowchart diagrams to prevent cropping */
+#component-diagram .mermaid svg {
+    max-width: 100% !important;
+}
+
+/* Keep sequence diagrams responsive */
+#workflow-diagram .mermaid svg {
+    max-width: 100% !important;
 }
 
 .zoom-info {
@@ -3260,6 +3280,79 @@ n8n-demo {
 .timeline-item:hover,
 .workflow-step:hover {
     animation: eInkFlicker 0.2s ease-out;
+}
+
+/* ===== MOBILE-SPECIFIC STYLES ===== */
+
+/* Mobile device detection class */
+.mobile-device .btn,
+.mobile-device .project-card,
+.mobile-device .feature-card,
+.mobile-device .tech-category {
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+/* Enhanced touch targets for mobile */
+@media (max-width: 768px) {
+    .btn {
+        min-height: 48px;
+        padding: var(--space-4) var(--space-5);
+        font-size: 1rem;
+    }
+    
+    .mobile-toggle {
+        min-width: 48px;
+        min-height: 48px;
+    }
+    
+    .nav-links a {
+        min-height: 48px;
+        padding: var(--space-3) var(--space-4);
+    }
+    
+    .social-link {
+        width: 48px;
+        height: 48px;
+    }
+    
+    /* Improved spacing for mobile */
+    .project-hero {
+        padding: var(--space-8) 0;
+    }
+    
+    .project-section {
+        padding: var(--space-8) 0;
+    }
+    
+    /* Better mobile typography */
+    .project-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+    }
+}
+
+/* Mobile-specific touch feedback */
+@media (hover: none) and (pointer: coarse) {
+    .btn:active,
+    .project-card:active,
+    .feature-card:active,
+    .tech-category:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+    
+    /* Remove hover effects on touch devices */
+    .btn:hover,
+    .project-card:hover,
+    .feature-card:hover,
+    .tech-category:hover {
+        transform: none;
+        box-shadow: initial;
+    }
 } 
 
 .flow-steps {

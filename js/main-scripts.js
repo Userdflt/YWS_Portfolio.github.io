@@ -2,11 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // E-ink style page initialization
     console.log('📖 E-ink Portfolio Loading...');
 
-    // Mobile Menu Toggle
+    // Mobile Menu Toggle with enhanced touch support
     const mobileToggle = document.querySelector('.mobile-toggle');
     const mainNav = document.querySelector('.main-nav');
     
     if (mobileToggle) {
+        // Enhanced touch support for mobile menu
         mobileToggle.addEventListener('click', function() {
             this.classList.toggle('active');
             mainNav.classList.toggle('active');
@@ -15,6 +16,26 @@ document.addEventListener('DOMContentLoaded', function() {
             // E-ink flicker effect for menu
             this.classList.add('e-ink-transition');
             setTimeout(() => this.classList.remove('e-ink-transition'), 300);
+        });
+        
+        // Touch feedback for mobile toggle
+        mobileToggle.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        mobileToggle.addEventListener('touchend', function() {
+            this.style.transform = 'scale(1)';
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (mainNav.classList.contains('active') && 
+                !mainNav.contains(e.target) && 
+                !mobileToggle.contains(e.target)) {
+                mobileToggle.classList.remove('active');
+                mainNav.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         });
     }
 
@@ -600,5 +621,92 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start image optimization
     initImageOptimization();
 
+    // ===== MOBILE-SPECIFIC ENHANCEMENTS =====
+    
+    // Detect mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    if (isMobile || isTouch) {
+        console.log('📱 Mobile device detected - applying mobile optimizations');
+        document.body.classList.add('mobile-device');
+        
+        // Enhanced touch feedback for all interactive elements
+        const touchElements = document.querySelectorAll('.btn, .project-card, .tech-category, .skill-category');
+        touchElements.forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+                this.classList.add('e-ink-transition');
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+                setTimeout(() => this.classList.remove('e-ink-transition'), 200);
+            });
+        });
+        
+        // Prevent zoom on double tap for buttons
+        const buttons = document.querySelectorAll('.btn, button');
+        buttons.forEach(button => {
+            button.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                this.click();
+            });
+        });
+        
+        // Smooth scroll behavior for mobile
+        document.documentElement.style.scrollBehavior = 'smooth';
+        
+        // Optimize scroll performance on mobile
+        let ticking = false;
+        function updateOnScroll() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    handleScroll();
+                    highlightNavigation();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        
+        window.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('scroll', highlightNavigation);
+        window.addEventListener('scroll', updateOnScroll, { passive: true });
+    }
+    
+    // Mobile orientation change handling
+    window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+            // Recalculate layouts after orientation change
+            window.dispatchEvent(new Event('resize'));
+            
+            // Close mobile menu if open
+            if (mobileToggle && mainNav) {
+                mobileToggle.classList.remove('active');
+                mainNav.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }, 100);
+    });
+    
+    // Prevent iOS bounce scrolling
+    document.addEventListener('touchmove', function(e) {
+        if (e.target.closest('.main-nav.active')) {
+            return; // Allow scrolling in mobile menu
+        }
+        
+        const scrollable = e.target.closest('[data-scrollable]');
+        if (!scrollable) {
+            const isAtTop = window.pageYOffset === 0;
+            const isAtBottom = window.pageYOffset + window.innerHeight >= document.body.scrollHeight;
+            
+            if ((isAtTop && e.touches[0].clientY > e.touches[0].clientY) || 
+                (isAtBottom && e.touches[0].clientY < e.touches[0].clientY)) {
+                e.preventDefault();
+            }
+        }
+    }, { passive: false });
+    
     console.log('📚 E-ink Portfolio interactions initialized successfully!');
 });

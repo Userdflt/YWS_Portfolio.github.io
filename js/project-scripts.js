@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // E-ink style project page initialization
     console.log('📄 E-ink Project Page Scripts Loading...');
 
-    // Mobile Menu Toggle with e-ink effects
+    // Mobile Menu Toggle with enhanced touch support
     const mobileToggle = document.querySelector('.mobile-toggle');
     const mainNav = document.querySelector('.main-nav');
     
@@ -15,6 +15,26 @@ document.addEventListener('DOMContentLoaded', function() {
             // E-ink flicker effect
             this.classList.add('e-ink-transition');
             setTimeout(() => this.classList.remove('e-ink-transition'), 300);
+        });
+        
+        // Touch feedback for mobile toggle
+        mobileToggle.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        mobileToggle.addEventListener('touchend', function() {
+            this.style.transform = 'scale(1)';
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (mainNav.classList.contains('active') && 
+                !mainNav.contains(e.target) && 
+                !mobileToggle.contains(e.target)) {
+                mobileToggle.classList.remove('active');
+                mainNav.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         });
     }
 
@@ -373,5 +393,53 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize image optimization for project pages
     initLazyLoading();
 
+    // ===== MOBILE-SPECIFIC ENHANCEMENTS FOR PROJECT PAGES =====
+    
+    // Detect mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    if (isMobile || isTouch) {
+        console.log('📱 Mobile device detected - applying project page mobile optimizations');
+        document.body.classList.add('mobile-device');
+        
+        // Enhanced touch feedback for project page elements
+        const touchElements = document.querySelectorAll('.btn, .feature-card, .architecture-component, .result-card, .analysis-card');
+        touchElements.forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+                this.classList.add('e-ink-transition');
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+                setTimeout(() => this.classList.remove('e-ink-transition'), 200);
+            });
+        });
+        
+        // Mobile orientation change handling for project pages
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                // Recalculate layouts after orientation change
+                window.dispatchEvent(new Event('resize'));
+                
+                // Close mobile menu if open
+                if (mobileToggle && mainNav) {
+                    mobileToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                
+                // Refresh any mermaid diagrams or workflow displays
+                const mermaidElements = document.querySelectorAll('.mermaid');
+                if (mermaidElements.length > 0 && typeof mermaid !== 'undefined') {
+                    setTimeout(() => {
+                        mermaid.init();
+                    }, 300);
+                }
+            }, 100);
+        });
+    }
+    
     console.log('📄 E-ink Project Page Scripts Initialized Successfully!');
 });
