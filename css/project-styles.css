@@ -1,38 +1,34 @@
-/* E-ink Inspired Project Styles */
+/* Modern Dark Glass Project Styles */
 :root {
-    /* E-ink Color Palette */
-    --color-primary: #1a1a1a;
-    --color-primary-light: #333333;
-    --color-secondary: #666666;
-    --color-accent: #2d2d2d;
-    --color-warning: #1a1a1a;
-    --color-success: #333333;
-    --color-error: #1a1a1a;
+   /* Inherit from main-styles.css where possible, but define project specifics */
     
-    /* E-ink Background Colors */
-    --color-background: #fdfdf8;
-    --color-background-alt: #f7f7f2;
-    --color-background-card: #ffffff;
-    --color-background-elevated: #f0f0eb;
+    /* Modern Dark Color Palette */
+    --color-primary: #6C5CE7; 
+    --color-primary-light: #8e7ef0;
+    --color-secondary: #a29bfe;
+    --color-accent: #00cec9;
     
-    /* E-ink Text Colors */
-    --color-text: #1a1a1a;
-    --color-text-secondary: #4a4a4a;
-    --color-text-muted: #888888;
-    --color-text-inverse: #fdfdf8;
+    /* Dark Background Colors */
+    --color-background: #0f0f14;
+    --color-background-alt: #181820;
+    --color-background-card: rgba(30, 30, 40, 0.6);
+    --color-background-elevated: rgba(40, 40, 50, 0.8);
     
-    /* E-ink Border Colors */
-    --color-border: #d1d1d1;
-    --color-border-light: #e8e8e8;
-    --color-border-focus: #1a1a1a;
+    /* Text Colors */
+    --color-text: #ffffff;
+    --color-text-secondary: #b2bec3;
+    --color-text-muted: #636e72;
+    --color-text-inverse: #0f0f14;
     
-    /* E-ink Gradients - Monochrome */
-    --gradient-primary: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
-    --gradient-secondary: linear-gradient(135deg, #333333 0%, #666666 100%);
-    --gradient-tech: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    /* Border Colors */
+    --color-border: rgba(255, 255, 255, 0.1);
+    --color-border-light: rgba(255, 255, 255, 0.2);
     
-    /* Technical E-ink Typography */
-    --font-sans: 'Roboto Mono', 'JetBrains Mono', 'Monaco', monospace;
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #6C5CE7 0%, #00cec9 100%);
+    
+    /* Typography */
+    --font-sans: 'Inter', sans-serif;
     
     /* Spacing */
     --space-1: 0.25rem;
@@ -45,30 +41,25 @@
     --space-10: 4rem;
     --space-12: 6rem;
     
-    /* E-ink Transitions - Slow and Deliberate */
-    --transition-fast: 0.2s ease-out;
-    --transition-normal: 0.4s ease-out;
-    --transition-slow: 0.6s ease-out;
+    /* Transitions */
+    --transition-normal: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     
-    /* E-ink Shadows - Subtle */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.12);
-    --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.15);
-    --shadow-glow: 0 2px 6px rgba(0, 0, 0, 0.10);
-    --shadow-glow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.3);
+    --shadow-glow: 0 0 20px rgba(108, 92, 231, 0.4);
     
-    /* E-ink Border Radius - Minimal */
-    --radius-sm: 2px;
-    --radius-md: 4px;
-    --radius-lg: 6px;
-    --radius-xl: 8px;
-    --radius-full: 50%;
+    /* Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
     
-    /* E-ink Paper Effect */
-    --glass-bg: rgba(253, 253, 248, 0.9);
-    --glass-border: rgba(209, 209, 209, 0.8);
-    --glass-backdrop: blur(2px);
+    /* Glass */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --glass-backdrop: blur(12px);
 }
 
 /* Reset & Base Styles */
@@ -92,107 +83,94 @@ body {
     background-attachment: fixed;
     font-weight: 400;
     letter-spacing: 0.025em;
-    /* E-ink paper texture with technical grid */
     background-image: 
-        radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0),
-        linear-gradient(0deg, transparent 24px, rgba(0,0,0,0.01) 25px, rgba(0,0,0,0.01) 26px, transparent 27px),
-        linear-gradient(90deg, transparent 24px, rgba(0,0,0,0.01) 25px, rgba(0,0,0,0.01) 26px, transparent 27px);
-    background-size: 20px 20px, 25px 25px, 25px 25px;
+        radial-gradient(circle at 50% 0%, #1e1e2e 0%, transparent 70%),
+        radial-gradient(circle at 100% 0%, #2d1b4e 0%, transparent 50%);
 }
 
-/* E-ink paper effect - all themes use same monochrome pattern */
+/* Remove E-ink paper effect overrides */
 body.youtube-theme,
 body.nasa-theme,
 body.ai-detection-theme,
 body.wind-energy-theme,
 body.n8n-theme {
     background-image: 
-        radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0),
-        linear-gradient(0deg, transparent 24px, rgba(0,0,0,0.01) 25px, rgba(0,0,0,0.01) 26px, transparent 27px),
-        linear-gradient(90deg, transparent 24px, rgba(0,0,0,0.01) 25px, rgba(0,0,0,0.01) 26px, transparent 27px);
-    background-size: 20px 20px, 25px 25px, 25px 25px;
+        radial-gradient(circle at 50% 0%, #1e1e2e 0%, transparent 70%),
+        radial-gradient(circle at 100% 0%, #2d1b4e 0%, transparent 50%);
+    background-size: cover;
 }
 
 a {
     color: var(--color-text);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
+    text-decoration: none;
     transition: all var(--transition-normal);
 }
 
 a:hover {
-    color: var(--color-text-secondary);
-    text-decoration-thickness: 2px;
+    color: var(--color-primary-light);
 }
 
 img {
     max-width: 100%;
     height: auto;
     display: block;
-    filter: contrast(1.1) brightness(0.95);
 }
 
-/* E-ink Selection */
-::selection {
-    background-color: var(--color-text);
-    color: var(--color-text-inverse);
-}
-
-/* E-ink Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--color-background-alt);
-    border-left: 1px solid var(--color-border);
+    background: var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--color-secondary);
-    border-radius: 0;
-    border: 1px solid var(--color-background);
+    background: var(--color-border);
+    border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-text-secondary);
+    background: var(--color-primary);
 }
 
-/* Container - Consistent with main styles */
+/* Container */
 .container {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 var(--space-4);
+    padding: 0 var(--space-6);
 }
 
-/* Technical E-ink Typography */
+/* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
-    font-weight: 600;
+    font-family: var(--font-sans);
+    font-weight: 700;
     line-height: 1.2;
     margin-bottom: var(--space-4);
     color: var(--color-text);
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
+    letter-spacing: -0.02em;
 }
 
 h1 { 
-    font-size: 3rem; 
-    font-weight: 600;
-    border-bottom: 2px solid var(--color-text);
-    padding-bottom: var(--space-3);
+    font-size: 3.5rem; 
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: var(--space-6);
+    border: none;
+    padding: 0;
 }
+
 h2 { 
-    font-size: 2.25rem; 
-    font-weight: 500;
-    position: relative;
+    font-size: 2.5rem; 
+    font-weight: 700;
 }
+
 h3 { 
-    font-size: 1.5rem; 
-    font-weight: 500;
+    font-size: 1.75rem; 
+    font-weight: 600;
 }
 
 p {
@@ -200,56 +178,28 @@ p {
     color: var(--color-text-secondary);
     font-family: var(--font-sans);
     font-weight: 400;
-    letter-spacing: 0.02em;
-}
-
-ul, ol {
-    margin-bottom: var(--space-4);
-    padding-left: var(--space-5);
-}
-
-li {
-    margin-bottom: var(--space-2);
-    color: var(--color-text-secondary);
-    font-family: var(--font-sans);
-    font-weight: 300;
+    letter-spacing: normal;
 }
 
 .section-title {
     position: relative;
     display: inline-block;
-    margin-bottom: var(--space-8);
-    font-size: 2.25rem;
+    margin-bottom: var(--space-10);
+    font-size: 2.5rem;
     color: var(--color-text);
-    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
-    border-bottom: 3px solid var(--color-text);
-    padding-bottom: var(--space-2);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-family: var(--font-sans);
+    border: none;
+    padding: 0;
+    text-transform: none;
+    letter-spacing: -0.02em;
 }
 
 .section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    width: 30px;
-    height: 1px;
-    background: var(--color-text);
+    display: none;
 }
 
-/* E-ink Header */
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-    background: var(--color-background-card);
-    border-bottom: 2px solid var(--color-border);
-    transition: all var(--transition-normal);
-    box-shadow: var(--shadow-md);
-}
+/* Header - Inherits from main-styles.css */
+/* Overrides removed to match index.html */
 
 /* Project Navigation Bar */
 .project-nav {
@@ -258,8 +208,9 @@ li {
     left: 0;
     width: 100%;
     z-index: 99;
-    background: var(--color-background-alt);
-    border-bottom: 1px solid var(--color-border);
+    background: rgba(15, 15, 20, 0.7);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
 }
@@ -276,7 +227,7 @@ li {
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: var(--space-6);
+    gap: var(--space-4);
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
@@ -288,37 +239,36 @@ li {
 
 .nav-menu a {
     display: block;
-    padding: var(--space-2) var(--space-3);
+    padding: 6px 16px;
     color: var(--color-text-secondary);
     text-decoration: none;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: var(--radius-sm);
+    text-transform: none;
+    letter-spacing: normal;
+    border-radius: var(--radius-full);
     transition: all var(--transition-normal);
     border: 1px solid transparent;
 }
 
 .nav-menu a:hover {
-    color: var(--color-text);
-    background: var(--color-background-card);
-    border-color: var(--color-border);
-    text-decoration: none;
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-menu a:active,
 .nav-menu a.active {
-    color: var(--color-text-inverse);
-    background: var(--color-text);
-    border-color: var(--color-text);
+    color: white;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px rgba(108, 92, 231, 0.4);
 }
 
 .header.scrolled {
-    background: var(--color-background-card);
-    box-shadow: var(--shadow-lg);
-    border-bottom-color: var(--color-text-secondary);
+    background: rgba(15, 15, 20, 0.9);
+    box-shadow: var(--shadow-card);
 }
 
 .header-content {
@@ -326,18 +276,18 @@ li {
     align-items: center;
     justify-content: space-between;
     height: 80px;
-    gap: var(--space-8);
 }
 
+/* Logo & Nav inherit from main-styles.css */
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text);
-    font-family: 'Space Mono', 'JetBrains Mono', monospace;
+    font-family: var(--font-heading);
     text-decoration: none;
     transition: all var(--transition-normal);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    text-transform: none;
     margin-right: var(--space-6);
     flex-shrink: 0;
 }
@@ -349,7 +299,8 @@ li {
 
 .logo strong {
     font-weight: 700;
-    border-bottom: 1px solid var(--color-text);
+    color: var(--color-primary);
+    border: none;
 }
 
 .main-nav {
@@ -369,37 +320,25 @@ li {
 .nav-links a {
     color: var(--color-text-secondary);
     font-weight: 500;
-    font-family: 'Fira Code', 'JetBrains Mono', 'Monaco', monospace;
+    font-family: var(--font-body);
     position: relative;
     padding: var(--space-2) 0;
     transition: all var(--transition-normal);
     text-decoration: none;
-    border-bottom: 1px solid transparent;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    border: none;
+    font-size: 0.95rem;
+    text-transform: none;
+    letter-spacing: normal;
 }
 
 .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: var(--color-text);
-    transition: width var(--transition-normal);
+    display: none;
 }
 
 .nav-links a:hover,
 .nav-links a.active {
     color: var(--color-text);
-    border-bottom-color: var(--color-text);
-}
-
-.nav-links a:hover::after,
-.nav-links a.active::after {
-    width: 100%;
+    text-shadow: 0 0 20px rgba(255,255,255,0.4);
 }
 
 .social-links {
@@ -704,30 +643,65 @@ li {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.coming-soon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 6px 16px;
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    color: #ffd700; /* Gold for work in progress */
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+}
+
+.pulse {
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
 }
 
 .project-category {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--color-text-muted);
+    color: var(--color-primary);
     margin-bottom: var(--space-2);
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-family: 'Fira Code', 'JetBrains Mono', 'Monaco', monospace;
-    border-bottom: 1px solid var(--color-border-light);
-    padding-bottom: var(--space-1);
+    font-family: var(--font-body);
+    border: none;
+    padding: 4px 8px;
     display: inline-block;
+    background: rgba(108, 92, 231, 0.1);
+    border-radius: 4px;
 }
 
 .project-title {
     font-size: 3rem;
     margin-bottom: var(--space-5);
     color: var(--color-text);
-    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    border-bottom: 2px solid var(--color-text);
+    font-family: var(--font-heading);
+    text-transform: none;
+    letter-spacing: -0.02em;
+    border: none;
     padding-bottom: var(--space-3);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .project-links {
@@ -775,46 +749,35 @@ li {
     max-width: 100%;
 }
 
-/* E-ink Buttons */
+/* Modern Buttons (Inherited and matched with main-styles.css) */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-3) var(--space-6);
-    font-weight: 500;
+    padding: 14px 28px;
+    font-weight: 600;
     transition: all var(--transition-normal);
     cursor: pointer;
-    border: 2px solid var(--color-text);
+    border: none;
     text-align: center;
     gap: var(--space-2);
     position: relative;
     overflow: hidden;
     text-decoration: none;
-    font-family: 'Fira Code', 'JetBrains Mono', 'Monaco', monospace;
-    background: var(--color-background-card);
-    color: var(--color-text);
-    min-width: 140px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.9rem;
+    font-family: var(--font-body);
+    min-width: 160px;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 1rem;
+    border-radius: var(--radius-full);
 }
 
 .btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--color-text);
-    transition: left var(--transition-slow);
-    z-index: 0;
+    display: none;
 }
 
 .btn:hover {
-    background: var(--color-text);
-    color: var(--color-text-inverse);
-    border-color: var(--color-text);
+    transform: translateY(-2px);
 }
 
 .btn span {
@@ -823,15 +786,27 @@ li {
 }
 
 .btn-primary {
-    background: var(--color-background-card);
-    color: var(--color-text);
-    border-color: var(--color-text);
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 10px 20px -5px rgba(108, 92, 231, 0.4);
+    border: none;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 15px 25px -5px rgba(108, 92, 231, 0.5);
+    filter: brightness(1.1);
 }
 
 .btn-secondary {
-    background: var(--color-background-card);
-    color: var(--color-text);
-    border-color: var(--color-text);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-primary);
 }
 
 /* Feature Lists */
@@ -3211,65 +3186,17 @@ n8n-demo {
     }
 }
 
-/* Subtle E-ink Refresh Animation */
-@keyframes eInkRefresh {
-    0% { 
-        opacity: 1;
-        background-color: var(--color-background);
-    }
-    20% { 
-        opacity: 0.95;
-        background-color: var(--color-background-elevated);
-    }
-    40% { 
-        opacity: 0.98;
-        background-color: var(--color-background-alt);
-    }
-    60% { 
-        opacity: 0.92;
-        background-color: var(--color-background-elevated);
-    }
-    80% { 
-        opacity: 0.97;
-        background-color: var(--color-background-alt);
-    }
-    100% { 
-        opacity: 1;
-        background-color: var(--color-background);
-    }
-}
-
-/* Subtle E-ink flicker for interactions */
-@keyframes eInkFlicker {
-    0% { 
-        opacity: 1;
-        background-color: transparent;
-    }
-    30% { 
-        opacity: 0.97;
-        background-color: rgba(0,0,0,0.01);
-    }
-    60% { 
-        opacity: 0.99;
-        background-color: rgba(240,240,235,0.3);
-    }
-    100% { 
-        opacity: 1;
-        background-color: transparent;
-    }
-}
-
-/* E-ink specific animations for state changes */
+/* Modern state changes handled via transitions */
 .e-ink-transition {
-    animation: eInkFlicker 0.3s ease-out;
+    /* Removed e-ink flicker */
 }
 
-/* E-ink screen refresh simulation for page loads */
+/* Page refresh handled via fade in */
 .e-ink-page-refresh {
-    animation: eInkRefresh 0.8s ease-in-out;
+    animation: fadeInUp 0.5s ease-out;
 }
 
-/* Apply e-ink transition to interactive elements */
+/* Standardize hover effects */
 .btn:hover,
 .arch-card:hover,
 .feature-card:hover,
@@ -3279,7 +3206,7 @@ n8n-demo {
 .metric-card:hover,
 .timeline-item:hover,
 .workflow-step:hover {
-    animation: eInkFlicker 0.2s ease-out;
+    /* Transitions handled by base class */
 }
 
 /* ===== MOBILE-SPECIFIC STYLES ===== */
@@ -3395,9 +3322,8 @@ n8n-demo {
 }
 
 .video-container:hover {
-    border-color: var(--color-border-focus);
+    border-color: var(--color-primary);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-    animation: eInkFlicker 0.2s ease-out;
 }
 
 .demo-video {
@@ -3450,7 +3376,8 @@ n8n-demo {
 
 .demo-features li:hover {
     color: var(--color-text);
-    animation: eInkFlicker 0.15s ease-out;
+    background: rgba(255,255,255,0.05);
+    padding-left: var(--space-2);
 }
 
 .demo-features li i {

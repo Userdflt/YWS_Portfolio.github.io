@@ -6,10 +6,10 @@
     <title>Young Woo Song - Portfolio</title>
     <meta name="description" content="">
     
-    <!-- Technical E-ink Fonts -->
+    <!-- Modern Sans Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -17,8 +17,6 @@
     <!-- Preload Critical Images -->
     <link rel="preload" as="image" href="images/optimized/me_light.webp" type="image/webp">
     <link rel="preload" as="image" href="images/me_light.png" type="image/png">
-    
-    <!-- E-ink styles - No external animation libraries needed -->
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/main-styles.css">
@@ -626,20 +624,17 @@
         </div>
     </footer>
 
-    <!-- E-ink Scripts -->
+    <!-- Modern Glass Scripts -->
     <script src="js/main-scripts.js"></script>
     <script>
-        // E-ink style page loading effect
+        // Modern page loading effect
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('📖 E-ink Portfolio Loading...');
+            console.log('✨ Modern Glass Portfolio Loading...');
             
-            // Apply initial e-ink refresh animation like real e-ink tablets
+            // Add page loaded class for smooth entrance
             setTimeout(() => {
-                document.body.classList.add('e-ink-page-refresh');
-                setTimeout(() => {
-                    document.body.classList.remove('e-ink-page-refresh');
-                    console.log('📚 E-ink Portfolio Ready');
-                }, 800);
+                document.body.classList.add('page-loaded');
+                console.log('🚀 Portfolio Ready');
             }, 100);
         });
     </script>
