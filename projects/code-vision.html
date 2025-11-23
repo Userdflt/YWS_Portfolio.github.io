@@ -4,38 +4,185 @@
     Copyright (c) 2025 Young Woo Song. All Rights Reserved.
     
     PROPRIETARY AND CONFIDENTIAL
-    
-    This software and its documentation are proprietary to Young Woo Song and are protected by
-    copyright, trade secret, and other intellectual property laws. Any reproduction, distribution,
-    modification, or use of this software without express written permission is strictly prohibited
-    and may result in severe civil and criminal penalties.
-    
-    License: PROPRIETARY - All Rights Reserved
-    
-    UNAUTHORIZED USE, COPYING, MODIFICATION, DISTRIBUTION, OR REVERSE ENGINEERING IS PROHIBITED.
-    VIOLATORS WILL BE PROSECUTED TO THE FULL EXTENT OF THE LAW.
-    
-    For licensing inquiries, contact: [Your Contact Email]
 -->
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CodeVision - AI Building Code Assistant</title>
-    <meta name="description" content="CodeVision - AI-powered Building Code Assistant for instant, accurate answers to complex New Zealand Building Code (NZBC) questions. Streamline your compliance workflow.">
+    <meta name="description" content="CodeVision - AI-powered Building Code Assistant for instant, accurate answers to complex New Zealand Building Code (NZBC) questions.">
     <meta name="copyright" content="Copyright (c) 2025 Vision Studio. All Rights Reserved.">
     <meta name="license" content="PROPRIETARY - All Rights Reserved">
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
-    <!-- Technical E-ink Fonts -->
+    
+    <!-- Technical Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <!-- E-ink Project Styles -->
-        <!-- E-ink Theme Styles -->
+    
+    <!-- Project Styles -->
     <link rel="stylesheet" href="../css/main-styles.css">
     <link rel="stylesheet" href="../css/project-styles.css">
+    
+    <style>
+        /* Enhanced Styles from Vision Studio for Consistency */
+        
+        /* Typography Consistency */
+        .section-content h3 { font-size: 1.75rem; }
+        .section-content h4 { font-size: 1.25rem; }
+        .section-content h5 { font-size: 1.1rem; }
+        .section-content p { font-size: 1rem; }
+        
+        /* Card Typography Standardization */
+        .feature-card h3, .feature-card h4 {
+            font-size: 1.25rem !important;
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+        }
+        
+        .feature-card p, .feature-card ul li {
+            font-size: 1rem !important;
+            line-height: 1.6;
+        }
+        
+        .feature-card p:last-of-type {
+            margin-bottom: var(--space-4);
+        }
+
+        /* Feature Card List Styling */
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-card li {
+            position: relative;
+            padding-left: var(--space-4);
+            margin-bottom: var(--space-2);
+            color: var(--color-text-secondary);
+        }
+        
+        .feature-card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+
+        /* Diagram Styles */
+        .diagram-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            backdrop-filter: var(--glass-backdrop);
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mermaid-wrapper {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            background: var(--color-background-elevated);
+        }
+
+        .mermaid-diagram {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            padding: var(--space-4);
+            transform-origin: center center;
+            transition: transform 0.3s ease;
+            cursor: grab;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mermaid-diagram:active {
+            cursor: grabbing;
+        }
+
+        .mermaid {
+            background: transparent;
+            font-size: 14px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .diagram-controls {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            display: flex;
+            gap: var(--space-2);
+            z-index: 10;
+        }
+
+        .diagram-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--color-text);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            backdrop-filter: var(--glass-backdrop);
+            font-size: 16px;
+        }
+
+        .diagram-btn:hover {
+            background: var(--color-primary);
+            color: var(--color-text-inverse);
+            transform: translateY(-2px);
+        }
+
+        .zoom-info {
+            position: absolute;
+            bottom: var(--space-4);
+            left: var(--space-4);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            backdrop-filter: var(--glass-backdrop);
+        }
+
+        /* Fullscreen overrides */
+        .mermaid-wrapper:fullscreen {
+            background: var(--color-background);
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .mermaid-wrapper:fullscreen .diagram-controls {
+            top: 20px;
+            right: 20px;
+        }
+    </style>
 </head>
 <body class="coming-soon-theme">
     <!-- Header -->
@@ -65,6 +212,7 @@
             </div>
         </div>
     </header>
+
     <!-- Project Hero -->
     <section class="project-hero">
         <div class="container">
@@ -78,15 +226,10 @@
                     <h1 class="project-title" data-aos="fade-up" data-aos-delay="500">CodeVision</h1>
                     <p class="project-subtitle" data-aos="fade-up" data-aos-delay="600">AI Building Code Assistant</p>
                     <p class="project-description" data-aos="fade-up" data-aos-delay="650">Ready to streamline your NZ Building Code compliance? Get instant answers to complex NZBC questions with our AI assistant — from fire protection to structure, durability, moisture, safety of users, services and facilities, and energy efficiency.</p>
-                    <div class="project-links" data-aos="fade-up" data-aos-delay="700">
-                        <!-- <a href="https://github.com/Userdflt/codevision_app" class="btn btn-primary">
-                            <i class="fab fa-github"></i>
-                            <span>View on GitHub</span>
-                        </a> -->
-                    </div>
                 </div>
                 <div class="project-hero-image" data-aos="fade-up" data-aos-delay="400">
-<img src="../images/code_vision.png" alt="Code Vision AI Building Code Assistant Preview" / class="lazy-image">                </div>
+                    <img src="../images/code_vision.png" alt="Code Vision AI Building Code Assistant Preview" class="lazy-image">
+                </div>
             </div>
         </div>
     </section>
@@ -96,7 +239,7 @@
         <div class="container">
             <div class="section-header" data-aos="fade-up">
                 <h2>See CodeVision in Action</h2>
-                <p>Watch how CodeVision provides, accurate answers to New Zealand Building Code questions</p>
+                <p>Watch how CodeVision provides accurate answers to New Zealand Building Code questions</p>
             </div>
             <div class="demo-content" data-aos="fade-up" data-aos-delay="200">
                 <div class="video-container">
@@ -129,40 +272,61 @@
             <div class="section-header" data-aos="fade-up">
                 <h2>Why Choose Code Vision</h2>
             </div>
+            
             <div class="features-grid">
+                <!-- AI Powered Card -->
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="feature-icon">
                         <i class="fas fa-robot"></i>
                     </div>
-                    <h3>AI-Powered Building Code Assistant</h3>
-                    <p>Instant, accurate answers to complex New Zealand Building Code (NZBC) questions. From Protection from Fire to Structure and Durability, our AI assistant helps you navigate NZ regulations with confidence.</p>
+                    <h3>AI-Powered Assistant</h3>
+                    <p>Instant, accurate answers to complex New Zealand Building Code (NZBC) questions. Navigate NZ regulations with confidence.</p>
                 </div>
+
+                <!-- Benefits Card -->
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-icon">
-                        <i class="fas fa-list-check"></i>
-                    </div>
-                    <h3>Covered NZBC Sections</h3>
-                    <ul class="feature-list">
-                        <li>Structure & Durability</li>
-                        <li>Protection from Fire</li>
-                        <li>Access</li>
-                        <li>Moisture</li>
-                        <li>Safety of Users</li>
-                        <li>Services</li>
-                        <li>Energy</li>
-                    </ul>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="feature-icon">
                         <i class="fas fa-star"></i>
                     </div>
-                    <h3>Benefits</h3>
+                    <h3>Key Benefits</h3>
                     <ul class="feature-list">
-                        <li><strong>Time Savings:</strong> Reduce research time from hours to seconds.</li>
-                        <li><strong>Accuracy:</strong> Verified answers with official source references.</li>
-                        <li><strong>Accessibility:</strong> Complex regulations made easy to understand, suitable for all experience levels.</li>
-                        <li><strong>Comprehensive:</strong> Complete coverage of all building code sections, with specialized AI agents.</li>
+                        <li><strong>Time Savings:</strong> 95% faster than manual research.</li>
+                        <li><strong>Accuracy:</strong> Verified answers, 100% traceable to NZBC.</li>
+                        <li><strong>Accessibility:</strong> Complex regulations made easy.</li>
+                        <li><strong>Comprehensive:</strong> 7 specialized AI agents covering all sections.</li>
                     </ul>
+                </div>
+            </div>
+
+            <!-- NZBC Coverage Diagram -->
+            <div style="margin-top: 50px;" data-aos="fade-up" data-aos-delay="300">
+                <h3 style="text-align: center; margin-bottom: 20px;">Covered NZBC Sections</h3>
+                <div class="diagram-container">
+                    <div class="mermaid-wrapper" id="wrapper-nzbc">
+                        <div class="diagram-controls">
+                            <button class="diagram-btn" onclick="zoomIn('wrapper-nzbc')" title="Zoom In"><i class="fas fa-plus"></i></button>
+                            <button class="diagram-btn" onclick="zoomOut('wrapper-nzbc')" title="Zoom Out"><i class="fas fa-minus"></i></button>
+                            <button class="diagram-btn" onclick="resetZoom('wrapper-nzbc')" title="Reset Zoom"><i class="fas fa-home"></i></button>
+                            <button class="diagram-btn" onclick="toggleFullscreen('wrapper-nzbc')" title="Fullscreen"><i class="fas fa-expand"></i></button>
+                        </div>
+                        <div class="zoom-info" id="wrapper-nzbc-zoom-info">100%</div>
+                        <div class="mermaid-diagram" id="diagram-nzbc">
+                            <div class="mermaid">
+                            graph TD
+                                B["Structure & Durability"]
+                                C["Protection from Fire"]
+                                D["Access"]
+                                E["Moisture"]
+                                F["Safety of Users"]
+                                G["Services"]
+                                H1["Energy"]
+
+                                subgraph NZBC_Clauses["NZBC Clauses Coverage"]
+                                    B --> C --> D --> E --> F --> G --> H1
+                                end
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -172,72 +336,110 @@
     <section class="project-section alt-bg">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
-                <h2>Advanced AI Technology for Building Code Compliance</h2>
-                <p>Our AI system processes complex building code documentation, extracts key information from diagrams and text, and provides instant, accurate guidance for New Zealand Building Code compliance.</p>
+                <h2>Advanced AI Technology</h2>
+                <p>Processing complex documentation, diagrams, and regulatory text for accurate compliance guidance.</p>
             </div>
-            <div class="tech-grid">
-                <div class="tech-feature" data-aos="fade-up" data-aos-delay="100">
-                    <div class="tech-icon">
+            
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
                         <i class="fas fa-eye"></i>
                     </div>
-                    <h3>Advanced OCR & Document Analysis</h3>
+                    <h3>OCR & Document Analysis</h3>
                     <ul>
-                        <li>Reads and understands technical diagrams, charts, and regulatory text.</li>
-                        <li>Extracts text from technical diagrams and blueprints.</li>
-                        <li>Processes complex charts and tables.</li>
-                        <li>Understands regulatory document structure and hierarchy.</li>
+                        <li>Reads technical diagrams & blueprints</li>
+                        <li>Extracts text from charts & tables</li>
+                        <li>Understands document hierarchy</li>
                     </ul>
                 </div>
-                <div class="tech-feature" data-aos="fade-up" data-aos-delay="200">
-                    <div class="tech-icon">
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
                         <i class="fas fa-database"></i>
                     </div>
-                    <h3>Comprehensive Data Ingestion</h3>
+                    <h3>Data Ingestion</h3>
                     <ul>
-                        <li>Complete NZBC clauses, acceptable solutions, and verification methods.</li>
-                        <li>Cross-referenced compliance pathways.</li>
+                        <li>NZBC Clauses: <strong>B1-B2, C1-C6, D1-D2, E1-E3, F1-F9, G1-G15, H1</strong></li>
+                        <li>Acceptable Solutions & Verification Methods</li>
+                        <li>Cross-referenced compliance pathways</li>
                     </ul>
                 </div>
-                <div class="tech-feature" data-aos="fade-up" data-aos-delay="300">
-                    <div class="tech-icon">
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
                         <i class="fas fa-brain"></i>
                     </div>
-                    <h3>Intelligent Query Processing</h3>
+                    <h3>Intelligent Processing</h3>
                     <ul>
-                        <li>Specialized AI agents for each building code section.</li>
-                        <li>Cross-referential compliance checking.</li>
-                        <li>Contextual interpretation of regulatory requirements.</li>
+                        <li>Specialized AI agents per section</li>
+                        <li>Cross-referential checking</li>
+                        <li>Contextual interpretation</li>
                     </ul>
                 </div>
-                <div class="tech-feature" data-aos="fade-up" data-aos-delay="400">
-                    <div class="tech-icon">
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
                         <i class="fas fa-cogs"></i>
                     </div>
-                    <h3>Key Capabilities</h3>
+                    <h3>Core Capabilities</h3>
                     <ul>
                         <li>Document Understanding</li>
-                        <li>Instant Search</li>
+                        <li>Instant Semantic Search</li>
                         <li>Compliance Pathways</li>
                         <li>Verified Accuracy</li>
                     </ul>
                 </div>
             </div>
-            <br>
-            <div class="specialized-agents" data-aos="fade-up" data-aos-delay="500">
-                <h3>Specialized AI Agents</h3>
-                <div class="agents-features">
-                    <div class="agent-feature">
-                        <i class="fas fa-users"></i>
-                        <span>One for each NZBC section.</span>
+
+            <!-- Specialized Agents -->
+            <div class="specialized-agents" data-aos="fade-up" data-aos-delay="500" style="margin-top: 50px;">
+                <h3 style="text-align: center; margin-bottom: 30px;">Specialized AI Agents</h3>
+                <div class="agents-features" style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                    <div class="agent-feature" style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-users" style="color: var(--color-primary);"></i>
+                        <span>One for each NZBC section</span>
                     </div>
-                    <div class="agent-feature">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Full coverage of all clauses and sub-sections.</span>
+                    <div class="agent-feature" style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-check-circle" style="color: var(--color-primary);"></i>
+                        <span>Full coverage of all clauses</span>
                     </div>
-                    <div class="agent-feature">
-                        <i class="fas fa-bolt"></i>
-                        <span>Fast response times.</span>
+                    <div class="agent-feature" style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-bolt" style="color: var(--color-primary);"></i>
+                        <span>Fast response times</span>
                     </div>
+                </div>
+            </div>
+
+            <!-- Key Capabilities Table -->
+            <div class="tools-table" data-aos="fade-up" data-aos-delay="600" style="margin-top: 50px;">
+                <h3 style="text-align: center; margin-bottom: 20px;">Key Capabilities</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Capability</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Document Understanding</strong></td>
+                                <td>Processes complex regulatory documents with precision</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Instant Search</strong></td>
+                                <td>Find relevant code sections in milliseconds</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Compliance Pathways</strong></td>
+                                <td>Clear guidance on meeting regulatory requirements</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Verified Accuracy</strong></td>
+                                <td>All answers backed by official NZBC sources</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -248,38 +450,76 @@
         <div class="container">
             <div class="section-header" data-aos="fade-up">
                 <h2>How Code Vision Works</h2>
+                <p>A comprehensive multi-stage pipeline from data ingestion to intelligent query responses</p>
             </div>
-            <div class="process-steps">
-                <div class="process-step" data-aos="fade-up" data-aos-delay="100">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <h3>Data Collection</h3>
-                        <p>Ingestion of NZ Building Code documentation, including diagrams and regulatory text. Incorporates compliance matrices and reference standards.</p>
-                        <br>
+            
+            <!-- Mermaid Flowchart -->
+            <div class="diagram-container" data-aos="fade-up" data-aos-delay="100">
+                <div class="mermaid-wrapper" id="wrapper-process">
+                    <div class="diagram-controls">
+                        <button class="diagram-btn" onclick="zoomIn('wrapper-process')" title="Zoom In"><i class="fas fa-plus"></i></button>
+                        <button class="diagram-btn" onclick="zoomOut('wrapper-process')" title="Zoom Out"><i class="fas fa-minus"></i></button>
+                        <button class="diagram-btn" onclick="resetZoom('wrapper-process')" title="Reset Zoom"><i class="fas fa-home"></i></button>
+                        <button class="diagram-btn" onclick="toggleFullscreen('wrapper-process')" title="Fullscreen"><i class="fas fa-expand"></i></button>
+                    </div>
+                    <div class="zoom-info" id="wrapper-process-zoom-info">100%</div>
+                    <div class="mermaid-diagram" id="diagram-process">
+                        <div class="mermaid">
+                        %%{init: {'flowchart': {'curve': 'stepBefore'}}}%%
+                        flowchart TD
+                            A["01 Data Collection"] --> B["02 OCR & Data Processing"] --> C["03 Multi-Agent Orchestration"] --> D["04 Query Response"]
+
+                            A -->|Sources| A1["Official NZBC Docs"]
+                            A --> A2["Technical Diagrams & Images"]
+                            A --> A3["Compliance Matrices"]
+                            A --> A4["Reference Standards"]
+
+                            B -->|Extraction| B1["Diagram + Image Analysis"]
+                            B --> B2["Table & Text Data Extraction"]
+                            B --> B3["Cross-reference Mapping"]
+                            B --> B4["Structured Knowledge Base RAG"]
+
+                            C -->|Orchestration| C1["Specialized Agents per NZBC Clause"]
+                            C --> C2["Contextual Retrieval from Vector DB"]
+                            C --> C3["Cross-Agent Collaboration & Escalation"]
+
+                            D -->|Output| D1["Instant Responses"]
+                            D --> D2["Verified Source Citations"]
+                            D --> D3["Compliance Pathways"]
+                            D --> D4["Rendered Text + Diagram Outputs"]
+                        </div>
                     </div>
                 </div>
-                <div class="process-step" data-aos="fade-up" data-aos-delay="200">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <h3>OCR Processing</h3>
-                        <p>Extracts text and data from charts, diagrams, and structured documents. Performs cross-reference mapping and content validation.</p>
-                        <br>
+            </div>
+
+            <div class="features-grid" style="margin-top: 40px;">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-layer-group"></i>
                     </div>
+                    <h3>01. Data Collection</h3>
+                    <p>Comprehensive ingestion of NZ Building Code documentation, diagrams, compliance matrices, and reference standards.</p>
                 </div>
-                <div class="process-step" data-aos="fade-up" data-aos-delay="300">
-                    <div class="step-number">03</div>
-                    <div class="step-content">
-                        <h3>AI Training</h3>
-                        <p>Specialized agents trained on each section of the building code. Maps compliance pathways and cross-referential knowledge.</p>
-                        <br>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-microchip"></i>
                     </div>
+                    <h3>02. OCR & Processing</h3>
+                    <p>Advanced extraction from charts and diagrams, cross-reference mapping, and structured knowledge base generation.</p>
                 </div>
-                <div class="process-step" data-aos="fade-up" data-aos-delay="400">
-                    <div class="step-number">04</div>
-                    <div class="step-content">
-                        <h3>Query Response</h3>
-                        <p>Provides accurate, source-referenced answers. Delivers compliance pathways and related regulations.</p>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
                     </div>
+                    <h3>03. Orchestration</h3>
+                    <p>Intelligent coordination of specialized AI agents, contextual retrieval, and cross-agent collaboration.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h3>04. Query Response</h3>
+                    <p>Accurate, verified answers with source citations, compliance pathways, and visual outputs.</p>
                 </div>
             </div>
         </div>
@@ -291,27 +531,39 @@
             <div class="section-header" data-aos="fade-up">
                 <h2>Perfect For</h2>
             </div>
-            <div class="target-audience">
-                <div class="audience-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="audience-icon">
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
                         <i class="fas fa-drafting-compass"></i>
                     </div>
                     <h3>Architects & Engineers</h3>
-                    <p>Quick compliance checks during design. Structural requirements, fire safety, accessibility standards.</p>
+                    <ul class="feature-list" style="margin-top: 15px;">
+                        <li>Structural requirements</li>
+                        <li>Fire safety compliance</li>
+                        <li>Accessibility standards</li>
+                    </ul>
                 </div>
-                <div class="audience-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="audience-icon">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
                         <i class="fas fa-clipboard-check"></i>
                     </div>
                     <h3>Building Consent Officers</h3>
-                    <p>Streamlined assessment and verification. Code interpretation, cross-referencing, compliance pathways.</p>
+                    <ul class="feature-list" style="margin-top: 15px;">
+                        <li>Code interpretation</li>
+                        <li>Cross-referencing</li>
+                        <li>Compliance pathways</li>
+                    </ul>
                 </div>
-                <div class="audience-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="audience-icon">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
                         <i class="fas fa-hard-hat"></i>
                     </div>
                     <h3>Construction Professionals</h3>
-                    <p>On-site guidance and clarification. Installation requirements, material specifications, safety protocols.</p>
+                    <ul class="feature-list" style="margin-top: 15px;">
+                        <li>Installation requirements</li>
+                        <li>Material specifications</li>
+                        <li>Safety protocols</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -322,7 +574,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                   <span>Y_W_SONG</span>
+                   <strong>Y_</strong><span>W_SONG</span>
                 </div>
                 <div class="footer-social">
                     <a href="https://github.com/Userdflt" aria-label="GitHub">
@@ -343,14 +595,11 @@
                         <small>
                             PROPRIETARY SOFTWARE - This application and its underlying technology are protected by copyright, 
                             trade secret, and other intellectual property laws. Unauthorized use, copying, modification, 
-                            distribution, or reverse engineering is strictly prohibited and may result in severe civil 
-                            and criminal penalties. Protected under international copyright treaties including the Berne Convention.
+                            distribution, or reverse engineering is strictly prohibited.
                         </small>
                     </p>
                     <p class="license-notice">
                         <small>
-                            <strong>License:</strong> PROPRIETARY - All Rights Reserved | 
-                            <strong>Commercial Use:</strong> Forbidden without written license | 
                             <strong>Contact:</strong> youngwoo930@gmail.com for licensing inquiries
                         </small>
                     </p>
@@ -358,19 +607,263 @@
             </div>
         </div>
     </footer>
-    <!-- E-ink Scripts -->
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="../js/project-scripts.js"></script>
     <script>
-        // E-ink style page initialization
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("📖 Project Page - E-ink Style Loading...");
+        // Initialize Mermaid with dark theme for better visibility
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                darkMode: true,
+                primaryColor: '#6C5CE7',
+                primaryTextColor: '#FFFFFF',
+                primaryBorderColor: '#A29BFE',
+                lineColor: '#B2BEC3',
+                secondaryColor: '#181820',
+                tertiaryColor: '#1E1E28',
+                background: '#0F0F14',
+                mainBkg: '#1E1E28',
+                secondBkg: '#181820',
+                border1: '#6C5CE7',
+                border2: '#00CEC9',
+                
+                // Generic Note settings
+                note: '#2D2D3A',
+                noteText: '#FFFFFF',
+                noteBorder: '#6C5CE7',
+                
+                // Sequence Diagram Specifics
+                noteBkgColor: '#2D2D3A',
+                noteTextColor: '#FFFFFF',
+                noteBorderColor: '#6C5CE7',
+                
+                actorBkg: '#1E1E28',
+                actorBorder: '#6C5CE7',
+                actorTextColor: '#FFFFFF',
+                actorLineColor: '#B2BEC3',
+                
+                signalColor: '#B2BEC3',
+                signalTextColor: '#FFFFFF',
+                
+                labelBoxBkgColor: '#2D2D3A',
+                labelBoxBorderColor: '#6C5CE7',
+                labelTextColor: '#FFFFFF',
+                loopTextColor: '#FFFFFF',
+                
+                textColor: '#FFFFFF',
+                labelColor: '#FFFFFF',
+                errorBkgColor: '#2D1B4E',
+                errorTextColor: '#FF7675',
+                fontSize: '16px',
+                fontFamily: 'JetBrains Mono, Roboto Mono, monospace'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 20,
+                nodeSpacing: 60,
+                rankSpacing: 80
+            }
+        });
+
+        // Diagram interaction variables
+        let diagramStates = {};
+
+        // Initialize diagram state
+        function initDiagramState(wrapperId) {
+            if (!diagramStates[wrapperId]) {
+                diagramStates[wrapperId] = {
+                    scale: 1,
+                    translateX: 0,
+                    translateY: 0,
+                    isDragging: false,
+                    lastX: 0,
+                    lastY: 0
+                };
+            }
+        }
+
+        // Zoom in function
+        function zoomIn(wrapperId) {
+            initDiagramState(wrapperId);
+            const state = diagramStates[wrapperId];
+            state.scale = Math.min(state.scale * 1.2, 3);
+            updateDiagramTransform(wrapperId);
+            updateZoomInfo(wrapperId);
+        }
+
+        // Zoom out function
+        function zoomOut(wrapperId) {
+            initDiagramState(wrapperId);
+            const state = diagramStates[wrapperId];
+            state.scale = Math.max(state.scale / 1.2, 0.3);
+            updateDiagramTransform(wrapperId);
+            updateZoomInfo(wrapperId);
+        }
+
+        // Reset zoom function
+        function resetZoom(wrapperId) {
+            initDiagramState(wrapperId);
+            const state = diagramStates[wrapperId];
+            state.scale = 1;
+            state.translateX = 0;
+            state.translateY = 0;
+            updateDiagramTransform(wrapperId);
+            updateZoomInfo(wrapperId);
+        }
+
+        // Toggle fullscreen
+        function toggleFullscreen(wrapperId) {
+            const wrapper = document.getElementById(wrapperId);
+            if (!document.fullscreenElement) {
+                wrapper.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Update diagram transform
+        function updateDiagramTransform(wrapperId) {
+            const diagram = document.querySelector(`#${wrapperId} .mermaid-diagram`);
+            const state = diagramStates[wrapperId];
+            if (diagram) {
+                diagram.style.transform = `translate(${state.translateX}px, ${state.translateY}px) scale(${state.scale})`;
+            }
+        }
+
+        // Update zoom info display
+        function updateZoomInfo(wrapperId) {
+            const zoomInfo = document.getElementById(wrapperId + '-zoom-info');
+            const state = diagramStates[wrapperId];
+            if (zoomInfo) {
+                zoomInfo.textContent = `${Math.round(state.scale * 100)}%`;
+            }
+        }
+
+        // Initialize pan functionality
+        function initPanFunctionality() {
+            document.querySelectorAll('.mermaid-diagram').forEach(diagram => {
+                const wrapper = diagram.closest('.mermaid-wrapper');
+                if (!wrapper) return;
+                
+                const wrapperId = wrapper.id;
+                initDiagramState(wrapperId);
+
+                // Mouse events
+                diagram.addEventListener('mousedown', (e) => {
+                    const state = diagramStates[wrapperId];
+                    state.isDragging = true;
+                    state.lastX = e.clientX;
+                    state.lastY = e.clientY;
+                    diagram.style.cursor = 'grabbing';
+                    e.preventDefault();
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    const state = diagramStates[wrapperId];
+                    if (state && state.isDragging) {
+                        const deltaX = e.clientX - state.lastX;
+                        const deltaY = e.clientY - state.lastY;
+                        state.translateX += deltaX;
+                        state.translateY += deltaY;
+                        state.lastX = e.clientX;
+                        state.lastY = e.clientY;
+                        updateDiagramTransform(wrapperId);
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    const state = diagramStates[wrapperId];
+                    if (state && state.isDragging) {
+                        state.isDragging = false;
+                        diagram.style.cursor = 'grab';
+                    }
+                });
+
+                // Wheel zoom
+                wrapper.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const state = diagramStates[wrapperId];
+                    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                    state.scale = Math.min(Math.max(state.scale * delta, 0.3), 3);
+                    updateDiagramTransform(wrapperId);
+                    updateZoomInfo(wrapperId);
+                });
+
+                // Touch events for mobile
+                let lastTouchDistance = 0;
+                
+                diagram.addEventListener('touchstart', (e) => {
+                    const state = diagramStates[wrapperId];
+                    if (e.touches.length === 1) {
+                        state.isDragging = true;
+                        state.lastX = e.touches[0].clientX;
+                        state.lastY = e.touches[0].clientY;
+                    } else if (e.touches.length === 2) {
+                        const touch1 = e.touches[0];
+                        const touch2 = e.touches[1];
+                        lastTouchDistance = Math.sqrt(
+                            Math.pow(touch2.clientX - touch1.clientX, 2) +
+                            Math.pow(touch2.clientY - touch1.clientY, 2)
+                        );
+                    }
+                    // Don't prevent default here to allow scrolling if not interacting
+                });
+
+                diagram.addEventListener('touchmove', (e) => {
+                    const state = diagramStates[wrapperId];
+                    if (e.touches.length === 1 && state.isDragging) {
+                        const deltaX = e.touches[0].clientX - state.lastX;
+                        const deltaY = e.touches[0].clientY - state.lastY;
+                        state.translateX += deltaX;
+                        state.translateY += deltaY;
+                        state.lastX = e.touches[0].clientX;
+                        state.lastY = e.touches[0].clientY;
+                        updateDiagramTransform(wrapperId);
+                        e.preventDefault(); // Prevent scroll while panning
+                    } else if (e.touches.length === 2) {
+                        const touch1 = e.touches[0];
+                        const touch2 = e.touches[1];
+                        const currentDistance = Math.sqrt(
+                            Math.pow(touch2.clientX - touch1.clientX, 2) +
+                            Math.pow(touch2.clientY - touch1.clientY, 2)
+                        );
+                        
+                        if (lastTouchDistance > 0) {
+                            const scale = currentDistance / lastTouchDistance;
+                            state.scale = Math.min(Math.max(state.scale * scale, 0.3), 3);
+                            updateDiagramTransform(wrapperId);
+                            updateZoomInfo(wrapperId);
+                        }
+                        lastTouchDistance = currentDistance;
+                        e.preventDefault(); // Prevent zoom while pinching
+                    }
+                });
+
+                diagram.addEventListener('touchend', () => {
+                    const state = diagramStates[wrapperId];
+                    state.isDragging = false;
+                    lastTouchDistance = 0;
+                });
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Smooth page transition
+            document.body.classList.add("e-ink-transition");
             setTimeout(() => {
-                document.body.classList.add("e-ink-transition");
-                setTimeout(() => {
-                    document.body.classList.remove("e-ink-transition");
-                    console.log("📚 Project Page Ready");
-                }, 500);
-            }, 100);
+                document.body.classList.remove("e-ink-transition");
+            }, 500);
+
+            // Wait for mermaid to render, then initialize pan functionality
+            setTimeout(initPanFunctionality, 1000);
         });
     </script>  
 </body>
