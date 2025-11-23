@@ -30,6 +30,14 @@
     <style>
         /* Enhanced Vision Studio Styles */
         
+        /* Typography Hierarchy:
+           - h2 (section-title): 2.5rem (from project-styles.css)
+           - h3 (subsection): 1.75rem (standard heading)
+           - h4 (card titles): 1.25rem
+           - h5 (small headings): 1.1rem
+           - body text: 1rem
+           - small text: 0.875rem
+        */
         
         .job-section {
             margin-bottom: var(--space-4);
@@ -37,7 +45,7 @@
         
         .job-section h5 {
             font-family: var(--font-mono);
-            font-size: 0.9rem;
+            font-size: 1.1rem;
             font-weight: 600;
             margin: 0 0 var(--space-2);
             color: var(--color-text);
@@ -45,7 +53,7 @@
         
         .job-prompt {
             font-family: var(--font-mono);
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             line-height: 1.5;
             color: var(--color-text-secondary);
             background: var(--color-background-hover);
@@ -61,7 +69,7 @@
         
         .file-structure h3 {
             font-family: var(--font-mono);
-            font-size: 1.1rem;
+            font-size: 1.75rem;
             font-weight: 600;
             margin-bottom: var(--space-4);
             color: var(--color-text);
@@ -72,7 +80,7 @@
             border: var(--border-width) solid var(--color-border);
             padding: var(--space-4);
             font-family: var(--font-mono);
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
         
         .file-tree-item {
@@ -106,7 +114,7 @@
         
         .file-tree-item small {
             color: var(--color-text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.875rem;
             margin-left: var(--space-2);
         }
         
@@ -117,6 +125,7 @@
         
         .workflow-substeps p {
             margin-bottom: var(--space-2);
+            font-size: 1rem;
         }
         
         .workflow-substeps ul {
@@ -127,6 +136,11 @@
         .workflow-substeps li {
             margin-bottom: var(--space-1);
             color: var(--color-text-secondary);
+            font-size: 1rem;
+        }
+        
+        .workflow-substeps strong {
+            font-size: 1rem;
         }
         
         /* Data Flow Cards */
@@ -151,7 +165,7 @@
         
         .flow-card h4 {
             font-family: var(--font-mono);
-            font-size: 1rem;
+            font-size: 1.25rem;
             font-weight: 600;
             margin: 0 0 var(--space-3);
             color: var(--color-text);
@@ -168,6 +182,111 @@
             margin: 0;
             color: var(--color-text-secondary);
             line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        /* Ensure consistent heading sizes throughout */
+        .section-content h3 {
+            font-size: 1.75rem;
+        }
+        
+        .section-content h4 {
+            font-size: 1.25rem;
+        }
+        
+        .section-content h5 {
+            font-size: 1.1rem;
+        }
+        
+        .section-content p {
+            font-size: 1rem;
+        }
+        
+        /* ============================================
+           STANDARDIZE ALL CARD TYPOGRAPHY
+           Card titles: 1.25rem (h3 or h4)
+           Card body text: 1rem
+           Card small text/badges: 0.875rem
+           ============================================ */
+        
+        /* Agent Cards */
+        .agent-card h4,
+        .agent-header h4 {
+            font-size: 1.25rem !important;
+            font-weight: 600;
+        }
+        
+        .agent-card p {
+            font-size: 1rem !important;
+            line-height: 1.6;
+            margin-bottom: var(--space-3);
+        }
+        
+        /* Feature Cards */
+        .feature-card h3 {
+            font-size: 1.25rem !important;
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+        }
+        
+        .feature-card p {
+            font-size: 1rem !important;
+            line-height: 1.6;
+            margin-bottom: var(--space-3);
+        }
+        
+        /* Architecture Cards */
+        .arch-card h3 {
+            font-size: 1.25rem !important;
+            font-weight: 600;
+        }
+        
+        .arch-card p {
+            font-size: 1rem !important;
+            line-height: 1.6;
+        }
+        
+        /* Architecture Component Cards */
+        .architecture-component h4,
+        .component-title {
+            font-size: 1.25rem !important;
+            font-weight: 600;
+        }
+        
+        .architecture-component p,
+        .component-description {
+            font-size: 1rem !important;
+            line-height: 1.6;
+        }
+        
+        /* Workflow Steps */
+        .workflow-step h4 {
+            font-size: 1.25rem !important;
+            font-weight: 600;
+        }
+        
+        .workflow-step h3 {
+            font-size: 1.75rem !important;
+        }
+        
+        /* Result Cards */
+        .result-card .result-label {
+            font-size: 1rem !important;
+        }
+        
+        /* Tech Badges - Consistent across all card types */
+        .agent-tech,
+        .tech-badge,
+        .arch-tech span {
+            font-size: 0.875rem !important;
+        }
+        
+        /* Ensure last paragraphs in cards have proper spacing */
+        .agent-card p:last-of-type,
+        .feature-card p:last-of-type,
+        .arch-card p:last-of-type,
+        .architecture-component p:last-of-type {
+            margin-bottom: var(--space-4);
         }
         
     </style>
@@ -221,7 +340,7 @@
                 <div class="project-meta">
                     <span class="project-category">Generative AI</span>
                     <h1 class="project-title">Vision Studio</h1>
-                    <p>A multi-agent AI system that transforms simple briefs into detailed prompts and professional visuals using Google's Gemini API. Features a structured pipeline with Planner and Writer agents for superior image generation.</p>
+                    <p>Agentic AI Orchestration & Node-Based Image Generation. A professional-grade generative AI application featuring a Multi-Agent Architecture, interactive node-based workspace, architectural intelligence engine, and Gemini 3 Pro upscaling for enterprise-grade image generation.</p>
                     <div class="project-links">
                         <a href="https://github.com/Userdflt/Gemini-vision-studio" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
                             <span>View on GitHub</span>
@@ -245,13 +364,13 @@
                 <h2 class="section-title">Project Overview</h2>
             </div>
             <div class="section-content">
-                <p>Vision Studio is a web application built in Google AI Studio that streamlines AI image generation with an advanced multi-agent workflow. It replaces trial-and-error prompting with a structured pipeline where specialized AI agents collaborate to interpret ideas, compose detailed prompts, and generate professional visuals.</p>
+                <p>Vision Studio is a professional-grade generative AI application that evolves beyond simple text-to-image prompting. It utilizes a Multi-Agent Architecture (Planner & Writer agents) to deconstruct complex user briefs into strategic plans before generation. The latest version features a fully interactive Node-Based Workspace for iterative design, an architectural intelligence engine for technical drawings, and integrates Google's Gemini 3 Pro model for enterprise-grade upscaling.</p>
                 
-                <p>The application is built as a modern Single Page Application (SPA) using <strong>React</strong> and <strong>TypeScript</strong>, styled with <strong>Tailwind CSS</strong> in dark mode, and persists user sessions in-browser via <strong>IndexedDB</strong> to survive refreshes.</p>
+                <p>The application is built as a modern Single Page Application (SPA) using <strong>React 19</strong> and <strong>TypeScript</strong>, styled with <strong>Tailwind CSS</strong> with a "Gladia-inspired" aesthetic featuring deep space themes, aurora background animations, and glassmorphism panels. It persists user sessions locally via <strong>IndexedDB</strong> with a local-first architecture.</p>
                 <br>
             </br>
-                <h3>Core Concept: Multi-Agent Workflow</h3>
-                <p>A two-stage pipeline converts a brief into a superior "power prompt," improving detail, coherence, and alignment with the user's intent.</p>
+                <h3>Core Architecture: Singleton Service Design</h3>
+                <p>The application uses a Singleton Service Architecture (GeminiService) that routes requests through one of three pipelines depending on task complexity: <strong>Dual-Agent Pipeline</strong> (Planner → Writer → Image Model) for complex conceptual tasks, <strong>Direct Writer Pipeline</strong> (Writer → Image Model) for strict technical tasks like inpainting and elevation generation, and <strong>Direct Generation Pipeline</strong> (Prompt → Image Model) for high-fidelity upscaling or fast iteration.</p>
             </div>
         </div>
     </section>
@@ -272,12 +391,14 @@
                             </div>
                             <h4>Planner Agent</h4>
                         </div>
-                        <p><strong>Input:</strong> User brief and any provided images.</p>
-                        <p><strong>Task:</strong> Analyze and decompose the request into a high-level checklist covering subject, style, composition, environment, and other core elements.</p>
-                        <p><strong>Output:</strong> A strategic plan that scopes what the prompt must cover.</p>
+                        <p><strong>Model:</strong> gemini-2.5-flash</p>
+                        <p><strong>Input:</strong> User brief and any provided images (style/composition cues).</p>
+                        <p><strong>Task:</strong> Analyzes the request and decomposes it into a high-level Markdown checklist covering subject, style, composition, environment, and other core elements.</p>
+                        <p><strong>Pipeline:</strong> Used in Dual-Agent workflows for complex conceptual tasks requiring strategic planning.</p>
+                        <p><strong>Output:</strong> A strategic checklist that scopes what the prompt must cover.</p>
                         <div class="agent-tech">
                             <span class="tech-badge">gemini-2.5-flash</span>
-                            <span class="tech-badge">Analysis</span>
+                            <span class="tech-badge">Strategic Analysis</span>
                         </div>
                     </div>
 
@@ -287,15 +408,17 @@
                             <div class="agent-icon">
                                 <i class="fas fa-pencil-ruler"></i>
                             </div>
-                            <h4>Context-Aware Writer Agent</h4>
+                            <h4>Writer Agent</h4>
                         </div>
-                        <p><strong>Input:</strong> Original brief, images, and the Planner's checklist.</p>
-                        <p><strong>Task:</strong> Act as a prompt engineer to produce a rich, descriptive, one-shot narrative prompt.</p>
-                        <p><strong>Context routing:</strong> Specialized Writer variants handle use cases such as inpainting, floor plan visualization, or scene extension.</p>
-                        <p><strong>Output:</strong> Final prompt with clarifying assumptions or questions.</p>
+                        <p><strong>Model:</strong> gemini-2.5-flash</p>
+                        <p><strong>Input:</strong> Original brief, images, and the Planner's checklist (in Dual-Agent mode) or direct context (in Direct Writer mode).</p>
+                        <p><strong>Task:</strong> Acts as a prompt engineer to produce rich, descriptive, one-shot narrative prompts. Includes specialized variants with Chain-of-Thought reasoning for technical tasks.</p>
+                        <p><strong>Context Routing:</strong> Specialized system instructions handle mask inpainting, floor plan visualization, elevation generation (orthographic flattening), background fusion, and related scene generation.</p>
+                        <p><strong>Output:</strong> Final comprehensive prompt with assumptions or clarifications.</p>
                         <div class="agent-tech">
                             <span class="tech-badge">gemini-2.5-flash</span>
                             <span class="tech-badge">Prompt Engineering</span>
+                            <span class="tech-badge">Chain-of-Thought</span>
                         </div>
                     </div>
 
@@ -305,14 +428,16 @@
                             <div class="agent-icon">
                                 <i class="fas fa-image"></i>
                             </div>
-                            <h4>Image Generation Model</h4>
+                            <h4>Image Generation Models</h4>
                         </div>
-                        <p><strong>Model:</strong> gemini-2.5-flash-image</p>
+                        <p><strong>Standard Model:</strong> gemini-2.5-flash-image – Used for all base image generation tasks.</p>
+                        <p><strong>Upscaler Model:</strong> gemini-3-pro-image-preview – Dedicated to 2K/4K resolution upscaling with detail preservation.</p>
                         <p><strong>Input:</strong> Final prompt from the Writer and relevant images.</p>
-                        <p><strong>Output:</strong> Generated images aligned with the brief and checklist.</p>
+                        <p><strong>Output:</strong> Base64-encoded generated images aligned with the brief and strategic plan.</p>
                         <div class="agent-tech">
                             <span class="tech-badge">gemini-2.5-flash-image</span>
-                            <span class="tech-badge">Image Generation</span>
+                            <span class="tech-badge">gemini-3-pro-image</span>
+                            <span class="tech-badge">Generation</span>
                         </div>
                     </div>
                 </div>
@@ -324,68 +449,123 @@
     <section id="specialized-agents" class="project-section bg-light">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Context-Aware Specialized Agents</h2>
-                <p>The application's intelligence goes beyond a single Writer agent. Based on uploaded image types, the system automatically selects specialized Writer agents with unique system prompts tailored for specific creative tasks.</p>
-                <div class="workflow-step">
-                    <h3>Context Selection Process</h3>
-                    <p>The <code>handleGenerate</code> function in <strong>App.tsx</strong> automatically sets an <strong>AgentContext</strong> based on uploaded image types. This context is then used in <strong>geminiService.ts</strong> to select the appropriate specialized Writer agent with its unique system prompt, making the application incredibly versatile for complex creative tasks with expert precision.</p>
-                </div>
+                <h2 class="section-title">Core Features & Workflows</h2>
+                <p>Vision Studio routes requests through specialized pipelines based on task complexity. The system intelligently selects between Dual-Agent, Direct Writer, and Direct Generation workflows to optimize for quality, precision, or speed.</p>
             </div>
             <div class="section-content">
                 <div class="features-grid">
-                    <!-- Inpainting Agent -->
+                    <!-- Node-Based Image Building -->
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-magic"></i>
+                            <i class="fas fa-project-diagram"></i>
                         </div>
-                        <h3>Inpainting Agent</h3>
-                        <p><strong>Trigger:</strong> User provides "Image to Edit" with mask</p>
-                        <p><strong>Expertise:</strong> Analyzes artistic style of original image and writes prompts that apply changes while perfectly preserving the existing style for seamless, believable edits.</p>
+                        <h3>Node-Based Image Building</h3>
+                        <p><strong>Workflow:</strong> Dual-Agent (Genesis) → Direct (Iterations)</p>
+                        <p>A sophisticated "ComfyUI-style" infinite canvas that visualizes the creative process as a branching graph. Genesis nodes use the full Dual-Agent pipeline. Iteration nodes pass parent images with new prompts to create variations. Features recursive branch deletion, concurrent generation, pan/zoom navigation, and SVG Bézier curve connections.</p>
                         <div class="agent-tech">
-                            <span class="tech-badge">Style Preservation</span>
-                            <span class="tech-badge">Mask Analysis</span>
+                            <span class="tech-badge">Iterative Design</span>
+                            <span class="tech-badge">Branching Logic</span>
+                            <span class="tech-badge">Visual Genealogy</span>
                         </div>
                     </div>
 
-                    <!-- Floor Plan Agent -->
+                    <!-- Gemini 3 Pro Upscaler -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                        <h3>Gemini 3 Pro Upscaler</h3>
+                        <p><strong>Workflow:</strong> Direct Generation</p>
+                        <p>Enterprise-grade upscaling utilizing gemini-3-pro-image-preview. Offers 2K and 4K resolution enhancement with exact detail preservation using a fixed system prompt: "preserve everything in this image." Features a dedicated Before/After slider interface for high-fidelity comparison.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">gemini-3-pro</span>
+                            <span class="tech-badge">2K/4K Resolution</span>
+                            <span class="tech-badge">Detail Preservation</span>
+                        </div>
+                    </div>
+
+                    <!-- Plan to Vision -->
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-drafting-compass"></i>
                         </div>
-                        <h3>Floor Plan Visualization Agent</h3>
-                        <p><strong>Trigger:</strong> Technical drawings and architectural plans</p>
-                        <p><strong>Expertise:</strong> Interprets technical symbols, respects core structure and scale, then "narrates" the plan into visual scenes. Intelligently lists assumptions (e.g., "Circular symbols represent trees").</p>
+                        <h3>Plan to Vision (Architectural)</h3>
+                        <p><strong>Workflow:</strong> Dual-Agent</p>
+                        <p>Converts 2D floor plans into photorealistic 3D visualizations. Planner analyzes spatial layout. Floor Plan Specialist Writer identifies walls, windows, and scale symbols to extrude the plan into a rendered 3D scene while maintaining architectural accuracy.</p>
                         <div class="agent-tech">
                             <span class="tech-badge">Technical Analysis</span>
-                            <span class="tech-badge">Spatial Understanding</span>
+                            <span class="tech-badge">3D Extrusion</span>
                         </div>
                     </div>
 
-                    <!-- Related Scene Agent -->
+                    <!-- Elevation Generator -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-ruler-combined"></i>
+                        </div>
+                        <h3>Elevation Generator (Vision to Technical)</h3>
+                        <p><strong>Workflow:</strong> Direct Writer (Chain-of-Thought)</p>
+                        <p>Flattens 3D perspective renders into precise 2D orthographic elevation drawings. Skips the Planner. Uses specialized Chain-of-Thought reasoning to mentally dissect building massing, fenestration, and structure before writing prompts for clean architectural linework on white background, removing perspective distortion.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">Chain-of-Thought</span>
+                            <span class="tech-badge">Orthographic</span>
+                            <span class="tech-badge">Technical Drawings</span>
+                        </div>
+                    </div>
+
+                    <!-- Mask Inpainting -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3>Precision Mask Inpainting</h3>
+                        <p><strong>Workflow:</strong> Direct Writer</p>
+                        <p>Refined editing workflow where users paint mask areas for targeted edits. Skips the Planner. The specialized Writer is instructed to look only at the masked area and write prompts to fill the void with requested objects while strictly preserving original lighting, perspective, and style for seamless integration.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">Mask Interpretation</span>
+                            <span class="tech-badge">Style Preservation</span>
+                        </div>
+                    </div>
+
+                    <!-- Background Fusion -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3>Background Fusion</h3>
+                        <p><strong>Workflow:</strong> Dual-Agent</p>
+                        <p>Composites new elements into background images. Writer Agent system instruction explicitly forbids altering camera perspective or lighting of the base image, treating it as a "locked layer" while generating new objects "on top" with perfect perspective and lighting match.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">Composite Matching</span>
+                            <span class="tech-badge">Locked Layer Logic</span>
+                        </div>
+                    </div>
+
+                    <!-- Related Scene -->
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-expand-arrows-alt"></i>
                         </div>
-                        <h3>Related Scene Generation Agent</h3>
-                        <p><strong>Trigger:</strong> Extending visual worlds ("other side of room")</p>
-                        <p><strong>Expertise:</strong> Performs detailed spatial inventory of source images and maintains strict continuity of object placement, lighting, and artistic style from new perspectives.</p>
+                        <h3>Related Scene Generation</h3>
+                        <p><strong>Workflow:</strong> Dual-Agent</p>
+                        <p>Generates new images that feel like they belong in the same physical space as the source image. Writer performs a "Spatial Inventory" of furniture, colors, and style from the source, then writes prompts to generate different angles or adjacent rooms using the same design assets for strict continuity.</p>
                         <div class="agent-tech">
                             <span class="tech-badge">Spatial Continuity</span>
                             <span class="tech-badge">Scene Extension</span>
                         </div>
                     </div>
 
-                    <!-- Background Compositing Agent -->
+                    <!-- Sketch/Image to Image -->
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-layer-group"></i>
+                            <i class="fas fa-paint-brush"></i>
                         </div>
-                        <h3>Background Compositing Agent</h3>
-                        <p><strong>Trigger:</strong> Background image with new element requests</p>
-                        <p><strong>Expertise:</strong> Acts as "senior visual assistant" for composites. Analyzes background images and writes prompts that add new elements while perfectly matching perspective, lighting, and scale.</p>
+                        <h3>Creative Transformation (Sketch/Image to Image)</h3>
+                        <p><strong>Workflow:</strong> Dual-Agent</p>
+                        <p>Transforms the style or content of images while keeping composition. Planner deconstructs the source into compositional rules. Writer re-imagines the scene based on text brief (e.g., "Make this sketch photorealistic") while strictly adhering to compositional constraints.</p>
                         <div class="agent-tech">
-                            <span class="tech-badge">Composite Matching</span>
-                            <span class="tech-badge">Lighting Analysis</span>
+                            <span class="tech-badge">Style Transfer</span>
+                            <span class="tech-badge">Composition Lock</span>
                         </div>
                     </div>
                 </div>
@@ -426,12 +606,17 @@
                         <div class="file-tree-item level-2">
                             <i class="fas fa-file-code"></i>
                             <span>geminiService.ts</span>
-                            <small>(Handles all Gemini API calls and agentic logic)</small>
+                            <small>(Singleton API Wrapper - Routes all pipeline logic)</small>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>promptTemplates.ts</span>
+                            <small>(System Instructions for all agent contexts)</small>
                         </div>
                         <div class="file-tree-item level-2">
                             <i class="fas fa-file-code"></i>
                             <span>dbService.ts</span>
-                            <small>(Manages session persistence with IndexedDB)</small>
+                            <small>(IndexedDB persistence - Local-first architecture)</small>
                         </div>
                         <div class="file-tree-item level-1">
                             <i class="fas fa-folder-open"></i>
@@ -450,7 +635,17 @@
                         <div class="file-tree-item level-3">
                             <i class="fas fa-file-code"></i>
                             <span>MaskEditor.tsx</span>
-                            <small>(Specialized component for image inpainting)</small>
+                            <small>(Mask Inpainting - Canvas masking)</small>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>ImageBuilding.tsx</span>
+                            <small>(Node Graph Engine - Infinite canvas with branching)</small>
+                        </div>
+                        <div class="file-tree-item level-2">
+                            <i class="fas fa-file-code"></i>
+                            <span>ImageComparer.tsx</span>
+                            <small>(Before/After Slider for Upscaler)</small>
                         </div>
                         <div class="file-tree-item level-2">
                             <i class="fas fa-file-code"></i>
@@ -500,39 +695,53 @@
                         <div class="zoom-info" id="component-zoom-info">100%</div>
                         <div class="mermaid-diagram" id="component-diagram">
                             <div class="mermaid">
-graph TD
-    App[App.tsx<br/>State Manager]
+graph LR
+    User((You))
     
-    GeminiService[geminiService.ts<br/>API Handler]
-    DBService[dbService.ts<br/>Data Storage]
+    subgraph App["Vision Studio Application"]
+        Input["Input Tools<br/>Enter ideas & upload images"]
+        Brain["Smart Coordinator<br/>Manages everything"]
+        Storage[("Your Saved Work<br/>Automatic saving")]
+    end
     
-    PromptInput[PromptInput.tsx<br/>User Input]
-    ResultsDisplay[ResultsDisplay.tsx<br/>Job Results]
+    subgraph AI["Google AI"]
+        Planner["Planning Agent<br/>Understands your request"]
+        Writer["Writing Agent<br/>Creates detailed prompts"]
+        Generator["Image Generator<br/>Creates visuals"]
+        Upscaler["Pro Upscaler<br/>2K/4K enhancement"]
+    end
     
-    ImageUploader[ImageUploader.tsx]
-    MaskEditor[MaskEditor.tsx]
-    ImageGrid[ImageGrid.tsx]
-    ImageModal[ImageModal.tsx]
+    subgraph Output["Results"]
+        Display["View Results<br/>See all your creations"]
+        Compare["Compare Tool<br/>Before & after slider"]
+    end
     
-    App --> GeminiService
-    App --> DBService
-    App --> PromptInput
-    App --> ResultsDisplay
+    User -->|1. Enter request| Input
+    Input -->|2. Send to| Brain
+    Brain <-->|Auto-saves| Storage
     
-    PromptInput --> ImageUploader
-    PromptInput --> MaskEditor
-    ResultsDisplay --> ImageGrid
-    ImageGrid --> ImageModal
+    Brain -->|3. Request| Planner
+    Planner -->|4. Strategic plan| Writer
+    Writer -->|5. Detailed prompt| Generator
+    Generator -->|6. Generated images| Brain
     
-    style App fill:#1a1a1a,stroke:#333,stroke-width:3px,color:#fdfdf8
-    style GeminiService fill:#2d2d2d,stroke:#666,stroke-width:2px,color:#fdfdf8
-    style DBService fill:#2d2d2d,stroke:#666,stroke-width:2px,color:#fdfdf8
-    style PromptInput fill:#333,stroke:#888,stroke-width:2px,color:#fdfdf8
-    style ResultsDisplay fill:#333,stroke:#888,stroke-width:2px,color:#fdfdf8
-    style ImageUploader fill:#4a4a4a,stroke:#888,stroke-width:1px,color:#fdfdf8
-    style MaskEditor fill:#4a4a4a,stroke:#888,stroke-width:1px,color:#fdfdf8
-    style ImageGrid fill:#4a4a4a,stroke:#888,stroke-width:1px,color:#fdfdf8
-    style ImageModal fill:#4a4a4a,stroke:#888,stroke-width:1px,color:#fdfdf8
+    Brain -->|Optional: Upscale| Upscaler
+    Upscaler -->|High-res images| Brain
+    
+    Brain -->|7. Show results| Display
+    Display -->|View comparisons| Compare
+    Display -->|8. View| User
+    
+    style User fill:#2d1b4e,stroke:#6c5ce7,stroke-width:4px,color:#ffffff
+    style Brain fill:#6c5ce7,stroke:#a29bfe,stroke-width:4px,color:#ffffff
+    style Input fill:#1e1e28,stroke:#a29bfe,stroke-width:2px,color:#ffffff
+    style Storage fill:#1e1e28,stroke:#a29bfe,stroke-width:2px,color:#ffffff
+    style Planner fill:#1e1e28,stroke:#00cec9,stroke-width:2px,color:#ffffff
+    style Writer fill:#1e1e28,stroke:#00cec9,stroke-width:2px,color:#ffffff
+    style Generator fill:#1e1e28,stroke:#fdcb6e,stroke-width:2px,color:#ffffff
+    style Upscaler fill:#1e1e28,stroke:#fdcb6e,stroke-width:2px,color:#ffffff
+    style Display fill:#1e1e28,stroke:#74b9ff,stroke-width:2px,color:#ffffff
+    style Compare fill:#1e1e28,stroke:#74b9ff,stroke-width:2px,color:#ffffff
                             </div>
                         </div>
                     </div>
@@ -559,10 +768,22 @@ graph TD
                                 <i class="fas fa-cloud"></i>
                             </div>
                             <div>
-                                <h4 class="component-title">geminiService.ts (API Service)</h4>
+                                <h4 class="component-title">geminiService.ts (Singleton API Service)</h4>
                             </div>
                         </div>
-                        <p class="component-description">The sole interface to the Google Gemini API. It encapsulates all API call logic, including the multi-agent prompts, the two-stage "Planner" and "Writer" workflow (generatePowerPrompt), and the final image generation call (generateImages). It abstracts the complexity of the AI interactions away from the UI components.</p>
+                        <p class="component-description">The sole interface to the Google Gemini API, implemented as a Singleton. It routes all requests through one of three pipelines: Dual-Agent (Planner → Writer → Image Model), Direct Writer (Writer → Image Model), or Direct Generation (Prompt → Image Model). Encapsulates all API call logic including generatePowerPrompt (multi-agent workflow), generateImages (standard generation), and upscaleImage (Gemini 3 Pro upscaling).</p>
+                    </div>
+
+                    <div class="architecture-component">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-scroll"></i>
+                            </div>
+                            <div>
+                                <h4 class="component-title">promptTemplates.ts (System Instructions)</h4>
+                            </div>
+                        </div>
+                        <p class="component-description">Centralized repository of all system prompts for different agent contexts. Contains specialized instructions for Planner Agent, multiple Writer variants (Default, Floor Plan, Elevation with Chain-of-Thought, Inpainting, Background Fusion, Related Scene), and upscaler preservation prompts. Referenced by geminiService to select appropriate context-aware instructions.</p>
                     </div>
 
                     <div class="architecture-component">
@@ -607,10 +828,34 @@ graph TD
                                 <i class="fas fa-paint-brush"></i>
                             </div>
                             <div>
-                                <h4 class="component-title">MaskEditor.tsx (Inpainting UI)</h4>
+                                <h4 class="component-title">MaskEditor.tsx (Mask Inpainting UI)</h4>
                             </div>
                         </div>
-                        <p class="component-description">A complex, specialized component that activates when a user wants to edit an image. It uses stacked HTML5 canvases to allow users to draw a mask over an image, then composites the original image and the mask into a single new image file that can be sent to the Gemini API for inpainting.</p>
+                        <p class="component-description">A specialized component for the precision inpainting workflow. Uses stacked HTML5 canvases to allow users to paint mask areas over regions they want to edit. Composites the original image with a mask layer into a single image file that's sent to the Gemini API. The Direct Writer agent interprets the masked areas to seamlessly integrate new elements while preserving surrounding lighting and style.</p>
+                    </div>
+
+                    <div class="architecture-component">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <div>
+                                <h4 class="component-title">ImageBuilding.tsx (Node Graph Engine)</h4>
+                            </div>
+                        </div>
+                        <p class="component-description">A sophisticated "ComfyUI-style" infinite canvas component. Visualizes the creative process as a branching graph with Genesis nodes (full Dual-Agent pipeline) and Iteration nodes (parent image + prompt variations). Features pan/zoom navigation, SVG Bézier curve connectors, recursive branch deletion, and concurrent multi-node generation. Integrates directly with the Upscaler for resolution enhancement.</p>
+                    </div>
+
+                    <div class="architecture-component">
+                        <div class="component-header">
+                            <div class="component-icon">
+                                <i class="fas fa-sliders-h"></i>
+                            </div>
+                            <div>
+                                <h4 class="component-title">ImageComparer.tsx (Upscale Comparison UI)</h4>
+                            </div>
+                        </div>
+                        <p class="component-description">Dedicated Before/After slider interface for the Gemini 3 Pro upscaler. Provides an interactive comparison view where users can drag a divider to see the original vs. upscaled (2K/4K) image side-by-side, enabling high-fidelity quality assessment of the detail preservation.</p>
                     </div>
                 </div>
             </div>
@@ -648,45 +893,57 @@ graph TD
 sequenceDiagram
     actor User
     participant App
-    participant Service as geminiService
-    participant API as Gemini API
+    participant Service as GeminiService (Singleton)
+    participant Templates as promptTemplates
+    participant Flash as gemini-2.5-flash
+    participant FlashImg as flash-image
+    participant Pro as gemini-3-pro
+
+    Note over User,Pro: Pipeline 1: Dual-Agent (Text-to-Image, Plan to Vision, etc.)
     
-    Note over User,API: Concurrent Generation Workflow
+    User->>App: Enter brief + images
+    App->>Service: Route to Dual-Agent Pipeline
+    Service->>Templates: Fetch Planner Instructions
+    Service->>Flash: Planner Agent Call
+    Flash-->>Service: Markdown Checklist
+    Service->>Templates: Fetch Writer Instructions (Context-Aware)
+    Service->>Flash: Writer Agent Call (Brief + Checklist + Images)
+    Flash-->>Service: Final One-Shot Prompt
+    Service->>FlashImg: Generate Images
+    FlashImg-->>Service: Base64 Images
+    Service-->>App: GenerationResult
+    App-->>User: Display Results
     
-    User->>App: Enter brief & click Generate (Job 1)
-    App->>App: Create Job 1 (status: running)
-    App-->>User: UI remains interactive
+    Note over User,Pro: Pipeline 2: Direct Writer (Inpainting, Elevation)
     
-    par Job 1 Processing
-        App->>Service: generatePowerPrompt() [Job 1]
-        Service->>API: Planner Agent
-        API-->>Service: Checklist
-        Service->>API: Writer Agent
-        API-->>Service: Final prompt
-        Service-->>App: Generated content [Job 1]
-        
-        App->>Service: generateImages() [Job 1]
-        Service->>API: Image generation
-        API-->>Service: Generated images
-        Service-->>App: Image results [Job 1]
-        App->>App: Update Job 1 (status: completed)
-    and User Starts Job 2
-        User->>App: Start another generation (Job 2)
-        App->>App: Create Job 2 (status: running)
-        App->>Service: generatePowerPrompt() [Job 2]
-        Note over Service,API: Job 2 runs in parallel
-    and User Starts Job 3
-        User->>App: Start third generation (Job 3)
-        App->>App: Create Job 3 (status: running)
-        Note over App,Service: Multiple jobs running concurrently
-    end
+    User->>App: Upload image + mask / Select Elevation
+    App->>Service: Route to Direct Writer Pipeline
+    Service->>Templates: Fetch Specialized Writer (Inpainting/Elevation CoT)
+    Service->>Flash: Writer Agent Only (Skip Planner)
+    Flash-->>Service: Optimized Technical Prompt
+    Service->>FlashImg: Generate Images
+    FlashImg-->>Service: Base64 Images
+    Service-->>App: GenerationResult
+    App-->>User: Display Results
     
-    App->>User: Display all completed results
+    Note over User,Pro: Pipeline 3: Direct Generation (Upscaler)
     
-    Note over User,App: Non-blocking Re-generation
-    User->>App: Click "Generate Again" on any job
-    App->>App: Start new job with saved parameters
-    Note over App,User: Original jobs remain accessible
+    User->>App: Select image + resolution (2K/4K)
+    App->>Service: Route to Direct Generation Pipeline
+    Service->>Pro: Image + "Preserve Everything" Prompt
+    Pro-->>Service: Upscaled 2K/4K Image
+    Service-->>App: Upscaled Result
+    App-->>User: Before/After Slider View
+    
+    Note over User,Pro: Node-Based Image Building
+    
+    User->>App: Create Genesis Node
+    Note over App,Service: Uses Dual-Agent Pipeline
+    Service-->>App: Genesis Image
+    User->>App: Create Iteration Node (Select Parent)
+    Note over App,Service: Uses Direct Writer Pipeline
+    Service-->>App: Variation Image
+    App-->>User: Display Branching Graph with SVG Connectors
                             </div>
                         </div>
                     </div>
@@ -696,48 +953,67 @@ sequenceDiagram
                 <h3>Detailed Workflow Steps</h3>
                 <div class="workflow-steps">
                     <div class="workflow-step">
-                        <h4>1. App Initialization & Session Loading</h4>
+                        <h4>1. App Initialization & Local-First Loading</h4>
                         <div class="workflow-substeps">
-                            <p><strong>Mount:</strong> The App component mounts and initially displays a loading state (isInitialized is false).</p>
-                            <p><strong>Load Data:</strong> A useEffect hook calls loadSession() from dbService.</p>
-                            <p><strong>DB Read:</strong> dbService asynchronously retrieves the last saved session data from IndexedDB.</p>
-                            <p><strong>State Hydration:</strong> If data is found, it's passed back to App.tsx, which uses it to populate its state variables (brief, referenceImages, generationMode, etc.).</p>
-                            <p><strong>Render UI:</strong> isInitialized is set to true, which removes the loader and renders the main application UI (PromptInput and any previous ResultsDisplay) with the restored data.</p>
+                            <p><strong>Mount:</strong> The App component mounts and displays an initial loading state.</p>
+                            <p><strong>Load Session:</strong> A useEffect hook calls loadSession() from dbService to retrieve stored data from IndexedDB.</p>
+                            <p><strong>State Hydration:</strong> If session data exists, App.tsx populates its state with previous user inputs, node graph history, and generation results.</p>
+                            <p><strong>Render UI:</strong> The main interface renders with PromptInput (tab controller), ImageBuilding (node canvas), and ResultsDisplay (history viewer).</p>
                         </div>
                     </div>
 
                     <div class="workflow-step">
-                        <h4>2. Main Generation Workflow</h4>
+                        <h4>2. Pipeline Routing & Execution</h4>
                         <div class="workflow-substeps">
-                            <p><strong>User Input:</strong> The user interacts with the PromptInput component. Because it is a "controlled component," every change (typing in the brief, uploading an image) immediately updates the state within the parent App.tsx component.</p>
-                            <p><strong>Trigger Generation:</strong> The user clicks the "Generate" button. This calls the handleGenerate function in App.tsx.</p>
-                            <p><strong>Create Job & Update UI:</strong> handleGenerate immediately:</p>
+                            <p><strong>Context Detection:</strong> When user triggers generation, App.tsx analyzes the request type (feature selection, image types, node type).</p>
+                            <p><strong>Pipeline Selection:</strong> GeminiService (Singleton) routes the request to one of three pipelines:</p>
                             <ul>
-                                <li>Creates a new GenerationJob object with a unique ID, a status of 'running', and a snapshot of all current user inputs (GenerationParams).</li>
-                                <li>Adds this new job to the top of the jobs state array.</li>
-                                <li>This state change triggers a re-render, and ResultsDisplay instantly shows a new collapsible card for this job with a loading spinner.</li>
+                                <li><strong>Dual-Agent Pipeline:</strong> For Text-to-Image, Plan to Vision, Background Fusion, Related Scene, Genesis Nodes. Planner creates checklist → Writer crafts prompt → gemini-2.5-flash-image generates.</li>
+                                <li><strong>Direct Writer Pipeline:</strong> For Inpainting, Elevation, Iteration Nodes. Skips Planner → Specialized Writer with Chain-of-Thought → gemini-2.5-flash-image generates.</li>
+                                <li><strong>Direct Generation Pipeline:</strong> For Upscaler. Fixed "preserve" prompt → gemini-3-pro-image-preview upscales to 2K/4K.</li>
                             </ul>
-                            <p><strong>Call Power Prompt Service:</strong> handleGenerate calls generatePowerPrompt() in geminiService, passing the user's brief and any image files.</p>
-                            <p><strong>Multi-Agent Execution:</strong> Inside geminiService:</p>
-                            <ul>
-                                <li><strong>Planner Agent:</strong> An API call is made to gemini-2.5-flash with the user's brief and the PLANNER_AGENT_PROMPT.</li>
-                                <li><strong>Writer Agent:</strong> The Planner's response (a checklist) is received. A second API call is made to gemini-2.5-flash, this time with the user's brief, the planner's checklist, and the appropriate context-aware WRITER_AGENT_PROMPT (e.g., DEFAULT, FLOORPLAN, INPAINTING).</li>
-                                <li>The Writer's response is parsed into a structured GeneratedContent object (containing the finalPrompt, assumptions, etc.).</li>
-                            </ul>
-                            <p><strong>Call Image Generation Service:</strong> Back in App.tsx, handleGenerate receives the GeneratedContent and then calls generateImages() from geminiService, passing the finalPrompt.</p>
-                            <p><strong>Generate Images:</strong> geminiService makes parallel API calls to gemini-2.5-flash-image for the requested number of images. It returns an array of base64-encoded image strings.</p>
-                            <p><strong>Final State Update:</strong> handleGenerate receives the generated images. It finds the job in the jobs array by its ID and updates its status to 'completed', attaching the full GenerationResult (both the prompt content and the images).</p>
-                            <p><strong>Render Results:</strong> This final state change triggers a re-render. The JobResultCard for the completed job now replaces its loader with the detailed prompt information and the ImageGrid containing the final visuals.</p>
+                            <p><strong>System Instructions:</strong> GeminiService fetches appropriate prompts from promptTemplates.ts based on context (Floor Plan Writer, Elevation CoT, Inpainting, etc.).</p>
+                            <p><strong>API Calls:</strong> Service makes sequential calls for Dual-Agent (Planner then Writer then Image) or single calls for Direct pipelines.</p>
+                            <p><strong>Result Return:</strong> Base64 images and metadata return to App.tsx for state update and UI rendering.</p>
                         </div>
                     </div>
 
                     <div class="workflow-step">
-                        <h4>3. "Generate Again" Workflow</h4>
+                        <h4>3. Node-Based Image Building Workflow</h4>
                         <div class="workflow-substeps">
-                            <p><strong>User Click:</strong> The user clicks "Generate Again" inside a completed JobResultCard.</p>
-                            <p><strong>Call Regenerate:</strong> This triggers the handleRegenerate function in App.tsx, passing in the entire GenerationJob object for that card.</p>
-                            <p><strong>Invoke Generate with Params:</strong> handleRegenerate calls the main handleGenerate function, but instead of using the current state from the UI, it passes the saved job.params from the old job.</p>
-                            <p><strong>Execute Workflow:</strong> The process then follows the Main Generation Workflow from Step 2, using the preserved parameters to ensure an exact re-run of the previous job.</p>
+                            <p><strong>Genesis Node Creation:</strong> User enters brief in ImageBuilding component. System uses Dual-Agent Pipeline to create root node with strategic planning.</p>
+                            <p><strong>Branching Logic:</strong> User selects any parent node and enters variation prompt. System creates Iteration node using Direct Writer Pipeline (parent image + new prompt).</p>
+                            <p><strong>Visual Rendering:</strong> ImageBuilding.tsx renders nodes on infinite canvas with SVG Bézier curves connecting parent-child relationships.</p>
+                            <p><strong>Concurrent Processing:</strong> Multiple nodes can generate simultaneously. Each maintains its own status (pending, running, completed).</p>
+                            <p><strong>Recursive Deletion:</strong> Deleting a node removes entire branch including all descendant nodes.</p>
+                            <p><strong>Upscaler Integration:</strong> Any generated image can be sent directly to Gemini 3 Pro upscaler from node context menu.</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <h4>4. Architectural Intelligence Workflows</h4>
+                        <div class="workflow-substeps">
+                            <p><strong>Plan to Vision:</strong> User uploads 2D floor plan. Dual-Agent Pipeline: Planner analyzes spatial layout → Floor Plan Writer identifies walls/windows/symbols → Extrudes into 3D photorealistic render.</p>
+                            <p><strong>Elevation Generation:</strong> User uploads 3D render. Direct Writer Pipeline with Chain-of-Thought: Agent mentally dissects building massing/fenestration → Writes prompt for clean orthographic linework → Flattens perspective into technical 2D drawing.</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <h4>5. Mask Inpainting Workflow</h4>
+                        <div class="workflow-substeps">
+                            <p><strong>Mask Creation:</strong> User uploads image and paints mask areas in MaskEditor.tsx (HTML5 Canvas).</p>
+                            <p><strong>Mask Compositing:</strong> Component converts mask to appropriate format, composites with original image.</p>
+                            <p><strong>Direct Writer Processing:</strong> System instruction tells Writer to focus only on masked areas.</p>
+                            <p><strong>Context Preservation:</strong> Writer analyzes surrounding unmasked pixels for lighting/perspective/style → Writes prompt to fill void seamlessly.</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <h4>6. Gemini 3 Pro Upscaling Workflow</h4>
+                        <div class="workflow-substeps">
+                            <p><strong>Resolution Selection:</strong> User selects image and target resolution (2K/4K).</p>
+                            <p><strong>Direct Generation:</strong> GeminiService bypasses all agents, sends image + fixed prompt "preserve everything in this image" to gemini-3-pro-image-preview.</p>
+                            <p><strong>Comparison UI:</strong> ImageComparer.tsx displays Before/After slider for interactive quality assessment.</p>
                         </div>
                     </div>
                 </div>
@@ -762,36 +1038,43 @@ sequenceDiagram
         </div>
     </section>
 
-    <!-- Generation Modes -->
+    <!-- Pipeline Architecture -->
     <section id="generation-modes" class="project-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Generation Modes</h2>
+                <h2 class="section-title">Pipeline Architecture</h2>
+                <p>The Singleton Service routes requests through three specialized pipelines based on task complexity and precision requirements.</p>
             </div>
             <div class="section-content">
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-magic"></i>
+                            <i class="fas fa-brain"></i>
                         </div>
-                        <h3>Prompt & Image</h3>
-                        <p>Full pipeline. Produce a refined prompt through Planner and Writer agents, then generate images from it and any provided images. Best for complex, detailed requests requiring nuanced interpretation.</p>
+                        <h3>Dual-Agent Pipeline</h3>
+                        <p><strong>Flow:</strong> Planner Agent → Writer Agent → Image Model</p>
+                        <p><strong>Use Cases:</strong> Text-to-Image, Plan to Vision, Background Fusion, Related Scene, Sketch/Image Transformation, Genesis Nodes</p>
+                        <p>Full strategic workflow. Planner creates a Markdown checklist from the brief and reference images. Writer takes Brief + Images + Checklist to craft comprehensive one-shot prompts tailored for the image model. Best for complex conceptual tasks requiring nuanced interpretation.</p>
                     </div>
 
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-pencil-ruler"></i>
                         </div>
-                        <h3>Prompt Only</h3>
-                        <p>Run Planner and Writer agents to produce a professional prompt without generating images. Perfect for crafting detailed prompts to use elsewhere or to refine before image generation.</p>
+                        <h3>Direct Writer Pipeline</h3>
+                        <p><strong>Flow:</strong> Writer Agent → Image Model</p>
+                        <p><strong>Use Cases:</strong> Mask Inpainting, Elevation Generation, Iteration Nodes</p>
+                        <p>Skips the Planner for strict technical tasks where "planning" introduces unnecessary abstraction. Uses specialized Writer variants with Chain-of-Thought reasoning for precision work. Elevation Writer mentally dissects building structure before writing. Inpainting Writer focuses only on masked areas while preserving context.</p>
                     </div>
 
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-bolt"></i>
                         </div>
-                        <h3>Image Only (Fast)</h3>
-                        <p>Bypass agents and send the user's brief and images directly to the image model for rapid results. Ideal for quick iterations or when you already have a well-crafted brief.</p>
+                        <h3>Direct Generation Pipeline</h3>
+                        <p><strong>Flow:</strong> Prompt → Image Model</p>
+                        <p><strong>Use Cases:</strong> Upscaler (Gemini 3 Pro), Fast Iteration</p>
+                        <p>Bypasses all agents for maximum speed or when using fixed system prompts. The Upscaler uses a hardcoded "preserve everything in this image" instruction with gemini-3-pro-image-preview for 2K/4K resolution enhancement. Ideal for rapid iterations when you already have a well-crafted prompt.</p>
                     </div>
                 </div>
             </div>
@@ -805,56 +1088,82 @@ sequenceDiagram
                 <h2 class="section-title">Technology Stack</h2>
             </div>
             <div class="section-content">
-                <div class="architecture-cards">
-                    <div class="arch-card">
-                        <div class="arch-icon">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
                             <i class="fab fa-react"></i>
                         </div>
                         <h3>Frontend</h3>
-                        <p>Modern SPA built with React and TypeScript for type-safe development and component-based architecture.</p>
-                        <div class="arch-tech">
-                            <span>React</span>
-                            <span>TypeScript</span>
-                            <span>SPA</span>
+                        <p>Modern SPA built with React 19 and TypeScript for type-safe development and component-based architecture.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">React 19</span>
+                            <span class="tech-badge">TypeScript</span>
+                            <span class="tech-badge">SPA</span>
                         </div>
                     </div>
 
-                    <div class="arch-card">
-                        <div class="arch-icon">
+                    <div class="feature-card">
+                        <div class="feature-icon">
                             <i class="fas fa-palette"></i>
                         </div>
-                        <h3>Styling</h3>
-                        <p>Tailwind CSS with custom dark mode theme for a modern, responsive, and accessible user interface.</p>
-                        <div class="arch-tech">
-                            <span>Tailwind CSS</span>
-                            <span>Dark Mode</span>
-                            <span>Responsive</span>
+                        <h3>UI/UX Design</h3>
+                        <p>Tailwind CSS with "Gladia-inspired" aesthetic featuring deep space themes, aurora background animations, glassmorphism panels, and fluid interactions.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">Tailwind CSS</span>
+                            <span class="tech-badge">Glassmorphism</span>
+                            <span class="tech-badge">Aurora Animations</span>
                         </div>
                     </div>
 
-                    <div class="arch-card">
-                        <div class="arch-icon">
+                    <div class="feature-card">
+                        <div class="feature-icon">
                             <i class="fas fa-database"></i>
                         </div>
                         <h3>Persistence</h3>
-                        <p>IndexedDB for client-side session storage, ensuring work is preserved across page refreshes.</p>
-                        <div class="arch-tech">
-                            <span>IndexedDB</span>
-                            <span>dbService</span>
-                            <span>Local Storage</span>
+                        <p>Local-first architecture with IndexedDB for client-side session storage, ensuring work is preserved across sessions without server dependencies.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">IndexedDB</span>
+                            <span class="tech-badge">Local-First</span>
+                            <span class="tech-badge">Session Storage</span>
                         </div>
                     </div>
 
-                    <div class="arch-card">
-                        <div class="arch-icon">
+                    <div class="feature-card">
+                        <div class="feature-icon">
                             <i class="fas fa-brain"></i>
                         </div>
-                        <h3>AI Services</h3>
-                        <p>Google Gemini API integration for multi-agent workflows and image generation capabilities.</p>
-                        <div class="arch-tech">
-                            <span>Gemini 2.5 Flash</span>
-                            <span>Image Generation</span>
-                            <span>Multi-Agent</span>
+                        <h3>AI Models</h3>
+                        <p>Google Gemini API integration with multiple models: gemini-2.5-flash for reasoning & generation, gemini-3-pro-image-preview for enterprise upscaling.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">Gemini 2.5 Flash</span>
+                            <span class="tech-badge">Gemini 3 Pro</span>
+                            <span class="tech-badge">Multi-Agent</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h3>Visualization</h3>
+                        <p>SVG-based dynamic node connectors with Bézier curves and HTML5 Canvas for masking workflows in the infinite node-based workspace.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">SVG Connectors</span>
+                            <span class="tech-badge">HTML5 Canvas</span>
+                            <span class="tech-badge">Infinite Canvas</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3>State Management</h3>
+                        <p>Centralized state orchestration in App.tsx with unidirectional data flow. Singleton service pattern for API interactions and pipeline routing.</p>
+                        <div class="agent-tech">
+                            <span class="tech-badge">Centralized State</span>
+                            <span class="tech-badge">Singleton Service</span>
+                            <span class="tech-badge">Unidirectional Flow</span>
                         </div>
                     </div>
                 </div>
@@ -872,50 +1181,66 @@ sequenceDiagram
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <h3>Node-Based Image Building</h3>
+                        <p>Sophisticated "ComfyUI-style" infinite canvas that visualizes the creative process as a branching graph. Users can branch multiple iterations from a single parent node, pan/zoom through their history, and visualize the genealogy of their designs with dynamic SVG connections.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                        <h3>Gemini 3 Pro Upscaler</h3>
+                        <p>Specialized module utilizing gemini-3-pro-image-preview for enterprise-grade upscaling. Offers 2K and 4K resolution enhancement with a dedicated Before/After slider interface for high-fidelity comparison.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-drafting-compass"></i>
+                        </div>
+                        <h3>Architectural Intelligence</h3>
+                        <p>Specialized workflows for architects: Plan to Vision converts 2D floor plans into photorealistic 3D visualizations. Elevation Generator uses Chain-of-Thought reasoning to analyze 3D renders and flatten them into precise 2D orthographic drawings.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3>Precision Inpainting</h3>
+                        <p>Mask inpainting workflow where users paint targeted areas for editing. A specialized agent interprets the mask to seamlessly integrate new elements while strictly preserving the original lighting, perspective, and style.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
                             <i class="fas fa-brain"></i>
                         </div>
-                        <h3>Intelligent Prompt Engineering</h3>
-                        <p>Two-stage AI pipeline with Planner and Writer agents that decompose and enhance user briefs into detailed, professional prompts.</p>
+                        <h3>Multi-Agent Orchestration</h3>
+                        <p>Three-pipeline architecture: Dual-Agent (Planner → Writer → Image), Direct Writer (Writer → Image), and Direct Generation. Intelligent routing based on task complexity with specialized Chain-of-Thought reasoning for technical precision.</p>
                     </div>
 
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-search"></i>
+                            <i class="fas fa-palette"></i>
                         </div>
-                        <h3>Context-Aware Processing</h3>
-                        <p>Four specialized Writer agents automatically selected based on image type: Inpainting, Floor Plan Visualization, Related Scene Generation, and Background Compositing - each with expert-level system prompts.</p>
+                        <h3>Immersive UI/UX</h3>
+                        <p>Completely redesigned "Gladia-inspired" interface featuring deep space themes, aurora background animations, glassmorphism panels, and fluid interactions optimized for extended creative sessions.</p>
                     </div>
 
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-paint-brush"></i>
+                            <i class="fas fa-layer-group"></i>
                         </div>
-                        <h3>Advanced Image Editing</h3>
-                        <p>Interactive mask editor for precise inpainting workflows with dedicated brief fields for targeted edits.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-upload"></i>
-                        </div>
-                        <h3>Flexible Image Upload</h3>
-                        <p>Drag-and-drop support for multiple image types: reference, background, sketch, and edit images.</p>
+                        <h3>Advanced Compositing</h3>
+                        <p>Background Fusion with "locked layer" logic that forbids altering camera perspective or lighting. Related Scene Generation performs spatial inventory to maintain strict continuity across different angles.</p>
                     </div>
 
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-save"></i>
                         </div>
-                        <h3>Session Persistence</h3>
-                        <p>IndexedDB integration ensures your work is automatically saved and restored across browser sessions.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-moon"></i>
-                        </div>
-                        <h3>Modern Dark UI</h3>
-                        <p>Sleek Tailwind-based dark mode interface optimized for extended creative sessions and reduced eye strain.</p>
+                        <h3>Local-First Architecture</h3>
+                        <p>IndexedDB integration with automatic session persistence ensures work is preserved across browser sessions without server dependencies, enabling offline-capable creative workflows.</p>
                     </div>
                 </div>
             </div>
@@ -945,35 +1270,47 @@ sequenceDiagram
                                 </tr>
                                 <tr>
                                     <td><strong>services/geminiService.ts</strong></td>
-                                    <td>Handles Planner and Writer calls to Gemini API, image generation via generatePowerPrompt() and generateImages()</td>
+                                    <td>Singleton API wrapper that routes all requests through three pipelines (Dual-Agent, Direct Writer, Direct Generation). Handles generatePowerPrompt(), generateImages(), and upscaleImage() with intelligent context selection</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>services/promptTemplates.ts</strong></td>
+                                    <td>Centralized repository of all system instructions for Planner, Writer variants (Default, Floor Plan, Elevation with Chain-of-Thought, Inpainting, Background Fusion, Related Scene), and upscaler prompts</td>
                                 </tr>
                                 <tr>
                                     <td><strong>services/dbService.ts</strong></td>
-                                    <td>Persists and retrieves session data from IndexedDB for cross-session continuity</td>
+                                    <td>Manages local-first architecture with IndexedDB persistence for automatic session storage and retrieval across browser sessions</td>
                                 </tr>
                                 <tr>
                                     <td><strong>components/PromptInput.tsx</strong></td>
-                                    <td>Input controls, mode selection, image uploaders, and Generate action trigger</td>
+                                    <td>Tab controller for all user inputs including text briefs, feature selection, image uploaders, and pipeline trigger actions</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>components/ImageBuilding.tsx</strong></td>
+                                    <td>Node graph engine implementing infinite canvas with Genesis and Iteration nodes, branching logic, pan/zoom navigation, SVG Bézier connectors, and concurrent generation</td>
                                 </tr>
                                 <tr>
                                     <td><strong>components/MaskEditor.tsx</strong></td>
-                                    <td>Mask drawing canvas and inpainting brief input for image edit workflows</td>
+                                    <td>Mask inpainting interface using stacked HTML5 canvases. Users paint mask areas that are processed for Direct Writer interpretation</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>components/ImageComparer.tsx</strong></td>
+                                    <td>Before/After slider interface for Gemini 3 Pro upscaler results, enabling interactive comparison of original vs. 2K/4K upscaled images</td>
                                 </tr>
                                 <tr>
                                     <td><strong>components/ResultsDisplay.tsx</strong></td>
-                                    <td>Displays checklist, final prompt, and image gallery based on selected generation mode</td>
+                                    <td>Unified history viewer displaying checklist, final prompts, generated images, and pipeline status for all completed jobs</td>
                                 </tr>
                                 <tr>
                                     <td><strong>components/ImageGrid.tsx</strong></td>
-                                    <td>Grid view for generated images with hover effects and modal triggers</td>
+                                    <td>Grid view for generated images with hover effects, modal triggers, and integration with Upscaler for resolution enhancement</td>
                                 </tr>
                                 <tr>
                                     <td><strong>components/ImageModal.tsx</strong></td>
-                                    <td>Fullscreen image preview with download and navigation controls</td>
+                                    <td>Fullscreen image preview with download, navigation controls, and quick access to upscaling options</td>
                                 </tr>
                                 <tr>
                                     <td><strong>components/Loader.tsx</strong></td>
-                                    <td>Loading state indicator tied to isLoading flag during API operations</td>
+                                    <td>Reusable loading state indicator for async API operations including generation, upscaling, and node processing</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -990,49 +1327,51 @@ sequenceDiagram
                 <h2 class="section-title">Results & Impact</h2>
             </div>
             <div class="section-content">
-                <p>The enhanced Vision Studio now features concurrent generation capabilities, improved user experience with collapsible job management, and robust validation. The structured, agent-driven approach ensures nuanced interpretation of briefs, precise prompt construction, and coherent final images using gemini-2.5-flash-image.</p>
+                <p>Vision Studio represents a professional-grade evolution in generative AI tooling. The latest version introduces a node-based workspace for iterative design, architectural intelligence with Chain-of-Thought reasoning, and enterprise-grade Gemini 3 Pro upscaling. The three-pipeline architecture intelligently routes requests based on complexity, balancing quality, precision, and speed.</p>
 
                 <div class="results-grid">
                     <div class="result-card">
                         <div class="result-value">3</div>
-                        <div class="result-label">Generation Modes</div>
+                        <div class="result-label">Pipeline Architectures</div>
                     </div>
 
                     <div class="result-card">
-                        <div class="result-value">Concurrent</div>
-                        <div class="result-label">Multi-Job Support</div>
+                        <div class="result-value">8+</div>
+                        <div class="result-label">Specialized Features</div>
                     </div>
 
                     <div class="result-card">
-                        <div class="result-value">9</div>
-                        <div class="result-label">React Components</div>
+                        <div class="result-value">2</div>
+                        <div class="result-label">AI Models (Flash & Pro)</div>
                     </div>
 
                     <div class="result-card">
-                        <div class="result-value">Enhanced</div>
-                        <div class="result-label">User Experience</div>
+                        <div class="result-value">4K</div>
+                        <div class="result-label">Max Upscaling Resolution</div>
                     </div>
                 </div>
                 <br>
             </br>
-                <h3>Key Improvements</h3>
+                <h3>Major Features</h3>
                 <ul class="feature-list">
-                    <li>Added concurrent generation support for parallel job processing</li>
-                    <li>Implemented collapsible job cards with timestamps and status tracking</li>
-                    <li>Fixed image preview positioning and background scroll prevention</li>
-                    <li>Enhanced input validation for image editing workflows</li>
-                    <li>Added individual re-generation buttons for each completed job</li>
-                    <li>Improved overall workflow with non-blocking interface design</li>
+                    <li><strong>Node-Based Image Building:</strong> Infinite canvas with branching genealogy visualization, Genesis nodes with full Dual-Agent pipeline, and Iteration nodes for rapid variations</li>
+                    <li><strong>Gemini 3 Pro Upscaler:</strong> Enterprise-grade 2K/4K resolution enhancement with exact detail preservation and interactive Before/After comparison</li>
+                    <li><strong>Architectural Intelligence:</strong> Plan to Vision for 3D visualization and Elevation Generator with Chain-of-Thought reasoning for orthographic technical drawings</li>
+                    <li><strong>Mask Inpainting:</strong> Intuitive workflow with specialized Direct Writer agent for seamless edits preserving lighting and style</li>
+                    <li><strong>Pipeline Orchestration:</strong> Singleton service intelligently routes between Dual-Agent, Direct Writer, and Direct Generation pipelines</li>
+                    <li><strong>Immersive UI:</strong> "Gladia-inspired" aesthetic with deep space themes, aurora animations, glassmorphism panels, and fluid interactions</li>
                 </ul>
                 
-                <h3>Original Outcomes</h3>
+                <h3>Technical Achievements</h3>
                 <ul class="feature-list">
-                    <li>Eliminated trial-and-error prompting with structured AI agent pipeline</li>
-                    <li>Improved prompt quality and detail through specialized Writer variants</li>
-                    <li>Enabled complex workflows like inpainting and floor plan visualization</li>
-                    <li>Provided fast-path option for quick iterations when needed</li>
-                    <li>Ensured work continuity with automatic session persistence</li>
-                    <li>Delivered professional, coherent image outputs aligned with user intent</li>
+                    <li>Implemented three distinct pipeline architectures with intelligent context routing based on task complexity</li>
+                    <li>Integrated multiple Gemini models: gemini-2.5-flash for reasoning/generation, gemini-3-pro-image-preview for upscaling</li>
+                    <li>Developed specialized Writer agents with Chain-of-Thought reasoning for technical precision (Elevation, Inpainting)</li>
+                    <li>Created sophisticated node graph engine with SVG Bézier connectors, recursive branch deletion, and concurrent generation</li>
+                    <li>Built local-first architecture with IndexedDB persistence for offline-capable creative workflows</li>
+                    <li>Designed context-aware system with 7+ specialized Writer variants (Floor Plan, Elevation, Inpainting, Background Fusion, Related Scene)</li>
+                    <li>Achieved seamless integration between iterative design (node graph) and quality enhancement (Pro upscaler)</li>
+                    <li>Eliminated trial-and-error prompting with strategic Planner + Writer collaboration for complex conceptual tasks</li>
                 </ul>
             </div>
         </div>
@@ -1085,46 +1424,67 @@ sequenceDiagram
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="../js/project-scripts.js"></script>
     <script>
-        // Initialize Mermaid with e-ink theme
+        // Initialize Mermaid with dark theme for better visibility
         mermaid.initialize({
             startOnLoad: true,
             theme: 'base',
             themeVariables: {
-                primaryColor: '#fdfdf8',
-                primaryTextColor: '#1a1a1a',
-                primaryBorderColor: '#d1d1d1',
-                lineColor: '#4a4a4a',
-                secondaryColor: '#f7f7f2',
-                tertiaryColor: '#f0f0eb',
-                background: '#fdfdf8',
-                mainBkg: '#ffffff',
-                secondBkg: '#f7f7f2',
-                border1: '#d1d1d1',
-                border2: '#e8e8e8',
-                note: '#f0f0eb',
-                noteText: '#1a1a1a',
-                noteBorder: '#d1d1d1',
-                lineColor: '#666666',
-                textColor: '#1a1a1a',
-                labelColor: '#1a1a1a',
-                errorBkgColor: '#f7f7f2',
-                errorTextColor: '#1a1a1a',
-                fontSize: '14px',
+                darkMode: true,
+                primaryColor: '#6C5CE7',
+                primaryTextColor: '#FFFFFF',
+                primaryBorderColor: '#A29BFE',
+                lineColor: '#B2BEC3',
+                secondaryColor: '#181820',
+                tertiaryColor: '#1E1E28',
+                background: '#0F0F14',
+                mainBkg: '#1E1E28',
+                secondBkg: '#181820',
+                border1: '#6C5CE7',
+                border2: '#00CEC9',
+                
+                // Generic Note settings
+                note: '#2D2D3A',
+                noteText: '#FFFFFF',
+                noteBorder: '#6C5CE7',
+                
+                // Sequence Diagram Specifics - EXPLICIT OVERRIDES
+                noteBkgColor: '#2D2D3A',
+                noteTextColor: '#FFFFFF',
+                noteBorderColor: '#6C5CE7',
+                
+                actorBkg: '#1E1E28',
+                actorBorder: '#6C5CE7',
+                actorTextColor: '#FFFFFF',
+                actorLineColor: '#B2BEC3',
+                
+                signalColor: '#B2BEC3',
+                signalTextColor: '#FFFFFF',
+                
+                labelBoxBkgColor: '#2D2D3A',
+                labelBoxBorderColor: '#6C5CE7',
+                labelTextColor: '#FFFFFF',
+                loopTextColor: '#FFFFFF',
+                
+                textColor: '#FFFFFF',
+                labelColor: '#FFFFFF',
+                errorBkgColor: '#2D1B4E',
+                errorTextColor: '#FF7675',
+                fontSize: '16px',
                 fontFamily: 'JetBrains Mono, Roboto Mono, monospace'
             },
             flowchart: {
                 useMaxWidth: true,
                 htmlLabels: true,
                 curve: 'basis',
-                padding: 15,
-                nodeSpacing: 50,
-                rankSpacing: 50
+                padding: 20,
+                nodeSpacing: 60,
+                rankSpacing: 80
             },
             sequence: {
                 useMaxWidth: true,
                 diagramMarginX: 50,
                 diagramMarginY: 30,
-                actorMargin: 80,
+                actorMargin: 50,
                 boxMargin: 10,
                 boxTextMargin: 5,
                 noteMargin: 10,
