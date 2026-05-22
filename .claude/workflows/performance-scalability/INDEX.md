@@ -1,0 +1,22 @@
+# Performance Scalability
+
+Profiling, caching, load testing, capacity planning, Core Web Vitals, cost/latency.
+
+| Pack | Description | Path |
+|---|---|---|
+| `backend-latency-profiler-helper` | Identifies API latency hotspots and bottlenecks with profiling tools, slow endpoint detection, suspected causes, and fix roadmap. Use for "latency profiling", "performance bottlenecks", "slow APIs", or "backend performance". | `.claude/workflows/performance-scalability/backend-latency-profiler-helper/RULE.md` |
+| `caching-cdn-strategy-planner` | Designs multi-layer caching strategy with edge CDN, server-side caching, cache invalidation, and CDN configuration. Use for "caching strategy", "CDN setup", "cache invalidation", or "performance optimization". | `.claude/workflows/performance-scalability/caching-cdn-strategy-planner/RULE.md` |
+| `caching-strategist` | Defines caching strategies with cache keys, TTL values, invalidation triggers, consistency patterns, and correctness checklist. Provides code examples for Redis, CDN, and application-level caching. Use when implementing "caching", "performance optimization", "cache strategy", or "Redis caching". | `.claude/workflows/performance-scalability/caching-strategist/RULE.md` |
+| `caching-strategy-optimizer` | Optimizes CI/CD pipeline speed by implementing effective caching for dependencies, Docker layers, build outputs, and test results. Provides before/after performance metrics and best practices. Use for "CI caching", "pipeline optimization", "build speed", or "cache strategy". | `.claude/workflows/performance-scalability/caching-strategy-optimizer/RULE.md` |
+| `capacity-planning-helper` | Estimates infrastructure needs based on traffic forecasts, workload analysis, and performance requirements with sizing recommendations and cost trade-offs. Use for "capacity planning", "infrastructure sizing", "resource estimation", or "scalability planning". | `.claude/workflows/performance-scalability/capacity-planning-helper/RULE.md` |
+| `core-web-vitals-tuner` | Systematically improves Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS) with prioritized fixes and verification. Use for "Core Web Vitals", "performance", "LCP", "INP", or "CLS". | `.claude/workflows/performance-scalability/core-web-vitals-tuner/RULE.md` |
+| `cost-latency-optimizer` | Reduces LLM costs and improves response times through caching, model selection, batching, and prompt optimization. Provides cost breakdowns, latency hotspots, and configuration recommendations. Use for "cost reduction", "performance optimization", "latency improvement", or "efficiency". | `.claude/workflows/performance-scalability/cost-latency-optimizer/RULE.md` |
+| `hot-reload-optimizer` | Optimizes hot module replacement and fast refresh for development speed with Vite, Next.js, and webpack configurations. Use when users request "hot reload", "HMR optimization", "fast refresh", "dev server speed", or "development performance". | `.claude/workflows/performance-scalability/hot-reload-optimizer/RULE.md` |
+| `load-test-builder` | Creates load and performance tests with k6, Artillery, or autocannon to validate system behavior under stress. Use when users request "load testing", "performance testing", "stress testing", "k6 setup", or "benchmark API". | `.claude/workflows/performance-scalability/load-test-builder/RULE.md` |
+| `load-test-scenario-builder` | Creates comprehensive load test plans with realistic scenarios, traffic models, k6 scripts, and success criteria. Use for "load testing", "performance testing", "capacity validation", or "stress testing". | `.claude/workflows/performance-scalability/load-test-scenario-builder/RULE.md` |
+| `performance-budget-setter` | Defines measurable performance budgets for bundle size, API latency, database queries, and render times. Provides enforcement strategies and monitoring plans. Use for "performance budgets", "performance monitoring", "web vitals", or "optimization targets". | `.claude/workflows/performance-scalability/performance-budget-setter/RULE.md` |
+| `scalability-playbook` | Identifies performance bottlenecks and provides ordered scaling strategies with triggers, phased plans, and cost implications. Use for "scalability planning", "performance bottlenecks", "capacity planning", or "growth strategy". | `.claude/workflows/performance-scalability/scalability-playbook/RULE.md` |
+
+---
+
+Tier-1 catalog: `.claude/workflows/catalog.md`. Tier-0 discovery rule: `.claude/rules/workflow-discovery.md`.

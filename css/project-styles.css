@@ -1,34 +1,47 @@
-/* Modern Dark Glass Project Styles */
+/* Cosmic Terminal Project Styles
+   Re-themed to match root index.html. This :root loads AFTER main-styles.css,
+   so it must carry the cosmic tokens itself — a purple override here would
+   defeat the theme. Single source of truth for the theme is index.html. */
 :root {
-   /* Inherit from main-styles.css where possible, but define project specifics */
-    
-    /* Modern Dark Color Palette */
-    --color-primary: #6C5CE7; 
-    --color-primary-light: #8e7ef0;
-    --color-secondary: #a29bfe;
-    --color-accent: #00cec9;
-    
-    /* Dark Background Colors */
-    --color-background: #0f0f14;
-    --color-background-alt: #181820;
-    --color-background-card: rgba(30, 30, 40, 0.6);
-    --color-background-elevated: rgba(40, 40, 50, 0.8);
-    
-    /* Text Colors */
-    --color-text: #ffffff;
-    --color-text-secondary: #b2bec3;
-    --color-text-muted: #636e72;
-    --color-text-inverse: #0f0f14;
-    
-    /* Border Colors */
-    --color-border: rgba(255, 255, 255, 0.1);
-    --color-border-light: rgba(255, 255, 255, 0.2);
-    
+    /* ── Cosmic terminal primitives ── */
+    --bg: #05070a;
+    --bg-deep: #03050a;
+    --bg-elevated: #06080d;
+    --line: rgba(120,200,220,0.10);
+    --line-strong: rgba(120,200,220,0.22);
+    --grid: rgba(120,200,220,0.06);
+    --ink: #d8e4e7;
+    --ink-dim: rgba(216,228,231,0.55);
+    --ink-faint: rgba(216,228,231,0.32);
+    --accent: #5eead4;                    /* terminal teal */
+    --accent-2: #7dd3fc;                  /* cyan */
+    --accent-soft: rgba(94,234,212,0.16);
+    --accent-glow: rgba(94,234,212,0.42);
+
+    /* ── Legacy variable bridge (glassmorphism → cosmic) ── */
+    --color-primary: var(--accent);
+    --color-primary-light: var(--accent-2);
+    --color-secondary: var(--accent-2);
+    --color-accent: var(--accent);
+
+    --color-background: var(--bg);
+    --color-background-alt: var(--bg-deep);
+    --color-background-card: var(--panel, rgba(255,255,255,0.025));
+    --color-background-elevated: var(--bg-elevated);
+
+    --color-text: var(--ink);
+    --color-text-secondary: var(--ink-dim);
+    --color-text-muted: var(--ink-faint);
+    --color-text-inverse: #04060a;
+
+    --color-border: var(--line);
+    --color-border-light: var(--line-strong);
+
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #6C5CE7 0%, #00cec9 100%);
-    
-    /* Typography */
-    --font-sans: 'Inter', sans-serif;
+    --gradient-primary: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+
+    /* Typography — JetBrains Mono everywhere */
+    --font-sans: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
     
     /* Spacing */
     --space-1: 0.25rem;
@@ -45,9 +58,9 @@
     --transition-normal: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     
     /* Shadows */
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
-    --shadow-lg: 0 10px 30px rgba(0,0,0,0.3);
-    --shadow-glow: 0 0 20px rgba(108, 92, 231, 0.4);
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+    --shadow-glow: 0 0 20px var(--accent-glow);
     
     /* Radius */
     --radius-sm: 4px;
@@ -57,8 +70,8 @@
     --radius-full: 9999px;
     
     /* Glass */
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.05);
+    --glass-bg: rgba(255, 255, 255, 0.025);
+    --glass-border: var(--line);
     --glass-backdrop: blur(12px);
 }
 
@@ -77,27 +90,22 @@ html {
 body {
     font-family: var(--font-sans);
     color: var(--color-text);
-    background-color: var(--color-background);
+    background-color: var(--bg);
     line-height: 1.6;
     overflow-x: hidden;
-    background-attachment: fixed;
     font-weight: 400;
-    letter-spacing: 0.025em;
-    background-image: 
-        radial-gradient(circle at 50% 0%, #1e1e2e 0%, transparent 70%),
-        radial-gradient(circle at 100% 0%, #2d1b4e 0%, transparent 50%);
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+    /* The cosmic-stage canvas (injected by project-scripts.js) renders the
+       atmospheric background; the body stays a flat near-black behind it. */
 }
 
-/* Remove E-ink paper effect overrides */
 body.youtube-theme,
 body.nasa-theme,
 body.ai-detection-theme,
 body.wind-energy-theme,
 body.n8n-theme {
-    background-image: 
-        radial-gradient(circle at 50% 0%, #1e1e2e 0%, transparent 70%),
-        radial-gradient(circle at 100% 0%, #2d1b4e 0%, transparent 50%);
-    background-size: cover;
+    background-color: var(--bg);
 }
 
 a {
@@ -263,7 +271,7 @@ p {
     color: white;
     background: var(--color-primary);
     border-color: var(--color-primary);
-    box-shadow: 0 0 15px rgba(108, 92, 231, 0.4);
+    box-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
 }
 
 .header.scrolled {
@@ -686,7 +694,7 @@ p {
     border: none;
     padding: 4px 8px;
     display: inline-block;
-    background: rgba(108, 92, 231, 0.1);
+    background: rgba(94, 234, 212, 0.1);
     border-radius: 4px;
 }
 
@@ -788,12 +796,12 @@ p {
 .btn-primary {
     background: var(--gradient-primary);
     color: white;
-    box-shadow: 0 10px 20px -5px rgba(108, 92, 231, 0.4);
+    box-shadow: 0 10px 20px -5px rgba(94, 234, 212, 0.4);
     border: none;
 }
 
 .btn-primary:hover {
-    box-shadow: 0 15px 25px -5px rgba(108, 92, 231, 0.5);
+    box-shadow: 0 15px 25px -5px rgba(94, 234, 212, 0.5);
     filter: brightness(1.1);
 }
 
@@ -2156,7 +2164,7 @@ p {
 
 .agent-card.orchestrator {
     border: 2px solid var(--color-primary);
-    background: linear-gradient(135deg, rgba(0, 212, 170, 0.1), rgba(108, 92, 231, 0.1));
+    background: linear-gradient(135deg, rgba(125, 211, 252, 0.1), rgba(94, 234, 212, 0.1));
 }
 
 .agent-header {

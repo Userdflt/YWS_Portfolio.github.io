@@ -1,0 +1,55 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git branch *)",
+      "Bash(ls *)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/.claude/hooks/simplify-ignore.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/.claude/hooks/simplify-ignore.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/.claude/hooks/simplify-ignore.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

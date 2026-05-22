@@ -251,3 +251,190 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✨ Modern Project Page Scripts Initialized!');
 });
+
+/* ════════════════════════════════════════════════════════════════════════
+   COSMIC TERMINAL THEME — shared background, scroll progress, and reveals.
+   Injected at runtime so every project page matches root index.html with
+   no per-page HTML edits. Mirrors the inline theme module in index.html.
+   ════════════════════════════════════════════════════════════════════════ */
+(function cosmicTheme(){
+    'use strict';
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function ready(fn){
+        if(document.readyState === 'loading'){
+            document.addEventListener('DOMContentLoaded', fn);
+        } else { fn(); }
+    }
+
+    /* ── Inject the cosmic stage + scroll-progress bar into the page ── */
+    function injectStage(){
+        if(document.getElementById('cosmic-stage')) return;
+
+        var stage = document.createElement('div');
+        stage.id = 'cosmic-stage';
+        stage.setAttribute('aria-hidden', 'true');
+        stage.innerHTML =
+            '<canvas id="cosmic-canvas"></canvas>' +
+            '<div class="scanline"></div>' +
+            '<div class="vignette"></div>';
+        document.body.insertBefore(stage, document.body.firstChild);
+
+        var progress = document.createElement('div');
+        progress.className = 'scroll-progress';
+        progress.innerHTML = '<div class="bar" id="scroll-bar"></div>';
+        document.body.insertBefore(progress, stage.nextSibling);
+    }
+
+    /* ── Drifting starfield with cursor parallax ── */
+    function startStarfield(){
+        var canvas = document.getElementById('cosmic-canvas');
+        if(!canvas) return;
+        var ctx = canvas.getContext('2d');
+        var W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+        var stars = [];
+        var pointer = { x: 0.5, y: 0.5 };
+        var scrollY = 0;
+        var running = true;
+
+        function seed(){
+            var count = Math.min(160, Math.floor((W * H) / 11000));
+            stars = new Array(count).fill(0).map(function(){
+                var layer = Math.random();
+                return {
+                    x: Math.random() * W, y: Math.random() * H,
+                    z: layer, r: 0.4 + layer * 1.5,
+                    tw: Math.random() * Math.PI * 2,
+                    tws: 0.4 + Math.random() * 1.2,
+                    vx: (Math.random() - 0.5) * 0.04 * (layer + 0.2),
+                    vy: (Math.random() - 0.5) * 0.04 * (layer + 0.2),
+                    tint: Math.random() < 0.18
+                };
+            });
+        }
+        function resize(){
+            W = window.innerWidth; H = window.innerHeight;
+            canvas.width = Math.floor(W * DPR);
+            canvas.height = Math.floor(H * DPR);
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+            seed();
+        }
+
+        var t0 = performance.now();
+        function frame(now){
+            if(!running) return;
+            var dt = Math.min(40, now - t0); t0 = now;
+            ctx.clearRect(0, 0, W, H);
+            var parX = (pointer.x - 0.5) * 18;
+            var parY = (pointer.y - 0.5) * 18 + scrollY * 0.05;
+
+            for(var i = 0; i < stars.length; i++){
+                var s = stars[i];
+                s.x += s.vx * dt; s.y += s.vy * dt;
+                if(s.x < -10) s.x = W + 10; if(s.x > W + 10) s.x = -10;
+                if(s.y < -10) s.y = H + 10; if(s.y > H + 10) s.y = -10;
+                s.tw += dt * 0.001 * s.tws;
+
+                var twinkle = 0.55 + 0.45 * Math.sin(s.tw);
+                var px = s.x + parX * (s.z + 0.2);
+                var py = s.y + parY * (s.z + 0.2);
+                var alpha = (0.22 + s.z * 0.6) * twinkle;
+
+                ctx.beginPath();
+                ctx.arc(px, py, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = s.tint ? 'rgba(94,234,212,' + alpha + ')' : 'rgba(216,228,231,' + alpha + ')';
+                ctx.fill();
+
+                if(s.z > 0.86){
+                    ctx.beginPath();
+                    ctx.arc(px, py, s.r * 3.4, 0, Math.PI * 2);
+                    var g = ctx.createRadialGradient(px, py, 0, px, py, s.r * 3.4);
+                    g.addColorStop(0, s.tint ? 'rgba(94,234,212,' + (alpha * 0.32) + ')' : 'rgba(255,255,255,' + (alpha * 0.25) + ')');
+                    g.addColorStop(1, 'rgba(255,255,255,0)');
+                    ctx.fillStyle = g; ctx.fill();
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('pointermove', function(e){
+            pointer.x = e.clientX / window.innerWidth;
+            pointer.y = e.clientY / window.innerHeight;
+        }, { passive: true });
+        window.addEventListener('scroll', function(){ scrollY = window.scrollY; }, { passive: true });
+        document.addEventListener('visibilitychange', function(){
+            if(document.hidden){ running = false; }
+            else if(!reduced){ running = true; t0 = performance.now(); requestAnimationFrame(frame); }
+        });
+
+        resize();
+        if(!reduced){
+            requestAnimationFrame(frame);
+        } else {
+            ctx.clearRect(0, 0, W, H);
+            for(var j = 0; j < stars.length; j++){
+                var st = stars[j];
+                ctx.beginPath();
+                ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(216,228,231,' + (0.22 + st.z * 0.5) + ')';
+                ctx.fill();
+            }
+        }
+    }
+
+    /* ── Top scroll-progress bar ── */
+    function startScrollProgress(){
+        var bar = document.getElementById('scroll-bar');
+        if(!bar) return;
+        function update(){
+            var h = document.documentElement.scrollHeight - window.innerHeight;
+            var p = h > 0 ? (window.scrollY / h) * 100 : 0;
+            bar.style.width = p + '%';
+        }
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    }
+
+    /* ── Scroll-reveal: repurpose inert data-aos hooks as fade-ups ──
+       AOS is not loaded on these pages, so data-aos attributes have no
+       effect. Drive them with the .reveal mechanism for parity with
+       index.html. Elements already revealed by the page's own observer
+       (.feature-card etc.) are left untouched to avoid double-handling. */
+    function startReveals(){
+        var owned = '.feature-card, .architecture-component, .result-card, .analysis-card';
+        var els = [];
+        document.querySelectorAll('[data-aos]').forEach(function(el){
+            if(el.matches(owned)) return;
+            el.classList.add('reveal');
+            var delay = parseInt(el.getAttribute('data-aos-delay'), 10);
+            if(delay > 0){ el.style.transitionDelay = delay + 'ms'; }
+            els.push(el);
+        });
+        if(!els.length) return;
+
+        if(reduced){
+            els.forEach(function(el){ el.classList.add('in'); });
+            return;
+        }
+        var vh = window.innerHeight;
+        els.forEach(function(el){
+            var r = el.getBoundingClientRect();
+            if(r.top < vh * 0.95 && r.bottom > 0){ el.classList.add('in'); }
+        });
+        var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+                if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+        els.forEach(function(el){ if(!el.classList.contains('in')) io.observe(el); });
+    }
+
+    ready(function(){
+        injectStage();
+        startStarfield();
+        startScrollProgress();
+        startReveals();
+    });
+})();
