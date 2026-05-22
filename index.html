@@ -165,6 +165,9 @@
     repeating-linear-gradient(90deg, rgba(94,234,212,0.05) 0 1px, transparent 1px 24px),
     linear-gradient(135deg, rgba(94,234,212,0.10), rgba(0,0,0,0.6))}
   .preview-mark{font-family:var(--fs-mono);font-weight:500;font-size:42px;color:var(--accent);line-height:1;text-shadow:0 0 18px var(--accent-glow)}
+  .preview-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s}
+  .preview-img.loaded{opacity:1}
+  .preview-scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, rgba(4,6,10,0.35) 0%, transparent 32%, transparent 56%, rgba(4,6,10,0.85) 100%)}
   .preview-meta{position:absolute;left:10px;right:10px;bottom:8px;display:flex;justify-content:space-between;align-items:end;color:#fff;font-family:var(--fs-mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase}
   .preview-meta .pm-cat{color:var(--ink-dim)}
   .preview-meta .pm-tag{color:var(--accent)}
@@ -260,7 +263,11 @@
 <!-- Hover preview thumbnail (editorial list) -->
 <div class="work-preview" id="work-preview" aria-hidden="true">
   <div class="preview-frame"><span id="preview-frame-l">FRAME 01</span><span id="preview-frame-r">— —</span></div>
-  <div class="preview-inner"><span class="preview-mark" id="preview-mark">⟁</span></div>
+  <div class="preview-inner">
+    <span class="preview-mark" id="preview-mark">⟁</span>
+    <img class="preview-img" id="preview-img" alt="" />
+    <div class="preview-scrim"></div>
+  </div>
   <div class="preview-meta"><span class="pm-cat" id="preview-cat">CATEGORY</span><span class="pm-tag" id="preview-tag">VIEW →</span></div>
 </div>
 
@@ -333,7 +340,7 @@
     </div>
 
     <div class="work-list">
-      <a class="work-row reveal" href="projects/code-vision.html" data-mark="C" data-cat="App Development" data-year="2025" style="transition-delay:0s">
+      <a class="work-row reveal" href="projects/code-vision.html" data-mark="C" data-thumb="images/optimized/code_vision.webp" data-cat="App Development" data-year="2025" style="transition-delay:0s">
         <div class="idx">01</div>
         <div class="title-col">
           <div class="title">codevision</div>
@@ -342,7 +349,7 @@
         <div class="cat">App Development</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/gemini-vision.html" data-mark="V" data-cat="Generative AI" data-year="2025" style="transition-delay:.03s">
+      <a class="work-row reveal" href="projects/gemini-vision.html" data-mark="V" data-thumb="images/optimized/Vision_Studio_Hero.webp" data-cat="Generative AI" data-year="2025" style="transition-delay:.03s">
         <div class="idx">02</div>
         <div class="title-col">
           <div class="title">vision studio</div>
@@ -351,7 +358,7 @@
         <div class="cat">Generative AI</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/n8n_rag.html" data-mark="n" data-cat="Multi-agent RAG" data-year="2024" style="transition-delay:.06s">
+      <a class="work-row reveal" href="projects/n8n_rag.html" data-mark="n" data-thumb="images/optimized/n8n.webp" data-cat="Multi-agent RAG" data-year="2024" style="transition-delay:.06s">
         <div class="idx">03</div>
         <div class="title-col">
           <div class="title">n8n building code rag</div>
@@ -360,7 +367,7 @@
         <div class="cat">Multi-agent RAG</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/notion_mcp.html" data-mark="N" data-cat="AI Agent" data-year="2024" style="transition-delay:.09s">
+      <a class="work-row reveal" href="projects/notion_mcp.html" data-mark="N" data-thumb="images/optimized/mcp_logo.webp" data-cat="AI Agent" data-year="2024" style="transition-delay:.09s">
         <div class="idx">04</div>
         <div class="title-col">
           <div class="title">notion mcp agent</div>
@@ -369,7 +376,7 @@
         <div class="cat">AI Agent</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/stablediffusion.html" data-mark="S" data-cat="Generative AI" data-year="2024" style="transition-delay:.12s">
+      <a class="work-row reveal" href="projects/stablediffusion.html" data-mark="S" data-thumb="images/optimized/stable_sketch.webp" data-cat="Generative AI" data-year="2024" style="transition-delay:.12s">
         <div class="idx">05</div>
         <div class="title-col">
           <div class="title">genai sketch → image</div>
@@ -378,7 +385,7 @@
         <div class="cat">Generative AI</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/vision_model.html" data-mark="V" data-cat="ViT &amp; RAG" data-year="2024" style="transition-delay:.15s">
+      <a class="work-row reveal" href="projects/vision_model.html" data-mark="V" data-thumb="images/optimized/building_code.webp" data-cat="ViT &amp; RAG" data-year="2024" style="transition-delay:.15s">
         <div class="idx">06</div>
         <div class="title-col">
           <div class="title">vision model rag</div>
@@ -387,7 +394,7 @@
         <div class="cat">ViT &amp; RAG</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/llm.html" data-mark="L" data-cat="Advanced RAG" data-year="2024" style="transition-delay:.18s">
+      <a class="work-row reveal" href="projects/llm.html" data-mark="L" data-thumb="images/optimized/LLM.webp" data-cat="Advanced RAG" data-year="2024" style="transition-delay:.18s">
         <div class="idx">07</div>
         <div class="title-col">
           <div class="title">self-correcting rag</div>
@@ -396,7 +403,7 @@
         <div class="cat">Advanced RAG</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/cv.html" data-mark="Y" data-cat="Computer Vision" data-year="2024" style="transition-delay:.21s">
+      <a class="work-row reveal" href="projects/cv.html" data-mark="Y" data-thumb="images/optimized/cv.webp" data-cat="Computer Vision" data-year="2024" style="transition-delay:.21s">
         <div class="idx">08</div>
         <div class="title-col">
           <div class="title">construction safety cv</div>
@@ -405,7 +412,7 @@
         <div class="cat">Computer Vision</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/youtube-analytics.html" data-mark="Y" data-cat="Data Science" data-year="2024" style="transition-delay:.24s">
+      <a class="work-row reveal" href="projects/youtube-analytics.html" data-mark="Y" data-thumb="images/optimized/youtube_analytics.webp" data-cat="Data Science" data-year="2024" style="transition-delay:.24s">
         <div class="idx">09</div>
         <div class="title-col">
           <div class="title">youtube analytics</div>
@@ -414,7 +421,7 @@
         <div class="cat">Data Science</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/nasa-outgassing.html" data-mark="◊" data-cat="Data Science" data-year="2024" style="transition-delay:.27s">
+      <a class="work-row reveal" href="projects/nasa-outgassing.html" data-mark="◊" data-thumb="images/optimized/nasa_outgassing.webp" data-cat="Data Science" data-year="2024" style="transition-delay:.27s">
         <div class="idx">10</div>
         <div class="title-col">
           <div class="title">nasa outgassing</div>
@@ -423,7 +430,7 @@
         <div class="cat">Data Science</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/ai-detection.html" data-mark="A" data-cat="NLP" data-year="2024" style="transition-delay:.3s">
+      <a class="work-row reveal" href="projects/ai-detection.html" data-mark="A" data-thumb="images/optimized/ai_detection.webp" data-cat="NLP" data-year="2024" style="transition-delay:.3s">
         <div class="idx">11</div>
         <div class="title-col">
           <div class="title">ai content detection</div>
@@ -432,7 +439,7 @@
         <div class="cat">NLP</div>
         <div class="arrow" aria-hidden="true">↗</div>
       </a>
-      <a class="work-row reveal" href="projects/wind-energy.html" data-mark="W" data-cat="Data Science" data-year="2024" style="transition-delay:.33s">
+      <a class="work-row reveal" href="projects/wind-energy.html" data-mark="W" data-thumb="images/optimized/wind_energy.webp" data-cat="Data Science" data-year="2024" style="transition-delay:.33s">
         <div class="idx">12</div>
         <div class="title-col">
           <div class="title">wind energy prediction</div>
@@ -829,26 +836,46 @@
     });
   })();
 
-  /* ───────── Editorial list: cursor-following preview ───────── */
+  /* ───────── Editorial list: cursor-following project preview ───────── */
   (function workPreview(){
     var preview = document.getElementById("work-preview");
     if(!preview) return;
     var mark = document.getElementById("preview-mark");
+    var img  = document.getElementById("preview-img");
     var cat  = document.getElementById("preview-cat");
     var tag  = document.getElementById("preview-tag");
     var fl   = document.getElementById("preview-frame-l");
     var fr   = document.getElementById("preview-frame-r");
+    var activeRow = null;
+
+    // Glyph mark stays visible behind the image until the thumbnail loads,
+    // and is the fallback if a thumbnail is missing or fails to load.
+    img.addEventListener("load", function(){ img.classList.add("loaded"); });
+    img.addEventListener("error", function(){
+      img.classList.remove("loaded");
+      img.removeAttribute("src");
+    });
+
+    function setRow(row, i){
+      if(row === activeRow) return;
+      activeRow = row;
+      mark.textContent = row.getAttribute("data-mark") || "⟁";
+      cat.textContent = row.getAttribute("data-cat") || "";
+      tag.textContent = (row.getAttribute("data-year") || "") + " · open →";
+      fl.textContent = "FRAME " + String(i + 1).padStart(2, "0");
+      fr.textContent = "● REC";
+      var thumb = row.getAttribute("data-thumb");
+      img.classList.remove("loaded");
+      if(thumb){ img.src = thumb; }
+      else { img.removeAttribute("src"); }
+    }
 
     document.querySelectorAll(".work-row").forEach(function(row, i){
       row.addEventListener("mousemove", function(e){
         preview.style.left = e.clientX + "px";
         preview.style.top = e.clientY + "px";
         preview.classList.add("show");
-        mark.textContent = row.getAttribute("data-mark") || "⟁";
-        cat.textContent = row.getAttribute("data-cat") || "";
-        tag.textContent = (row.getAttribute("data-year") || "") + " · open →";
-        fl.textContent = "FRAME " + String(i + 1).padStart(2, "0");
-        fr.textContent = "● REC";
+        setRow(row, i);
       });
       row.addEventListener("mouseleave", function(){
         preview.classList.remove("show");
