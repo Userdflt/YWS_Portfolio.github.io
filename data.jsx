@@ -466,4 +466,23 @@ const PRINCIPLES = [
   { n: "04", t: "Measure what matters", d: "Quality, time saved, adoption, risk reduction — define metrics, then iterate on what they tell you." },
 ];
 
-Object.assign(window, { PROJECTS, STACK, PRINCIPLES });
+// Walks a project's details.media[] and returns the first usable image source,
+// or null if none found (caller falls back to letter mark).
+function getProjectThumbnail(project) {
+  const media = project?.details?.media;
+  if (!Array.isArray(media)) return null;
+  for (const item of media) {
+    if (!item || !item.type) continue;
+    if (item.type === "image" || item.type === "gif") {
+      if (item.src) return item.src;
+    } else if (item.type === "gallery") {
+      const first = Array.isArray(item.items) ? item.items[0] : null;
+      if (first && first.src) return first.src;
+    } else if (item.type === "video") {
+      if (item.poster) return item.poster;
+    }
+  }
+  return null;
+}
+
+Object.assign(window, { PROJECTS, STACK, PRINCIPLES, getProjectThumbnail });
