@@ -3,3 +3,10 @@
 
 # backup files
 *.backup
+
+# .claude
+.claude/
+
+# package
+package-lock.json
+package.json
