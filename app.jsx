@@ -71,24 +71,27 @@ function GlyphShuffle({ text, perChar = 60, scrambleMs = 180, fps = 28 }){
   const glyphs = "▓▒░█ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}<>/=*_-";
   const now = performance.now() - startRef.current;
 
-  return (
-    <span className="glyph-shuffle">
-      {text.split("").map((ch, i) => {
-        const charStart = i * perChar;
-        const charEnd = charStart + scrambleMs;
-        let display = ch;
-        let glow = false;
-        if(now < charStart){
-          display = ch === " " ? " " : "";       // not started yet — empty placeholder
-        } else if(now < charEnd && ch !== " "){
-          display = glyphs[(Math.random() * glyphs.length) | 0];
-          glow = true;
-        }
-        // suppress react warning by using key + dangerouslySetInnerHTML pattern? no — span text is fine.
-        return <span key={i} className={"gs-char" + (glow ? " gs-flash" : "")}>{display || "\u00A0"}</span>;
-      })}
-    </span>
-  );
+  const words = text.split(" ");
+  let globalI = 0;
+  const nodes = [];
+  words.forEach((word, wi) => {
+    nodes.push(
+      <span key={`w${wi}`} style={{ display:'inline-block', whiteSpace:'nowrap' }}>
+        {[...word].map((ch) => {
+          const i = globalI++;
+          const charStart = i * perChar;
+          const charEnd = charStart + scrambleMs;
+          let display = ch;
+          let glow = false;
+          if(now < charStart){ display = ""; }
+          else if(now < charEnd){ display = glyphs[(Math.random() * glyphs.length) | 0]; glow = true; }
+          return <span key={i} className={"gs-char" + (glow ? " gs-flash" : "")}>{display || "\u00A0"}</span>;
+        })}
+      </span>
+    );
+    if(wi < words.length - 1){ globalI++; nodes.push(<span key={`s${wi}`}> </span>); }
+  });
+  return <span className="glyph-shuffle">{nodes}</span>;
 }
 
 // Typing line — types char by char.
@@ -257,7 +260,22 @@ function WorkEditorial({ projects, previewRef }){
     el.style.left = e.clientX + 'px';
     el.style.top = e.clientY + 'px';
     el.classList.add('show');
-    document.getElementById('preview-mark').textContent = p.mark || '⟁';
+    const markEl = document.getElementById('preview-mark');
+    const imgEl = document.getElementById('preview-img');
+    const thumb = (typeof window.getProjectThumbnail === 'function') ? window.getProjectThumbnail(p) : null;
+    if (imgEl) {
+      if (thumb) {
+        if (imgEl.getAttribute('src') !== thumb) imgEl.src = thumb;
+        imgEl.alt = p.title || '';
+        imgEl.style.display = 'block';
+        if (markEl) markEl.style.display = 'none';
+      } else {
+        imgEl.removeAttribute('src');
+        imgEl.style.display = 'none';
+        if (markEl) markEl.style.display = '';
+      }
+    }
+    if (markEl) markEl.textContent = p.mark || '⟁';
     document.getElementById('preview-cat').textContent = p.category;
     document.getElementById('preview-tag').textContent = `${p.year} · open →`;
     document.getElementById('preview-frame-l').textContent = `FRAME ${String(i+1).padStart(2,'0')}`;

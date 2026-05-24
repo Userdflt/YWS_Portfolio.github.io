@@ -37,17 +37,25 @@ function GlyphShuffle({ text, perChar = 60, scrambleMs = 180, fps = 28 }){
   }, [text]);
   const glyphs = "▓▒░█ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}<>/=*_-";
   const now = performance.now() - startRef.current;
-  return (
-    <span>
-      {text.split("").map((ch, i) => {
-        const cs = i * perChar; const ce = cs + scrambleMs;
-        let d = ch; let flash = false;
-        if(now < cs){ d = ch === " " ? " " : ""; }
-        else if(now < ce && ch !== " "){ d = glyphs[(Math.random()*glyphs.length)|0]; flash = true; }
-        return <span key={i} style={{ display:'inline-block', minWidth:'.55ch', textAlign:'center', color: flash ? 'var(--accent)' : undefined, textShadow: flash ? '0 0 14px var(--accent-glow)' : 'none' }}>{d || "\u00A0"}</span>;
-      })}
-    </span>
-  );
+  const words = text.split(" ");
+  let globalI = 0;
+  const nodes = [];
+  words.forEach((word, wi) => {
+    nodes.push(
+      <span key={`w${wi}`} style={{ display:'inline-block', whiteSpace:'nowrap' }}>
+        {[...word].map((ch) => {
+          const i = globalI++;
+          const cs = i * perChar; const ce = cs + scrambleMs;
+          let d = ch; let flash = false;
+          if(now < cs){ d = ""; }
+          else if(now < ce){ d = glyphs[(Math.random()*glyphs.length)|0]; flash = true; }
+          return <span key={i} style={{ display:'inline-block', minWidth:'.55ch', textAlign:'center', color: flash ? 'var(--accent)' : undefined, textShadow: flash ? '0 0 14px var(--accent-glow)' : 'none' }}>{d || "\u00A0"}</span>;
+        })}
+      </span>
+    );
+    if(wi < words.length - 1){ globalI++; nodes.push(<span key={`s${wi}`}> </span>); }
+  });
+  return <span>{nodes}</span>;
 }
 
 // Scroll progress bar
