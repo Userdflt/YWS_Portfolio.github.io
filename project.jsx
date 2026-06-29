@@ -125,6 +125,33 @@ function Frame({ mark, label, frameNo }){
   );
 }
 
+// ───────── Lightbox ─────────
+// Click any grid/image to open the original-size source in a full-screen overlay.
+const LightboxContext = React.createContext(() => {});
+
+function Lightbox({ state, onClose }){
+  useEffect(() => {
+    if(!state) return;
+    function onKey(e){ if(e.key === 'Escape') onClose(); }
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
+  }, [state, onClose]);
+  if(!state) return null;
+  return (
+    <div
+      onClick={onClose}
+      style={{ position:'fixed', inset:0, zIndex:1000, background:'rgba(2,4,7,0.93)', backdropFilter:'blur(4px)', display:'flex', alignItems:'center', justifyContent:'center', padding:'4vh 4vw', cursor:'zoom-out' }}
+    >
+      <span style={{ position:'absolute', top:18, right:24, color:'var(--ink-dim)', fontSize:10, letterSpacing:'0.1em', textTransform:'uppercase' }}>esc / click to close</span>
+      <figure onClick={(e) => e.stopPropagation()} style={{ margin:0, display:'flex', flexDirection:'column', maxWidth:'92vw', maxHeight:'92vh', cursor:'default' }}>
+        <img src={state.src} alt={state.alt || ''} style={{ maxWidth:'92vw', maxHeight: state.caption ? '84vh' : '92vh', width:'auto', height:'auto', objectFit:'contain', border:'1px solid var(--line)', background:'var(--bg)' }} />
+        {state.caption && <figcaption style={{ ...mediaCaptionStyle, borderTop:'none', textAlign:'center' }}>{state.caption}</figcaption>}
+      </figure>
+    </div>
+  );
+}
+
 // ───────── Media renderers ─────────
 // Shared styles inlined so we don't depend on css that doesn't ship in project.html.
 const mediaFigureStyle = {
@@ -156,10 +183,15 @@ const mediaCornerStyle = {
 };
 
 function MediaImage({ item, frameNo }){
+  const openLightbox = React.useContext(LightboxContext);
   return (
     <figure className="reveal" style={mediaFigureStyle}>
       <span style={mediaCornerStyle}>IMG {String(frameNo).padStart(2,'0')}</span>
-      <img src={item.src} alt={item.alt || ''} loading="lazy" style={{ display:'block', width:'100%', height:'auto' }} />
+      <img
+        src={item.src} alt={item.alt || ''} loading="lazy"
+        onClick={() => openLightbox({ src:item.src, alt:item.alt, caption:item.caption })}
+        style={{ display:'block', width:'100%', height:'auto', cursor:'zoom-in' }}
+      />
       {item.caption && <figcaption style={mediaCaptionStyle}>{item.caption}</figcaption>}
     </figure>
   );
@@ -205,6 +237,7 @@ function MediaEmbed({ item, frameNo }){
 }
 
 function MediaGallery({ item, baseNo }){
+  const openLightbox = React.useContext(LightboxContext);
   return (
     <div className="reveal" style={{ marginTop:'calc(var(--u)*2)' }}>
       {item.title && (
@@ -217,10 +250,41 @@ function MediaGallery({ item, baseNo }){
       )}
       <div className="gallery" style={{ gridTemplateColumns:'repeat(auto-fill, minmax(280px, 1fr))' }}>
         {item.items.map((g, i) => (
-          <figure key={i} style={{ ...mediaFigureStyle, aspectRatio:'4/3' }}>
+          <figure
+            key={i}
+            onClick={() => openLightbox({ src:g.src, alt:g.alt, caption:g.caption })}
+            style={{ ...mediaFigureStyle, aspectRatio:'4/3', cursor:'zoom-in' }}
+          >
             <span style={mediaCornerStyle}>{String(baseNo + i).padStart(2,'0')}</span>
             <img src={g.src} alt={g.alt || ''} loading="lazy" style={{ display:'block', width:'100%', height:'100%', objectFit:'cover' }} />
             {g.caption && <figcaption style={{ ...mediaCaptionStyle, position:'absolute', bottom:0, left:0, right:0, background:'linear-gradient(180deg, transparent, rgba(5,7,10,0.85))', borderTop:'none' }}>{g.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MediaVideoGallery({ item, baseNo }){
+  return (
+    <div className="reveal" style={{ marginTop:'calc(var(--u)*2)' }}>
+      {item.title && (
+        <div className="section-tag" style={{ marginBottom:'calc(var(--u)*2)' }}>
+          <span className="marker">▸</span>
+          <span>{item.title.toLowerCase()}</span>
+          <span className="rule"></span>
+          <span>{String(item.items.length).padStart(2,'0')} clips</span>
+        </div>
+      )}
+      <div className="gallery" style={{ gridTemplateColumns:'repeat(auto-fill, minmax(360px, 1fr))' }}>
+        {item.items.map((v, i) => (
+          <figure key={i} style={mediaFigureStyle}>
+            <span style={mediaCornerStyle}>VID {String(baseNo + i).padStart(2,'0')}</span>
+            <span style={{ ...mediaCornerStyle, left:'auto', right:12, color:'var(--accent)' }}>● REC</span>
+            <video controls preload="metadata" playsInline poster={v.poster} style={{ display:'block', width:'100%', height:'auto', background:'#000' }}>
+              <source src={v.src} />
+            </video>
+            {v.caption && <figcaption style={mediaCaptionStyle}>{v.caption}</figcaption>}
           </figure>
         ))}
       </div>
@@ -250,6 +314,11 @@ function MediaSection({ media }){
               frameNo += (item.items?.length || 0) - 1;
               return <MediaGallery key={i} item={item} baseNo={base} />;
             }
+            if(item.type === 'videoGallery'){
+              const base = frameNo;
+              frameNo += (item.items?.length || 0) - 1;
+              return <MediaVideoGallery key={i} item={item} baseNo={base} />;
+            }
             return null;
           })}
         </div>
@@ -262,6 +331,7 @@ function MediaSection({ media }){
 function ProjectPage({ project }){
   useReveal();
   useScrollProgress();
+  const [lightbox, setLightbox] = useState(null);
 
   // adjacent projects
   const list = window.PROJECTS;
@@ -272,7 +342,7 @@ function ProjectPage({ project }){
   const d = project.details || {};
 
   return (
-    <>
+    <LightboxContext.Provider value={setLightbox}>
       <Nav />
 
       <div className="wrap">
@@ -411,7 +481,9 @@ function ProjectPage({ project }){
           </div>
         </div>
       </section>
-    </>
+
+      <Lightbox state={lightbox} onClose={() => setLightbox(null)} />
+    </LightboxContext.Provider>
   );
 }
 

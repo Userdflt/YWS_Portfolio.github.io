@@ -354,24 +354,13 @@ const PROJECTS = [
       ],
       links: [{ label: "GitHub profile", href: "https://github.com/Userdflt" }],
       media: [
-        { type: "gallery", title: "Featured ComfyUI Workflow", items: [
-          { src: "images/ai_visual_images/text_to_render/final_w_ppl.png", alt: "Residential Village Overview", caption: "Residential Village Overview" },
-          { src: "images/ai_visual_images/text_to_render/entry_w_ppl.png", alt: "Residential Village Entry", caption: "Residential Village Entry" },
-          { src: "images/ai_visual_images/text_to_render/cafe_w_ppl.png", alt: "Residential Village Cafe", caption: "Residential Village Cafe" },
-          { src: "images/ai_visual_images/text_to_render/residentail_units_w_ppl.png", alt: "Residential Units with People", caption: "Residential Units" },
-          { src: "images/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.jpg", alt: "Cabin High Quality Render", caption: "Cabin High Quality Render" },
-          { src: "images/ai_visual_images/model_to_render/AI_interior_render_1.jpg", alt: "AI Interior Render 1", caption: "AI Interior Render 1" },
-          { src: "images/ai_visual_images/model_to_render/AI_interior_render_2.jpg", alt: "AI Interior Render 2", caption: "AI Interior Render 2" },
-          { src: "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.png", alt: "ComfyUI Workflow Output 1", caption: "ComfyUI Workflow Output 1" },
-          { src: "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.png", alt: "ComfyUI Workflow Output 2", caption: "ComfyUI Workflow Output 2" },
-          { src: "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.png", alt: "ComfyUI Workflow Output 3", caption: "ComfyUI Workflow Output 3" },
-          { src: "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.png", alt: "ComfyUI Workflow Output 4", caption: "ComfyUI Workflow Output 4" },
+        { type: "videoGallery", title: "AI-Generated Walkthroughs", items: [
+          { src: "Videos/cabin_construction.mp4#t=0.1", caption: "Cabin Construction Process" },
+          { src: "Videos/shopping_mall.mp4#t=0.1", caption: "Shopping Mall Visualization" },
+          { src: "Videos/resi_village_v2.mp4#t=0.1", caption: "Residential Village" },
+          { src: "Videos/morning_architecture.mp4#t=0.1", caption: "Morning Residence" },
         ]},
-        { type: "video", src: "Videos/cabin_construction.mp4", caption: "Cabin Construction Process" },
-        { type: "video", src: "Videos/shopping_mall.mp4", caption: "Shopping Mall Visualization" },
-        { type: "video", src: "Videos/resi_village_v2.mp4", caption: "Residential Village" },
-        { type: "video", src: "Videos/morning architecture.mp4", caption: "Morning Residence" },
-        { type: "gallery", title: "More AI Visualizations", items: [
+        { type: "gallery", title: "AI Visualizations", items: [
           { src: "images/ai_visual_images/text_to_render/final_w_ppl.png", alt: "Residential Village Overview", caption: "Residential Village Overview" },
           { src: "images/ai_visual_images/text_to_render/cafe_w_ppl.png", alt: "Residential Village Cafe", caption: "Residential Village Cafe" },
           { src: "images/ai_visual_images/text_to_render/entry_w_ppl.png", alt: "Residential Village Entry", caption: "Residential Village Entry" },
