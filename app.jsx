@@ -2,7 +2,7 @@
 const { useState, useEffect, useRef, useMemo } = React;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "palette": "teal",
+  "palette": "azure",
   "typePairing": "jetbrains",
   "heroVariant": "centered",
   "projectLayout": "editorial",
@@ -10,6 +10,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 }/*EDITMODE-END*/;
 
 const PALETTES = {
+  azure:  { label: "Azure",  accent: "#6f8bff", accent2: "#9db4ff", glow: "rgba(111,139,255,0.42)", soft: "rgba(111,139,255,0.16)" },
   teal:   { label: "Teal",   accent: "#5eead4", accent2: "#7dd3fc", glow: "rgba(94,234,212,0.42)",  soft: "rgba(94,234,212,0.16)" },
   cyber:  { label: "Cyber",  accent: "#22d3ee", accent2: "#a78bfa", glow: "rgba(34,211,238,0.42)",  soft: "rgba(34,211,238,0.16)" },
   matrix: { label: "Matrix", accent: "#84cc16", accent2: "#22c55e", glow: "rgba(132,204,22,0.42)",  soft: "rgba(132,204,22,0.16)" },

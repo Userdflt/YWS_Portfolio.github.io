@@ -29,7 +29,7 @@
         tws: 0.4 + Math.random() * 1.2,
         vx: (Math.random() - 0.5) * 0.04 * (layer + 0.2),
         vy: (Math.random() - 0.5) * 0.04 * (layer + 0.2),
-        tint: Math.random() < 0.18  // teal-tinted
+        tint: Math.random() < 0.18  // azure-tinted
       };
     });
   }
@@ -55,14 +55,14 @@
 
       ctx.beginPath();
       ctx.arc(px, py, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = s.tint ? `rgba(94,234,212,${alpha})` : `rgba(216,228,231,${alpha})`;
+      ctx.fillStyle = s.tint ? `rgba(111,139,255,${alpha})` : `rgba(233,237,246,${alpha})`;
       ctx.fill();
 
       if(s.z > 0.86){
         ctx.beginPath();
         ctx.arc(px, py, s.r * 3.4, 0, Math.PI * 2);
         const g = ctx.createRadialGradient(px,py,0,px,py,s.r*3.4);
-        g.addColorStop(0, s.tint ? `rgba(94,234,212,${alpha*0.32})` : `rgba(255,255,255,${alpha*0.25})`);
+        g.addColorStop(0, s.tint ? `rgba(111,139,255,${alpha*0.32})` : `rgba(255,255,255,${alpha*0.25})`);
         g.addColorStop(1, 'rgba(255,255,255,0)');
         ctx.fillStyle = g; ctx.fill();
       }
@@ -90,5 +90,5 @@
 
   resize();
   if(!reduced) requestAnimationFrame(frame);
-  else { ctx.clearRect(0,0,W,H); for(const s of stars){ ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fillStyle = `rgba(216,228,231,${0.22 + s.z*0.5})`; ctx.fill(); } }
+  else { ctx.clearRect(0,0,W,H); for(const s of stars){ ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fillStyle = `rgba(233,237,246,${0.22 + s.z*0.5})`; ctx.fill(); } }
 })();
