@@ -435,9 +435,19 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .band-deep{background:var(--bg-deep)}
 .band-lift{background:linear-gradient(180deg, var(--panel) 0%, transparent 100%)}
 
+/* motion companions — added and removed by scripts/scroll.jsx for the lifetime
+   of a live hook. The hooks own the transform values; CSS owns the compositing
+   hint and the origin, so no inline style has to carry them. */
+.motion-hero-link{will-change:transform,opacity;transform-origin:50% 30%}
+.motion-parallax{will-change:transform}
+
 @media (prefers-reduced-motion: reduce){
   .reveal{opacity:1;transform:none;transition:none}
   #cosmic-canvas{opacity:.4}
   .scanline{animation:none}
   .status-pill .pulse::after{animation:none}
+  /* scroll.jsx writes no transforms under reduced motion and strips these
+     classes on cleanup; this drops the layer promotion if one ever outlives
+     its hook. */
+  .motion-hero-link,.motion-parallax{will-change:auto}
 }

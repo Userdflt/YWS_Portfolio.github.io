@@ -76,12 +76,8 @@
     pointer.y = e.clientY / window.innerHeight;
   }, { passive: true });
   window.addEventListener('scroll', () => {
+    // Starfield parallax only — the #scroll-bar is owned by scripts/scroll.jsx.
     scrollY = window.scrollY;
-    // update progress bar
-    const h = document.documentElement.scrollHeight - window.innerHeight;
-    const p = h > 0 ? (scrollY / h) * 100 : 0;
-    const bar = document.getElementById('scroll-bar');
-    if(bar) bar.style.width = p + '%';
   }, { passive: true });
   document.addEventListener('visibilitychange', () => {
     if(document.hidden){ running = false; }

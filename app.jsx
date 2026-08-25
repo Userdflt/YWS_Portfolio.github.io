@@ -18,34 +18,9 @@ const PALETTES = {
   bone:   { label: "Bone",   accent: "#e7e5e4", accent2: "#a8a29e", glow: "rgba(231,229,228,0.32)", soft: "rgba(231,229,228,0.10)" },
 };
 
-// ───────────────────────── Reveal hook ─────────────────────────
-function useReveal(){
-  useEffect(() => {
-    let io = null;
-    function attach(){
-      const els = document.querySelectorAll('.reveal:not(.in), .principle:not(.in), .stack-cell:not(.in)');
-      // Anything already on screen at mount: reveal immediately (no IO wait).
-      const vh = window.innerHeight;
-      els.forEach(el => {
-        const r = el.getBoundingClientRect();
-        if(r.top < vh * 0.95 && r.bottom > 0){ el.classList.add('in'); }
-      });
-      // Observe the rest for scroll-in.
-      io && io.disconnect();
-      io = new IntersectionObserver((entries) => {
-        for(const e of entries){
-          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-        }
-      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-      document.querySelectorAll('.reveal:not(.in), .principle:not(.in), .stack-cell:not(.in)').forEach(el => io.observe(el));
-    }
-    attach();
-    // Re-attach when layout/content changes (e.g. project layout swap, hero variant swap).
-    const mo = new MutationObserver(() => attach());
-    mo.observe(document.body, { childList: true, subtree: true });
-    return () => { io && io.disconnect(); mo.disconnect(); };
-  }, []);
-}
+// Reveals, CountUp and the scroll-linked hero live in scripts/scroll.jsx —
+// useReveal / CountUp / useScrollProgress / useHeroScrollLink are consumed as
+// window globals from there.
 
 // ───────────────────────── Frame-by-frame helpers ─────────────────────────
 
@@ -133,33 +108,6 @@ function BootSequence(){
   );
 }
 
-// Number counter that animates when in viewport
-function CountUp({ end, duration = 1200, suffix = "" }){
-  const [val, setVal] = useState(0);
-  const ref = useRef(null);
-  useEffect(() => {
-    if(!ref.current) return;
-    const io = new IntersectionObserver((entries) => {
-      for(const e of entries){
-        if(e.isIntersecting){
-          const t0 = performance.now();
-          function tick(now){
-            const t = Math.min(1, (now - t0)/duration);
-            const eased = 1 - Math.pow(1 - t, 3);
-            setVal(Math.round(end * eased));
-            if(t < 1) requestAnimationFrame(tick);
-          }
-          requestAnimationFrame(tick);
-          io.disconnect();
-        }
-      }
-    }, { threshold: 0.5 });
-    io.observe(ref.current);
-    return () => io.disconnect();
-  }, [end]);
-  return <span ref={ref} className="num">{val}{suffix}</span>;
-}
-
 // ───────────────────────── Nav ─────────────────────────
 function Nav(){
   return (
@@ -183,8 +131,10 @@ function Nav(){
 
 // ───────────────────────── Hero ─────────────────────────
 function Hero({ variant }){
+  const heroRef = useRef(null);
+  useHeroScrollLink(heroRef);
   return (
-    <section id="top" className={`hero variant-${variant}`}>
+    <section id="top" ref={heroRef} className={`hero variant-${variant}`}>
       {variant === "coords" && (
         <div className="coord-grid" aria-hidden="true">
           <div>// 36.85°S / 174.76°E</div><div></div><div>v2 / 2026</div>
@@ -475,6 +425,7 @@ function App(){
   }, [t.palette, t.density, t.typePairing]);
 
   useReveal();
+  useScrollProgress();
 
   return (
     <>

@@ -3,21 +3,8 @@
 const { useState, useEffect, useRef } = React;
 
 // ───────── shared helpers ─────────
-function useReveal(){
-  useEffect(() => {
-    const els = document.querySelectorAll('.reveal, .approach .row, .cell');
-    const vh = window.innerHeight;
-    els.forEach(el => {
-      const r = el.getBoundingClientRect();
-      if(r.top < vh * 0.95 && r.bottom > 0) el.classList.add('in');
-    });
-    const io = new IntersectionObserver(es => {
-      for(const e of es){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }
-    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-    els.forEach(el => !el.classList.contains('in') && io.observe(el));
-    return () => io.disconnect();
-  }, []);
-}
+// useReveal / useScrollProgress / useParallax come from scripts/scroll.jsx as
+// window globals — this page owns no motion runtime of its own.
 
 // Quick scramble that ends on the right word.
 function GlyphShuffle({ text, perChar = 60, scrambleMs = 180, fps = 28 }){
@@ -56,20 +43,6 @@ function GlyphShuffle({ text, perChar = 60, scrambleMs = 180, fps = 28 }){
     if(wi < words.length - 1){ globalI++; nodes.push(<span key={`s${wi}`}> </span>); }
   });
   return <span>{nodes}</span>;
-}
-
-// Scroll progress bar
-function useScrollProgress(){
-  useEffect(() => {
-    function onScroll(){
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      const p = h > 0 ? (window.scrollY / h) * 100 : 0;
-      const bar = document.getElementById('scroll-bar');
-      if(bar) bar.style.width = p + '%';
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 }
 
 // ───────── Nav ─────────
@@ -182,18 +155,25 @@ const mediaCornerStyle = {
   mixBlendMode: 'difference',
 };
 
+// Reveal and parallax must own SEPARATE elements: .reveal animates transform
+// from CSS, and the parallax hook writes an inline transform that would
+// override it. Outer div = reveal target, inner figure = parallax target.
 function MediaImage({ item, frameNo }){
   const openLightbox = React.useContext(LightboxContext);
+  const figureRef = useRef(null);
+  useParallax(figureRef);
   return (
-    <figure className="reveal" style={mediaFigureStyle}>
-      <span style={mediaCornerStyle}>IMG {String(frameNo).padStart(2,'0')}</span>
-      <img
-        src={item.src} alt={item.alt || ''} loading="lazy"
-        onClick={() => openLightbox({ src:item.src, alt:item.alt, caption:item.caption })}
-        style={{ display:'block', width:'100%', height:'auto', cursor:'zoom-in' }}
-      />
-      {item.caption && <figcaption style={mediaCaptionStyle}>{item.caption}</figcaption>}
-    </figure>
+    <div className="reveal">
+      <figure ref={figureRef} style={mediaFigureStyle}>
+        <span style={mediaCornerStyle}>IMG {String(frameNo).padStart(2,'0')}</span>
+        <img
+          src={item.src} alt={item.alt || ''} loading="lazy"
+          onClick={() => openLightbox({ src:item.src, alt:item.alt, caption:item.caption })}
+          style={{ display:'block', width:'100%', height:'auto', cursor:'zoom-in' }}
+        />
+        {item.caption && <figcaption style={mediaCaptionStyle}>{item.caption}</figcaption>}
+      </figure>
+    </div>
   );
 }
 
@@ -211,12 +191,16 @@ function MediaVideo({ item, frameNo }){
 }
 
 function MediaGif({ item, frameNo }){
+  const figureRef = useRef(null);
+  useParallax(figureRef);
   return (
-    <figure className="reveal" style={mediaFigureStyle}>
-      <span style={mediaCornerStyle}>GIF {String(frameNo).padStart(2,'0')}</span>
-      <img src={item.src} alt={item.alt || ''} loading="lazy" style={{ display:'block', width:'100%', height:'auto' }} />
-      {item.caption && <figcaption style={mediaCaptionStyle}>{item.caption}</figcaption>}
-    </figure>
+    <div className="reveal">
+      <figure ref={figureRef} style={mediaFigureStyle}>
+        <span style={mediaCornerStyle}>GIF {String(frameNo).padStart(2,'0')}</span>
+        <img src={item.src} alt={item.alt || ''} loading="lazy" style={{ display:'block', width:'100%', height:'auto' }} />
+        {item.caption && <figcaption style={mediaCaptionStyle}>{item.caption}</figcaption>}
+      </figure>
+    </div>
   );
 }
 
@@ -330,7 +314,6 @@ function MediaSection({ media }){
 // ───────── Page ─────────
 function ProjectPage({ project }){
   useReveal();
-  useScrollProgress();
   const [lightbox, setLightbox] = useState(null);
 
   // adjacent projects
@@ -492,6 +475,9 @@ function App(){
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
   const project = (window.PROJECTS || []).find(p => p.id === id);
+
+  // Progress bar is page-level, so it runs on the not-found branch too.
+  useScrollProgress();
 
   // Set document title
   useEffect(() => {
