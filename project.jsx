@@ -362,7 +362,7 @@ function ProjectPage({ project }){
             <span className="pill acc">[ idx {String(idx + 1).padStart(2,'0')} / {String(list.length).padStart(2,'0')} ]</span>
           </div>
 
-          <h1 className="reveal reveal-1">
+          <h1 className="reveal reveal-1 text-silver">
             <GlyphShuffle text={project.title.toLowerCase()} />
           </h1>
 

@@ -201,17 +201,17 @@ function Hero({ variant }){
         </div>
 
         {variant === "split" ? (
-          <h1 className="reveal reveal-1">
+          <h1 className="reveal reveal-1 text-silver">
             young woo<br/>
             <span className="acc"><GlyphShuffle text="song" /></span>
           </h1>
         ) : variant === "coords" ? (
-          <h1 className="reveal reveal-1">
+          <h1 className="reveal reveal-1 text-silver">
             young woo song<br/>
             <span className="acc"><GlyphShuffle text="applied ai" /></span> · architecture
           </h1>
         ) : (
-          <h1 className="reveal reveal-1">
+          <h1 className="reveal reveal-1 text-silver">
             young woo song<br/>
             <span className="acc"><GlyphShuffle text="applied" /></span> ai.
           </h1>
@@ -379,7 +379,7 @@ function Approach(){
         </div>
         <div className="approach-grid">
           <div>
-            <h2 className="reveal">from architecture to <span className="acc">applied ai</span>.</h2>
+            <h2 className="reveal text-silver">from architecture to <span className="acc">applied ai</span>.</h2>
             <p className="reveal reveal-1">seven years across new zealand architecture practices — ignite, woods bagot, rcg — taught me to work with constraints and ship under pressure. now back at ignite as ai specialist, applying generative ai and machine learning to real architecture and design workflows.</p>
             <p className="reveal reveal-2">i build internal tools — rag, workflow automation, document and compliance support — and stand up the governance, evals, and adoption frameworks that make them safe to scale. aut-accredited in data science &amp; ai (institute of data) and ibm-certified across ai engineering and ai development.</p>
           </div>
@@ -437,7 +437,7 @@ function Contact(){
           <span className="rule"></span>
         </div>
         <div className="contact-card reveal">
-          <h2>let&rsquo;s build<br/>something <span className="acc">real</span>.</h2>
+          <h2 className="text-silver">let&rsquo;s build<br/>something <span className="acc">real</span>.</h2>
           <p>open to interesting work in applied ai, ai governance and adoption, multi-agent systems, and tools for architecture and design.</p>
           <div className="contact-actions">
             <a className="btn btn-primary" href="mailto:youngwoo930@gmail.com">youngwoo930@gmail.com <span className="ar">↗</span></a>
