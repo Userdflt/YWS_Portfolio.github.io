@@ -67,11 +67,8 @@
 /* ─────────────── TOKENS: dark tone ───────────────
    Three consumers, one declaration: a section painted ink-navy (.sec-dark),
    the nav skin that matches it (.nav--dark), and the cursor-follow preview,
-   which is a body-level fixed overlay and so can never inherit a section tone.
-   `.band-deep` is a TEMPORARY alias for markup that still carries the old band
-   class — retired when sections take data-tone/.sec-dark. */
+   which is a body-level fixed overlay and so can never inherit a section tone. */
 .sec-dark,
-.band-deep,
 .nav--dark,
 .work-preview{
   --bg: var(--ink-navy);
@@ -91,11 +88,25 @@
 
 /* A tone scope PAINTS. Re-declaring the tokens alone would leave the section
    transparent over the page's paper background. */
-.sec-dark,.band-deep{background-color:var(--bg);color:var(--ink)}
+.sec-dark{background-color:var(--bg);color:var(--ink)}
 
-/* Lifted paper band — the quieter of the two light surfaces. `.band-lift` is
-   the pre-Phase-C alias of the same recipe. */
-.band-paper,.band-lift{background-color:var(--paper-2)}
+/* Lifted paper band — the quieter of the two light surfaces. */
+.band-paper{background-color:var(--paper-2)}
+
+/* ─────────────── TOKENS: always-dark component scope ───────────────
+   For surfaces that are dark REGARDLESS of the section they sit in: the
+   lightbox overlay (a fixed body-level layer) and the scrim caption over a
+   gallery thumbnail (a dark gradient inside a light section). Only the ink and
+   line tokens are re-declared — each component paints its own surface, so
+   `--bg` deliberately stays whatever the page tone says it is. */
+.overlay-dark{
+  --ink: #f4f5f8;
+  --ink-dim: rgba(244,245,248,0.64);
+  --ink-faint: rgba(244,245,248,0.40);
+  --line: rgba(244,245,248,0.14);
+  --line-strong: rgba(244,245,248,0.30);
+  color:var(--ink);
+}
 
 /* ─────────────── RESET ─────────────── */
 *,*::before,*::after{box-sizing:border-box}
@@ -193,11 +204,14 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 
 /* ─────────────── WORK ─────────────── */
 .work-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
-.work-row{position:relative;display:grid;grid-template-columns:64px 1fr auto auto;align-items:center;gap:24px;padding:calc(var(--u)*3.4) 0;border-bottom:1px solid var(--line);cursor:pointer;transition:padding .35s var(--ease-out-soft), background-color .35s var(--ease-out-soft)}
+.work-row{position:relative;display:grid;grid-template-columns:clamp(58px, 6vw, 92px) 1fr auto auto;align-items:center;gap:24px;padding:calc(var(--u)*3.4) 0;border-bottom:1px solid var(--line);cursor:pointer;transition:padding .35s var(--ease-out-soft), background-color .35s var(--ease-out-soft)}
 .work-row::before{content:"";position:absolute;left:0;top:0;width:2px;height:100%;background:var(--accent);transform:scaleY(0);transform-origin:center;transition:transform .35s ease}
 .work-row:hover{padding-left:18px;padding-right:8px;background-color:var(--accent-soft)}
 .work-row:hover::before{transform:scaleY(1)}
-.work-row .idx{font-family:var(--fs-mono);font-size:11px;color:var(--ink-dim);letter-spacing:0.06em}
+/* Big thin numeral — the index is the row's anchor, not a footnote. It reads
+   --ink, so it is white on the dark work band and ink on paper without a
+   second rule. */
+.work-row .idx{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-3);line-height:1;letter-spacing:-0.03em;color:var(--ink);font-variant-numeric:tabular-nums;transition:color .25s}
 .work-row:hover .idx{color:var(--accent)}
 .work-row .title-col{display:flex;flex-direction:column;gap:8px;min-width:0}
 .work-row .title{font-family:var(--fs-sans);font-weight:300;font-size:clamp(24px, 2.8vw, 38px);line-height:1.08;letter-spacing:-0.03em;color:var(--ink);transition:color .25s}
@@ -207,6 +221,15 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 /* circular hairline icon button */
 .work-row .arrow{width:40px;height:40px;border-radius:50%;border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;color:var(--ink-dim);transition:background-color .25s, border-color .25s, color .25s, transform .25s;font-size:14px}
 .work-row:hover .arrow{background-color:var(--ink);border-color:var(--ink);color:var(--bg);transform:translate(2px,-2px)}
+/* Narrow: the category drops to its own line under the title rather than
+   squeezing the title column to nothing beside the enlarged numeral. */
+@media (max-width: 640px){
+  .work-row{grid-template-columns:auto 1fr auto;gap:8px 16px}
+  .work-row .idx{grid-row:1;grid-column:1}
+  .work-row .title-col{grid-row:1;grid-column:2}
+  .work-row .cat{grid-row:2;grid-column:2}
+  .work-row .arrow{grid-row:1;grid-column:3}
+}
 
 /* hover preview thumbnail (follows cursor) — permanently dark-scoped above. */
 .work-preview{position:fixed;width:240px;height:160px;overflow:hidden;pointer-events:none;z-index:40;background:var(--bg);color:var(--ink);opacity:0;transform:translate(-50%,-50%) scale(0.92);transition:opacity .2s, transform .35s var(--ease-out-soft);box-shadow:var(--shadow-card)}
@@ -219,26 +242,6 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .preview-meta{position:absolute;left:12px;right:12px;bottom:9px;display:flex;justify-content:space-between;align-items:end;font-family:var(--fs-mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;z-index:3}
 .preview-meta .pm-cat{color:var(--ink-dim)}
 .preview-meta .pm-tag{color:var(--accent)}
-.preview-frame{position:absolute;top:8px;left:12px;right:12px;display:flex;justify-content:space-between;color:var(--ink-dim);font-family:var(--fs-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;z-index:3}
-
-/* CARDS variant */
-.work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-@media (max-width: 760px){.work-grid{grid-template-columns:1fr}}
-.work-card{position:relative;padding:calc(var(--u)*3.5);overflow:hidden;background:var(--panel);border:1px solid var(--line);transition:border-color .3s, box-shadow .3s}
-.work-card:hover{border-color:var(--line-strong);box-shadow:var(--shadow-card)}
-.work-card .thumb{aspect-ratio: 16/10;background:var(--paper-2);display:flex;align-items:center;justify-content:center;font-family:var(--fs-sans);font-weight:200;font-size:44px;color:var(--accent);margin-bottom:18px}
-.work-card .ctitle{font-family:var(--fs-sans);font-weight:300;font-size:22px;line-height:1.15;letter-spacing:-0.02em;margin:8px 0 6px;color:var(--ink)}
-.work-card .ccat{font-family:var(--fs-mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
-.work-card .cblurb{font-size:13px;color:var(--ink-dim);line-height:1.6}
-
-/* INDEX variant */
-.work-index{font-family:var(--fs-mono);font-size:12.5px}
-.work-index .head, .work-index .row{display:grid;grid-template-columns:48px 1.4fr 1fr 1fr 32px;gap:16px;padding:12px 4px;border-bottom:1px solid var(--line);align-items:center}
-.work-index .head{color:var(--ink-dim);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;border-bottom-color:var(--line-strong)}
-.work-index .row{cursor:pointer;transition:background-color .2s;color:var(--ink-dim)}
-.work-index .row:hover{background-color:var(--accent-soft);color:var(--ink)}
-.work-index .row .tname{font-family:var(--fs-sans);color:var(--ink)}
-.work-index .row:hover .tname{color:var(--accent)}
 
 /* ─────────────── APPROACH ─────────────── */
 .approach-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start}
@@ -344,7 +347,6 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .frame{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--paper-2);border:1px solid var(--line)}
 .frame .mark{font-family:var(--fs-sans);font-weight:200;font-size:56px;color:var(--accent);line-height:1}
 .frame .corner{position:absolute;top:10px;left:12px;font-family:var(--fs-mono);color:var(--ink-dim);font-size:9px;letter-spacing:0.1em;text-transform:uppercase}
-.frame .corner.r{left:auto;right:12px;color:var(--accent)}
 .frame .label{position:absolute;bottom:12px;left:12px;font-family:var(--fs-mono);color:var(--ink-dim);font-size:10px;letter-spacing:0.1em;text-transform:uppercase}
 
 /* project link cards — ONE recipe shared by prev/next (.pnav) and the
@@ -394,11 +396,6 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 :root.density-compact{--u:6px}
 :root.density-regular{--u:8px}
 :root.density-spacious{--u:11px}
-
-/* type pairings */
-:root[data-type-pairing="jetbrains"]{--fs-mono:"JetBrains Mono", ui-monospace, monospace}
-:root[data-type-pairing="plex"]{--fs-mono:"IBM Plex Mono", ui-monospace, monospace}
-:root[data-type-pairing="geist"]{--fs-mono:"Geist Mono", ui-monospace, monospace}
 
 /* entrance reveals (scroll-driven) */
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1)}

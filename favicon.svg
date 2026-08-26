@@ -1,23 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Young Woo Song">
-  <title>y_w_song.sh</title>
-  <defs>
-    <!-- silver ramp (retired theme recipe; icon redraw is Phase C) -->
-    <linearGradient id="silver" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#9aa6c4"/>
-    </linearGradient>
-  </defs>
+  <title>Young Woo Song</title>
 
-  <!-- deep navy plate (theme bg) with the theme hairline stroke -->
-  <rect width="64" height="64" rx="14" fill="#070b16"/>
-  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none"
-        stroke="#96aadc" stroke-opacity="0.24" stroke-width="1.5"/>
+  <!-- paper plate + ink hairline — the site's light tone, at tile scale -->
+  <rect width="64" height="64" rx="12" fill="#f0f1f4"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="11.25" fill="none"
+        stroke="#0e1228" stroke-opacity="0.16" stroke-width="1.5"/>
 
-  <!-- brand monogram, mono stack, lowercase like y_w_song.sh -->
-  <text x="30" y="43" text-anchor="middle"
-        font-family="'JetBrains Mono','IBM Plex Mono','Geist Mono',ui-monospace,monospace"
-        font-size="30" font-weight="500" fill="url(#silver)">y_</text>
-
-  <!-- accent blip, the same dot the nav brand wears -->
-  <circle cx="48" cy="19" r="4.5" fill="#6f8bff"/>
+  <!-- 'Y' drawn as geometric strokes, not text: no webfont is available to an
+       icon, and the display face is a thin geometric grotesk either way -->
+  <path d="M18 17 L32 35 L46 17 M32 35 L32 47" fill="none" stroke="#0e1228"
+        stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/>
 </svg>

@@ -3,8 +3,6 @@ const { useState, useEffect, useRef, useMemo } = React;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "palette": "azure",
-  "typePairing": "jetbrains",
-  "projectLayout": "editorial",
   "density": "regular"
 }/*EDITMODE-END*/;
 
@@ -51,7 +49,7 @@ function Hero(){
   const heroRef = useRef(null);
   useHeroScrollLink(heroRef);
   return (
-    <section id="top" ref={heroRef} className="hero">
+    <section id="top" ref={heroRef} className="hero" data-tone="light">
       <div className="wrap hero-lead">
         <p className="hero-status eyebrow">ai specialist · ignite · auckland · hybrid</p>
 
@@ -113,7 +111,7 @@ function Hero(){
 
 // ───────────────────────── Work: editorial list ─────────────────────────
 function WorkEditorial({ projects, previewRef }){
-  const onMove = (e, p, i) => {
+  const onMove = (e, p) => {
     const el = previewRef.current; if(!el) return;
     el.style.left = e.clientX + 'px';
     el.style.top = e.clientY + 'px';
@@ -136,8 +134,6 @@ function WorkEditorial({ projects, previewRef }){
     if (markEl) markEl.textContent = p.mark || '⟁';
     document.getElementById('preview-cat').textContent = p.category;
     document.getElementById('preview-tag').textContent = `${p.year} · open →`;
-    document.getElementById('preview-frame-l').textContent = `FRAME ${String(i+1).padStart(2,'0')}`;
-    document.getElementById('preview-frame-r').textContent = `● REC`;
   };
   const onLeave = () => previewRef.current?.classList.remove('show');
 
@@ -147,7 +143,7 @@ function WorkEditorial({ projects, previewRef }){
         <a key={p.id} href={`project.html?id=${p.id}`}
            className="work-row reveal"
            style={{ transitionDelay: `${0.03 * i}s` }}
-           onMouseMove={(e) => onMove(e, p, i)}
+           onMouseMove={(e) => onMove(e, p)}
            onMouseLeave={onLeave}>
           <div className="idx">{String(i + 1).padStart(2, '0')}</div>
           <div className="title-col">
@@ -162,45 +158,14 @@ function WorkEditorial({ projects, previewRef }){
   );
 }
 
-function WorkCards({ projects }){
-  return (
-    <div className="work-grid">
-      {projects.map((p, i) => (
-        <a key={p.id} href={`project.html?id=${p.id}`} className="work-card reveal" style={{ transitionDelay: `${0.04 * (i % 6)}s` }}>
-          <div className="thumb">{p.mark}</div>
-          <div className="ccat">{p.category} / {p.year}</div>
-          <div className="ctitle">{p.title}</div>
-          <div className="cblurb">{p.blurb}</div>
-        </a>
-      ))}
-    </div>
-  );
-}
-
-function WorkIndex({ projects }){
-  return (
-    <div className="work-index">
-      <div className="head">
-        <span>idx</span><span>project</span><span>category</span><span>stack</span><span></span>
-      </div>
-      {projects.map((p, i) => (
-        <a key={p.id} href={`project.html?id=${p.id}`} className="row reveal" style={{ transitionDelay: `${0.025 * i}s` }}>
-          <span>{String(i + 1).padStart(2, '0')}</span>
-          <span className="tname">{p.title}</span>
-          <span>{p.category}</span>
-          <span>{p.tech.slice(0,3).join(' · ')}</span>
-          <span>↗</span>
-        </a>
-      ))}
-    </div>
-  );
-}
-
-function Work({ layout }){
+// The dark band of the index. Editorial is the ONLY work renderer — the card
+// and table variants were competing surfaces for the same content, so the page
+// no longer has to declare which one it wants.
+function Work(){
   const previewRef = useRef(null);
   useEffect(() => { previewRef.current = document.getElementById('work-preview'); }, []);
   return (
-    <section id="work">
+    <section id="work" className="sec-dark" data-tone="dark">
       <div className="wrap">
         <div className="section-tag section-head reveal">
           <span className="marker section-num">[01]</span>
@@ -216,9 +181,7 @@ function Work({ layout }){
           <div className="stat"><span className="sn"><CountUp end={2} /></span><span className="sl">ibm specializations · 2025</span></div>
         </div>
 
-        {layout === "editorial" && <WorkEditorial projects={PROJECTS} previewRef={previewRef} />}
-        {layout === "cards" && <WorkCards projects={PROJECTS} />}
-        {layout === "index" && <WorkIndex projects={PROJECTS} />}
+        <WorkEditorial projects={PROJECTS} previewRef={previewRef} />
       </div>
     </section>
   );
@@ -227,7 +190,7 @@ function Work({ layout }){
 // ───────────────────────── Approach ─────────────────────────
 function Approach(){
   return (
-    <section id="approach" className="approach">
+    <section id="approach" className="approach" data-tone="light">
       <div className="wrap">
         <div className="section-tag section-head reveal">
           <span className="marker section-num">[02]</span>
@@ -260,7 +223,7 @@ function Approach(){
 // ───────────────────────── Stack ─────────────────────────
 function Stack(){
   return (
-    <section id="stack" className="band-lift">
+    <section id="stack" className="band-paper" data-tone="light">
       <div className="wrap">
         <div className="section-tag section-head reveal">
           <span className="marker section-num">[03]</span>
@@ -286,7 +249,7 @@ function Stack(){
 // ───────────────────────── Contact ─────────────────────────
 function Contact(){
   return (
-    <section id="contact" className="contact band-deep">
+    <section id="contact" className="contact sec-dark" data-tone="dark">
       <div className="wrap">
         <div className="section-tag section-head reveal">
           <span className="marker section-num">[04]</span>
@@ -333,8 +296,7 @@ function App(){
     r.style.setProperty('--accent-soft-d', p.softDark);
     r.classList.remove('density-compact','density-regular','density-spacious');
     r.classList.add(`density-${t.density}`);
-    r.setAttribute('data-type-pairing', t.typePairing);
-  }, [t.palette, t.density, t.typePairing]);
+  }, [t.palette, t.density]);
 
   useReveal();
   useScrollProgress();
@@ -344,7 +306,7 @@ function App(){
     <>
       <Nav page="index" activeId={activeId} />
       <Hero />
-      <Work layout={t.projectLayout} />
+      <Work />
       <Approach />
       <Stack />
       <Contact />
@@ -361,21 +323,7 @@ function App(){
           }}
         />
 
-        <TweakSection label="Typography" />
-        <TweakRadio
-          label="Mono"
-          value={t.typePairing}
-          options={["jetbrains", "plex", "geist"]}
-          onChange={(v) => setTweak('typePairing', v)}
-        />
-
         <TweakSection label="Layout" />
-        <TweakSelect
-          label="Projects"
-          value={t.projectLayout}
-          options={["editorial", "cards", "index"]}
-          onChange={(v) => setTweak('projectLayout', v)}
-        />
         <TweakRadio
           label="Density"
           value={t.density}

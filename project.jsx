@@ -16,14 +16,13 @@ function NotFound({ id }){
   return (
     <>
       <Nav page="project" />
-      <section className="wrap">
-        <div className="crumbs"><a href="index.html">← index.html</a><span className="sep">/</span><span className="here">404</span></div>
+      <section className="wrap" data-tone="light">
+        <div className="crumbs"><a href="index.html">← index</a><span className="sep">/</span><span className="here">404</span></div>
         <h1 style={{ fontWeight:500, fontSize:'clamp(40px,7vw,88px)', lineHeight:1.02, letterSpacing:'-.04em', margin:'40px 0 16px' }}>
           project <span style={{color:'var(--accent)'}}>{id || 'unknown'}</span> not found.
         </h1>
         <p style={{color:'var(--ink-dim)',fontSize:15,maxWidth:'60ch',margin:'0 0 28px'}}>
-          <span style={{color:'var(--accent)',opacity:.6}}>{'> '}</span>
-          this id isn&rsquo;t in the registry. head back to the index and pick another.
+          there is no project with that id. head back to the index and pick another.
         </p>
         <a className="btn btn-primary" href="index.html">return to index ↗</a>
       </section>
@@ -36,7 +35,6 @@ function Frame({ mark, label, frameNo }){
   return (
     <div className="frame">
       <span className="corner">FRAME {String(frameNo).padStart(2,'0')}</span>
-      <span className="corner r">● REC</span>
       <span className="mark">{mark}</span>
       <span className="label">{label}</span>
     </div>
@@ -57,13 +55,18 @@ function Lightbox({ state, onClose }){
   }, [state, onClose]);
   if(!state) return null;
   return (
+    // .overlay-dark carries the dark ink/line tokens: the overlay is a fixed
+    // body-level layer, so it can never inherit a section's tone, and the page
+    // tone under it is now light. The scrim colour itself stays an explicit
+    // value — it is the component's own surface, not a themed one.
     <div
+      className="overlay-dark"
       onClick={onClose}
-      style={{ position:'fixed', inset:0, zIndex:1000, background:'rgba(2,4,7,0.93)', backdropFilter:'blur(4px)', display:'flex', alignItems:'center', justifyContent:'center', padding:'4vh 4vw', cursor:'zoom-out' }}
+      style={{ position:'fixed', inset:0, zIndex:1000, background:'rgba(8,11,26,0.94)', backdropFilter:'blur(4px)', display:'flex', alignItems:'center', justifyContent:'center', padding:'4vh 4vw', cursor:'zoom-out' }}
     >
       <span style={{ position:'absolute', top:18, right:24, color:'var(--ink-dim)', fontSize:10, letterSpacing:'0.1em', textTransform:'uppercase' }}>esc / click to close</span>
       <figure onClick={(e) => e.stopPropagation()} style={{ margin:0, display:'flex', flexDirection:'column', maxWidth:'92vw', maxHeight:'92vh', cursor:'default' }}>
-        <img src={state.src} alt={state.alt || ''} style={{ maxWidth:'92vw', maxHeight: state.caption ? '84vh' : '92vh', width:'auto', height:'auto', objectFit:'contain', border:'1px solid var(--line)', background:'var(--bg)' }} />
+        <img src={state.src} alt={state.alt || ''} style={{ maxWidth:'92vw', maxHeight: state.caption ? '84vh' : '92vh', width:'auto', height:'auto', objectFit:'contain', border:'1px solid var(--line)', background:'var(--ink-navy)' }} />
         {state.caption && <figcaption style={{ ...mediaCaptionStyle, borderTop:'none', textAlign:'center' }}>{state.caption}</figcaption>}
       </figure>
     </div>
@@ -72,6 +75,8 @@ function Lightbox({ state, onClose }){
 
 // ───────── Media renderers ─────────
 // Shared styles inlined so we don't depend on css that doesn't ship in project.html.
+// Every colour reads a token, so a figure renders correctly wherever it lands:
+// on the light media section, or inside the dark lightbox overlay.
 const mediaFigureStyle = {
   margin: 0,
   border: '1px solid var(--line)',
@@ -79,25 +84,33 @@ const mediaFigureStyle = {
   position: 'relative',
   overflow: 'hidden',
 };
+// Caption text uses --ink-dim, never --ink-faint: faint is reserved for
+// non-text decoration because it falls below AA at every size.
 const mediaCaptionStyle = {
+  fontFamily: 'var(--fs-mono)',
   fontSize: 10,
   letterSpacing: '0.1em',
   textTransform: 'uppercase',
-  color: 'var(--ink-faint)',
+  color: 'var(--ink-dim)',
   padding: '10px 12px',
   borderTop: '1px solid var(--line)',
 };
+// The frame label sits over arbitrary media, so it carries its own paper chip
+// instead of the old difference blend — which only ever resolved against a
+// dark page and inverted to mud on paper.
 const mediaCornerStyle = {
   position: 'absolute',
   top: 10,
   left: 12,
-  color: 'var(--ink-faint)',
+  color: 'var(--ink-dim)',
+  background: 'var(--bg)',
+  padding: '3px 7px',
+  fontFamily: 'var(--fs-mono)',
   fontSize: 9,
   letterSpacing: '0.1em',
   textTransform: 'uppercase',
   zIndex: 1,
   pointerEvents: 'none',
-  mixBlendMode: 'difference',
 };
 
 // Reveal and parallax must own SEPARATE elements: .reveal animates transform
@@ -126,7 +139,6 @@ function MediaVideo({ item, frameNo }){
   return (
     <figure className="reveal" style={mediaFigureStyle}>
       <span style={mediaCornerStyle}>VID {String(frameNo).padStart(2,'0')}</span>
-      <span style={{ ...mediaCornerStyle, left:'auto', right:12, color:'var(--accent)' }}>● REC</span>
       <video controls preload="metadata" playsInline poster={item.poster} style={{ display:'block', width:'100%', height:'auto', background:'#000' }}>
         <source src={item.src} />
       </video>
@@ -186,7 +198,9 @@ function MediaGallery({ item, baseNo }){
           >
             <span style={mediaCornerStyle}>{String(baseNo + i).padStart(2,'0')}</span>
             <img src={g.src} alt={g.alt || ''} loading="lazy" style={{ display:'block', width:'100%', height:'100%', objectFit:'cover' }} />
-            {g.caption && <figcaption style={{ ...mediaCaptionStyle, position:'absolute', bottom:0, left:0, right:0, background:'linear-gradient(180deg, transparent, rgba(5,7,10,0.85))', borderTop:'none' }}>{g.caption}</figcaption>}
+            {/* Scrim caption: a dark gradient inside a light section, so it
+                carries .overlay-dark to read its ink from the dark scope. */}
+            {g.caption && <figcaption className="overlay-dark" style={{ ...mediaCaptionStyle, position:'absolute', bottom:0, left:0, right:0, background:'linear-gradient(180deg, transparent, rgba(8,11,26,0.88))', borderTop:'none' }}>{g.caption}</figcaption>}
           </figure>
         ))}
       </div>
@@ -209,7 +223,6 @@ function MediaVideoGallery({ item, baseNo }){
         {item.items.map((v, i) => (
           <figure key={i} style={mediaFigureStyle}>
             <span style={mediaCornerStyle}>VID {String(baseNo + i).padStart(2,'0')}</span>
-            <span style={{ ...mediaCornerStyle, left:'auto', right:12, color:'var(--accent)' }}>● REC</span>
             <video controls preload="metadata" playsInline poster={v.poster} style={{ display:'block', width:'100%', height:'auto', background:'#000' }}>
               <source src={v.src} />
             </video>
@@ -225,7 +238,7 @@ function MediaSection({ media }){
   if(!media || media.length === 0) return null;
   let frameNo = 0;
   return (
-    <section>
+    <section data-tone="light">
       <div className="wrap">
         <div className="section-tag section-head reveal">
           <span className="marker section-num">[04]</span><span className="eyebrow">media</span><span className="rule"></span>
@@ -317,15 +330,15 @@ function ProjectPage({ project }){
     <LightboxContext.Provider value={setLightbox}>
       <Nav page="project" />
 
-      <div className="wrap">
+      <div className="wrap" data-tone="light">
         <div className="crumbs reveal">
-          <a href="index.html">index.html</a><span className="sep">/</span>
+          <a href="index.html">index</a><span className="sep">/</span>
           <a href="index.html#work">work</a><span className="sep">/</span>
           <span className="here">{project.id}</span>
         </div>
       </div>
 
-      <section className="ph ph-overlapped">
+      <section className="ph ph-overlapped" data-tone="light">
         <div className="wrap">
           <div className="meta reveal">
             <span className="pill"><span className="blip"></span>{project.status}</span>
@@ -348,7 +361,7 @@ function ProjectPage({ project }){
       </section>
 
       {/* Overview */}
-      <section className="overview overview-lead">
+      <section className="overview overview-lead" data-tone="light">
         <div className="wrap panel-overlap">
           <div className="section-tag section-head reveal">
             <span className="marker section-num">[01]</span><span className="eyebrow">overview</span><span className="rule"></span>
@@ -367,7 +380,7 @@ function ProjectPage({ project }){
 
       {/* Approach */}
       {d.approach && d.approach.length > 0 && (
-        <section className="approach">
+        <section className="approach" data-tone="light">
           <div className="wrap">
             <div className="section-tag section-head reveal">
               <span className="marker section-num">[03]</span><span className="eyebrow">approach</span><span className="rule"></span>
@@ -391,7 +404,7 @@ function ProjectPage({ project }){
       {d.media && d.media.length > 0 ? (
         <MediaSection media={d.media} />
       ) : (
-        <section>
+        <section data-tone="light">
           <div className="wrap">
             <div className="section-tag section-head reveal">
               <span className="marker section-num">[04]</span><span className="eyebrow">frames</span><span className="rule"></span>
@@ -405,8 +418,8 @@ function ProjectPage({ project }){
         </section>
       )}
 
-      {/* Outcomes + Stack */}
-      <section className="band-lift">
+      {/* Outcomes + Stack — the page's one dark band */}
+      <section className="sec-dark" data-tone="dark">
         <div className="wrap">
           <div className="section-tag section-head reveal">
             <span className="marker section-num">[05]</span><span className="eyebrow">outcomes &amp; stack</span><span className="rule"></span>
@@ -431,7 +444,7 @@ function ProjectPage({ project }){
       </section>
 
       {/* Related → Prev/Next → Footer */}
-      <section>
+      <section data-tone="light">
         <div className="wrap">
           <RelatedProjects project={project} />
           <div className="pnav">
