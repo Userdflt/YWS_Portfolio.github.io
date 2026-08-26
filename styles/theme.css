@@ -495,6 +495,71 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .motion-hero-link{will-change:transform,opacity;transform-origin:50% 30%}
 .motion-parallax{will-change:transform}
 
+/* ─────────────── EDITORIAL GRAMMAR (applied) ───────────────
+   Phase 4 wires the primitives above into the two pages. Everything here is
+   STATIC — no new animation — so the reduced-motion block below needs no
+   additions. Both pages wear the same rules, so the grammar cannot drift. */
+
+/* Display ramp as applied classes. The scoped forms carry the extra
+   specificity needed to beat the per-component font-size each headline
+   already declares, so applying the class is the only markup change. */
+.display-1{font-size:var(--fs-display-1)}
+.display-2{font-size:var(--fs-display-2)}
+.hero h1.display-1,.ph h1.display-1{font-size:var(--fs-display-1)}
+.contact-card h2.display-2{font-size:var(--fs-display-2)}
+
+/* Editorial section header. The `[0x]` marker each section already renders
+   becomes the big quiet numeral and the label beside it becomes the eyebrow —
+   no new elements. Bottom alignment puts the numeral's own hairline and the
+   existing .rule gradient on ONE line running to the right edge.
+   Applied via the .section-head modifier so the inline `▸` gallery headers
+   (project.jsx MediaGallery / MediaVideoGallery) keep their small scale. */
+.section-tag.section-head{align-items:flex-end;gap:16px;margin-bottom:calc(var(--u)*5)}
+.section-tag.section-head .marker.section-num{position:relative;color:var(--ink-faint);line-height:.9;padding-bottom:10px}
+.section-tag.section-head .marker.section-num::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line-strong)}
+.section-tag.section-head .eyebrow{padding-bottom:10px;color:var(--ink-dim)}
+.section-tag.section-head > span:last-child:not(.rule){padding-bottom:10px}
+@media (max-width: 560px){
+  .section-tag.section-head{flex-wrap:wrap;gap:12px}
+  .section-tag.section-head .eyebrow{letter-spacing:.14em}
+}
+
+/* Hero status pill wears the eyebrow on its label. A pill is a fixed-height
+   chip, so the tracking steps down before the line could outgrow a phone. */
+.status-pill .eyebrow{letter-spacing:.14em}
+@media (max-width: 560px){
+  .hero-meta{flex-wrap:wrap}
+  .status-pill{max-width:100%}
+  .status-pill .eyebrow{font-size:10px;letter-spacing:.08em}
+}
+
+/* Hairline rules between stacked rows — index principles and project approach
+   steps. Both already draw their own border, so the primitive's tone lands on
+   the existing rule instead of inserting an <hr> into the DOM. */
+.approach .principle{border-top-color:var(--line-strong)}
+.approach .principle:last-child{border-bottom-color:var(--line-strong)}
+.approach .row{border-top-color:var(--line-strong)}
+.approach .row:last-child{border-bottom-color:var(--line-strong)}
+
+/* Project overview rides up over the hero's lower padding — likova's
+   overlapping panel. Three cooperating pieces:
+     .ph-overlapped   surrenders enough bottom padding that the pull lands in
+                      dead space instead of over the actions row, and drops its
+                      own bottom rule (the panel is now the boundary; a rule
+                      would otherwise read straight through the 3%-opaque card).
+     .overview-lead   gives up the section's top padding, which would otherwise
+                      swallow the negative margin whole.
+     .panel-overlap   supplies the margin itself (see the primitive above) —
+                      NOT restated here. It is declared after .wrap, so its
+                      margin-top wins over that rule's `margin:0 auto`.
+   .wrap pads horizontally only, so the panel adds its own vertical rhythm. */
+.ph.ph-overlapped{padding-bottom:calc(var(--u)*8 + 96px);border-bottom:0}
+.overview-lead{padding-top:0}
+.overview-lead .panel-overlap{padding-top:calc(var(--u)*5);padding-bottom:calc(var(--u)*5)}
+@media (max-width: 720px){
+  .ph.ph-overlapped{padding-bottom:calc(var(--u)*8 + 24px)}
+}
+
 @media (prefers-reduced-motion: reduce){
   .reveal{opacity:1;transform:none;transition:none}
   #cosmic-canvas{opacity:.4}

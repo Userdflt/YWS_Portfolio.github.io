@@ -227,8 +227,8 @@ function MediaSection({ media }){
   return (
     <section>
       <div className="wrap">
-        <div className="section-tag reveal">
-          <span className="marker">[04]</span><span>media</span><span className="rule"></span>
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">[04]</span><span className="eyebrow">media</span><span className="rule"></span>
           <span>{media.length} blocks</span>
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap:'calc(var(--u)*3)' }}>
@@ -281,8 +281,8 @@ function RelatedProjects({ project }){
   if(peers.length === 0) return null;
   return (
     <div className="related">
-      <div className="section-tag reveal">
-        <span className="marker">[06]</span><span>related</span><span className="rule"></span>
+      <div className="section-tag section-head reveal">
+        <span className="marker section-num">[06]</span><span className="eyebrow">related</span><span className="rule"></span>
         <span>{project.category.toLowerCase()}</span>
       </div>
       <div className="related-grid reveal">
@@ -325,7 +325,7 @@ function ProjectPage({ project }){
         </div>
       </div>
 
-      <section className="ph">
+      <section className="ph ph-overlapped">
         <div className="wrap">
           <div className="meta reveal">
             <span className="pill"><span className="blip"></span>{project.status}</span>
@@ -334,7 +334,7 @@ function ProjectPage({ project }){
             <span className="pill acc">[ idx {String(idx + 1).padStart(2,'0')} / {String(list.length).padStart(2,'0')} ]</span>
           </div>
 
-          <h1 className="reveal reveal-1 text-silver">
+          <h1 className="reveal reveal-1 text-silver display-1">
             <GlyphShuffle text={project.title.toLowerCase()} />
           </h1>
 
@@ -350,16 +350,16 @@ function ProjectPage({ project }){
       </section>
 
       {/* Overview */}
-      <section className="overview">
-        <div className="wrap">
-          <div className="section-tag reveal">
-            <span className="marker">[01]</span><span>overview</span><span className="rule"></span>
+      <section className="overview overview-lead">
+        <div className="wrap panel-overlap">
+          <div className="section-tag section-head reveal">
+            <span className="marker section-num">[01]</span><span className="eyebrow">overview</span><span className="rule"></span>
           </div>
           {d.overview && <p className="reveal">{d.overview}</p>}
           {d.problem && (
             <>
-              <div className="section-tag reveal" style={{marginTop:'calc(var(--u)*5)'}}>
-                <span className="marker">[02]</span><span>problem</span><span className="rule"></span>
+              <div className="section-tag section-head reveal" style={{marginTop:'calc(var(--u)*5)'}}>
+                <span className="marker section-num">[02]</span><span className="eyebrow">problem</span><span className="rule"></span>
               </div>
               <p className="reveal">{d.problem}</p>
             </>
@@ -371,8 +371,8 @@ function ProjectPage({ project }){
       {d.approach && d.approach.length > 0 && (
         <section className="approach">
           <div className="wrap">
-            <div className="section-tag reveal">
-              <span className="marker">[03]</span><span>approach</span><span className="rule"></span>
+            <div className="section-tag section-head reveal">
+              <span className="marker section-num">[03]</span><span className="eyebrow">approach</span><span className="rule"></span>
             </div>
             <div>
               {d.approach.map((a, i) => (
@@ -395,8 +395,8 @@ function ProjectPage({ project }){
       ) : (
         <section>
           <div className="wrap">
-            <div className="section-tag reveal">
-              <span className="marker">[04]</span><span>frames</span><span className="rule"></span>
+            <div className="section-tag section-head reveal">
+              <span className="marker section-num">[04]</span><span className="eyebrow">frames</span><span className="rule"></span>
               <span>placeholders</span>
             </div>
             <div className="gallery">
@@ -408,10 +408,10 @@ function ProjectPage({ project }){
       )}
 
       {/* Outcomes + Stack */}
-      <section>
+      <section className="band-lift">
         <div className="wrap">
-          <div className="section-tag reveal">
-            <span className="marker">[05]</span><span>outcomes &amp; stack</span><span className="rule"></span>
+          <div className="section-tag section-head reveal">
+            <span className="marker section-num">[05]</span><span className="eyebrow">outcomes &amp; stack</span><span className="rule"></span>
           </div>
           <div className="split">
             <div className="cell">

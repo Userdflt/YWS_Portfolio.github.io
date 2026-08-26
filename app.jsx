@@ -82,21 +82,21 @@ function Hero({ variant }){
         <BootSequence />
 
         <div className="hero-meta reveal">
-          <span className="status-pill"><span className="pulse"></span><span>ai specialist · ignite · auckland · hybrid</span></span>
+          <span className="status-pill"><span className="pulse"></span><span className="eyebrow">ai specialist · ignite · auckland · hybrid</span></span>
         </div>
 
         {variant === "split" ? (
-          <h1 className="reveal reveal-1 text-silver">
+          <h1 className="reveal reveal-1 text-silver display-1">
             young woo<br/>
             <span className="acc"><GlyphShuffle text="song" /></span>
           </h1>
         ) : variant === "coords" ? (
-          <h1 className="reveal reveal-1 text-silver">
+          <h1 className="reveal reveal-1 text-silver display-1">
             young woo song<br/>
             <span className="acc"><GlyphShuffle text="applied ai" /></span> · architecture
           </h1>
         ) : (
-          <h1 className="reveal reveal-1 text-silver">
+          <h1 className="reveal reveal-1 text-silver display-1">
             young woo song<br/>
             <span className="acc"><GlyphShuffle text="applied" /></span> ai.
           </h1>
@@ -230,9 +230,9 @@ function Work({ layout }){
   return (
     <section id="work">
       <div className="wrap">
-        <div className="section-tag reveal">
-          <span className="marker">[01]</span>
-          <span>selected work</span>
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">[01]</span>
+          <span className="eyebrow">selected work</span>
           <span className="rule"></span>
           <span>{PROJECTS.length} projects</span>
         </div>
@@ -257,9 +257,9 @@ function Approach(){
   return (
     <section id="approach" className="approach">
       <div className="wrap">
-        <div className="section-tag reveal">
-          <span className="marker">[02]</span>
-          <span>approach</span>
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">[02]</span>
+          <span className="eyebrow">approach</span>
           <span className="rule"></span>
         </div>
         <div className="approach-grid">
@@ -288,11 +288,11 @@ function Approach(){
 // ───────────────────────── Stack ─────────────────────────
 function Stack(){
   return (
-    <section id="stack">
+    <section id="stack" className="band-lift">
       <div className="wrap">
-        <div className="section-tag reveal">
-          <span className="marker">[03]</span>
-          <span>stack</span>
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">[03]</span>
+          <span className="eyebrow">stack</span>
           <span className="rule"></span>
         </div>
         <div className="stack-grid">
@@ -314,15 +314,15 @@ function Stack(){
 // ───────────────────────── Contact ─────────────────────────
 function Contact(){
   return (
-    <section id="contact" className="contact">
+    <section id="contact" className="contact band-deep">
       <div className="wrap">
-        <div className="section-tag reveal">
-          <span className="marker">[04]</span>
-          <span>contact</span>
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">[04]</span>
+          <span className="eyebrow">contact</span>
           <span className="rule"></span>
         </div>
         <div className="contact-card reveal">
-          <h2 className="text-silver">let&rsquo;s build<br/>something <span className="acc">real</span>.</h2>
+          <h2 className="text-silver display-2">let&rsquo;s build<br/>something <span className="acc">real</span>.</h2>
           <p>open to interesting work in applied ai, ai governance and adoption, multi-agent systems, and tools for architecture and design.</p>
           <div className="contact-actions">
             <a className="btn btn-primary" href="mailto:youngwoo930@gmail.com">youngwoo930@gmail.com <span className="ar">↗</span></a>
