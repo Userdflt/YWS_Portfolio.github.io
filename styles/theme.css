@@ -111,7 +111,11 @@
 /* ─────────────── RESET ─────────────── */
 *,*::before,*::after{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--fs-sans);font-size:15px;line-height:1.65;font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-body{overflow-x:hidden;min-height:100vh}
+/* `hidden` first as the fallback for engines without `clip`: they lose only the
+   sticky pin, never content. `clip` clips WITHOUT making body a scroll
+   container — `hidden` can, and a body scroll container silently kills
+   `position:sticky` inside it. */
+body{overflow-x:hidden;overflow-x:clip;min-height:100vh}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 ::selection{background:var(--accent-soft);color:var(--ink)}
@@ -171,7 +175,24 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .section-tag .marker{color:var(--accent)}
 
 /* ─────────────── HERO ─────────────── */
-.hero{padding-top:calc(var(--u)*17);padding-bottom:0}
+/* Pinned scene. `.hero-pin` supplies the scroll distance; `.hero-sticky` is the
+   scene that holds still while that distance is consumed. The section's own
+   vertical padding therefore moves ONTO the sticky — left on the section it
+   would scroll away, and the pinned scene would sit under the fixed nav.
+   Both elements paint --bg so the H4 tail (the scene sliding up -25svh over the
+   last 45% of the pin) uncovers paper, never a bare strip. */
+.hero{padding-top:0;padding-bottom:0}
+.hero-pin{position:relative;height:180vh;height:180svh;background-color:var(--bg)}
+.hero-sticky{position:sticky;top:0;min-height:100vh;min-height:100svh;padding-top:calc(var(--u)*17);
+  display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;background-color:var(--bg)}
+/* No room to pin on a short viewport: the wrapper collapses onto its content
+   and the scene rejoins normal flow. Kept in sync with HERO_PIN_OFF_QUERY
+   (app.jsx), which stops the pin scrubs registering at the same breakpoint —
+   a scrubbed scene with no pin would slide content away for no reason. */
+@media (max-height: 560px){
+  .hero-pin{height:auto}
+  .hero-sticky{position:static;min-height:0;overflow:visible}
+}
 .hero-lead{padding-bottom:calc(var(--u)*10)}
 /* mono status line — plain text, no chip, no pulse */
 .hero-status{margin:0 0 clamp(26px, 4vw, 48px);font-family:var(--fs-mono);color:var(--ink-dim)}
@@ -198,12 +219,18 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .hero-foot .v a{position:relative;transition:color .2s}
 .hero-foot .v a:hover{color:var(--accent)}
 
-.scroll-cue{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--ink-dim);font-family:var(--fs-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase}
+/* The cue owns its own centring transform, so the scrub engine hands it a
+   channel (--scrub-y) instead of overwriting the shorthand and un-centring it. */
+.scroll-cue{position:absolute;left:50%;transform:translateX(-50%) translateY(var(--scrub-y,0px));bottom:12px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--ink-dim);font-family:var(--fs-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase}
 .scroll-cue .line{width:1px;height:32px;background:linear-gradient(180deg, transparent, var(--accent));animation:scrollLine 2.2s ease-in-out infinite}
 @keyframes scrollLine{0%,100%{transform:scaleY(.6);opacity:.4}50%{transform:scaleY(1);opacity:1}}
 
 /* ─────────────── WORK ─────────────── */
 .work-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+/* Measurement anchor. The row itself is scrubbed (translateY), so its own rect
+   is not a usable progress input — this untransformed wrapper is what the row
+   and its numeral measure against. Layout-neutral by construction. */
+.work-row-slot{display:block}
 .work-row{position:relative;display:grid;grid-template-columns:clamp(58px, 6vw, 92px) 1fr auto auto;align-items:center;gap:24px;padding:calc(var(--u)*3.4) 0;border-bottom:1px solid var(--line);cursor:pointer;transition:padding .35s var(--ease-out-soft), background-color .35s var(--ease-out-soft)}
 .work-row::before{content:"";position:absolute;left:0;top:0;width:2px;height:100%;background:var(--accent);transform:scaleY(0);transform-origin:center;transition:transform .35s ease}
 .work-row:hover{padding-left:18px;padding-right:8px;background-color:var(--accent-soft)}
@@ -285,7 +312,11 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 /* numeric counters */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:calc(var(--u)*8)}
 @media (max-width: 760px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{padding:calc(var(--u)*2.5) calc(var(--u)*3);display:flex;flex-direction:column;gap:8px;background:var(--panel);border:1px solid var(--line)}
+.stat{position:relative;padding:calc(var(--u)*2.5) calc(var(--u)*3);display:flex;flex-direction:column;gap:8px;background:var(--panel);border:1px solid var(--line)}
+/* Accent hairline drawn left-to-right by the scrub engine's --scrub channel.
+   The `1` fallback is load-bearing: with no engine (reduced motion) the rule
+   still paints the finished line rather than nothing. */
+.stat::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--accent);transform:scaleX(var(--scrub,1));transform-origin:left;pointer-events:none}
 .stat .sn{font-family:var(--fs-sans);font-weight:200;font-size:clamp(30px, 3.8vw, 48px);line-height:1;color:var(--ink);letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
 .stat .sl{font-family:var(--fs-mono);font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-dim)}
 
@@ -405,6 +436,28 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .reveal-3{transition-delay:.19s}
 .reveal-4{transition-delay:.26s}
 
+/* Masked line reveal. The container CLIPS and nothing else — no transition of
+   its own — so a scrubbed headline (engine-driven) and an IO-revealed one
+   (`.mask-reveal` below) share the same wrapper.
+
+   The doubled class is a deliberate specificity bump: every headline this wraps
+   carries its own `.approach h2{margin:0 0 20px}`-style rule, which outranks a
+   plain `.mask-line > *`. Any margin left on the child grows the clip box past
+   the child's own height, and the line that slid away leaks back into view.
+
+   The padding is a descender cushion, expressed in the CHILD's em so it scales
+   with the headline rather than with the 15px body text around it. It is the
+   only reason the clip box is ever taller than the line box, and it is why
+   `.mask-reveal` parks at 130% rather than 110% — at 110% the cushion would
+   expose the top of the parked line. An upward exit (the scrubbed hero title)
+   is unaffected: bottom padding cannot uncover something that left via the top. */
+.mask-line{overflow:hidden}
+.mask-line.mask-line > *{margin:0;padding-bottom:.16em}
+.mask-reveal{transform:translateY(130%);transition:transform 700ms var(--ease-out-soft)}
+.mask-reveal.in{transform:translateY(0)}
+/* The bottom gap the wrapped headlines gave up; the cushion supplies the rest. */
+.approach .mask-line,.contact-card .mask-line{margin-bottom:12px}
+
 /* line-by-line text scramble container */
 .scramble{display:inline}
 
@@ -424,9 +477,9 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .section-num{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-2);color:var(--ink-dim);line-height:1;letter-spacing:-0.03em}
 
 /* motion companions — added and removed by scripts/scroll.jsx for the lifetime
-   of a live hook. The hooks own the transform values; CSS owns the compositing
-   hint and the origin, so no inline style has to carry them. */
-.motion-hero-link{will-change:transform,opacity;transform-origin:50% 30%}
+   of a live entry. The engine owns the animated values; CSS owns the
+   compositing hint, so no inline style has to carry it. */
+.motion-scrub{will-change:transform,opacity,clip-path}
 .motion-parallax{will-change:transform}
 
 /* ─────────────── EDITORIAL GRAMMAR (applied) ───────────────
@@ -482,9 +535,18 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 
 @media (prefers-reduced-motion: reduce){
   .reveal{opacity:1;transform:none;transition:none}
+  /* Masked lines render in place: the clip is released so nothing can be caught
+     mid-slide, and the child sits at its final position with no transition. */
+  .mask-line{overflow:visible}
+  .mask-reveal{transform:none;transition:none}
+  /* The pin is a motion device, so it is retired wholesale — the scene rejoins
+     normal flow. The engine registers nothing here, so `transform:none` only
+     covers a class that outlived its hook. */
+  .hero-pin{height:auto}
+  .hero-sticky{position:static;height:auto;min-height:0;overflow:visible;transform:none}
   .scroll-cue .line{animation:none}
   /* scroll.jsx writes no transforms under reduced motion and strips these
      classes on cleanup; this drops the layer promotion if one ever outlives
      its hook. */
-  .motion-hero-link,.motion-parallax{will-change:auto}
+  .motion-scrub,.motion-parallax{will-change:auto}
 }

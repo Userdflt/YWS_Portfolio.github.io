@@ -36,47 +36,142 @@ const HERO_IMAGE = {
 };
 
 // Shared runtime, consumed as window globals — this file owns home sections only:
-//   scripts/scroll.jsx    -> useReveal, useScrollProgress, useScrollSpy,
-//                            useHeroScrollLink, CountUp
+//   scripts/scroll.jsx    -> useScrub, useReveal, useScrollProgress,
+//                            useScrollSpy, CountUp
 //   scripts/shared-ui.jsx -> Nav, Footer
 // Re-declaring any of those names at top level here would shadow the shared copy.
 
+// ─────────────── Scroll-scrubbed motion (Design Spec tables H / W / X) ───────────
+// Every table below is a pure function of scroll position: `at` is progress
+// through the entry's own trigger range, never elapsed time. The values live
+// here, named, so a tuning pass never means reading JSX for numbers.
+
+// The pinned hero is retired on viewports too short to pin. Kept in sync with
+// the `@media (max-height: 560px)` block in theme.css that flattens the same
+// scene — the two must agree, or the scrubs would move an unpinned hero.
+const HERO_PIN_OFF_QUERY = '(max-height: 560px)';
+// Inertia on the large slow surfaces only. Edge-revealing entries (the clips)
+// must track the wheel exactly, so they stay undamped.
+const SCRUB_DAMPING = 0.14;
+
+// H1 — the title slides up under its own mask as the pin is consumed.
+const HERO_TITLE_SCRUB = [
+  { at: 0,    style: { translateY: '0%' } },
+  { at: 0.45, style: { translateY: '-101%' } },
+];
+// H2 — status line and scroll cue leave first.
+const HERO_FADE_SCRUB = [
+  { at: 0,    style: { opacity: 1, translateY: '0svh' } },
+  { at: 0.30, style: { opacity: 0, translateY: '-5svh' } },
+];
+// H3 — the band pushes in slowly across the whole pin.
+const HERO_BAND_SCRUB = [
+  { at: 0, style: { scale: 1 } },
+  { at: 1, style: { scale: 1.08 } },
+];
+// H4 — the whole scene exits upward over the pin's last 45%.
+const HERO_TAIL_SCRUB = [
+  { at: 0.55, style: { translateY: '0svh' } },
+  { at: 1,    style: { translateY: '-25svh' } },
+];
+// H5 — the paper panel rises into the space the scene vacates.
+const HERO_PANEL_SCRUB = [
+  { at: 0, style: { translateY: 24, opacity: 0 } },
+  { at: 1, style: { translateY: 0,  opacity: 1 } },
+];
+const HERO_PIN_OPTS = { mode: 'pin', offQuery: HERO_PIN_OFF_QUERY };
+const HERO_PANEL_OPTS = { mode: 'enter', endAt: 0.65 };
+
+// W1 / X2 — stepped clip entry for the dark bands: paper shows through the
+// staircase until it flattens. Six vertices on both sides (the interpolator
+// pairs them by index); the middle pair collapses onto the top edge.
+const BAND_CLIP_SCRUB = [
+  { at: 0, style: { clipPath: 'polygon(0% 34%, 50% 34%, 50% 17%, 100% 17%, 100% 100%, 0% 100%)' } },
+  { at: 1, style: { clipPath: 'polygon(0% 0%, 50% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
+];
+// Released at 1: a finished band must not carry a clip into every later paint.
+const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.55, releaseOnComplete: true };
+
+// W2 — each row rises on its own progress, which IS the stagger.
+const WORK_ROW_SCRUB = [
+  { at: 0, style: { translateY: 36, opacity: 0 } },
+  { at: 1, style: { translateY: 0,  opacity: 1 } },
+];
+const WORK_ROW_OPTS = { mode: 'enter', endAt: 0.75 };
+// W3 — the numeral travels against the row it sits in: depth, not decoration.
+const WORK_IDX_SCRUB = [
+  { at: 0, style: { translateY: 18 } },
+  { at: 1, style: { translateY: -18 } },
+];
+const WORK_IDX_OPTS = { mode: 'cross', damping: SCRUB_DAMPING };
+// W4 — the stat hairline draws itself left to right (theme.css `.stat::after`).
+const STAT_SCRUB = [
+  { at: 0, style: { '--scrub': 0 } },
+  { at: 1, style: { '--scrub': 1 } },
+];
+const STAT_OPTS = { mode: 'enter', endAt: 0.7 };
+
 // ───────────────────────── Hero ─────────────────────────
-// Three stacked blocks: the type lead, a full-bleed image band, and a paper
-// title card pulled up over the band. The band is a direct child of the
-// section — inside .wrap it would be capped at the content width.
+// A pinned scene plus a paper card. `.hero-pin` is 180svh of scroll distance;
+// `.hero-sticky` holds the type lead and the full-bleed band still while that
+// distance is consumed, then slides away; `.hero-panel` follows in normal flow.
+// The band is a direct child of the sticky (never inside .wrap) so it spans the
+// viewport instead of being capped at the content width.
+//
+// Every pin scrub measures `.hero-pin` and writes somewhere else: progress may
+// never be read from a node the same entry transforms.
 function Hero(){
-  const heroRef = useRef(null);
-  useHeroScrollLink(heroRef);
+  const pinRef = useRef(null);
+  const sceneRef = useRef(null);
+  const titleRef = useRef(null);
+  const statusRef = useRef(null);
+  const cueRef = useRef(null);
+  const bandImgRef = useRef(null);
+  const panelRef = useRef(null);
+
+  useScrub(titleRef, HERO_TITLE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef, damping: SCRUB_DAMPING });
+  useScrub(statusRef, HERO_FADE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
+  useScrub(cueRef, HERO_FADE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
+  useScrub(bandImgRef, HERO_BAND_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef, damping: SCRUB_DAMPING });
+  useScrub(sceneRef, HERO_TAIL_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
+  useScrub(panelRef, HERO_PANEL_SCRUB, HERO_PANEL_OPTS);
+
   return (
-    <section id="top" ref={heroRef} className="hero" data-tone="light">
-      <div className="wrap hero-lead">
-        <p className="hero-status eyebrow">ai specialist · ignite · auckland · hybrid</p>
+    <section id="top" className="hero" data-tone="light">
+      <div className="hero-pin" ref={pinRef}>
+        <div className="hero-sticky" ref={sceneRef}>
+          <div className="wrap hero-lead">
+            <p className="hero-status eyebrow" ref={statusRef}>ai specialist · ignite · auckland · hybrid</p>
 
-        <h1 className="reveal reveal-1 text-ink display-1">Young Woo Song</h1>
+            <div className="mask-line">
+              <h1 className="text-ink display-1" ref={titleRef}>Young Woo Song</h1>
+            </div>
 
-        <p className="hero-role reveal reveal-2">Applied AI</p>
+            <p className="hero-role reveal reveal-2">Applied AI</p>
 
-        <div className="scroll-cue" aria-hidden="true">
-          <span>scroll</span>
-          <span className="line"></span>
+            <div className="scroll-cue" ref={cueRef} aria-hidden="true">
+              <span>scroll</span>
+              <span className="line"></span>
+            </div>
+          </div>
+
+          <div className="hero-band">
+            <img
+              ref={bandImgRef}
+              src={HERO_IMAGE.src}
+              alt={HERO_IMAGE.alt}
+              width={HERO_IMAGE.width}
+              height={HERO_IMAGE.height}
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
 
-      <div className="hero-band reveal reveal-2">
-        <img
-          src={HERO_IMAGE.src}
-          alt={HERO_IMAGE.alt}
-          width={HERO_IMAGE.width}
-          height={HERO_IMAGE.height}
-          loading="eager"
-          fetchpriority="high"
-          decoding="async"
-        />
-      </div>
-
       <div className="wrap">
-        <div className="panel-overlap hero-panel reveal reveal-3">
+        <div className="panel-overlap hero-panel" ref={panelRef}>
           <p className="hero-tag">
             ai specialist at ignite. i build internal ai tools — knowledge retrieval, workflow automation, document and compliance support — and establish governance, evaluation, and adoption frameworks for design and architecture teams.
           </p>
@@ -110,6 +205,51 @@ function Hero(){
 }
 
 // ───────────────────────── Work: editorial list ─────────────────────────
+
+// One row = one component because it owns three refs and two scrub hooks, and
+// hooks cannot live inside a `.map()`.
+//
+// `.work-row-slot` exists purely as a measurement anchor: the row itself is
+// translated by W2, so its own rect would feed the scrub's output back into its
+// input. The slot never moves, so both the row and its numeral measure it.
+function WorkRow({ project, index, onMove, onLeave }){
+  const slotRef = useRef(null);
+  const rowRef = useRef(null);
+  const idxRef = useRef(null);
+  useScrub(rowRef, WORK_ROW_SCRUB, { ...WORK_ROW_OPTS, triggerRef: slotRef });
+  useScrub(idxRef, WORK_IDX_SCRUB, { ...WORK_IDX_OPTS, triggerRef: slotRef });
+
+  return (
+    <div className="work-row-slot" ref={slotRef}>
+      <a href={`project.html?id=${project.id}`}
+         className="work-row"
+         ref={rowRef}
+         onMouseMove={(e) => onMove(e, project)}
+         onMouseLeave={onLeave}>
+        <div className="idx" ref={idxRef}>{String(index + 1).padStart(2, '0')}</div>
+        <div className="title-col">
+          <div className="title">{project.title}</div>
+          <div className="blurb">{project.subtitle} — {project.blurb}</div>
+        </div>
+        <div className="cat">{project.category}</div>
+        <div className="arrow" aria-hidden="true">↗</div>
+      </a>
+    </div>
+  );
+}
+
+// Same reason: the hairline draw needs a ref per stat.
+function Stat({ end, label }){
+  const ref = useRef(null);
+  useScrub(ref, STAT_SCRUB, STAT_OPTS);
+  return (
+    <div className="stat" ref={ref}>
+      <span className="sn"><CountUp end={end} /></span>
+      <span className="sl">{label}</span>
+    </div>
+  );
+}
+
 function WorkEditorial({ projects, previewRef }){
   const onMove = (e, p) => {
     const el = previewRef.current; if(!el) return;
@@ -140,19 +280,7 @@ function WorkEditorial({ projects, previewRef }){
   return (
     <div className="work-list">
       {projects.map((p, i) => (
-        <a key={p.id} href={`project.html?id=${p.id}`}
-           className="work-row reveal"
-           style={{ transitionDelay: `${0.03 * i}s` }}
-           onMouseMove={(e) => onMove(e, p)}
-           onMouseLeave={onLeave}>
-          <div className="idx">{String(i + 1).padStart(2, '0')}</div>
-          <div className="title-col">
-            <div className="title">{p.title}</div>
-            <div className="blurb">{p.subtitle} — {p.blurb}</div>
-          </div>
-          <div className="cat">{p.category}</div>
-          <div className="arrow" aria-hidden="true">↗</div>
-        </a>
+        <WorkRow key={p.id} project={p} index={i} onMove={onMove} onLeave={onLeave} />
       ))}
     </div>
   );
@@ -163,9 +291,11 @@ function WorkEditorial({ projects, previewRef }){
 // no longer has to declare which one it wants.
 function Work(){
   const previewRef = useRef(null);
+  const sectionRef = useRef(null);
   useEffect(() => { previewRef.current = document.getElementById('work-preview'); }, []);
+  useScrub(sectionRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
   return (
-    <section id="work" className="sec-dark" data-tone="dark">
+    <section id="work" className="sec-dark" data-tone="dark" ref={sectionRef}>
       <div className="wrap">
         <div className="section-tag section-head reveal">
           <span className="marker section-num">[01]</span>
@@ -174,11 +304,11 @@ function Work(){
           <span>{PROJECTS.length} projects</span>
         </div>
 
-        <div className="stats reveal">
-          <div className="stat"><span className="sn"><CountUp end={PROJECTS.length} /></span><span className="sl">shipped projects</span></div>
-          <div className="stat"><span className="sn"><CountUp end={7} /></span><span className="sl">yrs in architecture</span></div>
-          <div className="stat"><span className="sn"><CountUp end={4} /></span><span className="sl">multi-agent systems</span></div>
-          <div className="stat"><span className="sn"><CountUp end={2} /></span><span className="sl">ibm specializations · 2025</span></div>
+        <div className="stats">
+          <Stat end={PROJECTS.length} label="shipped projects" />
+          <Stat end={7} label="yrs in architecture" />
+          <Stat end={4} label="multi-agent systems" />
+          <Stat end={2} label="ibm specializations · 2025" />
         </div>
 
         <WorkEditorial projects={PROJECTS} previewRef={previewRef} />
@@ -199,7 +329,9 @@ function Approach(){
         </div>
         <div className="approach-grid">
           <div>
-            <h2 className="reveal text-ink">from architecture to <span className="acc">applied ai</span>.</h2>
+            <div className="mask-line">
+              <h2 className="mask-reveal text-ink">from architecture to <span className="acc">applied ai</span>.</h2>
+            </div>
             <p className="reveal reveal-1">seven years across new zealand architecture practices — ignite, woods bagot, rcg — taught me to work with constraints and ship under pressure. now back at ignite as ai specialist, applying generative ai and machine learning to real architecture and design workflows.</p>
             <p className="reveal reveal-2">i build internal tools — rag, workflow automation, document and compliance support — and stand up the governance, evals, and adoption frameworks that make them safe to scale. aut-accredited in data science &amp; ai (institute of data) and ibm-certified across ai engineering and ai development.</p>
           </div>
@@ -248,18 +380,24 @@ function Stack(){
 
 // ───────────────────────── Contact ─────────────────────────
 function Contact(){
+  const sectionRef = useRef(null);
+  useScrub(sectionRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
   return (
-    <section id="contact" className="contact sec-dark" data-tone="dark">
+    <section id="contact" className="contact sec-dark" data-tone="dark" ref={sectionRef}>
       <div className="wrap">
         <div className="section-tag section-head reveal">
           <span className="marker section-num">[04]</span>
           <span className="eyebrow">contact</span>
           <span className="rule"></span>
         </div>
-        <div className="contact-card reveal">
-          <h2 className="text-ink display-2">let&rsquo;s build<br/>something <span className="acc">real</span>.</h2>
-          <p>open to interesting work in applied ai, ai governance and adoption, multi-agent systems, and tools for architecture and design.</p>
-          <div className="contact-actions">
+        {/* The card is no longer the reveal unit: its headline is masked and its
+            body keeps the plain IO reveal, so each part enters on its own. */}
+        <div className="contact-card">
+          <div className="mask-line">
+            <h2 className="mask-reveal text-ink display-2">let&rsquo;s build<br/>something <span className="acc">real</span>.</h2>
+          </div>
+          <p className="reveal">open to interesting work in applied ai, ai governance and adoption, multi-agent systems, and tools for architecture and design.</p>
+          <div className="contact-actions reveal">
             <a className="btn btn-primary" href="mailto:youngwoo930@gmail.com">youngwoo930@gmail.com <span className="ar">↗</span></a>
             <a className="btn btn-ghost" href="https://www.linkedin.com/in/young-woo-song-145488217/">linkedin <span className="ar">↗</span></a>
             <a className="btn btn-ghost" href="https://github.com/Userdflt">github <span className="ar">↗</span></a>
