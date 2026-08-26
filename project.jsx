@@ -2,75 +2,20 @@
 // renders the techy mono layout. Falls back to a 404 panel if id is missing/unknown.
 const { useState, useEffect, useRef } = React;
 
-// ───────── shared helpers ─────────
-// useReveal / useScrollProgress / useParallax come from scripts/scroll.jsx as
-// window globals — this page owns no motion runtime of its own.
+// ───────── shared modules (window globals) ─────────
+// scripts/scroll.jsx    -> useReveal, useScrollProgress, useParallax
+// scripts/shared-ui.jsx -> Nav, Footer, GlyphShuffle
+// This page owns detail sections only; re-declaring any of those names at top
+// level here would shadow the shared copy.
 
-// Quick scramble that ends on the right word.
-function GlyphShuffle({ text, perChar = 60, scrambleMs = 180, fps = 28 }){
-  const [, force] = React.useReducer((s) => s + 1, 0);
-  const startRef = useRef(0);
-  useEffect(() => {
-    startRef.current = performance.now();
-    let raf;
-    function tick(){
-      force();
-      raf = requestAnimationFrame(() => setTimeout(tick, 1000 / fps));
-    }
-    tick();
-    const stopAt = perChar * text.length + scrambleMs + 80;
-    const stop = setTimeout(() => cancelAnimationFrame(raf), stopAt);
-    return () => { cancelAnimationFrame(raf); clearTimeout(stop); };
-  }, [text]);
-  const glyphs = "▓▒░█ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}<>/=*_-";
-  const now = performance.now() - startRef.current;
-  const words = text.split(" ");
-  let globalI = 0;
-  const nodes = [];
-  words.forEach((word, wi) => {
-    nodes.push(
-      <span key={`w${wi}`} style={{ display:'inline-block', whiteSpace:'nowrap' }}>
-        {[...word].map((ch) => {
-          const i = globalI++;
-          const cs = i * perChar; const ce = cs + scrambleMs;
-          let d = ch; let flash = false;
-          if(now < cs){ d = ""; }
-          else if(now < ce){ d = glyphs[(Math.random()*glyphs.length)|0]; flash = true; }
-          return <span key={i} style={{ display:'inline-block', minWidth:'.55ch', textAlign:'center', color: flash ? 'var(--accent)' : undefined, textShadow: flash ? '0 0 14px var(--accent-glow)' : 'none' }}>{d || "\u00A0"}</span>;
-        })}
-      </span>
-    );
-    if(wi < words.length - 1){ globalI++; nodes.push(<span key={`s${wi}`}> </span>); }
-  });
-  return <span>{nodes}</span>;
-}
-
-// ───────── Nav ─────────
-function Nav(){
-  return (
-    <nav className="nav">
-      <div className="nav-inner">
-        <a href="index.html" className="brand">
-          <span className="dot"></span>
-          <span>y_w_song.sh</span>
-        </a>
-        <div className="nav-links">
-          <a href="index.html#work">work</a>
-          <a href="index.html#approach">approach</a>
-          <a href="index.html#stack">stack</a>
-          <a href="index.html#contact">contact</a>
-        </div>
-        <a className="nav-cta" href="mailto:youngwoo930@gmail.com">connect</a>
-      </div>
-    </nav>
-  );
-}
+// A related row of 3 fills one grid line and stays a suggestion, not a list.
+const RELATED_MAX = 3;
 
 // ───────── Not found ─────────
 function NotFound({ id }){
   return (
     <>
-      <Nav />
+      <Nav page="project" />
       <section className="wrap">
         <div className="crumbs"><a href="index.html">← index.html</a><span className="sep">/</span><span className="here">404</span></div>
         <h1 style={{ fontWeight:500, fontSize:'clamp(40px,7vw,88px)', lineHeight:1.02, letterSpacing:'-.04em', textTransform:'lowercase', margin:'40px 0 16px' }}>
@@ -311,6 +256,50 @@ function MediaSection({ media }){
   );
 }
 
+// ───────── Project link cards ─────────
+
+// Real media when the project has any, its letter mark when it doesn't —
+// getProjectThumbnail already encodes "first usable image in details.media".
+function CardThumb({ project }){
+  const src = (typeof window.getProjectThumbnail === 'function') ? window.getProjectThumbnail(project) : null;
+  return (
+    <div className="card-thumb" aria-hidden="true">
+      {src
+        ? <img src={src} alt="" loading="lazy" />
+        : <span className="mark">{project.mark || '⟁'}</span>}
+    </div>
+  );
+}
+
+// Same-category peers, in PROJECTS order, never the project you are reading.
+// Most categories are singletons, so the whole row renders nothing rather than
+// padding itself out with unrelated work.
+function RelatedProjects({ project }){
+  const peers = (window.PROJECTS || [])
+    .filter(p => p.category === project.category && p.id !== project.id)
+    .slice(0, RELATED_MAX);
+  if(peers.length === 0) return null;
+  return (
+    <div className="related">
+      <div className="section-tag reveal">
+        <span className="marker">[06]</span><span>related</span><span className="rule"></span>
+        <span>{project.category.toLowerCase()}</span>
+      </div>
+      <div className="related-grid reveal">
+        {peers.map(p => (
+          <a className="card" key={p.id} href={`project.html?id=${p.id}`}>
+            <CardThumb project={p} />
+            <div className="card-body">
+              <div className="t">{p.title.toLowerCase()}</div>
+              <div className="c">{p.category}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ───────── Page ─────────
 function ProjectPage({ project }){
   useReveal();
@@ -326,7 +315,7 @@ function ProjectPage({ project }){
 
   return (
     <LightboxContext.Provider value={setLightbox}>
-      <Nav />
+      <Nav page="project" />
 
       <div className="wrap">
         <div className="crumbs reveal">
@@ -443,25 +432,29 @@ function ProjectPage({ project }){
         </div>
       </section>
 
-      {/* Prev/Next */}
+      {/* Related → Prev/Next → Footer */}
       <section>
         <div className="wrap">
+          <RelatedProjects project={project} />
           <div className="pnav">
             <a className="card prev" href={`project.html?id=${prev.id}`}>
-              <div className="l"><span className="acc">←</span> previous</div>
-              <div className="t">{prev.title.toLowerCase()}</div>
+              <CardThumb project={prev} />
+              <div className="card-body">
+                <div className="l"><span className="acc">←</span> previous</div>
+                <div className="t">{prev.title.toLowerCase()}</div>
+                <div className="c">{prev.category}</div>
+              </div>
             </a>
             <a className="card next" href={`project.html?id=${next.id}`}>
-              <div className="l">next <span className="acc">→</span></div>
-              <div className="t">{next.title.toLowerCase()}</div>
+              <CardThumb project={next} />
+              <div className="card-body">
+                <div className="l">next <span className="acc">→</span></div>
+                <div className="t">{next.title.toLowerCase()}</div>
+                <div className="c">{next.category}</div>
+              </div>
             </a>
           </div>
-          <div className="footer">
-            <div className="footer-inner">
-              <span>© 2026 young woo song <span className="acc">·</span> auckland, nz</span>
-              <span>build <span className="acc">v2.0</span> · last sync may 2026</span>
-            </div>
-          </div>
+          <Footer page="project" />
         </div>
       </section>
 

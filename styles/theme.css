@@ -66,6 +66,14 @@ i,em,.italic,[data-italic]{font-style:normal !important}
   filter:drop-shadow(0 12px 22px rgba(0,0,0,0.45)) drop-shadow(0 2px 4px rgba(0,0,0,0.4));
 }
 
+/* glyph scramble (shared-ui.jsx GlyphShuffle) — one char recipe for every page,
+   so a scrambling headline holds its metrics instead of reflowing per frame.
+   .gs-char sets no color: inside .text-silver it inherits the transparent fill
+   and the gradient paints through. .gs-flash re-states -webkit-text-fill-color
+   precisely because .text-silver cleared it. */
+.gs-char{display:inline-block;min-width:.55ch;text-align:center}
+.gs-flash{color:var(--accent);-webkit-text-fill-color:var(--accent);text-shadow:0 0 14px var(--accent-glow)}
+
 /* layout */
 .wrap{position:relative;z-index:1;max-width:var(--content-max);margin:0 auto;padding-left:var(--pad-x);padding-right:var(--pad-x)}
 
@@ -108,11 +116,25 @@ i,em,.italic,[data-italic]{font-style:normal !important}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:var(--content-max);margin:0 auto;padding-left:var(--pad-x);padding-right:var(--pad-x)}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--fs-mono);font-size:12px;letter-spacing:0.06em;font-weight:500}
 .brand .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent-glow)}
+/* brand + (project pages only) back-to-work share the left cluster, so
+   .nav-inner keeps exactly three children and its space-between rhythm. */
+.nav-lead{display:flex;align-items:center;gap:14px;min-width:0}
 .nav-links{display:flex;gap:24px}
-.nav-links a{font-family:var(--fs-mono);font-size:11px;color:var(--ink-dim);letter-spacing:0.08em;text-transform:uppercase;transition:color .2s;position:relative}
-.nav-links a:hover{color:var(--ink)}
+.nav-links a,.nav-back{font-family:var(--fs-mono);font-size:11px;color:var(--ink-dim);letter-spacing:0.08em;text-transform:uppercase;transition:color .2s;position:relative}
+.nav-links a:hover,.nav-back:hover{color:var(--ink)}
 .nav-links a::before{content:"./";color:var(--ink-faint);margin-right:2px;opacity:0;transition:opacity .2s}
 .nav-links a:hover::before{opacity:1}
+/* active section — the hover affordance, held on: prefix shown, accent ink,
+   plus a hairline underline so the current section reads without hovering. */
+.nav-links a.active{color:var(--accent)}
+.nav-links a.active::before{opacity:1;color:var(--accent)}
+.nav-links a.active::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1px;background:var(--accent);box-shadow:0 0 10px var(--accent-glow)}
+/* back-to-work — distinct from the section links: an arrow instead of the "./"
+   prefix, split off the brand by a hairline. Stays visible on mobile, where
+   .nav-links is hidden and this is the only way back. */
+.nav-back{display:inline-flex;align-items:center;gap:7px;padding-left:14px;border-left:1px solid var(--line)}
+.nav-back::before{content:"←";color:var(--accent);transition:transform .2s}
+.nav-back:hover::before{transform:translateX(-3px)}
 /* physical tactile dark button */
 .nav-cta{font-family:var(--fs-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink);padding:7px 13px;border-radius:10px;display:inline-flex;gap:8px;align-items:center;
   background:linear-gradient(180deg, #2a3252 0%, #141a2e 100%);
@@ -152,8 +174,6 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .hero h1{font-family:var(--fs-mono);font-weight:500;font-size:clamp(40px, 8vw, 124px);line-height:0.96;letter-spacing:-0.04em;margin:0;color:var(--ink);text-transform:lowercase}
 .hero h1 .acc{color:var(--accent);-webkit-text-fill-color:var(--accent);filter:drop-shadow(0 0 18px var(--accent-glow))}
 .hero h1 .glyph-shuffle{display:inline-block}
-.hero h1 .gs-char{display:inline-block;min-width:.55ch;text-align:center}
-.hero h1 .gs-flash{color:var(--accent);-webkit-text-fill-color:var(--accent);text-shadow:0 0 14px var(--accent-glow)}
 .hero h1 .underline{position:relative;display:inline-block}
 .hero h1 .underline::after{content:"";position:absolute;left:0;right:0;bottom:0.06em;height:2px;background:var(--accent);box-shadow:0 0 18px var(--accent-glow);transform-origin:left;transform:scaleX(0);animation:drawLine 1.2s .8s cubic-bezier(.2,.8,.2,1) forwards}
 @keyframes drawLine{to{transform:scaleX(1)}}
@@ -370,21 +390,55 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .frame .corner.r{left:auto;right:12px;color:var(--accent)}
 .frame .label{position:absolute;bottom:12px;left:12px;color:var(--ink-dim);font-size:10px;letter-spacing:0.1em;text-transform:uppercase}
 
-/* nav between projects — physical cards */
-.pnav{margin-top:calc(var(--u)*8);border-top:1px solid var(--line);padding-top:calc(var(--u)*4);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.pnav .card{flex:1;min-width:240px;border-radius:16px;padding:22px 24px;transition:transform .25s, box-shadow .25s;cursor:pointer;
+/* project link cards — ONE physical-card recipe shared by prev/next (.pnav)
+   and the same-category related row (.related). Only size and alignment
+   differ between the two; the surface, hover lift and text ramp do not. */
+.pnav .card,.related .card{display:flex;align-items:center;gap:16px;border-radius:16px;transition:transform .25s, box-shadow .25s;cursor:pointer;
   background:linear-gradient(160deg, rgba(22,44,109,0.4) 0%, rgba(10,16,29,0.85) 100%);box-shadow:var(--depth-glass)}
-.pnav .card:hover{transform:translateY(-3px);box-shadow:0 0 0 1px var(--accent-soft), 0 30px 60px -18px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.16)}
+.pnav .card:hover,.related .card:hover{transform:translateY(-3px);box-shadow:0 0 0 1px var(--accent-soft), 0 30px 60px -18px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.16)}
+.pnav .card .card-body,.related .card .card-body{flex:1;min-width:0}
+.pnav .card .t,.related .card .t{font-weight:500;color:var(--ink);text-transform:lowercase;letter-spacing:-0.02em;line-height:1.25}
+.pnav .card:hover .t,.related .card:hover .t{color:var(--accent)}
+.pnav .card .c,.related .card .c{margin-top:6px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint)}
+
+/* card thumbnail — real media when the project has any, letter mark when not */
+.card-thumb{flex:0 0 auto;width:72px;height:52px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg, rgba(22,44,109,0.6), rgba(10,16,29,0.5));
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.10), inset 0 -1px 2px rgba(0,0,0,0.5)}
+.card-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.card-thumb .mark{font-weight:500;font-size:22px;line-height:1;color:var(--accent);text-shadow:0 0 12px var(--accent-glow)}
+
+/* nav between projects */
+.pnav{margin-top:calc(var(--u)*8);border-top:1px solid var(--line);padding-top:calc(var(--u)*4);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.pnav .card{flex:1;min-width:240px;padding:22px 24px}
 .pnav .card .l{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
 .pnav .card .l .acc{color:var(--accent)}
-.pnav .card .t{font-weight:500;font-size:18px;color:var(--ink);text-transform:lowercase;letter-spacing:-0.02em}
-.pnav .card:hover .t{color:var(--accent)}
-.pnav .card.next{text-align:right}
+.pnav .card .t{font-size:18px}
+/* mirrored: the thumbnail follows the arrow to the outer edge */
+.pnav .card.next{text-align:right;flex-direction:row-reverse}
+
+/* related projects — same category, rendered only when a peer exists */
+.related{margin-top:calc(var(--u)*8);border-top:1px solid var(--line);padding-top:calc(var(--u)*4)}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width: 900px){.related-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width: 620px){.related-grid{grid-template-columns:1fr}}
+.related .card{padding:16px 18px}
+.related .card .t{font-size:15px}
 
 /* footer */
 .footer{padding:32px 0 48px;border-top:1px solid var(--line);font-family:var(--fs-mono);font-size:11px;color:var(--ink-faint);letter-spacing:0.04em}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
 .footer .acc{color:var(--accent)}
+.footer-links{display:inline-flex;flex-wrap:wrap;gap:14px}
+.footer-links a{color:var(--ink-dim);transition:color .2s}
+.footer-links a:hover{color:var(--accent)}
+
+/* ─────────────── 404 (static page, no React, no cosmic stage) ─────────────── */
+.notfound{min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:22px}
+.notfound h1{font-family:var(--fs-mono);font-weight:300;font-size:var(--fs-display-1);line-height:1;letter-spacing:-0.04em;margin:0}
+.notfound p{color:var(--ink-dim);font-size:14px;line-height:1.7;max-width:60ch;margin:0}
+.notfound p::before{content:"> ";color:var(--accent);opacity:.6}
+.notfound .actions{display:flex;flex-wrap:wrap;gap:12px}
 
 /* density */
 :root.density-compact{--u:6px}

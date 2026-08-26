@@ -18,57 +18,13 @@ const PALETTES = {
   bone:   { label: "Bone",   accent: "#e7e5e4", accent2: "#a8a29e", glow: "rgba(231,229,228,0.32)", soft: "rgba(231,229,228,0.10)" },
 };
 
-// Reveals, CountUp and the scroll-linked hero live in scripts/scroll.jsx —
-// useReveal / CountUp / useScrollProgress / useHeroScrollLink are consumed as
-// window globals from there.
+// Shared runtime, consumed as window globals — this file owns home sections only:
+//   scripts/scroll.jsx    -> useReveal, useScrollProgress, useScrollSpy,
+//                            useHeroScrollLink, CountUp
+//   scripts/shared-ui.jsx -> Nav, Footer, GlyphShuffle
+// Re-declaring any of those names at top level here would shadow the shared copy.
 
 // ───────────────────────── Frame-by-frame helpers ─────────────────────────
-
-// Quick per-char scramble: each letter cycles glyphs briefly (≈180ms) then locks
-// to its real character. Letters start in a left-to-right wave so the word
-// resolves as a clean cascade — no partial misspellings linger.
-function GlyphShuffle({ text, perChar = 60, scrambleMs = 180, fps = 28 }){
-  const [frame, setFrame] = useState(0);
-  const startRef = useRef(0);
-  useEffect(() => {
-    startRef.current = performance.now();
-    let raf;
-    function tick(){
-      setFrame(f => f + 1);
-      raf = requestAnimationFrame(() => setTimeout(tick, 1000 / fps));
-    }
-    tick();
-    // Stop scrambling once the last char has locked.
-    const stopAt = perChar * text.length + scrambleMs + 80;
-    const stop = setTimeout(() => cancelAnimationFrame(raf), stopAt);
-    return () => { cancelAnimationFrame(raf); clearTimeout(stop); };
-  }, [text]);
-
-  const glyphs = "▓▒░█ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}<>/=*_-";
-  const now = performance.now() - startRef.current;
-
-  const words = text.split(" ");
-  let globalI = 0;
-  const nodes = [];
-  words.forEach((word, wi) => {
-    nodes.push(
-      <span key={`w${wi}`} style={{ display:'inline-block', whiteSpace:'nowrap' }}>
-        {[...word].map((ch) => {
-          const i = globalI++;
-          const charStart = i * perChar;
-          const charEnd = charStart + scrambleMs;
-          let display = ch;
-          let glow = false;
-          if(now < charStart){ display = ""; }
-          else if(now < charEnd){ display = glyphs[(Math.random() * glyphs.length) | 0]; glow = true; }
-          return <span key={i} className={"gs-char" + (glow ? " gs-flash" : "")}>{display || "\u00A0"}</span>;
-        })}
-      </span>
-    );
-    if(wi < words.length - 1){ globalI++; nodes.push(<span key={`s${wi}`}> </span>); }
-  });
-  return <span className="glyph-shuffle">{nodes}</span>;
-}
 
 // Typing line — types char by char.
 function TypeLine({ text, speed = 4, onDone, className }){
@@ -105,27 +61,6 @@ function BootSequence(){
         </span>
       ))}
     </pre>
-  );
-}
-
-// ───────────────────────── Nav ─────────────────────────
-function Nav(){
-  return (
-    <nav className="nav">
-      <div className="nav-inner">
-        <a href="#top" className="brand">
-          <span className="dot"></span>
-          <span>y_w_song.sh</span>
-        </a>
-        <div className="nav-links">
-          <a href="#work">work</a>
-          <a href="#approach">approach</a>
-          <a href="#stack">stack</a>
-          <a href="#contact">contact</a>
-        </div>
-        <a className="nav-cta" href="mailto:youngwoo930@gmail.com">connect</a>
-      </div>
-    </nav>
   );
 }
 
@@ -303,7 +238,7 @@ function Work({ layout }){
         </div>
 
         <div className="stats reveal">
-          <div className="stat"><span className="sn"><CountUp end={12} /></span><span className="sl">shipped projects</span></div>
+          <div className="stat"><span className="sn"><CountUp end={PROJECTS.length} /></span><span className="sl">shipped projects</span></div>
           <div className="stat"><span className="sn"><CountUp end={7} /></span><span className="sl">yrs in architecture</span></div>
           <div className="stat"><span className="sn"><CountUp end={4} /></span><span className="sl">multi-agent systems</span></div>
           <div className="stat"><span className="sn"><CountUp end={2} /></span><span className="sl">ibm specializations · 2025</span></div>
@@ -397,18 +332,18 @@ function Contact(){
         </div>
       </div>
       <div className="wrap">
-        <div className="footer">
-          <div className="footer-inner">
-            <span>© 2026 young woo song <span className="acc">·</span> auckland, nz</span>
-            <span>build <span className="acc">v2.0</span> · last sync may 2026</span>
-          </div>
-        </div>
+        <Footer page="index" />
       </div>
     </section>
   );
 }
 
 // ───────────────────────── App + Tweaks ─────────────────────────
+
+// Document order — useScrollSpy returns the first of these still intersecting
+// the band under the nav, which is what the nav highlights.
+const SPY_SECTIONS = ['top', 'work', 'approach', 'stack', 'contact'];
+
 function App(){
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
 
@@ -426,10 +361,11 @@ function App(){
 
   useReveal();
   useScrollProgress();
+  const activeId = useScrollSpy(SPY_SECTIONS);
 
   return (
     <>
-      <Nav />
+      <Nav page="index" activeId={activeId} />
       <Hero variant={t.heroVariant} />
       <Work layout={t.projectLayout} />
       <Approach />

@@ -4,6 +4,18 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Project — Young Woo Song</title>
+<meta name="description" content="Project case studies by Young Woo Song — applied AI, retrieval, multi-agent systems and computer vision, each with the problem, the approach, the media and what shipped." />
+<link rel="canonical" href="https://userdflt.github.io/YWS_Portfolio.github.io/project.html" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+<!-- Static Open Graph, generic to the project shell. Per-project OG cannot live
+     here: project.jsx renders client-side and crawlers do not execute it, so the
+     runtime only sets document.title. -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://userdflt.github.io/YWS_Portfolio.github.io/project.html" />
+<meta property="og:title" content="Project — Young Woo Song" />
+<meta property="og:description" content="A project case study from Young Woo Song's applied-AI portfolio: problem, approach, media and outcomes." />
+<meta property="og:image" content="https://userdflt.github.io/YWS_Portfolio.github.io/images/optimized/code_vision.webp" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,9 +42,12 @@
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
+<!-- Shared modules evaluate before the page app that consumes their globals;
+     Babel standalone runs text/babel scripts in DOM order. -->
 <script src="cosmic.js"></script>
 <script type="text/babel" src="data.jsx"></script>
 <script type="text/babel" src="scripts/scroll.jsx"></script>
+<script type="text/babel" src="scripts/shared-ui.jsx"></script>
 <script type="text/babel" src="project.jsx"></script>
 
 </body>

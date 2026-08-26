@@ -4,6 +4,17 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Young Woo Song — AI Builder</title>
+<meta name="description" content="Young Woo Song — AI specialist at Ignite, Auckland. Internal AI tools, retrieval and multi-agent systems, plus the governance, evaluation and adoption frameworks that make them safe to scale for architecture and design teams." />
+<link rel="canonical" href="https://userdflt.github.io/YWS_Portfolio.github.io/" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+<!-- Static Open Graph: crawlers do not execute the JSX, so nothing here is
+     written at runtime — project.jsx/app.jsx only set document.title. -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://userdflt.github.io/YWS_Portfolio.github.io/" />
+<meta property="og:title" content="Young Woo Song — Applied AI" />
+<meta property="og:description" content="AI specialist at Ignite, Auckland. Internal AI tools, retrieval and multi-agent systems, and AI governance for architecture and design teams." />
+<meta property="og:image" content="https://userdflt.github.io/YWS_Portfolio.github.io/images/optimized/code_vision.webp" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,9 +51,12 @@
 <!-- Cosmic stage: particle field (vanilla) -->
 <script src="cosmic.js"></script>
 
-<!-- Data + Scroll runtime + Tweaks panel + App -->
+<!-- Data + Scroll runtime + Shared chrome + Tweaks panel + App.
+     Babel standalone executes text/babel scripts in DOM order, and each shared
+     module must be evaluated before the page app that consumes its globals. -->
 <script type="text/babel" src="data.jsx"></script>
 <script type="text/babel" src="scripts/scroll.jsx"></script>
+<script type="text/babel" src="scripts/shared-ui.jsx"></script>
 <script type="text/babel" src="tweaks-panel.jsx"></script>
 <script type="text/babel" src="app.jsx"></script>
 
