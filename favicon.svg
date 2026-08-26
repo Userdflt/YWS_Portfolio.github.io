@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Young Woo Song">
   <title>y_w_song.sh</title>
   <defs>
-    <!-- same silver ramp as .text-silver in styles/theme.css -->
+    <!-- silver ramp (retired theme recipe; icon redraw is Phase C) -->
     <linearGradient id="silver" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#ffffff"/>
       <stop offset="1" stop-color="#9aa6c4"/>

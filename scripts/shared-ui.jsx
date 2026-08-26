@@ -2,9 +2,9 @@
 // shared-ui.jsx — the shared page chrome.
 //
 // Single responsibility: the components that must look and behave identically
-// on every page — the top nav, the footer, and the glyph-scramble headline
-// treatment. index.html and project.html render the SAME components from here,
-// so the chrome can no longer drift between the two pages.
+// on every page — the top nav (including its tone adaptation) and the footer.
+// index.html and project.html render the SAME components from here, so the
+// chrome can no longer drift between the two pages.
 //
 // Public entrypoint: the Object.assign(window, …) at the bottom of this file
 // (pattern: data.jsx:477, scripts/scroll.jsx:324). Nothing above it is
@@ -18,11 +18,10 @@
 // file. Wrapping keeps every internal name off the shared scope and makes the
 // window export the only door.
 //
-// Load order: AFTER scripts/scroll.jsx (GlyphShuffle consumes its
-// useReducedMotion) and BEFORE app.jsx / project.jsx.
+// Load order: AFTER scripts/scroll.jsx and BEFORE app.jsx / project.jsx.
 // ═══════════════════════════════════════════════════════════════════════════
 (function(){
-  const { useState, useEffect, useRef } = React;
+  const { useState, useEffect } = React;
 
   // ─────────────── Site constants (single source of truth) ───────────────
 
@@ -37,91 +36,90 @@
   const PAGE_INDEX = 'index';
   const NAV_SECTIONS = ['work', 'approach', 'stack', 'contact'];
 
-  const BRAND_LABEL = 'y_w_song.sh';
+  const BRAND_LABEL = 'YOUNG WOO SONG';
   const SITE_COPYRIGHT = '© 2026 young woo song';
   const SITE_LOCATION = 'auckland, nz';
   const BUILD_LABEL = 'v2.0';
   const BUILD_SYNC = 'last sync may 2026';
 
-  // ─────────────── Glyph scramble ───────────────
+  // ─────────────── Nav tone adaptation ───────────────
 
-  const GLYPHS = '▓▒░█ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}<>/=*_-';
-  const GLYPH_PER_CHAR_MS = 60;   // wave step — chars start left to right
-  const GLYPH_SCRAMBLE_MS = 180;  // how long one char churns before it locks
-  const GLYPH_FPS = 28;
-  const GLYPH_TAIL_MS = 80;       // grace period after the last char locks
-  const GLYPH_BLANK = '\u00A0';   // non-breaking space holds a not-yet-started slot open
+  // The nav is a 56px band pinned to the top of the viewport. Its skin follows
+  // whatever section sits under that band, so observation is CLIPPED to exactly
+  // those 56px — a full-viewport observer would report every section on screen.
+  const NAV_BAND_PX = 56;
+  const TONE_SELECTOR = '[data-tone]';
+  const TONE_LIGHT = 'light';
+  const NAV_TONE_CLASS = { light: 'nav--light', dark: 'nav--dark' };
 
-  /**
-   * Splits `text` into word-safe spans — each word is an inline-block with
-   * nowrap, so a line break can only land between words and never mid-scramble
-   * inside one. `resolveChar` decides what each character paints, so the
-   * animated path and the reduced-motion path emit IDENTICAL markup and
-   * identical metrics; only the resolver differs.
-   */
-  function renderGlyphNodes(text, resolveChar){
-    const words = text.split(' ');
-    const nodes = [];
-    let index = 0;
-    words.forEach((word, wi) => {
-      nodes.push(
-        <span key={`w${wi}`} style={{ display:'inline-block', whiteSpace:'nowrap' }}>
-          {[...word].map((ch) => {
-            const i = index++;
-            const { display, glow } = resolveChar(ch, i);
-            return <span key={i} className={'gs-char' + (glow ? ' gs-flash' : '')}>{display || GLYPH_BLANK}</span>;
-          })}
-        </span>
-      );
-      // The space between words consumes a wave slot so the cascade stays even.
-      if(wi < words.length - 1){ index++; nodes.push(<span key={`s${wi}`}> </span>); }
-    });
-    return nodes;
-  }
+  const toneOf = (el) => el.getAttribute('data-tone') || TONE_LIGHT;
 
   /**
-   * Per-char scramble that resolves left to right into the real word.
+   * Reports the tone of the topmost [data-tone] section intersecting the nav
+   * band; 'light' when none does — the page top, a gap between toned sections,
+   * or a page carrying no tone markers at all.
    *
-   * Under reduced motion the final text renders on the first paint: no rAF
-   * loop, no timers, no blank frames — the reader never sees a placeholder.
+   * Two resolvers, one answer:
+   *  - a SYNCHRONOUS geometry pass on mount, because IntersectionObserver does
+   *    not deliver its first callback until after paint — without it a mid-page
+   *    load shows the default skin over a dark section for a frame;
+   *  - a persistent visible-set thereafter, walked in DOM order so "topmost
+   *    wins" holds even though entries arrive in observation order.
+   *
+   * No IntersectionObserver (or no toned sections) leaves the light skin
+   * standing rather than failing to an unskinned nav.
    */
-  function GlyphShuffle({ text, perChar = GLYPH_PER_CHAR_MS, scrambleMs = GLYPH_SCRAMBLE_MS, fps = GLYPH_FPS }){
-    const reduced = useReducedMotion();
-    const [, nextFrame] = useState(0);
-    const startRef = useRef(0);
+  function useNavTone(){
+    const [tone, setTone] = useState(TONE_LIGHT);
 
     useEffect(() => {
-      if(reduced) return;
-      startRef.current = performance.now();
-      let frame = 0;
-      let timer = 0;
-      function tick(){
-        nextFrame(n => n + 1);
-        frame = requestAnimationFrame(() => { timer = setTimeout(tick, 1000 / fps); });
+      const sections = Array.from(document.querySelectorAll(TONE_SELECTOR));
+      if(sections.length === 0) return;
+
+      const resolveByGeometry = () => {
+        for(const el of sections){
+          const box = el.getBoundingClientRect();
+          if(box.top < NAV_BAND_PX && box.bottom > 0) return toneOf(el);
+        }
+        return TONE_LIGHT;
+      };
+      setTone(resolveByGeometry());
+
+      if(typeof IntersectionObserver === 'undefined') return;
+
+      const visible = new Set();
+      let io = null;
+
+      // The clip is expressed as a bottom root-margin, so it is a function of
+      // the viewport height and has to be rebuilt when that changes.
+      function attach(){
+        io = new IntersectionObserver((entries) => {
+          for(const e of entries){
+            if(e.isIntersecting) visible.add(e.target);
+            else visible.delete(e.target);
+          }
+          const topmost = sections.find(el => visible.has(el));
+          setTone(topmost ? toneOf(topmost) : TONE_LIGHT);
+        }, {
+          rootMargin: `0px 0px -${Math.max(0, window.innerHeight - NAV_BAND_PX)}px 0px`,
+          threshold: 0,
+        });
+        sections.forEach(el => io.observe(el));
       }
-      tick();
-      // Stop repainting once the last char has locked.
-      const stopAt = perChar * text.length + scrambleMs + GLYPH_TAIL_MS;
-      const stop = setTimeout(() => { cancelAnimationFrame(frame); clearTimeout(timer); }, stopAt);
-      return () => { cancelAnimationFrame(frame); clearTimeout(timer); clearTimeout(stop); };
-    }, [text, perChar, scrambleMs, fps, reduced]);
 
-    if(reduced){
-      return <span className="glyph-shuffle">{renderGlyphNodes(text, (ch) => ({ display: ch, glow: false }))}</span>;
-    }
+      function reattach(){
+        io.disconnect();
+        visible.clear();
+        attach();
+        setTone(resolveByGeometry());
+      }
 
-    const elapsed = performance.now() - startRef.current;
-    return (
-      <span className="glyph-shuffle">
-        {renderGlyphNodes(text, (ch, i) => {
-          const charStart = i * perChar;
-          const charEnd = charStart + scrambleMs;
-          if(elapsed < charStart) return { display: '', glow: false };
-          if(elapsed < charEnd) return { display: GLYPHS[(Math.random() * GLYPHS.length) | 0], glow: true };
-          return { display: ch, glow: false };
-        })}
-      </span>
-    );
+      attach();
+      window.addEventListener('resize', reattach);
+      return () => { io.disconnect(); window.removeEventListener('resize', reattach); };
+    }, []);
+
+    return tone;
   }
 
   // ─────────────── Nav ───────────────
@@ -134,16 +132,19 @@
    * page='project' — section links point back at index.html, and a distinct
    *                  back-to-work affordance sits beside the brand. Scroll-spy
    *                  does not apply, so no link is ever marked active.
+   *
+   * The tone skin is orthogonal to `page`: it tracks the section under the nav
+   * band on whichever page is mounted.
    */
   function Nav({ page = PAGE_INDEX, activeId = null }){
     const onIndex = page === PAGE_INDEX;
+    const tone = useNavTone();
     const sectionHref = (id) => (onIndex ? '#' + id : INDEX_URL + '#' + id);
     return (
-      <nav className="nav">
+      <nav className={'nav ' + (NAV_TONE_CLASS[tone] || NAV_TONE_CLASS.light)}>
         <div className="nav-inner">
           <div className="nav-lead">
             <a href={onIndex ? TOP_ANCHOR : INDEX_URL} className="brand">
-              <span className="dot"></span>
               <span>{BRAND_LABEL}</span>
             </a>
             {!onIndex && <a className="nav-back" href={WORK_URL}>back to work</a>}
@@ -192,7 +193,6 @@
   // ─────────────── Public entrypoint ───────────────
 
   Object.assign(window, {
-    GlyphShuffle,
     Nav,
     Footer,
   });

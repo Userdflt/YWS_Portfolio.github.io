@@ -19,18 +19,11 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500;600;700&family=Manrope:wght@200;300;400;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="styles/theme.css">
 </head>
 <body>
-
-<!-- Cosmic background stage -->
-<div id="cosmic-stage" aria-hidden="true">
-  <canvas id="cosmic-canvas"></canvas>
-  <div class="scanline"></div>
-  <div class="vignette"></div>
-</div>
 
 <!-- Scroll progress -->
 <div class="scroll-progress"><div class="bar" id="scroll-bar"></div></div>
@@ -44,7 +37,6 @@
 
 <!-- Shared modules evaluate before the page app that consumes their globals;
      Babel standalone runs text/babel scripts in DOM order. -->
-<script src="cosmic.js"></script>
 <script type="text/babel" src="data.jsx"></script>
 <script type="text/babel" src="scripts/scroll.jsx"></script>
 <script type="text/babel" src="scripts/shared-ui.jsx"></script>

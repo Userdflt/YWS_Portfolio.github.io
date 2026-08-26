@@ -1,139 +1,111 @@
-// Main portfolio app — techy mono variant.
+// Main portfolio app — paper/ink editorial.
 const { useState, useEffect, useRef, useMemo } = React;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "palette": "azure",
   "typePairing": "jetbrains",
-  "heroVariant": "centered",
   "projectLayout": "editorial",
   "density": "regular"
 }/*EDITMODE-END*/;
 
+// One entry per palette, TWO accents per entry: the tone scopes in theme.css
+// pick the pair that reads on their own surface. A single accent cannot serve
+// both — anything legible on #f0f1f4 is too dark for #0e1228 and vice versa.
+// Every `accent` is >= 4.5:1 on its surface, every `accent2` >= 3:1
+// (verified: scratchpad contrast.cjs).
 const PALETTES = {
-  azure:  { label: "Azure",  accent: "#6f8bff", accent2: "#9db4ff", glow: "rgba(111,139,255,0.42)", soft: "rgba(111,139,255,0.16)" },
-  teal:   { label: "Teal",   accent: "#5eead4", accent2: "#7dd3fc", glow: "rgba(94,234,212,0.42)",  soft: "rgba(94,234,212,0.16)" },
-  cyber:  { label: "Cyber",  accent: "#22d3ee", accent2: "#a78bfa", glow: "rgba(34,211,238,0.42)",  soft: "rgba(34,211,238,0.16)" },
-  matrix: { label: "Matrix", accent: "#84cc16", accent2: "#22c55e", glow: "rgba(132,204,22,0.42)",  soft: "rgba(132,204,22,0.16)" },
-  amber:  { label: "Amber",  accent: "#fbbf24", accent2: "#fb923c", glow: "rgba(251,191,36,0.42)",  soft: "rgba(251,191,36,0.16)" },
-  bone:   { label: "Bone",   accent: "#e7e5e4", accent2: "#a8a29e", glow: "rgba(231,229,228,0.32)", soft: "rgba(231,229,228,0.10)" },
+  azure:  { label: "Azure",  accent: "#2c46d8", accent2: "#5a70e8", soft: "rgba(44,70,216,0.10)",
+            accentDark: "#9db4ff", accent2Dark: "#c3d1ff", softDark: "rgba(157,180,255,0.14)" },
+  teal:   { label: "Teal",   accent: "#0f6f66", accent2: "#1d7fa8", soft: "rgba(15,111,102,0.10)",
+            accentDark: "#5eead4", accent2Dark: "#7dd3fc", softDark: "rgba(94,234,212,0.14)" },
+  cyber:  { label: "Cyber",  accent: "#0e7490", accent2: "#6d28d9", soft: "rgba(14,116,144,0.10)",
+            accentDark: "#22d3ee", accent2Dark: "#a78bfa", softDark: "rgba(34,211,238,0.14)" },
+  matrix: { label: "Matrix", accent: "#3f6212", accent2: "#15803d", soft: "rgba(63,98,18,0.10)",
+            accentDark: "#84cc16", accent2Dark: "#22c55e", softDark: "rgba(132,204,22,0.14)" },
+  amber:  { label: "Amber",  accent: "#92400e", accent2: "#9a3412", soft: "rgba(146,64,14,0.10)",
+            accentDark: "#fbbf24", accent2Dark: "#fb923c", softDark: "rgba(251,191,36,0.14)" },
+  bone:   { label: "Bone",   accent: "#57534e", accent2: "#78716c", soft: "rgba(87,83,78,0.10)",
+            accentDark: "#e7e5e4", accent2Dark: "#a8a29e", softDark: "rgba(231,229,228,0.12)" },
+};
+
+// Hero image band — the LCP element, so it is eager + high priority and carries
+// its intrinsic size to reserve the box before the bytes land.
+const HERO_IMAGE = {
+  src: "images/optimized/masterplan_1_render_2.webp",
+  width: 1088,
+  height: 960,
+  alt: "Aerial masterplan render: a residential development with landscaped parkland, a central clubhouse and pool, and detached houses across a rural site.",
 };
 
 // Shared runtime, consumed as window globals — this file owns home sections only:
 //   scripts/scroll.jsx    -> useReveal, useScrollProgress, useScrollSpy,
 //                            useHeroScrollLink, CountUp
-//   scripts/shared-ui.jsx -> Nav, Footer, GlyphShuffle
+//   scripts/shared-ui.jsx -> Nav, Footer
 // Re-declaring any of those names at top level here would shadow the shared copy.
 
-// ───────────────────────── Frame-by-frame helpers ─────────────────────────
-
-// Typing line — types char by char.
-function TypeLine({ text, speed = 4, onDone, className }){
-  const [n, setN] = useState(0);
-  useEffect(() => {
-    if(n >= text.length){ onDone && onDone(); return; }
-    // Batch a few chars per tick to stay fast even under timer throttling.
-    const id = setTimeout(() => setN(Math.min(text.length, n + 2)), speed + Math.random()*6);
-    return () => clearTimeout(id);
-  }, [n, text]);
-  return <span className={className}>{text.slice(0, n)}</span>;
-}
-
-// Boot sequence — frame-by-frame typed lines with delays
-function BootSequence(){
-  const [step, setStep] = useState(0);
-  const lines = [
-    { cls: "dim",  text: "$ boot --portfolio --user=youngwoo-song" },
-    { cls: "dim",  text: "→ loading modules ............ ", suffix: "ok" },
-    { cls: "dim",  text: "→ connecting agents .......... ", suffix: "ok" },
-    { cls: "dim",  text: "→ render pipeline ............ ", suffix: "ok" },
-    { cls: "acc",  text: "→ ready. type --view to begin." },
-  ];
-  return (
-    <pre className="boot" aria-hidden="true">
-      {lines.slice(0, step+1).map((ln, i) => (
-        <span className="line" key={i}>
-          {i < step
-            ? <span className={ln.cls}>{ln.text}{ln.suffix && <span className="ok"> [{ln.suffix}]</span>}</span>
-            : <span className={ln.cls}>
-                <TypeLine text={ln.text} speed={3} onDone={() => setStep(s => Math.min(lines.length-1, s+1))} />
-                {ln.suffix && step === lines.length-1 && <span className="ok"> [{ln.suffix}]</span>}
-              </span>}
-        </span>
-      ))}
-    </pre>
-  );
-}
-
 // ───────────────────────── Hero ─────────────────────────
-function Hero({ variant }){
+// Three stacked blocks: the type lead, a full-bleed image band, and a paper
+// title card pulled up over the band. The band is a direct child of the
+// section — inside .wrap it would be capped at the content width.
+function Hero(){
   const heroRef = useRef(null);
   useHeroScrollLink(heroRef);
   return (
-    <section id="top" ref={heroRef} className={`hero variant-${variant}`}>
-      {variant === "coords" && (
-        <div className="coord-grid" aria-hidden="true">
-          <div>// 36.85°S / 174.76°E</div><div></div><div>v2 / 2026</div>
-          <div></div><div></div><div></div>
-          <div>Auckland · AOT</div><div></div><div>● available</div>
-        </div>
-      )}
+    <section id="top" ref={heroRef} className="hero">
+      <div className="wrap hero-lead">
+        <p className="hero-status eyebrow">ai specialist · ignite · auckland · hybrid</p>
 
-      <div className="wrap">
-        <BootSequence />
+        <h1 className="reveal reveal-1 text-ink display-1">Young Woo Song</h1>
 
-        <div className="hero-meta reveal">
-          <span className="status-pill"><span className="pulse"></span><span className="eyebrow">ai specialist · ignite · auckland · hybrid</span></span>
-        </div>
+        <p className="hero-role reveal reveal-2">Applied AI</p>
 
-        {variant === "split" ? (
-          <h1 className="reveal reveal-1 text-silver display-1">
-            young woo<br/>
-            <span className="acc"><GlyphShuffle text="song" /></span>
-          </h1>
-        ) : variant === "coords" ? (
-          <h1 className="reveal reveal-1 text-silver display-1">
-            young woo song<br/>
-            <span className="acc"><GlyphShuffle text="applied ai" /></span> · architecture
-          </h1>
-        ) : (
-          <h1 className="reveal reveal-1 text-silver display-1">
-            young woo song<br/>
-            <span className="acc"><GlyphShuffle text="applied" /></span> ai.
-          </h1>
-        )}
-
-        <p className="hero-tag reveal reveal-2">
-          <span className="prompt">$</span>
-          ai specialist at ignite. i build internal ai tools — knowledge retrieval, workflow automation, document and compliance support — and establish governance, evaluation, and adoption frameworks for design and architecture teams.
-        </p>
-
-        <div className="hero-foot reveal reveal-3">
-          <div className="col">
-            <span className="k">role</span>
-            <span className="v">ai specialist · ignite</span>
-          </div>
-          <div className="col">
-            <span className="k">based</span>
-            <span className="v">auckland · nz · hybrid</span>
-          </div>
-          <div className="col">
-            <span className="k">since</span>
-            <span className="v">jan 2026 → present</span>
-          </div>
-          <div className="col">
-            <span className="k">channels</span>
-            <span className="v">
-              <a href="https://github.com/Userdflt">github</a>{" · "}
-              <a href="https://www.linkedin.com/in/young-woo-song-145488217/">linkedin</a>{" · "}
-              <a href="mailto:youngwoo930@gmail.com">email</a>
-            </span>
-          </div>
+        <div className="scroll-cue" aria-hidden="true">
+          <span>scroll</span>
+          <span className="line"></span>
         </div>
       </div>
 
-      <div className="scroll-cue" aria-hidden="true">
-        <span>scroll</span>
-        <span className="line"></span>
+      <div className="hero-band reveal reveal-2">
+        <img
+          src={HERO_IMAGE.src}
+          alt={HERO_IMAGE.alt}
+          width={HERO_IMAGE.width}
+          height={HERO_IMAGE.height}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+
+      <div className="wrap">
+        <div className="panel-overlap hero-panel reveal reveal-3">
+          <p className="hero-tag">
+            ai specialist at ignite. i build internal ai tools — knowledge retrieval, workflow automation, document and compliance support — and establish governance, evaluation, and adoption frameworks for design and architecture teams.
+          </p>
+
+          <div className="hero-foot">
+            <div className="col">
+              <span className="k">role</span>
+              <span className="v">ai specialist · ignite</span>
+            </div>
+            <div className="col">
+              <span className="k">based</span>
+              <span className="v">auckland · nz · hybrid</span>
+            </div>
+            <div className="col">
+              <span className="k">since</span>
+              <span className="v">jan 2026 → present</span>
+            </div>
+            <div className="col">
+              <span className="k">channels</span>
+              <span className="v">
+                <a href="https://github.com/Userdflt">github</a>{" · "}
+                <a href="https://www.linkedin.com/in/young-woo-song-145488217/">linkedin</a>{" · "}
+                <a href="mailto:youngwoo930@gmail.com">email</a>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -179,7 +151,7 @@ function WorkEditorial({ projects, previewRef }){
            onMouseLeave={onLeave}>
           <div className="idx">{String(i + 1).padStart(2, '0')}</div>
           <div className="title-col">
-            <div className="title">{p.title.toLowerCase()}</div>
+            <div className="title">{p.title}</div>
             <div className="blurb">{p.subtitle} — {p.blurb}</div>
           </div>
           <div className="cat">{p.category}</div>
@@ -197,7 +169,7 @@ function WorkCards({ projects }){
         <a key={p.id} href={`project.html?id=${p.id}`} className="work-card reveal" style={{ transitionDelay: `${0.04 * (i % 6)}s` }}>
           <div className="thumb">{p.mark}</div>
           <div className="ccat">{p.category} / {p.year}</div>
-          <div className="ctitle">{p.title.toLowerCase()}</div>
+          <div className="ctitle">{p.title}</div>
           <div className="cblurb">{p.blurb}</div>
         </a>
       ))}
@@ -214,7 +186,7 @@ function WorkIndex({ projects }){
       {projects.map((p, i) => (
         <a key={p.id} href={`project.html?id=${p.id}`} className="row reveal" style={{ transitionDelay: `${0.025 * i}s` }}>
           <span>{String(i + 1).padStart(2, '0')}</span>
-          <span className="tname">{p.title.toLowerCase()}</span>
+          <span className="tname">{p.title}</span>
           <span>{p.category}</span>
           <span>{p.tech.slice(0,3).join(' · ')}</span>
           <span>↗</span>
@@ -264,7 +236,7 @@ function Approach(){
         </div>
         <div className="approach-grid">
           <div>
-            <h2 className="reveal text-silver">from architecture to <span className="acc">applied ai</span>.</h2>
+            <h2 className="reveal text-ink">from architecture to <span className="acc">applied ai</span>.</h2>
             <p className="reveal reveal-1">seven years across new zealand architecture practices — ignite, woods bagot, rcg — taught me to work with constraints and ship under pressure. now back at ignite as ai specialist, applying generative ai and machine learning to real architecture and design workflows.</p>
             <p className="reveal reveal-2">i build internal tools — rag, workflow automation, document and compliance support — and stand up the governance, evals, and adoption frameworks that make them safe to scale. aut-accredited in data science &amp; ai (institute of data) and ibm-certified across ai engineering and ai development.</p>
           </div>
@@ -273,7 +245,7 @@ function Approach(){
               <div className="principle" key={p.n}>
                 <div className="pn">{p.n}</div>
                 <div>
-                  <div className="pt">{p.t.toLowerCase()}</div>
+                  <div className="pt">{p.t}</div>
                   <div className="pd">{p.d}</div>
                 </div>
               </div>
@@ -299,7 +271,7 @@ function Stack(){
           {STACK.map((s) => (
             <div className="stack-cell" key={s.head}>
               <div className="sh">{s.head}</div>
-              <div className="st">{s.title.toLowerCase()}</div>
+              <div className="st">{s.title}</div>
               <div className="stags">
                 {s.tags.map(t => <span className="tag" key={t}>{t}</span>)}
               </div>
@@ -322,7 +294,7 @@ function Contact(){
           <span className="rule"></span>
         </div>
         <div className="contact-card reveal">
-          <h2 className="text-silver display-2">let&rsquo;s build<br/>something <span className="acc">real</span>.</h2>
+          <h2 className="text-ink display-2">let&rsquo;s build<br/>something <span className="acc">real</span>.</h2>
           <p>open to interesting work in applied ai, ai governance and adoption, multi-agent systems, and tools for architecture and design.</p>
           <div className="contact-actions">
             <a className="btn btn-primary" href="mailto:youngwoo930@gmail.com">youngwoo930@gmail.com <span className="ar">↗</span></a>
@@ -347,13 +319,18 @@ const SPY_SECTIONS = ['top', 'work', 'approach', 'stack', 'contact'];
 function App(){
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
 
+  // Palette writes the tone-NEUTRAL base vars, never --accent itself: an
+  // inline --accent on documentElement would reach the light scope only,
+  // because .sec-dark re-declares --accent for its own subtree.
   useEffect(() => {
-    const p = PALETTES[t.palette] || PALETTES.teal;
+    const p = PALETTES[t.palette] || PALETTES.azure;
     const r = document.documentElement;
-    r.style.setProperty('--accent', p.accent);
-    r.style.setProperty('--accent-2', p.accent2);
-    r.style.setProperty('--accent-glow', p.glow);
-    r.style.setProperty('--accent-soft', p.soft);
+    r.style.setProperty('--accent-l', p.accent);
+    r.style.setProperty('--accent-2-l', p.accent2);
+    r.style.setProperty('--accent-soft-l', p.soft);
+    r.style.setProperty('--accent-d', p.accentDark);
+    r.style.setProperty('--accent-2-d', p.accent2Dark);
+    r.style.setProperty('--accent-soft-d', p.softDark);
     r.classList.remove('density-compact','density-regular','density-spacious');
     r.classList.add(`density-${t.density}`);
     r.setAttribute('data-type-pairing', t.typePairing);
@@ -366,7 +343,7 @@ function App(){
   return (
     <>
       <Nav page="index" activeId={activeId} />
-      <Hero variant={t.heroVariant} />
+      <Hero />
       <Work layout={t.projectLayout} />
       <Approach />
       <Stack />
@@ -393,12 +370,6 @@ function App(){
         />
 
         <TweakSection label="Layout" />
-        <TweakRadio
-          label="Hero"
-          value={t.heroVariant}
-          options={["centered", "coords", "split"]}
-          onChange={(v) => setTweak('heroVariant', v)}
-        />
         <TweakSelect
           label="Projects"
           value={t.projectLayout}

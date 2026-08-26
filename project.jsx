@@ -4,7 +4,7 @@ const { useState, useEffect, useRef } = React;
 
 // ───────── shared modules (window globals) ─────────
 // scripts/scroll.jsx    -> useReveal, useScrollProgress, useParallax
-// scripts/shared-ui.jsx -> Nav, Footer, GlyphShuffle
+// scripts/shared-ui.jsx -> Nav, Footer
 // This page owns detail sections only; re-declaring any of those names at top
 // level here would shadow the shared copy.
 
@@ -18,7 +18,7 @@ function NotFound({ id }){
       <Nav page="project" />
       <section className="wrap">
         <div className="crumbs"><a href="index.html">← index.html</a><span className="sep">/</span><span className="here">404</span></div>
-        <h1 style={{ fontWeight:500, fontSize:'clamp(40px,7vw,88px)', lineHeight:1.02, letterSpacing:'-.04em', textTransform:'lowercase', margin:'40px 0 16px' }}>
+        <h1 style={{ fontWeight:500, fontSize:'clamp(40px,7vw,88px)', lineHeight:1.02, letterSpacing:'-.04em', margin:'40px 0 16px' }}>
           project <span style={{color:'var(--accent)'}}>{id || 'unknown'}</span> not found.
         </h1>
         <p style={{color:'var(--ink-dim)',fontSize:15,maxWidth:'60ch',margin:'0 0 28px'}}>
@@ -172,7 +172,7 @@ function MediaGallery({ item, baseNo }){
       {item.title && (
         <div className="section-tag" style={{ marginBottom:'calc(var(--u)*2)' }}>
           <span className="marker">▸</span>
-          <span>{item.title.toLowerCase()}</span>
+          <span>{item.title}</span>
           <span className="rule"></span>
           <span>{String(item.items.length).padStart(2,'0')} frames</span>
         </div>
@@ -200,7 +200,7 @@ function MediaVideoGallery({ item, baseNo }){
       {item.title && (
         <div className="section-tag" style={{ marginBottom:'calc(var(--u)*2)' }}>
           <span className="marker">▸</span>
-          <span>{item.title.toLowerCase()}</span>
+          <span>{item.title}</span>
           <span className="rule"></span>
           <span>{String(item.items.length).padStart(2,'0')} clips</span>
         </div>
@@ -290,7 +290,7 @@ function RelatedProjects({ project }){
           <a className="card" key={p.id} href={`project.html?id=${p.id}`}>
             <CardThumb project={p} />
             <div className="card-body">
-              <div className="t">{p.title.toLowerCase()}</div>
+              <div className="t">{p.title}</div>
               <div className="c">{p.category}</div>
             </div>
           </a>
@@ -334,9 +334,7 @@ function ProjectPage({ project }){
             <span className="pill acc">[ idx {String(idx + 1).padStart(2,'0')} / {String(list.length).padStart(2,'0')} ]</span>
           </div>
 
-          <h1 className="reveal reveal-1 text-silver display-1">
-            <GlyphShuffle text={project.title.toLowerCase()} />
-          </h1>
+          <h1 className="reveal reveal-1 text-ink display-1">{project.title}</h1>
 
           <p className="sub reveal reveal-2">{project.subtitle} — {project.blurb}</p>
 
@@ -379,7 +377,7 @@ function ProjectPage({ project }){
                 <div className="row" key={i}>
                   <div className="pn">{String(i + 1).padStart(2,'0')} /</div>
                   <div>
-                    <div className="pt">{a.t.toLowerCase()}</div>
+                    <div className="pt">{a.t}</div>
                     <div className="pd">{a.d}</div>
                   </div>
                 </div>
@@ -441,7 +439,7 @@ function ProjectPage({ project }){
               <CardThumb project={prev} />
               <div className="card-body">
                 <div className="l"><span className="acc">←</span> previous</div>
-                <div className="t">{prev.title.toLowerCase()}</div>
+                <div className="t">{prev.title}</div>
                 <div className="c">{prev.category}</div>
               </div>
             </a>
@@ -449,7 +447,7 @@ function ProjectPage({ project }){
               <CardThumb project={next} />
               <div className="card-body">
                 <div className="l">next <span className="acc">→</span></div>
-                <div className="t">{next.title.toLowerCase()}</div>
+                <div className="t">{next.title}</div>
                 <div className="c">{next.category}</div>
               </div>
             </a>
