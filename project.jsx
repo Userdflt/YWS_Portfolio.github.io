@@ -3,13 +3,65 @@
 const { useState, useEffect, useRef } = React;
 
 // ───────── shared modules (window globals) ─────────
-// scripts/scroll.jsx    -> useReveal, useScrollProgress, useParallax
+// scripts/scroll.jsx    -> useScrub, useReveal, useScrollProgress, useParallax
 // scripts/shared-ui.jsx -> Nav, Footer
 // This page owns detail sections only; re-declaring any of those names at top
 // level here would shadow the shared copy.
 
 // A related row of 3 fills one grid line and stays a suggestion, not a list.
 const RELATED_MAX = 3;
+
+// ───────── Scroll-scrubbed motion (Design Spec tables P1–P4) ─────────
+// Every table below is a pure function of scroll position: `at` is progress
+// through the entry's own trigger range, never elapsed time. The values live
+// here, named, so a tuning pass never means reading JSX for numbers.
+//
+// Detail pages are NOT pinned (Design Note "no pin on project pages") — reading
+// speed wins over a second sticky scene.
+
+// P1 / P4 — the one rise recipe on this page: 28px of travel under a fade. The
+// overview panel and the link cards differ only in how much of their entry
+// range they spend on it.
+const RISE_SCRUB = [
+  { at: 0, style: { translateY: 28, opacity: 0 } },
+  { at: 1, style: { translateY: 0,  opacity: 1 } },
+];
+const PANEL_RISE_OPTS = { mode: 'enter', endAt: 0.65 };
+const CARD_RISE_OPTS = { mode: 'enter', endAt: 0.75 };
+
+// P2 / P3 — media unmasks bottom-up over roughly one viewport of travel. Four
+// vertices on both sides: the top edge starts collapsed onto the bottom one and
+// lifts to 0%. Released at 1 so a finished figure carries no clip into later
+// paints — and so the inner figure's ±24px parallax is never cropped by a mask
+// that has already done its job.
+const MEDIA_WIPE_SCRUB = [
+  { at: 0, style: { clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' } },
+  { at: 1, style: { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
+];
+const MEDIA_WIPE_OPTS = { mode: 'enter', endAt: 0.35, releaseOnComplete: true };
+
+// P3 — gallery stagger. The offset is the item's index modulo a FIXED column
+// count, never the real one: the grid is `auto-fill`, so its column count
+// changes with the viewport and would make the motion resize-dependent. The
+// engine REMAPS a delayed range rather than truncating it, so every item still
+// reaches 1 and still releases.
+const GALLERY_STAGGER_COLS = 3;
+const GALLERY_STAGGER_STEP = 0.07;
+const galleryWipeOpts = (i) => ({
+  ...MEDIA_WIPE_OPTS,
+  delay: (i % GALLERY_STAGGER_COLS) * GALLERY_STAGGER_STEP,
+});
+
+// P4 — the outcomes band steps in behind a paper staircase: six vertices on
+// both sides (the interpolator pairs them by index), the middle pair collapsing
+// onto the top edge as it flattens. Same recipe as the index work/contact bands
+// (Design Spec table W1); the two page modules never co-load, so each states
+// its own copy rather than widening the engine's export surface.
+const BAND_CLIP_SCRUB = [
+  { at: 0, style: { clipPath: 'polygon(0% 34%, 50% 34%, 50% 17%, 100% 17%, 100% 100%, 0% 100%)' } },
+  { at: 1, style: { clipPath: 'polygon(0% 0%, 50% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
+];
+const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.55, releaseOnComplete: true };
 
 // ───────── Not found ─────────
 function NotFound({ id }){
@@ -113,15 +165,19 @@ const mediaCornerStyle = {
   pointerEvents: 'none',
 };
 
-// Reveal and parallax must own SEPARATE elements: .reveal animates transform
-// from CSS, and the parallax hook writes an inline transform that would
-// override it. Outer div = reveal target, inner figure = parallax target.
+// The wipe and the parallax must own SEPARATE elements. The mask has to stand
+// still while the picture drifts through it: clip-path is applied in the
+// element's own coordinate space, so a clip on the parallaxed figure would
+// simply travel with it and mask nothing. Outer div = wipe target (static
+// window), inner figure = parallax target (the thing that moves inside it).
 function MediaImage({ item, frameNo }){
   const openLightbox = React.useContext(LightboxContext);
+  const wipeRef = useRef(null);
   const figureRef = useRef(null);
+  useScrub(wipeRef, MEDIA_WIPE_SCRUB, MEDIA_WIPE_OPTS);
   useParallax(figureRef);
   return (
-    <div className="reveal">
+    <div ref={wipeRef}>
       <figure ref={figureRef} style={mediaFigureStyle}>
         <span style={mediaCornerStyle}>IMG {String(frameNo).padStart(2,'0')}</span>
         <img
@@ -135,9 +191,15 @@ function MediaImage({ item, frameNo }){
   );
 }
 
+// No parallax on a video: the wipe lands on the figure itself, which carries
+// authored inline layout. The engine only ever owns the properties its
+// keyframes name (here: clip-path), so releasing restores the authored style
+// untouched.
 function MediaVideo({ item, frameNo }){
+  const figureRef = useRef(null);
+  useScrub(figureRef, MEDIA_WIPE_SCRUB, MEDIA_WIPE_OPTS);
   return (
-    <figure className="reveal" style={mediaFigureStyle}>
+    <figure ref={figureRef} style={mediaFigureStyle}>
       <span style={mediaCornerStyle}>VID {String(frameNo).padStart(2,'0')}</span>
       <video controls preload="metadata" playsInline poster={item.poster} style={{ display:'block', width:'100%', height:'auto', background:'#000' }}>
         <source src={item.src} />
@@ -148,10 +210,12 @@ function MediaVideo({ item, frameNo }){
 }
 
 function MediaGif({ item, frameNo }){
+  const wipeRef = useRef(null);
   const figureRef = useRef(null);
+  useScrub(wipeRef, MEDIA_WIPE_SCRUB, MEDIA_WIPE_OPTS);
   useParallax(figureRef);
   return (
-    <div className="reveal">
+    <div ref={wipeRef}>
       <figure ref={figureRef} style={mediaFigureStyle}>
         <span style={mediaCornerStyle}>GIF {String(frameNo).padStart(2,'0')}</span>
         <img src={item.src} alt={item.alt || ''} loading="lazy" style={{ display:'block', width:'100%', height:'auto' }} />
@@ -162,8 +226,10 @@ function MediaGif({ item, frameNo }){
 }
 
 function MediaEmbed({ item, frameNo }){
+  const figureRef = useRef(null);
+  useScrub(figureRef, MEDIA_WIPE_SCRUB, MEDIA_WIPE_OPTS);
   return (
-    <figure className="reveal" style={{ ...mediaFigureStyle, aspectRatio:'16/9' }}>
+    <figure ref={figureRef} style={{ ...mediaFigureStyle, aspectRatio:'16/9' }}>
       <span style={mediaCornerStyle}>EMBED {String(frameNo).padStart(2,'0')}</span>
       <iframe
         src={item.src}
@@ -177,10 +243,45 @@ function MediaEmbed({ item, frameNo }){
   );
 }
 
-function MediaGallery({ item, baseNo }){
+// One gallery tile = one component, because it owns a ref and a scrub and hooks
+// cannot live inside a `.map()`. Each tile wipes on its own progress, offset by
+// its column position, so a row unmasks left to right instead of as a slab.
+function GalleryItem({ image, frameNo, index }){
   const openLightbox = React.useContext(LightboxContext);
+  const figureRef = useRef(null);
+  useScrub(figureRef, MEDIA_WIPE_SCRUB, galleryWipeOpts(index));
   return (
-    <div className="reveal" style={{ marginTop:'calc(var(--u)*2)' }}>
+    <figure
+      ref={figureRef}
+      onClick={() => openLightbox({ src:image.src, alt:image.alt, caption:image.caption })}
+      style={{ ...mediaFigureStyle, aspectRatio:'4/3', cursor:'zoom-in' }}
+    >
+      <span style={mediaCornerStyle}>{String(frameNo).padStart(2,'0')}</span>
+      <img src={image.src} alt={image.alt || ''} loading="lazy" style={{ display:'block', width:'100%', height:'100%', objectFit:'cover' }} />
+      {/* Scrim caption: a dark gradient inside a light section, so it
+          carries .overlay-dark to read its ink from the dark scope. */}
+      {image.caption && <figcaption className="overlay-dark" style={{ ...mediaCaptionStyle, position:'absolute', bottom:0, left:0, right:0, background:'linear-gradient(180deg, transparent, rgba(8,11,26,0.88))', borderTop:'none' }}>{image.caption}</figcaption>}
+    </figure>
+  );
+}
+
+function VideoGalleryItem({ clip, frameNo, index }){
+  const figureRef = useRef(null);
+  useScrub(figureRef, MEDIA_WIPE_SCRUB, galleryWipeOpts(index));
+  return (
+    <figure ref={figureRef} style={mediaFigureStyle}>
+      <span style={mediaCornerStyle}>VID {String(frameNo).padStart(2,'0')}</span>
+      <video controls preload="metadata" playsInline poster={clip.poster} style={{ display:'block', width:'100%', height:'auto', background:'#000' }}>
+        <source src={clip.src} />
+      </video>
+      {clip.caption && <figcaption style={mediaCaptionStyle}>{clip.caption}</figcaption>}
+    </figure>
+  );
+}
+
+function MediaGallery({ item, baseNo }){
+  return (
+    <div style={{ marginTop:'calc(var(--u)*2)' }}>
       {item.title && (
         <div className="section-tag" style={{ marginBottom:'calc(var(--u)*2)' }}>
           <span className="marker">▸</span>
@@ -191,17 +292,7 @@ function MediaGallery({ item, baseNo }){
       )}
       <div className="gallery" style={{ gridTemplateColumns:'repeat(auto-fill, minmax(280px, 1fr))' }}>
         {item.items.map((g, i) => (
-          <figure
-            key={i}
-            onClick={() => openLightbox({ src:g.src, alt:g.alt, caption:g.caption })}
-            style={{ ...mediaFigureStyle, aspectRatio:'4/3', cursor:'zoom-in' }}
-          >
-            <span style={mediaCornerStyle}>{String(baseNo + i).padStart(2,'0')}</span>
-            <img src={g.src} alt={g.alt || ''} loading="lazy" style={{ display:'block', width:'100%', height:'100%', objectFit:'cover' }} />
-            {/* Scrim caption: a dark gradient inside a light section, so it
-                carries .overlay-dark to read its ink from the dark scope. */}
-            {g.caption && <figcaption className="overlay-dark" style={{ ...mediaCaptionStyle, position:'absolute', bottom:0, left:0, right:0, background:'linear-gradient(180deg, transparent, rgba(8,11,26,0.88))', borderTop:'none' }}>{g.caption}</figcaption>}
-          </figure>
+          <GalleryItem key={i} image={g} frameNo={baseNo + i} index={i} />
         ))}
       </div>
     </div>
@@ -210,7 +301,7 @@ function MediaGallery({ item, baseNo }){
 
 function MediaVideoGallery({ item, baseNo }){
   return (
-    <div className="reveal" style={{ marginTop:'calc(var(--u)*2)' }}>
+    <div style={{ marginTop:'calc(var(--u)*2)' }}>
       {item.title && (
         <div className="section-tag" style={{ marginBottom:'calc(var(--u)*2)' }}>
           <span className="marker">▸</span>
@@ -221,13 +312,7 @@ function MediaVideoGallery({ item, baseNo }){
       )}
       <div className="gallery" style={{ gridTemplateColumns:'repeat(auto-fill, minmax(360px, 1fr))' }}>
         {item.items.map((v, i) => (
-          <figure key={i} style={mediaFigureStyle}>
-            <span style={mediaCornerStyle}>VID {String(baseNo + i).padStart(2,'0')}</span>
-            <video controls preload="metadata" playsInline poster={v.poster} style={{ display:'block', width:'100%', height:'auto', background:'#000' }}>
-              <source src={v.src} />
-            </video>
-            {v.caption && <figcaption style={mediaCaptionStyle}>{v.caption}</figcaption>}
-          </figure>
+          <VideoGalleryItem key={i} clip={v} frameNo={baseNo + i} index={i} />
         ))}
       </div>
     </div>
@@ -284,10 +369,33 @@ function CardThumb({ project }){
   );
 }
 
+// One link card = one component: it owns a ref and a scrub, and hooks cannot
+// live inside a `.map()`. Prev/next and the related row are the SAME card — the
+// optional `label` line and the `prev`/`next` modifier are the only difference,
+// and the modifier is what CSS mirrors the next card with.
+//
+// The card measures its CONTAINER, never itself: it is translated by its own
+// entry, so its own rect would feed the scrub's output back into its input.
+function ProjectCard({ project, triggerRef, variant, label }){
+  const ref = useRef(null);
+  useScrub(ref, RISE_SCRUB, { ...CARD_RISE_OPTS, triggerRef });
+  return (
+    <a className={variant ? `card ${variant}` : 'card'} href={`project.html?id=${project.id}`} ref={ref}>
+      <CardThumb project={project} />
+      <div className="card-body">
+        {label && <div className="l">{label}</div>}
+        <div className="t">{project.title}</div>
+        <div className="c">{project.category}</div>
+      </div>
+    </a>
+  );
+}
+
 // Same-category peers, in PROJECTS order, never the project you are reading.
 // Most categories are singletons, so the whole row renders nothing rather than
 // padding itself out with unrelated work.
 function RelatedProjects({ project }){
+  const gridRef = useRef(null);
   const peers = (window.PROJECTS || [])
     .filter(p => p.category === project.category && p.id !== project.id)
     .slice(0, RELATED_MAX);
@@ -298,15 +406,9 @@ function RelatedProjects({ project }){
         <span className="marker section-num">[06]</span><span className="eyebrow">related</span><span className="rule"></span>
         <span>{project.category.toLowerCase()}</span>
       </div>
-      <div className="related-grid reveal">
+      <div className="related-grid" ref={gridRef}>
         {peers.map(p => (
-          <a className="card" key={p.id} href={`project.html?id=${p.id}`}>
-            <CardThumb project={p} />
-            <div className="card-body">
-              <div className="t">{p.title}</div>
-              <div className="c">{p.category}</div>
-            </div>
-          </a>
+          <ProjectCard key={p.id} project={p} triggerRef={gridRef} />
         ))}
       </div>
     </div>
@@ -317,6 +419,15 @@ function RelatedProjects({ project }){
 function ProjectPage({ project }){
   useReveal();
   const [lightbox, setLightbox] = useState(null);
+
+  // The overview panel and the two link cards are translated by their own
+  // entries, so each measures a container that stays put instead of itself.
+  const overviewRef = useRef(null);
+  const panelRef = useRef(null);
+  const outcomesRef = useRef(null);
+  const pnavRef = useRef(null);
+  useScrub(panelRef, RISE_SCRUB, { ...PANEL_RISE_OPTS, triggerRef: overviewRef });
+  useScrub(outcomesRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
 
   // adjacent projects
   const list = window.PROJECTS;
@@ -347,7 +458,11 @@ function ProjectPage({ project }){
             <span className="pill acc">[ idx {String(idx + 1).padStart(2,'0')} / {String(list.length).padStart(2,'0')} ]</span>
           </div>
 
-          <h1 className="reveal reveal-1 text-ink display-1">{project.title}</h1>
+          {/* Masked line, not a scrub: a short headline parked at half progress
+              would read as a cropped line. IO owns it (`.mask-reveal`). */}
+          <div className="mask-line">
+            <h1 className="mask-reveal text-ink display-1">{project.title}</h1>
+          </div>
 
           <p className="sub reveal reveal-2">{project.subtitle} — {project.blurb}</p>
 
@@ -361,8 +476,8 @@ function ProjectPage({ project }){
       </section>
 
       {/* Overview */}
-      <section className="overview overview-lead" data-tone="light">
-        <div className="wrap panel-overlap">
+      <section className="overview overview-lead" data-tone="light" ref={overviewRef}>
+        <div className="wrap panel-overlap" ref={panelRef}>
           <div className="section-tag section-head reveal">
             <span className="marker section-num">[01]</span><span className="eyebrow">overview</span><span className="rule"></span>
           </div>
@@ -419,7 +534,7 @@ function ProjectPage({ project }){
       )}
 
       {/* Outcomes + Stack — the page's one dark band */}
-      <section className="sec-dark" data-tone="dark">
+      <section className="sec-dark" data-tone="dark" ref={outcomesRef}>
         <div className="wrap">
           <div className="section-tag section-head reveal">
             <span className="marker section-num">[05]</span><span className="eyebrow">outcomes &amp; stack</span><span className="rule"></span>
@@ -447,23 +562,15 @@ function ProjectPage({ project }){
       <section data-tone="light">
         <div className="wrap">
           <RelatedProjects project={project} />
-          <div className="pnav">
-            <a className="card prev" href={`project.html?id=${prev.id}`}>
-              <CardThumb project={prev} />
-              <div className="card-body">
-                <div className="l"><span className="acc">←</span> previous</div>
-                <div className="t">{prev.title}</div>
-                <div className="c">{prev.category}</div>
-              </div>
-            </a>
-            <a className="card next" href={`project.html?id=${next.id}`}>
-              <CardThumb project={next} />
-              <div className="card-body">
-                <div className="l">next <span className="acc">→</span></div>
-                <div className="t">{next.title}</div>
-                <div className="c">{next.category}</div>
-              </div>
-            </a>
+          <div className="pnav" ref={pnavRef}>
+            <ProjectCard
+              project={prev} triggerRef={pnavRef} variant="prev"
+              label={<><span className="acc">←</span> previous</>}
+            />
+            <ProjectCard
+              project={next} triggerRef={pnavRef} variant="next"
+              label={<>next <span className="acc">→</span></>}
+            />
           </div>
           <Footer page="project" />
         </div>

@@ -434,7 +434,6 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .reveal-1{transition-delay:.05s}
 .reveal-2{transition-delay:.12s}
 .reveal-3{transition-delay:.19s}
-.reveal-4{transition-delay:.26s}
 
 /* Masked line reveal. The container CLIPS and nothing else — no transition of
    its own — so a scrubbed headline (engine-driven) and an IO-revealed one
@@ -455,11 +454,10 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .mask-line.mask-line > *{margin:0;padding-bottom:.16em}
 .mask-reveal{transform:translateY(130%);transition:transform 700ms var(--ease-out-soft)}
 .mask-reveal.in{transform:translateY(0)}
-/* The bottom gap the wrapped headlines gave up; the cushion supplies the rest. */
-.approach .mask-line,.contact-card .mask-line{margin-bottom:12px}
-
-/* line-by-line text scramble container */
-.scramble{display:inline}
+/* The bottom gap the wrapped headlines gave up; the cushion supplies the rest.
+   All three wrapped headlines declared the same `margin:0 0 20px`, so they take
+   the same replacement. */
+.approach .mask-line,.contact-card .mask-line,.ph .mask-line{margin-bottom:12px}
 
 /* --- editorial primitives --- */
 .eyebrow{font-family:var(--fs-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim)}
