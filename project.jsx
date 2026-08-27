@@ -3,7 +3,8 @@
 const { useState, useEffect, useRef } = React;
 
 // ───────── shared modules (window globals) ─────────
-// scripts/scroll.jsx    -> useScrub, useReveal, useScrollProgress, useParallax
+// scripts/scroll.jsx    -> useScrub, useReveal, useScrollProgress, useParallax,
+//                          useSmoothScroll
 // scripts/shared-ui.jsx -> Nav, Footer
 // This page owns detail sections only; re-declaring any of those names at top
 // level here would shadow the shared copy.
@@ -587,8 +588,10 @@ function App(){
   const id = params.get('id');
   const project = (window.PROJECTS || []).find(p => p.id === id);
 
-  // Progress bar is page-level, so it runs on the not-found branch too.
+  // Progress bar and smooth scrolling are page-level, so they run on the
+  // not-found branch too.
   useScrollProgress();
+  useSmoothScroll();
 
   // Set document title
   useEffect(() => {

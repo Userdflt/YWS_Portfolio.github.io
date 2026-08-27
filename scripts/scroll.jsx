@@ -3,7 +3,8 @@
 //
 // Single responsibility: every scroll-derived UI effect on the site (scrubbed
 // keyframe entries, reveals, progress bar, scroll-spy, parallax, viewport
-// counters) and the one motion switch they all consult.
+// counters, desktop smooth scrolling) and the one motion switch they all
+// consult.
 //
 // ONE dispatcher for the whole page. Every effect below is an *entry* in a
 // shared registry; a single scroll/resize-driven rAF tick walks it twice per
@@ -59,6 +60,21 @@
   const COUNTUP_THRESHOLD = 0.5;
   const COUNTUP_DURATION_MS = 1200;
 
+  // Smooth scroll (desktop only — every gate below must hold).
+  const SMOOTH_POINTER_QUERY = '(pointer: fine) and (hover: hover)';
+  // 561px is the first height that still pins: it mirrors the 560px pin-off
+  // breakpoint shared by theme.css and HERO_PIN_OFF_QUERY (app.jsx).
+  const SMOOTH_VIEWPORT_QUERY = '(min-width: 900px) and (min-height: 561px)';
+  const SMOOTH_LERP = 0.12;                 // gap fraction closed per baseline frame
+  const SMOOTH_FRAME_MS = 16.7;             // the 60Hz baseline SMOOTH_LERP is defined against
+  const SMOOTH_MAX_FRAME_MS = 50;           // a stalled tab must not teleport the page
+  const SMOOTH_SETTLE_PX = 0.5;             // below this the glide snaps exactly and sleeps
+  const SMOOTH_EXTERNAL_PX = 2;             // a bigger gap than this was opened from outside
+  const WHEEL_LINE_PX = 16;                 // deltaMode 1 (lines) → px
+  const WHEEL_AXIS_DOMINANCE = 1.2;         // |deltaX| past this multiple of |deltaY| is horizontal
+  const SCROLL_LOCK_VALUE = 'hidden';       // the inline body overflow the lightbox writes
+  const HASH_TOP = '#top';
+
   const PROGRESS_BAR_ID = 'scroll-bar';
 
   // Wake sources beyond scroll/resize: a shared ResizeObserver over every
@@ -106,21 +122,28 @@
   const observedNodes = new Map();
 
   /**
-   * Runs the whole registry once: every read, then every write. Damped entries
-   * ask for the next frame themselves; everything else sleeps until the next
-   * wake event. requestAnimationFrame never returns 0, so `dispatcherFrame`
-   * doubles as the "pending" flag.
+   * Runs the whole registry once: the smoother's scroll write, then every read,
+   * then every write. Damped entries ask for the next frame themselves, and so
+   * does an unsettled glide; everything else sleeps until the next wake event.
+   * requestAnimationFrame never returns 0, so `dispatcherFrame` doubles as the
+   * "pending" flag.
+   *
+   * `now` is the rAF timestamp, and is absent on the mount flush (a microtask,
+   * not a frame) — the smoother falls back to its baseline step there.
    */
-  function runDispatch(){
+  function runDispatch(now){
     dispatcherFrame = 0;
-    if(entries.length === 0) return;
-    const ctx = { vh: window.innerHeight, vw: window.innerWidth, scrollY: window.scrollY };
+    // The glide writes the scroll position FIRST, so every rect read below
+    // reflects this frame's movement instead of trailing it by one.
+    const smooth = stepSmoother(now);
+    if(entries.length === 0 && !smoothingNeedsFrame) return;
+    const ctx = { vh: window.innerHeight, vw: window.innerWidth, scrollY: window.scrollY, smooth: smooth };
     for(let i = 0; i < entries.length; i++) entries[i].read(ctx);
     let again = false;
     for(let i = 0; i < entries.length; i++){
       if(entries[i].write(ctx) === true) again = true;
     }
-    if(again) dispatcherFrame = requestAnimationFrame(runDispatch);
+    if(again || smoothingNeedsFrame) dispatcherFrame = requestAnimationFrame(runDispatch);
   }
 
   function scheduleDispatch(){
@@ -143,6 +166,9 @@
     if(resizeObserver){ resizeObserver.disconnect(); resizeObserver = null; }
     observedNodes.clear();
     if(dispatcherFrame){ cancelAnimationFrame(dispatcherFrame); dispatcherFrame = 0; }
+    // The smoother is not a registry entry: an emptied registry must not cancel
+    // a glide that still owes the page frames.
+    if(smoothingNeedsFrame) scheduleDispatch();
   }
 
   function observeNode(node){
@@ -212,6 +238,215 @@
       entry.dispose();
       if(entries.length === 0) detachDispatcher();
     };
+  }
+
+  // ═════════════════ Smooth scroll (desktop, gated) ═════════════════
+  //
+  // The wheel is intercepted and accumulates a VIRTUAL target; each dispatcher
+  // frame lerps the REAL scroll position toward it (window.scrollTo) ahead of
+  // the read pass. Because the real scroll position IS the smoothed one, every
+  // consumer stays correct without knowing this exists: position:sticky pins,
+  // progress math, IntersectionObservers (reveals, spy, nav tone), the progress
+  // bar, and browser scroll restoration.
+  //
+  // Every other input stays native. A keyboard, a scrollbar drag or a history
+  // restore moves the page out from under the glide; the engine notices the gap
+  // and adopts the new position instead of fighting it back.
+
+  let smoothEnabled = false;         // gates hold AND the listeners are attached
+  let smoothingNeedsFrame = false;   // an unsettled glide owes the page a frame
+  let smoothTargetY = 0;             // where the wheel (or an anchor) says we are going
+  let smoothCurrentY = 0;            // the glide's own float position; scrollY rounds it
+  let smoothLastWrittenY = 0;        // the last position THIS engine put on the page
+  let smoothLastTs = 0;              // rAF timestamp of the previous advance
+
+  const maxScrollY = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  const clampScrollY = (y) => Math.min(maxScrollY(), Math.max(0, y));
+
+  // The lightbox's scroll-lock contract: an inline `overflow:hidden` on body.
+  const isScrollLocked = () => document.body.style.overflow === SCROLL_LOCK_VALUE;
+
+  /** Adopts the page's current position as the entire smoother state. */
+  function syncSmoothToPage(){
+    smoothTargetY = smoothCurrentY = smoothLastWrittenY = window.scrollY;
+    smoothLastTs = 0;
+  }
+
+  /**
+   * Absorbs a move nobody here made — keyboard, scrollbar drag, anchor default,
+   * history restore. Adopting it is what makes those land EXACTLY where the
+   * browser put them instead of being dragged back by a stale target.
+   */
+  function absorbExternalScroll(){
+    if(Math.abs(window.scrollY - smoothLastWrittenY) <= SMOOTH_EXTERNAL_PX) return false;
+    syncSmoothToPage();
+    return true;
+  }
+
+  function setSmoothTarget(y){
+    smoothTargetY = clampScrollY(y);
+    smoothingNeedsFrame = true;
+    scheduleDispatch();
+  }
+
+  /** Cancels any pending travel and leaves the page exactly where it stands. */
+  function cancelGlide(){
+    syncSmoothToPage();
+    smoothingNeedsFrame = false;
+  }
+
+  /**
+   * One glide step, run as the FIRST thing in a dispatcher frame. Returns true
+   * on frames it actually moved (or exactly settled) the page — that is what
+   * `ctx.smooth` reports to the entries, so per-entry damping only applies on
+   * the frames the global glide did NOT already provide the inertia.
+   */
+  function stepSmoother(now){
+    if(!smoothEnabled || !smoothingNeedsFrame) return false;
+    // A locked page (lightbox open) must not be glided out from under the
+    // overlay: drop the pending travel and adopt wherever the page is parked.
+    if(isScrollLocked()){ cancelGlide(); return false; }
+    absorbExternalScroll();
+
+    // Re-read the end of the document every frame: lazy media, font swaps and
+    // reveals change it mid-glide, and a target past the end never arrives.
+    smoothTargetY = clampScrollY(smoothTargetY);
+    const distance = smoothTargetY - smoothCurrentY;
+    if(Math.abs(distance) <= SMOOTH_SETTLE_PX){
+      smoothCurrentY = smoothTargetY;
+      smoothingNeedsFrame = false;
+      smoothLastTs = 0;
+    } else {
+      const usable = (typeof now === 'number' && isFinite(now));
+      const elapsed = (smoothLastTs && usable) ? now - smoothLastTs : 0;
+      const dtMs = (elapsed > 0) ? Math.min(elapsed, SMOOTH_MAX_FRAME_MS) : SMOOTH_FRAME_MS;
+      smoothLastTs = usable ? now : 0;
+      // Frame-rate corrected: SMOOTH_LERP is a per-60Hz-frame fraction, so a
+      // 120Hz display closes the same share of the gap per unit TIME.
+      smoothCurrentY += distance * (1 - Math.pow(1 - SMOOTH_LERP, dtMs / SMOOTH_FRAME_MS));
+    }
+    window.scrollTo(0, smoothCurrentY);
+    // What the page ACTUALLY took, never what was asked for: a clamp at the
+    // document end or device-pixel rounding is not an external scroll.
+    smoothLastWrittenY = window.scrollY;
+    return true;
+  }
+
+  // ─────────────── Wheel capture ───────────────
+
+  function normalizedWheelDelta(e){
+    if(e.deltaMode === 1) return e.deltaY * WHEEL_LINE_PX;      // lines
+    if(e.deltaMode === 2) return e.deltaY * window.innerHeight;  // pages
+    return e.deltaY;
+  }
+
+  /**
+   * The nearest ancestor that scrolls its own content — the tweaks panel today,
+   * any future scroll region for free. A wheel inside one is left alone:
+   * intercepting there would steal the region's own scrolling.
+   */
+  function scrollableAncestor(node){
+    let el = (node && node.nodeType === 1) ? node : null;
+    while(el && el !== document.body && el !== document.documentElement){
+      // The cheap geometry test first: getComputedStyle is the expensive half
+      // and most ancestors cannot scroll at all.
+      if(el.scrollHeight > el.clientHeight){
+        const overflowY = window.getComputedStyle(el).overflowY;
+        if(overflowY === 'auto' || overflowY === 'scroll') return el;
+      }
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  /**
+   * The ONLY place the page's own wheel is prevented. Every bail-out below
+   * leaves the event untouched, so the browser's native behaviour is what
+   * happens — zoom, horizontal history gestures, an inner scroll region, a
+   * locked page, or an event another handler already claimed.
+   */
+  function onWheel(e){
+    if(e.ctrlKey || e.shiftKey || e.defaultPrevented) return;
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY) * WHEEL_AXIS_DOMINANCE) return;
+    if(isScrollLocked()){ cancelGlide(); return; }
+    if(scrollableAncestor(e.target)) return;
+    const delta = normalizedWheelDelta(e);
+    if(!delta) return;
+    e.preventDefault();
+    // The page may have moved natively since the last glide (keyboard, drag):
+    // accumulate onto where it IS, not onto a target that describes the past.
+    absorbExternalScroll();
+    setSmoothTarget(smoothTargetY + delta);
+  }
+
+  // ─────────────── Anchor glide ───────────────
+
+  /** The element a hash points at; null when it resolves to nothing. */
+  function hashTarget(hash){
+    const raw = hash.slice(1);
+    if(!raw) return null;
+    const byId = document.getElementById(raw);
+    if(byId) return byId;
+    let decoded = null;
+    try { decoded = decodeURIComponent(raw); } catch(err){ return null; }
+    return (decoded !== raw) ? document.getElementById(decoded) : null;
+  }
+
+  /**
+   * Same-document hash links glide instead of jumping. Everything else is left
+   * to the browser: modified clicks, keyboard activation, new-tab/download
+   * links, cross-document hashes, and any hash that resolves to no element (the
+   * browser scrolls nowhere for those too — forging a history entry for one
+   * would be worse than doing nothing).
+   */
+  function onAnchorClick(e){
+    if(e.defaultPrevented || e.button !== 0) return;
+    if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    if(e.detail === 0) return;                    // keyboard activation stays native
+    const link = (e.target && e.target.closest) ? e.target.closest('a[href]') : null;
+    if(!link || link.hasAttribute('target') || link.hasAttribute('download')) return;
+
+    // Same DOCUMENT, not merely same origin: `index.html#work` from a project
+    // page is a real navigation and must stay native.
+    let url = null;
+    try { url = new URL(link.href, document.baseURI); } catch(err){ return; }
+    if(url.origin !== location.origin) return;
+    if(url.pathname !== location.pathname || url.search !== location.search) return;
+
+    const href = link.getAttribute('href') || '';
+    // A bare '#' carries no hash of its own through the URL parser.
+    const hash = url.hash || (href.indexOf('#') >= 0 ? '#' : '');
+    if(!hash) return;
+
+    let y = 0;
+    if(hash !== '#' && hash !== HASH_TOP){
+      const el = hashTarget(hash);
+      if(!el) return;
+      y = el.getBoundingClientRect().top + window.scrollY;
+    }
+    e.preventDefault();
+    absorbExternalScroll();
+    setSmoothTarget(y);
+    if(history.pushState) history.pushState(null, '', hash);
+  }
+
+  // ─────────────── Enable / disable ───────────────
+
+  function enableSmoothScroll(){
+    if(smoothEnabled) return;
+    smoothEnabled = true;
+    cancelGlide();
+    // Non-passive: preventing the page's own wheel is this listener's whole job.
+    window.addEventListener('wheel', onWheel, { passive: false });
+    document.addEventListener('click', onAnchorClick);
+  }
+
+  function disableSmoothScroll(){
+    if(!smoothEnabled) return;
+    smoothEnabled = false;
+    window.removeEventListener('wheel', onWheel);
+    document.removeEventListener('click', onAnchorClick);
+    cancelGlide();
   }
 
   // ═════════════════ Keyframe value model ═════════════════
@@ -514,12 +749,16 @@
         for(let i = 0; i < keyframes.length; i++) frame[i] = resolveStyle(keyframes[i].style, ctx);
         resolved = frame;
       },
-      write(){
+      write(ctx){
+        // Under the global glide the page ITSELF is already lerped, so a second
+        // per-entry lerp would only double the lag. Damping stays live on every
+        // native frame — keyboard, scrollbar, touch, resize (Design Note D3).
+        const lag = (ctx && ctx.smooth) ? 0 : damping;
         if(!primed){ current = target; primed = true; }
-        else if(damping){
+        else if(lag){
           const distance = target - current;
           if(Math.abs(distance) < SCRUB_SETTLE_EPSILON) current = target;
-          else current += distance * damping;
+          else current += distance * lag;
         }
         else current = target;
 
@@ -656,6 +895,33 @@
       el.classList.add(SCRUB_CLASS);
       return registerEntry(createScrubEntry(el, trigger, keyframesRef.current, active));
     }, [targetRef, triggerRef, key, reduced, off]);
+  }
+
+  // ─────────────── Smooth scroll ───────────────
+
+  /**
+   * Desktop inertial scrolling. Call ONCE per page root — the engine keeps a
+   * single virtual target for the document (same contract as useScrollProgress).
+   *
+   * Every gate must hold: a fine hovering pointer, no touch points at all, a
+   * viewport with room to pin, and no reduced-motion preference. All of them are
+   * LIVE — plug in a display, rotate a hybrid, turn on reduce-motion, and the
+   * listeners come off mid-session and the page is native again, with the glide
+   * cancelled where it stands (never mid-travel).
+   *
+   * Touch, keyboard and scrollbar input are never intercepted on any device.
+   */
+  function useSmoothScroll(){
+    const reduced = useReducedMotion();
+    const finePointer = useMediaQuery(SMOOTH_POINTER_QUERY);
+    const roomy = useMediaQuery(SMOOTH_VIEWPORT_QUERY);
+    const enabled = !reduced && finePointer && roomy && navigator.maxTouchPoints === 0;
+
+    useEffect(() => {
+      if(!enabled) return;
+      enableSmoothScroll();
+      return disableSmoothScroll;
+    }, [enabled]);
   }
 
   // ─────────────── Reveals ───────────────
@@ -821,6 +1087,7 @@
 
   Object.assign(window, {
     useReducedMotion,
+    useSmoothScroll,
     useScrub,
     useReveal,
     useScrollProgress,

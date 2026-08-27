@@ -180,9 +180,9 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
    vertical padding therefore moves ONTO the sticky — left on the section it
    would scroll away, and the pinned scene would sit under the fixed nav.
    Both elements paint --bg so the H4 tail (the scene sliding up -25svh over the
-   last 45% of the pin) uncovers paper, never a bare strip. */
+   last 30% of the pin) uncovers paper, never a bare strip. */
 .hero{padding-top:0;padding-bottom:0}
-.hero-pin{position:relative;height:180vh;height:180svh;background-color:var(--bg)}
+.hero-pin{position:relative;height:260vh;height:260svh;background-color:var(--bg)}
 .hero-sticky{position:sticky;top:0;min-height:100vh;min-height:100svh;padding-top:calc(var(--u)*17);
   display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;background-color:var(--bg)}
 /* No room to pin on a short viewport: the wrapper collapses onto its content
@@ -192,6 +192,9 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 @media (max-height: 560px){
   .hero-pin{height:auto}
   .hero-sticky{position:static;min-height:0;overflow:visible}
+  /* The second beat is a PIN device: with no pin there is no swap to make, and
+     the statement would only duplicate the panel copy right below it. */
+  .hero-beat2{display:none}
 }
 .hero-lead{padding-bottom:calc(var(--u)*10)}
 /* mono status line — plain text, no chip, no pulse */
@@ -199,10 +202,24 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .hero h1{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-1);line-height:0.92;letter-spacing:-0.04em;margin:0;color:var(--ink)}
 .hero-role{margin:clamp(18px, 2.6vw, 30px) 0 0;font-family:var(--fs-sans);font-weight:300;font-size:clamp(20px, 2.6vw, 34px);line-height:1.15;letter-spacing:-0.02em;color:var(--ink-dim)}
 
+/* Second beat (H6b). It occupies the SAME lead area the role line vacates, so
+   it is absolute inside .hero-lead (a .wrap, hence the positioned ancestor) and
+   pinned to the bottom of that box's content edge — where the role line ends.
+   `opacity:0` is AUTHORED, not written by the engine: the parked state must be
+   invisible from the first paint, before any scrub has run. Nothing inside is
+   interactive, and it overlays the lead, so it never takes the pointer. */
+.hero-beat2{position:absolute;left:var(--pad-x);right:var(--pad-x);bottom:calc(var(--u)*10);
+  opacity:0;pointer-events:none}
+.hero-beat2 .b2-eyebrow{margin:0 0 clamp(10px, 1.4vw, 16px)}
+/* The measure is capped on the LINE, not the block: a `ch` cap on the block
+   would resolve against the 15px body font and choke a 56px display line into a
+   column. Explicit px keeps the wrap point the same at every display size. */
+.hero-beat2 .b2-line{margin:0;max-width:min(100%, 620px);font-family:var(--fs-sans);font-weight:200;line-height:1.04;letter-spacing:-0.03em}
+
 /* Full-bleed image band. A direct child of .hero (never inside .wrap) so it
    spans the viewport, with a fixed band height that crops the source instead
    of letting a tall render push the fold down. */
-.hero-band{position:relative;width:100%;height:clamp(280px, 46vh, 540px);overflow:hidden;background:var(--paper-2)}
+.hero-band{position:relative;width:100%;height:clamp(320px, 58vh, 680px);overflow:hidden;background:var(--paper-2)}
 .hero-band img{display:block;width:100%;height:100%;object-fit:cover;
   /* The clubhouse/pool cluster sits above and right of the frame centre; a
      wide crop keeps it in view only with the origin pushed there. */
@@ -542,6 +559,8 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
      covers a class that outlived its hook. */
   .hero-pin{height:auto}
   .hero-sticky{position:static;height:auto;min-height:0;overflow:visible;transform:none}
+  /* Same reason as the short-viewport flatten: no pin, no second beat. */
+  .hero-beat2{display:none}
   .scroll-cue .line{animation:none}
   /* scroll.jsx writes no transforms under reduced motion and strips these
      classes on cleanup; this drops the layer promotion if one ever outlives

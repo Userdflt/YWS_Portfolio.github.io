@@ -37,7 +37,7 @@ const HERO_IMAGE = {
 
 // Shared runtime, consumed as window globals — this file owns home sections only:
 //   scripts/scroll.jsx    -> useScrub, useReveal, useScrollProgress,
-//                            useScrollSpy, CountUp
+//                            useScrollSpy, useSmoothScroll, CountUp
 //   scripts/shared-ui.jsx -> Nav, Footer
 // Re-declaring any of those names at top level here would shadow the shared copy.
 
@@ -57,21 +57,32 @@ const SCRUB_DAMPING = 0.14;
 // H1 — the title slides up under its own mask as the pin is consumed.
 const HERO_TITLE_SCRUB = [
   { at: 0,    style: { translateY: '0%' } },
-  { at: 0.45, style: { translateY: '-101%' } },
+  { at: 0.30, style: { translateY: '-101%' } },
 ];
 // H2 — status line and scroll cue leave first.
 const HERO_FADE_SCRUB = [
   { at: 0,    style: { opacity: 1, translateY: '0svh' } },
-  { at: 0.30, style: { opacity: 0, translateY: '-5svh' } },
+  { at: 0.22, style: { opacity: 0, translateY: '-5svh' } },
 ];
 // H3 — the band pushes in slowly across the whole pin.
 const HERO_BAND_SCRUB = [
   { at: 0, style: { scale: 1 } },
-  { at: 1, style: { scale: 1.08 } },
+  { at: 1, style: { scale: 1.14 } },
 ];
-// H4 — the whole scene exits upward over the pin's last 45%.
+// H6a — the role line hands the lead area over to the second beat.
+const HERO_ROLE_SCRUB = [
+  { at: 0.32, style: { opacity: 1, translateY: '0svh' } },
+  { at: 0.44, style: { opacity: 0, translateY: '-4svh' } },
+];
+// H6b — the second beat rises into the vacated space and HOLDS there: the last
+// keyframe is the resting state for the whole remainder of the pin.
+const HERO_BEAT2_SCRUB = [
+  { at: 0.46, style: { opacity: 0, translateY: '3svh' } },
+  { at: 0.62, style: { opacity: 1, translateY: '0svh' } },
+];
+// H4 — the whole scene exits upward over the pin's last 30%.
 const HERO_TAIL_SCRUB = [
-  { at: 0.55, style: { translateY: '0svh' } },
+  { at: 0.70, style: { translateY: '0svh' } },
   { at: 1,    style: { translateY: '-25svh' } },
 ];
 // H5 — the paper panel rises into the space the scene vacates.
@@ -112,7 +123,7 @@ const STAT_SCRUB = [
 const STAT_OPTS = { mode: 'enter', endAt: 0.7 };
 
 // ───────────────────────── Hero ─────────────────────────
-// A pinned scene plus a paper card. `.hero-pin` is 180svh of scroll distance;
+// A pinned scene plus a paper card. `.hero-pin` is 260svh of scroll distance;
 // `.hero-sticky` holds the type lead and the full-bleed band still while that
 // distance is consumed, then slides away; `.hero-panel` follows in normal flow.
 // The band is a direct child of the sticky (never inside .wrap) so it spans the
@@ -126,12 +137,16 @@ function Hero(){
   const titleRef = useRef(null);
   const statusRef = useRef(null);
   const cueRef = useRef(null);
+  const roleRef = useRef(null);
+  const beat2Ref = useRef(null);
   const bandImgRef = useRef(null);
   const panelRef = useRef(null);
 
   useScrub(titleRef, HERO_TITLE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef, damping: SCRUB_DAMPING });
   useScrub(statusRef, HERO_FADE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
   useScrub(cueRef, HERO_FADE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
+  useScrub(roleRef, HERO_ROLE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
+  useScrub(beat2Ref, HERO_BEAT2_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
   useScrub(bandImgRef, HERO_BAND_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef, damping: SCRUB_DAMPING });
   useScrub(sceneRef, HERO_TAIL_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
   useScrub(panelRef, HERO_PANEL_SCRUB, HERO_PANEL_OPTS);
@@ -147,7 +162,18 @@ function Hero(){
               <h1 className="text-ink display-1" ref={titleRef}>Young Woo Song</h1>
             </div>
 
-            <p className="hero-role reveal reveal-2">Applied AI</p>
+            {/* Scrub-owned from H6a on, so it carries no IO reveal: an
+                observer and a scrub writing opacity to one node would fight. */}
+            <p className="hero-role" ref={roleRef}>Applied AI</p>
+
+            {/* The second beat occupies the SAME lead area as the role line —
+                absolutely, so the swap is a cross-fade in one place instead of
+                two elements shoving each other around in flow. Parked at
+                opacity 0 by theme.css, never by the engine's first write. */}
+            <div className="hero-beat2" ref={beat2Ref}>
+              <p className="eyebrow b2-eyebrow">internal tools · retrieval · governance</p>
+              <p className="display-2 text-ink b2-line">i make ai work for architecture teams.</p>
+            </div>
 
             <div className="scroll-cue" ref={cueRef} aria-hidden="true">
               <span>scroll</span>
@@ -438,6 +464,7 @@ function App(){
 
   useReveal();
   useScrollProgress();
+  useSmoothScroll();
   const activeId = useScrollSpy(SPY_SECTIONS);
 
   return (
