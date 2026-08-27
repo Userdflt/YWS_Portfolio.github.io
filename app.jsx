@@ -36,7 +36,7 @@ const HERO_IMAGE = {
 };
 
 // Shared runtime, consumed as window globals — this file owns home sections only:
-//   scripts/scroll.jsx    -> useScrub, useScrubCount, useReveal,
+//   scripts/scroll.jsx    -> useScrub, useParallax, useReveal,
 //                            useScrollProgress, useScrollSpy, useSmoothScroll
 //   scripts/shared-ui.jsx -> Nav, Footer
 // Re-declaring any of those names at top level here would shadow the shared copy.
@@ -105,58 +105,49 @@ const BAND_CLIP_SCRUB = [
 // 0.35 spends ~65% of a viewport on the staircase (Design Spec table W′).
 const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.35, releaseOnComplete: true };
 
-// W2 — each row rises on its own progress, which IS the stagger.
-const WORK_ROW_SCRUB = [
+// ─────────────── Tables SC1–SC3 — the project showcase articles ───────────────
+// One article per project, three entries each. Every table is progress through
+// the article's own crossing, so thirteen showcases reverse exactly on
+// scroll-back with no sequencing state anywhere.
+
+// SC1 — the media unmasks bottom-up. The wipe target is ALSO its own trigger:
+// clip-path never moves the rect it is measured from, so self-measurement is
+// safe here (unlike SC2/SC3, whose targets are translated by their own entries).
+// A per-page copy of project.jsx's MEDIA_WIPE table — the two page modules never
+// co-load, so each states its own recipe rather than widening the engine's
+// export surface (same precedent as BAND_CLIP_SCRUB above).
+//
+// `enter` span = vh × (1 − endAt), so a HIGHER endAt is a SHORTER, quicker wipe:
+// 0.25 spends ~75% of a viewport unmasking, against the project page's 0.18 —
+// thirteen consecutive wipes at that length read as syrup.
+const SHOWCASE_WIPE_SCRUB = [
+  { at: 0, style: { clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' } },
+  { at: 1, style: { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
+];
+// Released at 1: a finished figure must not carry a clip into every later paint,
+// and the inner figure's ±24px parallax must not be cropped by a mask that has
+// already done its job.
+const SHOWCASE_WIPE_OPTS = { mode: 'enter', endAt: 0.25, releaseOnComplete: true };
+
+// SC2 — the whole text block rises as ONE unit. Per-child staggers would cost
+// ~40 more registry entries to say what the masked title already says.
+const SHOWCASE_TEXT_SCRUB = [
   { at: 0, style: { translateY: 36, opacity: 0 } },
   { at: 1, style: { translateY: 0,  opacity: 1 } },
 ];
-const WORK_ROW_OPTS = { mode: 'enter', endAt: 0.75 };
-// W3 — the numeral travels against the row it sits in: depth, not decoration.
-const WORK_IDX_SCRUB = [
-  { at: 0, style: { translateY: 18 } },
-  { at: 1, style: { translateY: -18 } },
+const SHOWCASE_TEXT_OPTS = { mode: 'enter', endAt: 0.75 };
+
+// SC3 — the index numeral travels against the article it sits in: depth, not
+// decoration. Retired at the width where the article becomes a single column and
+// the numeral is static background. This query is mirrored by the `.showcase`
+// breakpoint in theme.css — a scrubbed numeral over a layout with no room for
+// its travel is exactly what the breakpoint exists to prevent.
+const SHOWCASE_NUM_OFF_QUERY = '(max-width: 899px)';
+const SHOWCASE_NUM_SCRUB = [
+  { at: 0, style: { translateY: 60 } },
+  { at: 1, style: { translateY: -60 } },
 ];
-const WORK_IDX_OPTS = { mode: 'cross', damping: SCRUB_DAMPING };
-
-// ─────────────── Table S — the pinned stats scene ───────────────
-// Four numerals share ONE 220svh pin: each rises in, counts up on scroll, and
-// hands the stage to the next. Every window below is progress through
-// `.stats-pin`, so the whole sequence reverses exactly on scroll-back.
-//
-// The pin is retired wherever it cannot be held. This query is mirrored
-// BYTE-FOR-BYTE by the flatten @media block in theme.css — a scrubbed scene
-// with no pin and a pinned scene with no scrubs are both broken, so the two
-// must name the same viewports.
-const STATS_PIN_OFF_QUERY = '(max-width: 899px), (max-height: 560px)';
-
-// S-fade — one recipe, four windows: rise 4svh into place, hold, leave upward.
-// The last scene declares no exit pair and HOLDS its arrival state until the
-// pin releases (Design Spec table S).
-function statsFadeScrub(fade){
-  const stops = [
-    { at: fade[0], style: { opacity: 0, translateY: '4svh' } },
-    { at: fade[1], style: { opacity: 1, translateY: '0svh' } },
-  ];
-  if(fade.length === 4){
-    stops.push({ at: fade[2], style: { opacity: 1, translateY: '0svh' } });
-    stops.push({ at: fade[3], style: { opacity: 0, translateY: '-4svh' } });
-  }
-  return stops;
-}
-
-// `fade` = [in-start, in-end, out-start, out-end]; `count` = the [a, b] slice
-// of the pin the numeral counts across.
-const STATS_SCENES = [
-  // Readability contract: a scene fades in FULLY before its count starts, and
-  // consecutive scenes never overlap mid-fade — no half-transparent numerals
-  // while a value is changing.
-  { end: PROJECTS.length, label: 'shipped projects',           fade: [0.02, 0.06, 0.27, 0.30], count: [0.06, 0.25] },
-  { end: 7,               label: 'yrs in architecture',        fade: [0.30, 0.34, 0.51, 0.54], count: [0.34, 0.49] },
-  { end: 4,               label: 'multi-agent systems',        fade: [0.54, 0.58, 0.75, 0.78], count: [0.58, 0.73] },
-  { end: 2,               label: 'ibm specializations · 2025', fade: [0.78, 0.82],             count: [0.82, 0.95] },
-].map(scene => ({ ...scene, scrub: statsFadeScrub(scene.fade) }));
-
-const STATS_SCENE_OPTS = { mode: 'pin', offQuery: STATS_PIN_OFF_QUERY };
+const SHOWCASE_NUM_OPTS = { mode: 'cross', damping: SCRUB_DAMPING, offQuery: SHOWCASE_NUM_OFF_QUERY };
 
 // ───────────────────────── Hero ─────────────────────────
 // A pinned scene plus a paper card. `.hero-pin` is 260svh of scroll distance;
@@ -266,171 +257,110 @@ function Hero(){
   );
 }
 
-// ───────────────────────── Work: editorial list ─────────────────────────
+// ───────────────────────── Work: project showcases ─────────────────────────
 
-// One row = one component because it owns three refs and two scrub hooks, and
-// hooks cannot live inside a `.map()`.
+// One article = one component, because it owns four refs and three scrub hooks
+// and hooks cannot live inside a `.map()` (precedent: project.jsx's ProjectCard).
 //
-// `.work-row-slot` exists purely as a measurement anchor: the row itself is
-// translated by W2, so its own rect would feed the scrub's output back into its
-// input. The slot never moves, so both the row and its numeral measure it.
-function WorkRow({ project, index, onMove, onLeave }){
-  const slotRef = useRef(null);
-  const rowRef = useRef(null);
-  const idxRef = useRef(null);
-  useScrub(rowRef, WORK_ROW_SCRUB, { ...WORK_ROW_OPTS, triggerRef: slotRef });
-  useScrub(idxRef, WORK_IDX_SCRUB, { ...WORK_IDX_OPTS, triggerRef: slotRef });
+// Three DISCRETE links — figure, title, CTA — rather than one article-wide click
+// handler: a whole-article hit area is invisible to the keyboard and absent from
+// the link list a screen reader builds. The figure and the CTA carry the same
+// aria-label because neither's own content names the project; the title link
+// names itself, and is what `aria-labelledby` points the article at.
+//
+// Which node measures which is the engine's one hard contract: progress may
+// never be read from a node the same entry transforms. The wipe measures itself
+// (clip-path moves nothing), while the rise and the numeral — both transformed
+// by their own entries — measure the article, which never moves.
+function ProjectShowcase({ project, index }){
+  const articleRef = useRef(null);
+  const numRef = useRef(null);
+  const wipeRef = useRef(null);
+  const figureRef = useRef(null);
+  const textRef = useRef(null);
+
+  useScrub(wipeRef, SHOWCASE_WIPE_SCRUB, SHOWCASE_WIPE_OPTS);
+  useScrub(textRef, SHOWCASE_TEXT_SCRUB, { ...SHOWCASE_TEXT_OPTS, triggerRef: articleRef });
+  useScrub(numRef, SHOWCASE_NUM_SCRUB, { ...SHOWCASE_NUM_OPTS, triggerRef: articleRef });
+  useParallax(figureRef);
+
+  const href = `project.html?id=${project.id}`;
+  const titleId = `showcase-${project.id}`;
+  const mediaLabel = `View ${project.title} project`;
+  // Real media when the project has any, its letter mark when it does not —
+  // getProjectThumbnail already encodes "first usable image in details.media".
+  const thumb = (typeof window.getProjectThumbnail === 'function') ? window.getProjectThumbnail(project) : null;
 
   return (
-    <div className="work-row-slot" ref={slotRef}>
-      <a href={`project.html?id=${project.id}`}
-         className="work-row"
-         ref={rowRef}
-         onMouseMove={(e) => onMove(e, project)}
-         onMouseLeave={onLeave}>
-        <div className="idx" ref={idxRef}>{String(index + 1).padStart(2, '0')}</div>
-        <div className="title-col">
-          <div className="title">{project.title}</div>
-          <div className="blurb">{project.subtitle} — {project.blurb}</div>
-        </div>
-        <div className="cat">{project.category}</div>
-        <div className="arrow" aria-hidden="true">↗</div>
-      </a>
-    </div>
-  );
-}
+    <article
+      className={index % 2 === 1 ? 'showcase showcase--flip' : 'showcase'}
+      ref={articleRef}
+      aria-labelledby={titleId}
+    >
+      {/* Decoration, and BEFORE .wrap: the wrap carries z-index 1, so document
+          order alone paints the content over the numeral. */}
+      <div className="showcase-num" ref={numRef} aria-hidden="true">
+        {String(index + 1).padStart(2, '0')}
+      </div>
 
-// Pure markup, no hooks — so it can live inside a `.map()`. The scene is parked
-// invisible by theme.css, never by the engine's first write, so nothing flashes
-// before the pin starts. Its static text is the FINISHED value: that is what
-// shows on every path where the count entry does not register (reduced motion,
-// an off viewport, a validation fault, no JS).
-function StatSceneView({ scene, sceneRef, numRef }){
-  return (
-    <div className="stat-scene" ref={sceneRef}>
-      <span className="ss-num num" ref={numRef}>{scene.end}</span>
-      <span className="eyebrow">{scene.label}</span>
-    </div>
-  );
-}
-
-// The stats band: 220svh of scroll spent on four numerals, one at a time, in
-// the space the work list is about to fill. It stays INSIDE `#work` so the
-// `#work` anchor, the scroll-spy order and the nav tone observer are untouched.
-//
-// Two layers, one content: `.stats-stage` is the animated DECORATION
-// (aria-hidden, absolutely stacked), and the semantic list below it is the real
-// thing — visually hidden while the pin runs, and the visible static grid on
-// every flattened path.
-//
-// EVERY registration lives HERE, in the component that owns the pin node, for
-// the same reason Hero registers its own pin scrubs: React attaches a host
-// ref during the layout phase that completes AFTER its subtree's layout
-// effects, so a child component registering against an ancestor's ref would
-// find it still null and silently measure itself instead.
-function StatsScene(){
-  const pinRef = useRef(null);
-  // One ref pair per scene, in table order. Fixed length and unconditional —
-  // the Rules of Hooks constrain call ORDER, which an array literal fixes.
-  const sceneRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-  const numRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-  const pinOpts = { ...STATS_SCENE_OPTS, triggerRef: pinRef };
-
-  useScrub(sceneRefs[0], STATS_SCENES[0].scrub, pinOpts);
-  useScrub(sceneRefs[1], STATS_SCENES[1].scrub, pinOpts);
-  useScrub(sceneRefs[2], STATS_SCENES[2].scrub, pinOpts);
-  useScrub(sceneRefs[3], STATS_SCENES[3].scrub, pinOpts);
-  useScrubCount(numRefs[0], { ...pinOpts, end: STATS_SCENES[0].end, window: STATS_SCENES[0].count });
-  useScrubCount(numRefs[1], { ...pinOpts, end: STATS_SCENES[1].end, window: STATS_SCENES[1].count });
-  useScrubCount(numRefs[2], { ...pinOpts, end: STATS_SCENES[2].end, window: STATS_SCENES[2].count });
-  useScrubCount(numRefs[3], { ...pinOpts, end: STATS_SCENES[3].end, window: STATS_SCENES[3].count });
-
-  return (
-    <div className="stats-pin" ref={pinRef}>
-      <div className="stats-sticky">
-        <div className="wrap">
-          <div className="section-tag section-head reveal">
-            <span className="marker section-num">[01]</span>
-            <span className="eyebrow">selected work</span>
-            <span className="rule"></span>
-            <span>{PROJECTS.length} projects</span>
+      <div className="wrap">
+        <a className="showcase-media" href={href} aria-label={mediaLabel}>
+          {/* Wipe target and parallax target are SEPARATE elements: the mask has
+              to stand still while the picture drifts through it. */}
+          <div className="showcase-frame" ref={wipeRef}>
+            <figure ref={figureRef}>
+              {thumb
+                ? <img src={thumb} alt="" loading="lazy" decoding="async" />
+                : <span className="mark">{project.mark || '⟁'}</span>}
+            </figure>
           </div>
+        </a>
 
-          {/* Only the scenes a ref pair exists for are rendered: a fifth row in
-              the table would otherwise mount un-animated and stay invisible. */}
-          <div className="stats-stage" aria-hidden="true">
-            {sceneRefs.map((sceneRef, i) => STATS_SCENES[i] && (
-              <StatSceneView key={STATS_SCENES[i].label} scene={STATS_SCENES[i]}
-                             sceneRef={sceneRef} numRef={numRefs[i]} />
-            ))}
+        <div className="showcase-text" ref={textRef}>
+          <p className="eyebrow">{project.category} · {project.year}</p>
+          <div className="mask-line">
+            <h2 id={titleId} className="mask-reveal text-ink display-2">
+              <a href={href}>{project.title}</a>
+            </h2>
           </div>
-
-          <div className="stats stats-semantic">
-            {STATS_SCENES.map(scene => (
-              <div className="stat" key={scene.label}>
-                <span className="sn num">{scene.end}</span>
-                <span className="sl">{scene.label}</span>
-              </div>
-            ))}
+          <p className="showcase-dek">{project.subtitle} — {project.blurb}</p>
+          <div className="stags">
+            {project.tech.map(t => <span className="tag" key={t}>{t}</span>)}
           </div>
+          <a className="showcase-cta" href={href} aria-label={mediaLabel}>
+            view project <span aria-hidden="true">→</span>
+          </a>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
-function WorkEditorial({ projects, previewRef }){
-  const onMove = (e, p) => {
-    const el = previewRef.current; if(!el) return;
-    el.style.left = e.clientX + 'px';
-    el.style.top = e.clientY + 'px';
-    el.classList.add('show');
-    const markEl = document.getElementById('preview-mark');
-    const imgEl = document.getElementById('preview-img');
-    const thumb = (typeof window.getProjectThumbnail === 'function') ? window.getProjectThumbnail(p) : null;
-    if (imgEl) {
-      if (thumb) {
-        if (imgEl.getAttribute('src') !== thumb) imgEl.src = thumb;
-        imgEl.alt = p.title || '';
-        imgEl.style.display = 'block';
-        if (markEl) markEl.style.display = 'none';
-      } else {
-        imgEl.removeAttribute('src');
-        imgEl.style.display = 'none';
-        if (markEl) markEl.style.display = '';
-      }
-    }
-    if (markEl) markEl.textContent = p.mark || '⟁';
-    document.getElementById('preview-cat').textContent = p.category;
-    document.getElementById('preview-tag').textContent = `${p.year} · open →`;
-  };
-  const onLeave = () => previewRef.current?.classList.remove('show');
-
-  return (
-    <div className="work-list">
-      {projects.map((p, i) => (
-        <WorkRow key={p.id} project={p} index={i} onMove={onMove} onLeave={onLeave} />
-      ))}
-    </div>
-  );
-}
-
-// The dark band of the index: the pinned stats scene, then the list. Editorial
-// is the ONLY work renderer — the card and table variants were competing
-// surfaces for the same content, so the page no longer has to declare which one
-// it wants. The section head lives inside the pin (it heads the whole band, and
-// the pin is the band's opening frame), so the list needs no second one.
+// The dark band of the index: the section head, then one showcase article per
+// project. ProjectShowcase is the ONLY work renderer — the pinned stats scene
+// and the compact editorial rows were competing surfaces for the same content,
+// so the page no longer has to declare which one it wants (git is their archive).
+//
+// The articles are direct children of the section, NOT of one shared `.wrap`:
+// each owns its own wrap so its index numeral can be positioned against the
+// article's own edges and bleed past them.
 function Work(){
-  const previewRef = useRef(null);
   const sectionRef = useRef(null);
-  useEffect(() => { previewRef.current = document.getElementById('work-preview'); }, []);
   useScrub(sectionRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
   return (
     <section id="work" className="sec-dark" data-tone="dark" ref={sectionRef}>
-      <StatsScene />
       <div className="wrap">
-        <WorkEditorial projects={PROJECTS} previewRef={previewRef} />
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">[01]</span>
+          <span className="eyebrow">selected work</span>
+          <span className="rule"></span>
+          <span>{PROJECTS.length} projects</span>
+        </div>
       </div>
+
+      {PROJECTS.map((p, i) => (
+        <ProjectShowcase key={p.id} project={p} index={i} />
+      ))}
     </section>
   );
 }

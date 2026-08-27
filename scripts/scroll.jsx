@@ -2,9 +2,8 @@
 // scroll.jsx — the scroll/motion runtime.
 //
 // Single responsibility: every scroll-derived UI effect on the site (scrubbed
-// keyframe entries, scrubbed counters, reveals, progress bar, scroll-spy,
-// parallax, desktop smooth scrolling) and the one motion switch they all
-// consult.
+// keyframe entries, reveals, progress bar, scroll-spy, parallax, desktop smooth
+// scrolling) and the one motion switch they all consult.
 //
 // ONE dispatcher for the whole page. Every effect below is an *entry* in a
 // shared registry; a single scroll/resize-driven rAF tick walks it twice per
@@ -774,60 +773,6 @@
     };
   }
 
-  // ═════════════════ Count entries ═════════════════
-
-  /**
-   * Static validation for a count entry — the keyframeFault counterpart.
-   * Everything checkable without a frame context is checked ONCE, at
-   * registration, so a malformed window can never reach a write pass and leave
-   * a numeral stuck on a nonsense value. Returns a reason string, or null.
-   */
-  function countFault(end, a, b){
-    if(typeof end !== 'number' || !isFinite(end)) return '`end` must be a finite number';
-    if(typeof a !== 'number' || typeof b !== 'number') return '`window` must be a [start, end] pair of numbers';
-    if(!(a >= 0) || !(b <= 1) || !(a < b)) return '`window` must satisfy 0 <= start < end <= 1';
-    return null;
-  }
-
-  /**
-   * A counter whose value IS scroll position: `end × progress across [a, b]`,
-   * rounded. Fully reversible by construction — scrolling back counts back
-   * down, because there is no time anywhere in the mapping.
-   *
-   * The authored textContent (the finished value, which the component renders
-   * statically) is captured at registration and put back on dispose, so every
-   * no-engine path shows exactly what the markup already says.
-   */
-  function createCountEntry(el, trigger, opts){
-    const mode = opts.mode || SCRUB_DEFAULT_MODE;
-    const endAt = (typeof opts.endAt === 'number') ? opts.endAt : SCRUB_DEFAULT_END_AT;
-    const suffix = (typeof opts.suffix === 'string') ? opts.suffix : '';
-    const end = opts.end;
-    const a = opts.window[0];
-    const b = opts.window[1];
-    const authored = el.textContent;
-
-    let next = 0;
-    let written = null;
-
-    return {
-      nodes: (trigger === el) ? [el] : [el, trigger],
-      read(ctx){
-        const rect = trigger.getBoundingClientRect();
-        const p = progressOf(mode, rect, ctx, endAt);
-        next = Math.round(end * clamp01((p - a) / (b - a)));
-      },
-      write(){
-        // One textContent assignment per value CHANGE, never per frame: a
-        // counter holds the same integer across most of its window, so writing
-        // it again would be pure invalidation for an identical pixel.
-        if(next !== written){ written = next; el.textContent = next + suffix; }
-        return false;
-      },
-      dispose(){ el.textContent = authored; },
-    };
-  }
-
   // ═════════════════ Internal entry types ═════════════════
 
   function createParallaxEntry(el, maxPx){
@@ -947,72 +892,6 @@
     }, [targetRef, triggerRef, key, reduced, off]);
   }
 
-  // ─────────────── Scrubbed counter ───────────────
-
-  /**
-   * Counts `targetRef`'s numeral from 0 to `opts.end` across `opts.window` —
-   * the [a, b] slice of the trigger's own progress the count is spread over.
-   *
-   *   opts.end        the finished value. The component MUST also render it as
-   *                   its static text: that is what reduced motion, an off
-   *                   viewport, a faulted registration and a no-JS crawl show.
-   *   opts.suffix     appended to every written value (default '').
-   *   opts.window     [a, b], 0 <= a < b <= 1.
-   *   opts.mode       'cross' (default) | 'enter' (with opts.endAt) | 'pin'.
-   *                   'pin' REQUIRES opts.triggerRef — the pin wrapper.
-   *   opts.offQuery   media query that disables the entry entirely.
-   *
-   * Registration, release and reduced-motion semantics are the scrub entry's,
-   * verbatim: nothing registers when off, and disposal restores the authored
-   * text. The write is imperative on purpose — a React state write per frame
-   * would re-render a component ~60×/s to change one text node (Design Note D5).
-   */
-  function useScrubCount(targetRef, opts){
-    const settings = opts || {};
-    const reduced = useReducedMotion();
-    const off = useMediaQuery(settings.offQuery || NEVER_QUERY);
-
-    // Same snapshot discipline as useScrub: callers pass object literals, whose
-    // identity changes every render, so registration keys on scalars only.
-    const settingsRef = useRef(settings);
-    settingsRef.current = settings;
-
-    const triggerRef = settings.triggerRef || null;
-    const win = Array.isArray(settings.window) ? settings.window : [];
-    // end/suffix/window ARE the entry's behaviour, so they belong in the key:
-    // a re-render that changes one has to re-register, not drift.
-    const key = [
-      settings.mode || SCRUB_DEFAULT_MODE,
-      settings.endAt,
-      settings.end,
-      settings.suffix,
-      win[0],
-      win[1],
-    ].join('|');
-
-    useLayoutEffect(() => {
-      if(reduced || off) return;
-      const el = targetRef && targetRef.current;
-      if(!el) return;
-
-      const active = settingsRef.current;
-      const trigger = (active.triggerRef && active.triggerRef.current) || el;
-      if((active.mode || SCRUB_DEFAULT_MODE) === 'pin' && trigger === el){
-        console.warn('[scroll] useScrubCount: mode "pin" needs opts.triggerRef (the pin wrapper) — entry skipped', el);
-        return;
-      }
-
-      const range = Array.isArray(active.window) ? active.window : [];
-      const fault = countFault(active.end, range[0], range[1]);
-      if(fault){
-        console.warn('[scroll] useScrubCount: ' + fault + ' — entry skipped, numeral left at its authored value', el);
-        return;
-      }
-
-      return registerEntry(createCountEntry(el, trigger, active));
-    }, [targetRef, triggerRef, key, reduced, off]);
-  }
-
   // ─────────────── Smooth scroll ───────────────
 
   /**
@@ -1076,12 +955,31 @@
         });
 
         io && io.disconnect();
+        // A `.mask-reveal` parks at translateY(130%) — fully OUTSIDE its
+        // `.mask-line{overflow:hidden}` box. IntersectionObserver intersects a
+        // target against every ancestor clip rect, so a fully clipped target
+        // never reports isIntersecting. Observe the mask container instead
+        // (it is never clipped) and reveal the child when the CONTAINER enters.
+        const sentinelFor = (el) => {
+          const mask = el.parentElement;
+          return (el.classList.contains('mask-reveal') && mask && mask.classList.contains('mask-line')) ? mask : el;
+        };
+        const childOf = new Map(); // sentinel element -> reveal target
         io = new IntersectionObserver((entries) => {
           for(const e of entries){
-            if(e.isIntersecting){ e.target.classList.add(REVEALED_CLASS); io.unobserve(e.target); }
+            if(e.isIntersecting){
+              const target = childOf.get(e.target) || e.target;
+              target.classList.add(REVEALED_CLASS);
+              io.unobserve(e.target);
+            }
           }
         }, { threshold: REVEAL_THRESHOLD, rootMargin: REVEAL_ROOT_MARGIN });
-        els.forEach(el => { if(!el.classList.contains(REVEALED_CLASS)) io.observe(el); });
+        els.forEach(el => {
+          if(el.classList.contains(REVEALED_CLASS)) return;
+          const sentinel = sentinelFor(el);
+          if(sentinel !== el) childOf.set(sentinel, el);
+          io.observe(sentinel);
+        });
       }
 
       attach();
@@ -1170,7 +1068,6 @@
     useReducedMotion,
     useSmoothScroll,
     useScrub,
-    useScrubCount,
     useReveal,
     useScrollProgress,
     useScrollSpy,

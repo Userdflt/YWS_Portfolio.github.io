@@ -65,12 +65,10 @@
 }
 
 /* ─────────────── TOKENS: dark tone ───────────────
-   Three consumers, one declaration: a section painted ink-navy (.sec-dark),
-   the nav skin that matches it (.nav--dark), and the cursor-follow preview,
-   which is a body-level fixed overlay and so can never inherit a section tone. */
+   Two consumers, one declaration: a section painted ink-navy (.sec-dark) and
+   the nav skin that matches it (.nav--dark). */
 .sec-dark,
-.nav--dark,
-.work-preview{
+.nav--dark{
   --bg: var(--ink-navy);
   --panel: rgba(244,245,248,0.05);
   --ink: #f4f5f8;
@@ -117,6 +115,10 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
    `position:sticky` inside it. */
 body{overflow-x:hidden;overflow-x:clip;min-height:100vh}
 a{color:inherit;text-decoration:none}
+/* Keyboard focus, on every link on both pages. `:focus-visible`, not `:focus`,
+   so a mouse click never paints a ring; the accent is a token, so the ring reads
+   on paper and on the ink band without a second rule. */
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 ::selection{background:var(--accent-soft);color:var(--ink)}
 /* No italics — anywhere */
@@ -242,50 +244,88 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .scroll-cue .line{width:1px;height:32px;background:linear-gradient(180deg, transparent, var(--accent));animation:scrollLine 2.2s ease-in-out infinite}
 @keyframes scrollLine{0%,100%{transform:scaleY(.6);opacity:.4}50%{transform:scaleY(1);opacity:1}}
 
-/* ─────────────── WORK ─────────────── */
-.work-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
-/* Measurement anchor. The row itself is scrubbed (translateY), so its own rect
-   is not a usable progress input — this untransformed wrapper is what the row
-   and its numeral measure against. Layout-neutral by construction. */
-.work-row-slot{display:block}
-.work-row{position:relative;display:grid;grid-template-columns:clamp(58px, 6vw, 92px) 1fr auto auto;align-items:center;gap:24px;padding:calc(var(--u)*3.4) 0;border-bottom:1px solid var(--line);cursor:pointer;transition:padding .35s var(--ease-out-soft), background-color .35s var(--ease-out-soft)}
-.work-row::before{content:"";position:absolute;left:0;top:0;width:2px;height:100%;background:var(--accent);transform:scaleY(0);transform-origin:center;transition:transform .35s ease}
-.work-row:hover{padding-left:18px;padding-right:8px;background-color:var(--accent-soft)}
-.work-row:hover::before{transform:scaleY(1)}
-/* Big thin numeral — the index is the row's anchor, not a footnote. It reads
-   --ink, so it is white on the dark work band and ink on paper without a
-   second rule. */
-.work-row .idx{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-3);line-height:1;letter-spacing:-0.03em;color:var(--ink);font-variant-numeric:tabular-nums;transition:color .25s}
-.work-row:hover .idx{color:var(--accent)}
-.work-row .title-col{display:flex;flex-direction:column;gap:8px;min-width:0}
-.work-row .title{font-family:var(--fs-sans);font-weight:300;font-size:clamp(24px, 2.8vw, 38px);line-height:1.08;letter-spacing:-0.03em;color:var(--ink);transition:color .25s}
-.work-row:hover .title{color:var(--accent)}
-.work-row .blurb{font-size:13px;color:var(--ink-dim);max-width:72ch;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
-.work-row .cat{font-family:var(--fs-mono);font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-dim);white-space:nowrap}
-/* circular hairline icon button */
-.work-row .arrow{width:40px;height:40px;border-radius:50%;border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;color:var(--ink-dim);transition:background-color .25s, border-color .25s, color .25s, transform .25s;font-size:14px}
-.work-row:hover .arrow{background-color:var(--ink);border-color:var(--ink);color:var(--bg);transform:translate(2px,-2px)}
-/* Narrow: the category drops to its own line under the title rather than
-   squeezing the title column to nothing beside the enlarged numeral. */
-@media (max-width: 640px){
-  .work-row{grid-template-columns:auto 1fr auto;gap:8px 16px}
-  .work-row .idx{grid-row:1;grid-column:1}
-  .work-row .title-col{grid-row:1;grid-column:2}
-  .work-row .cat{grid-row:2;grid-column:2}
-  .work-row .arrow{grid-row:1;grid-column:3}
+/* ─────────────── WORK — project showcases ───────────────
+   One article per project, ~90svh each. Three layers, painted back to front:
+   the index numeral (absolute, aria-hidden decoration), the media figure, and
+   the text block. The ARTICLE — not the section — is the numeral's containing
+   block, and `isolation:isolate` keeps each article's stack its own, so a
+   numeral can never rise over a neighbour's content. */
+.showcase{position:relative;display:flex;align-items:center;isolation:isolate;
+  min-height:90vh;min-height:90svh;border-top:1px solid var(--line);
+  /* The numeral is allowed to bleed past the inline edge, and the ARTICLE is
+     what cuts it there. Body's `overflow-x:clip` cannot: body propagates its
+     overflow to the viewport, so the bleed becomes 29px of real horizontal
+     scroll instead (measured). `clip` and not `hidden`, on the inline axis
+     only: `overflow-x:hidden` would coerce overflow-y to `auto` and turn every
+     article into a scroll container. */
+  overflow-x:clip}
+/* The flex centring above is what holds a short pair of columns in the middle
+   of that box; the wrap has to take the full width for it to work on. */
+.showcase > .wrap{width:100%;display:grid;grid-template-columns:7fr 5fr;
+  gap:clamp(28px, 4vw, 64px);align-items:center}
+
+/* Index numeral. DECORATION ONLY — --ink-faint is below AA at every size, which
+   is why it is aria-hidden in the markup and never takes the pointer. It sits at
+   the media-OPPOSITE edge and is allowed to bleed past it: body's
+   `overflow-x:clip` absorbs the bleed without making the page scroll sideways. */
+.showcase-num{position:absolute;top:6%;right:-2%;
+  font-family:var(--fs-sans);font-weight:200;font-size:clamp(120px, 24vw, 340px);
+  line-height:1;letter-spacing:-0.05em;color:var(--ink-faint);
+  font-variant-numeric:tabular-nums;pointer-events:none;user-select:none;-webkit-user-select:none}
+.showcase--flip .showcase-num{right:auto;left:-2%}
+
+/* Media. The WIPE box owns the aspect ratio and the overflow, and is the node
+   the wipe measures — a clip-path never moves the rect it is read from. The
+   inner figure is the parallax target, overscanned by 2 × PARALLAX_MAX_PX
+   (scroll.jsx) so ±24px of drift can never expose a strip of empty box. */
+.showcase-media{display:block;position:relative}
+.showcase-frame{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--panel)}
+.showcase-frame figure{margin:0;height:calc(100% + 48px);margin-top:-24px;
+  display:flex;align-items:center;justify-content:center}
+.showcase-frame img{display:block;width:100%;height:100%;object-fit:cover;
+  transition:transform .6s var(--ease-out-soft)}
+.showcase-media:hover img{transform:scale(1.03)}
+/* Letter mark — the fallback for a project with no usable image. */
+.showcase-frame .mark{font-family:var(--fs-sans);font-weight:200;
+  font-size:clamp(64px, 8vw, 120px);line-height:1;color:var(--accent)}
+
+/* Text column — ONE rise unit (SC2), so it needs no per-child spacing rhythm
+   beyond the gap. */
+.showcase-text{display:flex;flex-direction:column;align-items:flex-start;
+  gap:clamp(14px, 1.6vw, 20px)}
+.showcase-text .eyebrow{margin:0}
+.showcase-text h2{font-family:var(--fs-sans);font-weight:200;line-height:1.02;
+  letter-spacing:-0.03em;margin:0}
+.showcase-text h2 a{transition:color .25s}
+.showcase-text h2 a:hover{color:var(--accent)}
+/* Two lines, never one: a single clamped line at this measure dies mid-clause. */
+.showcase-dek{margin:0;color:var(--ink-dim);font-size:14.5px;line-height:1.6;max-width:52ch;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* The shared chip row pushes itself to the bottom of a stretched cell; here the
+   column is content-height, so the auto margin is turned off to keep the gap. */
+.showcase-text .stags{margin-top:0}
+.showcase-cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--fs-mono);
+  font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);
+  transition:gap .25s var(--ease-out-soft)}
+.showcase-cta:hover{gap:14px}
+
+/* The flip is a TWO-COLUMN device: it swaps the order of the grid's children,
+   which only exists above the breakpoint. Below it the column is media-then-text
+   for flipped and unflipped articles alike, so reading order never depends on an
+   article's parity. */
+@media (min-width: 900px){
+  .showcase--flip > .wrap > .showcase-media{order:2}
+  .showcase--flip > .wrap > .showcase-text{order:1}
 }
 
-/* hover preview thumbnail (follows cursor) — permanently dark-scoped above. */
-.work-preview{position:fixed;width:240px;height:160px;overflow:hidden;pointer-events:none;z-index:40;background:var(--bg);color:var(--ink);opacity:0;transform:translate(-50%,-50%) scale(0.92);transition:opacity .2s, transform .35s var(--ease-out-soft);box-shadow:var(--shadow-card)}
-.work-preview.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
-/* bottom scrim so the metadata reads over any thumbnail without a glow layer */
-.work-preview::after{content:"";position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(180deg, transparent, rgba(2,4,12,0.88));z-index:2;pointer-events:none}
-.preview-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg)}
-#preview-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:1}
-.preview-mark{font-family:var(--fs-sans);font-weight:200;font-size:42px;color:var(--accent);line-height:1;position:relative;z-index:2}
-.preview-meta{position:absolute;left:12px;right:12px;bottom:9px;display:flex;justify-content:space-between;align-items:end;font-family:var(--fs-mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;z-index:3}
-.preview-meta .pm-cat{color:var(--ink-dim)}
-.preview-meta .pm-tag{color:var(--accent)}
+/* One column, media above text. The numeral's scrub is retired at exactly this
+   width by SHOWCASE_NUM_OFF_QUERY (app.jsx) — the two must name the same
+   viewport, or the numeral would travel over a layout with no room for it. */
+@media (max-width: 899px){
+  .showcase > .wrap{grid-template-columns:1fr;gap:clamp(20px, 4vw, 32px)}
+  .showcase-num{top:2%;font-size:clamp(88px, 26vw, 160px)}
+  .showcase-dek{max-width:60ch}
+}
 
 /* ─────────────── APPROACH ─────────────── */
 .approach-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start}
@@ -325,69 +365,6 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .stags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
 .tag{font-family:var(--fs-mono);font-size:11px;color:var(--ink-dim);padding:4px 10px;border:1px solid var(--line);transition:color .2s, border-color .2s}
 .tag:hover{color:var(--accent);border-color:var(--accent)}
-
-/* ─────────────── STATS ───────────────
-   TWO LAYERS, ONE CONTENT. `.stats-stage` is the animated decoration the pin
-   plays — four numerals stacked in one place, aria-hidden. `.stats-semantic` is
-   the real list: visually hidden while the pin owns the visuals, and the
-   VISIBLE static grid on every flattened path. Nothing here is a fork of the
-   other: the grid rules below are the same `.stats`/`.stat` recipe both paths
-   use. */
-
-/* 220svh of scroll distance. The vh line is the fallback for engines without
-   svh — declared first, exactly as .hero-pin declares it. */
-.stats-pin{position:relative;height:220vh;height:220svh}
-/* The scene that holds still while that distance is consumed. The top padding
-   is the fixed nav's clearance: the sticky parks at the viewport top. */
-.stats-sticky{position:sticky;top:0;min-height:100vh;min-height:100svh;
-  display:flex;flex-direction:column;justify-content:center;overflow:hidden;
-  padding-top:calc(var(--u)*9);padding-bottom:calc(var(--u)*7)}
-/* The canvas the scenes stack on. Its min-height reserves the numeral's box, so
-   the section head above never shifts as one scene hands over to the next. */
-.stats-stage{position:relative;display:grid;min-height:clamp(320px, 60vh, 640px)}
-/* Parked invisible by AUTHORED css, never by the engine's first write: a stack
-   of four numerals must be invisible from the very first paint. */
-.stat-scene{position:absolute;inset:0;display:grid;place-content:center;
-  gap:clamp(12px, 1.6vw, 22px);text-align:center;opacity:0;pointer-events:none}
-/* Weight 300 (not the display 200): at 280px on the dark band, 200's strokes
-   thin out below comfortable contrast; 300 keeps the likova lightness legible. */
-.stat-scene .ss-num{font-family:var(--fs-sans);font-weight:300;font-size:clamp(96px, 18vw, 280px);
-  line-height:0.86;letter-spacing:-0.05em;color:var(--ink)}
-.stat-scene .eyebrow{font-size:13px;color:var(--ink);opacity:.85}
-
-/* The stable semantic list — the only stats content in the a11y tree, and the
-   markup every flattened path shows. Visually hidden rather than display:none
-   while the pin runs: the numbers are already final in the markup, so they stay
-   readable to a screen reader and to a crawler that runs no JS. */
-.stats-semantic{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-
-/* numeric counters — the grid the semantic list renders as */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:calc(var(--u)*8)}
-@media (max-width: 760px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{position:relative;padding:calc(var(--u)*2.5) calc(var(--u)*3);display:flex;flex-direction:column;gap:8px;background:var(--panel);border:1px solid var(--line)}
-/* Accent hairline. The `1` fallback is what paints it: no entry writes --scrub
-   on this card any more (the scrubbed presentation is the pinned scene), so the
-   grid always shows the finished line. */
-.stat::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--accent);transform:scaleX(var(--scrub,1));transform-origin:left;pointer-events:none}
-.stat .sn{font-family:var(--fs-sans);font-weight:200;font-size:clamp(30px, 3.8vw, 48px);line-height:1;color:var(--ink);letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
-.stat .sl{font-family:var(--fs-mono);font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-dim)}
-
-/* No room to pin — too narrow OR too short. The scene retires and the semantic
-   list becomes the visible grid: today's layout, exactly. This query mirrors
-   STATS_PIN_OFF_QUERY (app.jsx) BYTE FOR BYTE, which stops the stats scrubs and
-   counts registering at the same viewports — a scrubbed scene with no pin and a
-   pinned scene with no scrubs are both broken. */
-@media (max-width: 899px), (max-height: 560px){
-  .stats-pin{height:auto}
-  .stats-sticky{position:static;min-height:0;overflow:visible;padding-top:0;padding-bottom:0}
-  /* The animated layer is aria-hidden decoration carrying the same four
-     numbers as the list below, so it retires whole rather than stacking a
-     second visible copy. The scene reset is the belt to that brace: no path may
-     leave a scene parked invisible and absolute once the stage is in flow. */
-  .stats-stage{display:none}
-  .stat-scene{position:static;inset:auto;opacity:1;transform:none}
-  .stats-semantic{position:static;width:auto;height:auto;overflow:visible;clip-path:none;white-space:normal}
-}
 
 /* ─────────────── CONTACT ─────────────── */
 .contact{padding-bottom:calc(var(--u) * 16)}
@@ -626,16 +603,6 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
   .hero-sticky{position:static;height:auto;min-height:0;overflow:visible;transform:none}
   /* Same reason as the short-viewport flatten: no pin, no second beat. */
   .hero-beat2{display:none}
-  /* And no stats pin either: the scene is a motion device, so it retires and
-     the semantic list is the visible grid with its numerals already final.
-     Same declarations as the pin-off flatten above — CSS cannot share a rule
-     across two unrelated conditions, and these two ARE unrelated (a viewport
-     with no room vs a stated preference). */
-  .stats-pin{height:auto}
-  .stats-sticky{position:static;min-height:0;overflow:visible;padding-top:0;padding-bottom:0}
-  .stats-stage{display:none}
-  .stat-scene{position:static;inset:auto;opacity:1;transform:none}
-  .stats-semantic{position:static;width:auto;height:auto;overflow:visible;clip-path:none;white-space:normal}
   .scroll-cue .line{animation:none}
   /* scroll.jsx writes no transforms under reduced motion and strips these
      classes on cleanup; this drops the layer promotion if one ever outlives
