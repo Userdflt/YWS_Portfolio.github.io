@@ -78,6 +78,79 @@ const PROJECT_BAND_SCRUB = [
 ];
 const PROJECT_BAND_OPTS = { mode: 'cross' };
 
+// A1 / X1 — the lateral counterpart of RISE_SCRUB: 24px of travel under the
+// same fade, mirrored so a list of rows arrives from alternating sides. Both
+// tables are consumed the same way — a row picks one by its index parity, and
+// the choice is fixed for the row's lifetime, so the entry registers once.
+const SLIDE_LEFT_SCRUB = [
+  { at: 0, style: { translateX: -24, opacity: 0 } },
+  { at: 1, style: { translateX: 0,   opacity: 1 } },
+];
+const SLIDE_RIGHT_SCRUB = [
+  { at: 0, style: { translateX: 24, opacity: 0 } },
+  { at: 1, style: { translateX: 0,  opacity: 1 } },
+];
+const SLIDE_OPTS = { mode: 'enter', endAt: 0.7 };
+
+// A2 — the architecture connector DRAWS itself: the engine scrubs a plain
+// `--scrub` number and CSS turns it into `scaleY`. The property is written on
+// the line, the progress is read from the LIST — a scaled element must never
+// measure itself. The CSS fallback is 1, which is why reduced motion renders
+// the finished line with no extra rule (Design Spec A2).
+const ARCH_LINE_SCRUB = [
+  { at: 0, style: { '--scrub': 0 } },
+  { at: 1, style: { '--scrub': 1 } },
+];
+// Shorter than SLIDE_OPTS on purpose: the connector must reach the last row
+// before the rows it connects have finished arriving.
+const ARCH_LINE_OPTS = { mode: 'enter', endAt: 0.35 };
+
+// C1 — capability cards spend a little less of their range than the link cards.
+const FEATURE_RISE_OPTS = { mode: 'enter', endAt: 0.7 };
+// M1 / X2 — metric tiles and outcome bullets take the engine's default enter
+// span: both live inside the outcomes band, which clips itself in on its own
+// range, and a longer entry would leave them mid-rise under a finished band.
+const TILE_RISE_OPTS = { mode: 'enter' };
+
+// Stagger steps. The capabilities grid is a FIXED two columns (unlike the
+// auto-fill galleries), so `index % FEATURE_STAGGER_COLS` is the real column
+// at every viewport and the offset never depends on a resize. Metric tiles and
+// outcome bullets are single files, so they stagger on the raw index.
+const FEATURE_STAGGER_COLS = 2;
+const FEATURE_STAGGER_STEP = 0.12;
+const METRIC_STAGGER_STEP = 0.10;
+const OUTCOME_STAGGER_STEP = 0.08;
+
+// ───────── Section numbering ─────────
+// Sections are OPTIONAL, so their numbers cannot be literals: a project with no
+// problem statement and no architecture list must still read 01, 02, 03 with no
+// gaps. The order below is document order; only the keys actually rendered take
+// a number.
+const SECTION_ORDER = ['overview', 'problem', 'approach', 'capabilities', 'architecture', 'media', 'outcomes', 'related'];
+
+function sectionNumbers(d, hasPeers){
+  const present = {
+    overview: true,
+    problem: !!d.problem,
+    approach: !!(d.approach && d.approach.length),
+    capabilities: !!(d.features && d.features.length),
+    architecture: !!(d.architecture && d.architecture.length),
+    media: true,
+    outcomes: true,
+    related: !!hasPeers,
+  };
+  const numbers = {};
+  let n = 0;
+  for(const key of SECTION_ORDER){
+    if(present[key]) numbers[key] = String(++n).padStart(2, '0');
+  }
+  return numbers;
+}
+
+// The bracket is presentation, so the raw "01" stays available for the
+// outcomes band's "05.a / 05.b" sub-labels.
+const sectionMarker = (n) => `[${n}]`;
+
 // ───────── Not found ─────────
 function NotFound({ id }){
   return (
@@ -334,14 +407,14 @@ function MediaVideoGallery({ item, baseNo }){
   );
 }
 
-function MediaSection({ media }){
+function MediaSection({ media, number }){
   if(!media || media.length === 0) return null;
   let frameNo = 0;
   return (
     <section data-tone="light">
       <div className="wrap">
         <div className="section-tag section-head reveal">
-          <span className="marker section-num">[04]</span><span className="eyebrow">media</span><span className="rule"></span>
+          <span className="marker section-num">{sectionMarker(number)}</span><span className="eyebrow">media</span><span className="rule"></span>
           <span>{media.length} blocks</span>
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap:'calc(var(--u)*3)' }}>
@@ -367,6 +440,160 @@ function MediaSection({ media }){
       </div>
     </section>
   );
+}
+
+// ───────── Approach (E3 / X1) ─────────
+
+// One row = one component, because it owns a ref and a scrub and hooks cannot
+// live inside a `.map()` (GalleryItem precedent). The WRAPPER is the trigger:
+// the row itself is translated by this entry, so measuring it would feed the
+// scrub's output back into its own input.
+//
+// The IO `.in` class keeps arriving on `.row` through the engine's own reveal
+// selector and keeps driving ONLY the `::before` accent underline. The two
+// compose because neither writes the other's properties — the scrub owns x and
+// opacity, the class owns a pseudo-element's width.
+function ApproachRow({ step, index }){
+  const triggerRef = useRef(null);
+  const rowRef = useRef(null);
+  useScrub(rowRef, (index % 2 === 0) ? SLIDE_LEFT_SCRUB : SLIDE_RIGHT_SCRUB, { ...SLIDE_OPTS, triggerRef });
+  return (
+    <div className="approach-row-trigger" ref={triggerRef}>
+      <div className="row" ref={rowRef}>
+        <div className="pn">{String(index + 1).padStart(2,'0')} /</div>
+        <div>
+          <div className="pt">{step.t}</div>
+          <div className="pd">{step.d}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ───────── Capabilities (details.features) ─────────
+
+// Same wrapper-as-trigger contract as ApproachRow. The stagger is the card's
+// COLUMN, not its index, so both cards in a row start together and the grid
+// reads as rows arriving rather than a diagonal.
+function FeatureCard({ feature, index }){
+  const triggerRef = useRef(null);
+  const cardRef = useRef(null);
+  useScrub(cardRef, RISE_SCRUB, {
+    ...FEATURE_RISE_OPTS,
+    triggerRef,
+    delay: (index % FEATURE_STAGGER_COLS) * FEATURE_STAGGER_STEP,
+  });
+  return (
+    <div className="feat-trigger" ref={triggerRef}>
+      <div className="feat-card" ref={cardRef}>
+        <div className="ft">{feature.t}</div>
+        <div className="fd">{feature.d}</div>
+      </div>
+    </div>
+  );
+}
+
+// Absent field = absent section. Every project that has no verified feature
+// list renders exactly the sections it did before, and `sectionNumbers` closes
+// the gap in the numbering.
+function CapabilitiesSection({ features, number }){
+  if(!features || features.length === 0) return null;
+  return (
+    <section data-tone="light">
+      <div className="wrap">
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">{sectionMarker(number)}</span><span className="eyebrow">capabilities</span><span className="rule"></span>
+          <span>{String(features.length).padStart(2,'0')} items</span>
+        </div>
+        <div className="feat-grid">
+          {features.map((f, i) => <FeatureCard key={i} feature={f} index={i} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ───────── Architecture (details.architecture) ─────────
+
+function ArchRow({ text, index }){
+  const triggerRef = useRef(null);
+  const rowRef = useRef(null);
+  useScrub(rowRef, (index % 2 === 0) ? SLIDE_LEFT_SCRUB : SLIDE_RIGHT_SCRUB, { ...SLIDE_OPTS, triggerRef });
+  return (
+    <div className="arch-trigger" ref={triggerRef}>
+      <div className="arch-row" ref={rowRef}>
+        <div className="an">{String(index + 1).padStart(2,'0')} /</div>
+        <div className="ad">{text}</div>
+      </div>
+    </div>
+  );
+}
+
+// The hooks run before the empty-field bail-out, never inside it: hook order
+// has to be identical on every render, and a null `lineRef.current` is already
+// the engine's own no-op path.
+//
+// The connector is decoration — it repeats the sequence the numbered rows
+// already state — so it is hidden from assistive tech rather than described.
+function ArchitectureSection({ architecture, number }){
+  const listRef = useRef(null);
+  const lineRef = useRef(null);
+  useScrub(lineRef, ARCH_LINE_SCRUB, { ...ARCH_LINE_OPTS, triggerRef: listRef });
+  if(!architecture || architecture.length === 0) return null;
+  return (
+    <section data-tone="light">
+      <div className="wrap">
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">{sectionMarker(number)}</span><span className="eyebrow">architecture</span><span className="rule"></span>
+          <span>{String(architecture.length).padStart(2,'0')} layers</span>
+        </div>
+        <div className="arch-list" ref={listRef}>
+          {architecture.map((a, i) => <ArchRow key={i} text={a} index={i} />)}
+          <span className="arch-line" ref={lineRef} aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ───────── Metrics band (details.metrics) ─────────
+
+// Values are STATIC. A scrubbed count-up was tried and retired: a number that
+// only reads correctly at the end of its range is worse than a number.
+function MetricTile({ metric, index, triggerRef }){
+  const tileRef = useRef(null);
+  useScrub(tileRef, RISE_SCRUB, { ...TILE_RISE_OPTS, triggerRef, delay: index * METRIC_STAGGER_STEP });
+  return (
+    <div className="metric" ref={tileRef}>
+      <div className="mv display-2">{metric.v}</div>
+      <div className="mk eyebrow">{metric.k}</div>
+    </div>
+  );
+}
+
+// Rides inside the outcomes band rather than claiming a section number of its
+// own: only projects whose README states numbers have this field, and a
+// section that exists for one project in thirteen would make the numbering
+// read as arbitrary.
+function MetricsBand({ metrics }){
+  const gridRef = useRef(null);
+  if(!metrics || metrics.length === 0) return null;
+  return (
+    <div className="metrics-grid" ref={gridRef}>
+      {metrics.map((m, i) => <MetricTile key={m.k} metric={m} index={i} triggerRef={gridRef} />)}
+    </div>
+  );
+}
+
+// ───────── Outcomes list (E3 / X2) ─────────
+
+// The `<li>` is the target and the `<ul>` is the trigger: a translated item
+// cannot measure itself, and one shared trigger keeps the bullets on a single
+// staggered run instead of each restarting at its own crossing.
+function OutcomeItem({ text, index, triggerRef }){
+  const itemRef = useRef(null);
+  useScrub(itemRef, RISE_SCRUB, { ...TILE_RISE_OPTS, triggerRef, delay: index * OUTCOME_STAGGER_STEP });
+  return <li ref={itemRef}>{text}</li>;
 }
 
 // ───────── Project link cards ─────────
@@ -406,19 +633,15 @@ function ProjectCard({ project, triggerRef, variant, label }){
   );
 }
 
-// Same-category peers, in PROJECTS order, never the project you are reading.
-// Most categories are singletons, so the whole row renders nothing rather than
-// padding itself out with unrelated work.
-function RelatedProjects({ project }){
+// The peers are selected ONCE, in ProjectPage — the same array decides whether
+// this row renders at all and whether `related` takes a section number, so it
+// cannot be recomputed here without the two answers drifting apart.
+function RelatedProjects({ project, peers, number }){
   const gridRef = useRef(null);
-  const peers = (window.PROJECTS || [])
-    .filter(p => p.category === project.category && p.id !== project.id)
-    .slice(0, RELATED_MAX);
-  if(peers.length === 0) return null;
   return (
     <div className="related">
       <div className="section-tag section-head reveal">
-        <span className="marker section-num">[06]</span><span className="eyebrow">related</span><span className="rule"></span>
+        <span className="marker section-num">{sectionMarker(number)}</span><span className="eyebrow">related</span><span className="rule"></span>
         <span>{project.category.toLowerCase()}</span>
       </div>
       <div className="related-grid" ref={gridRef}>
@@ -466,6 +689,7 @@ function ProjectPage({ project }){
   const overviewRef = useRef(null);
   const panelRef = useRef(null);
   const outcomesRef = useRef(null);
+  const outcomesListRef = useRef(null);
   const pnavRef = useRef(null);
   useScrub(panelRef, RISE_SCRUB, { ...PANEL_RISE_OPTS, triggerRef: overviewRef });
   useScrub(outcomesRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
@@ -481,6 +705,15 @@ function ProjectPage({ project }){
   const next = list[(idx + 1) % list.length];
 
   const d = project.details || {};
+
+  // Same-category peers, in PROJECTS order, never the project you are reading.
+  // Most categories are singletons, so the row renders nothing rather than
+  // padding itself out with unrelated work — and an empty row takes no number.
+  const peers = list
+    .filter(p => p.category === project.category && p.id !== project.id)
+    .slice(0, RELATED_MAX);
+  const hasPeers = peers.length > 0;
+  const nums = sectionNumbers(d, hasPeers);
 
   return (
     <LightboxContext.Provider value={setLightbox}>
@@ -526,13 +759,13 @@ function ProjectPage({ project }){
       <section className="overview overview-lead" data-tone="light" ref={overviewRef}>
         <div className="wrap panel-overlap" ref={panelRef}>
           <div className="section-tag section-head reveal">
-            <span className="marker section-num">[01]</span><span className="eyebrow">overview</span><span className="rule"></span>
+            <span className="marker section-num">{sectionMarker(nums.overview)}</span><span className="eyebrow">overview</span><span className="rule"></span>
           </div>
           {d.overview && <p className="reveal">{d.overview}</p>}
           {d.problem && (
             <>
               <div className="section-tag section-head reveal" style={{marginTop:'calc(var(--u)*5)'}}>
-                <span className="marker section-num">[02]</span><span className="eyebrow">problem</span><span className="rule"></span>
+                <span className="marker section-num">{sectionMarker(nums.problem)}</span><span className="eyebrow">problem</span><span className="rule"></span>
               </div>
               <p className="reveal">{d.problem}</p>
             </>
@@ -545,31 +778,30 @@ function ProjectPage({ project }){
         <section className="approach" data-tone="light">
           <div className="wrap">
             <div className="section-tag section-head reveal">
-              <span className="marker section-num">[03]</span><span className="eyebrow">approach</span><span className="rule"></span>
+              <span className="marker section-num">{sectionMarker(nums.approach)}</span><span className="eyebrow">approach</span><span className="rule"></span>
             </div>
             <div>
               {d.approach.map((a, i) => (
-                <div className="row" key={i}>
-                  <div className="pn">{String(i + 1).padStart(2,'0')} /</div>
-                  <div>
-                    <div className="pt">{a.t}</div>
-                    <div className="pd">{a.d}</div>
-                  </div>
-                </div>
+                <ApproachRow key={i} step={a} index={i} />
               ))}
             </div>
           </div>
         </section>
       )}
 
+      {/* Capabilities + architecture — both absent unless the project data
+          carries a verified list for them. */}
+      <CapabilitiesSection features={d.features} number={nums.capabilities} />
+      <ArchitectureSection architecture={d.architecture} number={nums.architecture} />
+
       {/* Media (galleries, images, videos, gifs, embeds) */}
       {d.media && d.media.length > 0 ? (
-        <MediaSection media={d.media} />
+        <MediaSection media={d.media} number={nums.media} />
       ) : (
         <section data-tone="light">
           <div className="wrap">
             <div className="section-tag section-head reveal">
-              <span className="marker section-num">[04]</span><span className="eyebrow">frames</span><span className="rule"></span>
+              <span className="marker section-num">{sectionMarker(nums.media)}</span><span className="eyebrow">frames</span><span className="rule"></span>
               <span>placeholders</span>
             </div>
             <div className="gallery">
@@ -584,18 +816,21 @@ function ProjectPage({ project }){
       <section className="sec-dark" data-tone="dark" ref={outcomesRef}>
         <div className="wrap">
           <div className="section-tag section-head reveal">
-            <span className="marker section-num">[05]</span><span className="eyebrow">outcomes &amp; stack</span><span className="rule"></span>
+            <span className="marker section-num">{sectionMarker(nums.outcomes)}</span><span className="eyebrow">outcomes &amp; stack</span><span className="rule"></span>
           </div>
+          <MetricsBand metrics={d.metrics} />
           <div className="split">
             <div className="cell">
-              <div className="sh">05.a / outcomes</div>
+              <div className="sh">{nums.outcomes}.a / outcomes</div>
               <div className="st">what shipped</div>
-              <ul>
-                {(d.outcomes || ["Live and in use", "Reproducible setup"]).map((o, i) => <li key={i}>{o}</li>)}
+              <ul ref={outcomesListRef}>
+                {(d.outcomes || ["Live and in use", "Reproducible setup"]).map((o, i) => (
+                  <OutcomeItem key={i} text={o} index={i} triggerRef={outcomesListRef} />
+                ))}
               </ul>
             </div>
             <div className="cell">
-              <div className="sh">05.b / stack</div>
+              <div className="sh">{nums.outcomes}.b / stack</div>
               <div className="st">{project.tech.length} components</div>
               <div className="stags">
                 {project.tech.map(t => <span className="tag" key={t}>{t}</span>)}
@@ -608,7 +843,7 @@ function ProjectPage({ project }){
       {/* Related → Prev/Next → Footer */}
       <section data-tone="light">
         <div className="wrap">
-          <RelatedProjects project={project} />
+          {hasPeers && <RelatedProjects project={project} peers={peers} number={nums.related} />}
           <div className="pnav" ref={pnavRef}>
             <ProjectCard
               project={prev} triggerRef={pnavRef} variant="prev"

@@ -341,9 +341,16 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .principle .pt{font-family:var(--fs-sans);font-weight:600;font-size:16px;line-height:1.3;color:var(--ink);margin-bottom:6px;letter-spacing:-0.01em}
 .principle .pd{font-size:13.5px;color:var(--ink-dim);line-height:1.6}
 
-/* approach rows — project page numbered steps */
+/* approach rows — project page numbered steps.
+   Each row now sits inside its own `.approach-row-trigger`, the static wrapper
+   the scrub measures (the row itself is translated, so it cannot be its own
+   trigger). Every descendant rule below is unaffected, but `:last-child` had to
+   move to the WRAPPER: against the row it would now match every row, since each
+   row is an only child, and every row would draw a bottom rule on top of the
+   next row's top rule. */
+.approach-row-trigger{display:block}
 .approach .row{display:grid;grid-template-columns:80px 1fr;gap:18px;padding:18px 0;border-top:1px solid var(--line);position:relative}
-.approach .row:last-child{border-bottom:1px solid var(--line)}
+.approach-row-trigger:last-child .row{border-bottom:1px solid var(--line)}
 .approach .row::before{content:"";position:absolute;left:0;top:0;height:1px;width:0;background:var(--accent);transition:width .9s ease}
 .approach .row.in::before{width:80px}
 .approach .row .pn{font-family:var(--fs-mono);font-size:11px;color:var(--accent);letter-spacing:0.06em;padding-top:4px}
@@ -414,6 +421,39 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 /* overview */
 .overview p{color:var(--ink-dim);font-size:15px;line-height:1.75;margin:0 0 16px;max-width:72ch}
 
+/* capabilities — the verified feature grid (details.features).
+   A FIXED two columns, which is what lets the per-card stagger key off
+   `index % 2` and stay resize-independent (the galleries are auto-fill and
+   cannot). The trigger wrapper is layout-neutral apart from the height chain:
+   the grid stretches the wrapper, the wrapper hands that height to the card, so
+   both cards in a row share an edge even though only the card is animated. */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width: 760px){.feat-grid{grid-template-columns:1fr}}
+.feat-trigger{height:100%}
+.feat-card{height:100%;display:flex;flex-direction:column;gap:8px;padding:calc(var(--u)*3);background:var(--panel);border:1px solid var(--line);
+  /* the one strong edge — the same hairline the approach rows wear, so a card
+     reads as a row that grew a panel rather than a new component */
+  border-top:1px solid var(--line-strong)}
+.feat-card .ft{font-family:var(--fs-sans);font-weight:600;font-size:17px;line-height:1.3;color:var(--ink);letter-spacing:-0.01em}
+.feat-card .fd{font-size:14px;color:var(--ink-dim);line-height:1.65}
+
+/* architecture — numbered stack statements with a connector drawn down the
+   index column. The line's scaleY reads `--scrub`, which scroll.jsx writes on
+   its own entry; the `1` fallback is the FINISHED state, which is why reduced
+   motion (where the engine registers nothing) renders the full connector with
+   no rule of its own. transform-origin:top makes it grow downward. */
+.arch-list{position:relative}
+.arch-trigger{display:block}
+.arch-row{display:grid;grid-template-columns:56px 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--line-strong)}
+.arch-trigger:last-child .arch-row{border-bottom:1px solid var(--line-strong)}
+.arch-row .an{font-family:var(--fs-mono);font-size:11px;color:var(--accent);letter-spacing:0.06em;padding-top:4px;padding-left:18px}
+.arch-row .ad{font-size:14.5px;color:var(--ink-dim);line-height:1.65}
+.arch-line{position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--accent);transform:scaleY(var(--scrub,1));transform-origin:top}
+@media (max-width: 560px){
+  .arch-row{grid-template-columns:44px 1fr;gap:12px}
+  .arch-row .an{padding-left:12px}
+}
+
 /* split grid: outcomes + stack side-by-side */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media (max-width: 760px){.split{grid-template-columns:1fr}}
@@ -425,6 +465,19 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .cell ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
 .cell li{color:var(--ink-dim);font-size:14px;line-height:1.6;padding-left:18px;position:relative}
 .cell li::before{content:"▸";position:absolute;left:0;color:var(--accent)}
+
+/* metrics band — README-stated numbers as stat tiles, inside the dark outcomes
+   band and above the split, so it inherits that section's tone tokens rather
+   than declaring a second dark scope. auto-fit rather than a fixed count: the
+   field carries as many numbers as the source states, and the tiles reflow
+   instead of leaving a hole. Values are static — the tile rises, the number
+   never counts. */
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin-bottom:16px}
+.metric{padding:calc(var(--u)*3);display:flex;flex-direction:column;gap:10px;background:var(--panel);border:1px solid var(--line);border-top:1px solid var(--line-strong)}
+/* tabular numerals so a column of figures aligns on its digits; .display-2 on
+   the element supplies the size. */
+.metric .mv{font-family:var(--fs-sans);font-weight:200;line-height:1;letter-spacing:-0.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+.metric .mk{color:var(--ink-dim)}
 
 /* gallery — placeholder frames */
 .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
@@ -565,7 +618,7 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .approach .principle{border-top-color:var(--line-strong)}
 .approach .principle:last-child{border-bottom-color:var(--line-strong)}
 .approach .row{border-top-color:var(--line-strong)}
-.approach .row:last-child{border-bottom-color:var(--line-strong)}
+.approach-row-trigger:last-child .row{border-bottom-color:var(--line-strong)}
 
 /* Project overview rides up over the hero's lower padding — the overlapping
    panel. Three cooperating pieces:
