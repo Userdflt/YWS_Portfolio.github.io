@@ -26,14 +26,37 @@ const PALETTES = {
             accentDark: "#e7e5e4", accent2Dark: "#a8a29e", softDark: "rgba(231,229,228,0.12)" },
 };
 
-// Hero image band — the LCP element, so it is eager + high priority and carries
-// its intrinsic size to reserve the box before the bytes land.
-const HERO_IMAGE = {
-  src: "images/optimized/masterplan_1_render_2.webp",
-  width: 1088,
-  height: 960,
-  alt: "Aerial masterplan render: a residential development with landscaped parkland, a central clubhouse and pool, and detached houses across a rural site.",
-};
+// Hero image band — a four-tile mosaic of the flagship projects. Tile `a` is the
+// LCP element, so it is eager + high priority; the other three sit in the same
+// above-the-fold band and are small, so they are eager too rather than racing a
+// lazy load against the fold. Every tile carries its intrinsic size to reserve
+// its box before the bytes land.
+//
+// `area` names a cell in the .hero-mosaic template — theme.css owns the shape
+// (the 1.6fr asymmetry, and the 2x2 it collapses to under 900px), this owns
+// which project lands where. `pos` overrides the default centre crop wherever
+// the cell's aspect fights the source's; a tile without one takes centre.
+const HERO_MOSAIC = [
+  { area: "a",
+    src: "images/optimized/sketch_2_render_1.webp", width: 1088, height: 960,
+    alt: "Sketch to render: the photoreal output of the sketch-to-render pipeline — a mixed-use tower over a landscaped podium, with street trees, a pedestrian crossing and passers-by." },
+  // Portrait source in a landscape tile: a centred crop lands on the waist and
+  // loses both the hardhat and its label, so the origin rides high.
+  { area: "b", pos: "50% 12%",
+    src: "images/optimized/cv.webp", width: 1024, height: 1536,
+    alt: "Construction site safety detection: a computer-vision frame boxing a worker's hardhat and high-visibility vest, each box labelled with the item it found." },
+  // The clubhouse/pool cluster sits above and right of the frame centre; the
+  // crop keeps it in view only with the origin pushed there.
+  { area: "c", pos: "58% 45%",
+    src: "images/optimized/masterplan_1_render_2.webp", width: 1088, height: 960,
+    alt: "Masterplan render: an aerial view of a residential development with landscaped parkland, a central clubhouse and pool, and detached houses across a rural site." },
+  // A UI screenshot in the widest tile: a centred crop opens mid-headline and
+  // leaves the tile reading "Code Assistant". Anchored to the top it keeps the
+  // wordmark and both headline lines, so the tile names its own project.
+  { area: "d", pos: "50% 0%",
+    src: "images/optimized/code_vision.webp", width: 1026, height: 582,
+    alt: "CodeVision: the landing screen of an AI building-code assistant, offering answers on the New Zealand Building Code across its clause tiles." },
+];
 
 // Shared runtime, consumed as window globals — this file owns home sections only:
 //   scripts/scroll.jsx    -> useScrub, useParallax, useReveal,
@@ -186,7 +209,9 @@ function Hero(){
   const cueRef = useRef(null);
   const roleRef = useRef(null);
   const beat2Ref = useRef(null);
-  const bandImgRef = useRef(null);
+  // H3 scales the mosaic GRID, not its four images: one scrubbed node instead of
+  // four, and the gaps travel with the tiles so the plate pushes in as one piece.
+  const bandGridRef = useRef(null);
   const panelRef = useRef(null);
 
   useScrub(titleRef, HERO_TITLE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef, damping: SCRUB_DAMPING });
@@ -194,7 +219,7 @@ function Hero(){
   useScrub(cueRef, HERO_FADE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
   useScrub(roleRef, HERO_ROLE_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
   useScrub(beat2Ref, HERO_BEAT2_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
-  useScrub(bandImgRef, HERO_BAND_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef, damping: SCRUB_DAMPING });
+  useScrub(bandGridRef, HERO_BAND_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef, damping: SCRUB_DAMPING });
   useScrub(sceneRef, HERO_TAIL_SCRUB, { ...HERO_PIN_OPTS, triggerRef: pinRef });
   useScrub(panelRef, HERO_PANEL_SCRUB, HERO_PANEL_OPTS);
 
@@ -211,14 +236,14 @@ function Hero(){
 
             {/* Scrub-owned from H6a on, so it carries no IO reveal: an
                 observer and a scrub writing opacity to one node would fight. */}
-            <p className="hero-role" ref={roleRef}>Applied AI</p>
+            <p className="hero-role" ref={roleRef}>Applied AI for AEC</p>
 
             {/* The second beat occupies the SAME lead area as the role line —
                 absolutely, so the swap is a cross-fade in one place instead of
                 two elements shoving each other around in flow. Parked at
                 opacity 0 by theme.css, never by the engine's first write. */}
             <div className="hero-beat2" ref={beat2Ref}>
-              <p className="eyebrow b2-eyebrow">internal tools · retrieval · governance</p>
+              <p className="eyebrow b2-eyebrow">systems · tools · governance</p>
               <p className="display-2 text-ink b2-line">i make ai work for architecture teams.</p>
             </div>
 
@@ -229,16 +254,24 @@ function Hero(){
           </div>
 
           <div className="hero-band">
-            <img
-              ref={bandImgRef}
-              src={HERO_IMAGE.src}
-              alt={HERO_IMAGE.alt}
-              width={HERO_IMAGE.width}
-              height={HERO_IMAGE.height}
-              loading="eager"
-              fetchpriority="high"
-              decoding="async"
-            />
+            <div className="hero-mosaic" ref={bandGridRef}>
+              {/* Placement and crop are inline because they belong to the ENTRY,
+                  not the stylesheet: theme.css declares the two templates, the
+                  data says which project takes which cell in both of them. */}
+              {HERO_MOSAIC.map((tile, i) => (
+                <img
+                  key={tile.src}
+                  style={{ gridArea: tile.area, objectPosition: tile.pos }}
+                  src={tile.src}
+                  alt={tile.alt}
+                  width={tile.width}
+                  height={tile.height}
+                  loading="eager"
+                  fetchpriority={i === 0 ? "high" : undefined}
+                  decoding="async"
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -246,7 +279,7 @@ function Hero(){
       <div className="wrap">
         <div className="panel-overlap hero-panel" ref={panelRef}>
           <p className="hero-tag">
-            ai specialist at ignite. i build internal ai tools — knowledge retrieval, workflow automation, document and compliance support — and establish governance, evaluation, and adoption frameworks for design and architecture teams.
+            i build and maintain ignite's internal ai applications — generative ai, retrieval and rag, document intelligence, workflow automation, and ai-assisted design — plus the enterprise foundations beneath them: azure data architecture, permission-aware retrieval, evaluation, and monitoring. i set the governance and delivery standards that keep ai reliable, secure, and responsibly deployed.
           </p>
 
           <div className="hero-foot">

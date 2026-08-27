@@ -219,13 +219,37 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 .hero-beat2 .b2-line{margin:0;max-width:min(100%, 620px);font-family:var(--fs-sans);font-weight:200;line-height:1.04;letter-spacing:-0.03em}
 
 /* Full-bleed image band. A direct child of .hero (never inside .wrap) so it
-   spans the viewport, with a fixed band height that crops the source instead
-   of letting a tall render push the fold down. */
+   spans the viewport, with a fixed band height that crops the sources instead
+   of letting a tall render push the fold down. Its own paper is the mortar the
+   mosaic gaps show, and `overflow:hidden` is what clips the H3 scale — the grid
+   inside grows past the band edges on every side as the pin is consumed. */
 .hero-band{position:relative;width:100%;height:clamp(320px, 58vh, 680px);overflow:hidden;background:var(--paper-2)}
-.hero-band img{display:block;width:100%;height:100%;object-fit:cover;
-  /* The clubhouse/pool cluster sits above and right of the frame centre; a
-     wide crop keeps it in view only with the origin pushed there. */
-  object-position:58% 45%}
+/* Four flagship projects as one asymmetric plate: a tall lead tile beside two
+   small ones, over a wide tile that spans them both. Areas, not line numbers,
+   because the ≤899px fallback re-shapes the same four names (app.jsx pins each
+   project to its area) and a numeric placement would need resetting per tile.
+   minmax(0,…) floors every track: an <img>'s intrinsic width is its automatic
+   minimum, and 1088px of it would blow the column straight out of the band.
+   NOTHING here may author a `transform` — the H3 scrub reads the computed one
+   at registration and would switch to composing through --scrub-s, which no
+   rule below reads, silently dropping the scale. */
+.hero-mosaic{width:100%;height:100%;display:grid;gap:9px;
+  grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr);
+  grid-template-areas:"a b c"
+                      "a d d"}
+/* Explicit 100%/100% rather than relying on `stretch`: a replaced element with
+   an intrinsic aspect ratio declines that alignment and would sit at its own
+   size inside the cell. Per-tile object-position comes from the data. */
+.hero-mosaic img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;background:var(--paper-2)}
+
+/* Under 900px the 1.6fr lead column would leave the three small tiles too
+   narrow to read as anything, so the asymmetry collapses to an even 2x2. */
+@media (max-width: 899px){
+  .hero-mosaic{grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-areas:"a b"
+                        "c d"}
+}
 
 /* Solid-paper title card pulled up over the band (geometry from .panel-overlap). */
 .hero-panel{padding:clamp(28px, 4vw, 52px)}
