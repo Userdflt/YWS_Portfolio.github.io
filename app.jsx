@@ -161,9 +161,11 @@ const SHOWCASE_TEXT_OPTS = { mode: 'enter', endAt: 0.75 };
 // breakpoint in theme.css — a scrubbed numeral over a layout with no room for
 // its travel is exactly what the breakpoint exists to prevent.
 const SHOWCASE_NUM_OFF_QUERY = '(max-width: 899px)';
+// ±16px, not the old ±60: the numeral now lives IN FLOW above the title, so
+// its travel must stay inside the margin the layout reserves for it.
 const SHOWCASE_NUM_SCRUB = [
-  { at: 0, style: { translateY: 60 } },
-  { at: 1, style: { translateY: -60 } },
+  { at: 0, style: { translateY: 16 } },
+  { at: 1, style: { translateY: -16 } },
 ];
 const SHOWCASE_NUM_OPTS = { mode: 'cross', damping: SCRUB_DAMPING, offQuery: SHOWCASE_NUM_OFF_QUERY };
 
@@ -315,12 +317,6 @@ function ProjectShowcase({ project, index }){
       ref={articleRef}
       aria-labelledby={titleId}
     >
-      {/* Decoration, and FIRST in the article: both halves carry z-index 1, so
-          document order alone paints the content over the numeral. */}
-      <div className="showcase-num" ref={numRef} aria-hidden="true">
-        {String(index + 1).padStart(2, '0')}
-      </div>
-
       {/* The ARTICLE is the two-column grid, so the media is a HALF of the
           section rather than a box inside a content column: no `.wrap` around
           it, flush to the viewport edge, full article height. Only the copy
@@ -338,6 +334,12 @@ function ProjectShowcase({ project, index }){
       </a>
 
       <div className="showcase-copy">
+        {/* Decoration, IN FLOW above the text: sharing the copy column means
+            the layout reserves its space — the numeral can never overlap the
+            title at any viewport, which its old absolute anchoring did. */}
+        <div className="showcase-num" ref={numRef} aria-hidden="true">
+          {String(index + 1).padStart(2, '0')}
+        </div>
         <div className="showcase-text" ref={textRef}>
           <p className="eyebrow">{project.category} · {project.year}</p>
           <div className="mask-line">

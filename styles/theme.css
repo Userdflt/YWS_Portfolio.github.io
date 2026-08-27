@@ -274,16 +274,15 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
   overflow-x:clip}
 
 /* Index numeral. DECORATION ONLY — --ink-faint is below AA at every size, which
-   is why it is aria-hidden in the markup and never takes the pointer. It is
-   anchored to the COPY half's outer edge (the media-opposite side) rather than
-   to the article's, so it still stands behind the text on a viewport far wider
-   than the content column; the small negative offset lets the glyphs kiss and
-   bleed past that edge, and the article's `overflow-x:clip` absorbs the bleed. */
-.showcase-num{position:absolute;top:6%;left:calc(var(--showcase-gutter) - 0.08em);
-  font-family:var(--fs-sans);font-weight:200;font-size:clamp(120px, 24vw, 340px);
-  line-height:1;letter-spacing:-0.05em;color:var(--ink-faint);
+   is why it is aria-hidden in the markup and never takes the pointer. IN FLOW
+   as the copy column's first child: the layout reserves its box, so it can
+   never overlap the title at any viewport (its old absolute anchoring collided
+   with the vertically-centred text on wide/short screens). The margin-bottom
+   also absorbs the ±16px depth-scrub travel. */
+.showcase-num{font-family:var(--fs-sans);font-weight:200;
+  font-size:clamp(110px, 13vw, 240px);line-height:0.82;letter-spacing:-0.05em;
+  color:var(--ink-faint);margin:0 0 clamp(20px, 3vh, 40px) -0.05em;
   font-variant-numeric:tabular-nums;pointer-events:none;user-select:none;-webkit-user-select:none}
-.showcase--flip .showcase-num{left:auto;right:calc(var(--showcase-gutter) - 0.08em)}
 
 /* Media half. A one-cell grid, so the WIPE box fills it on both axes without a
    percentage height to resolve. The wipe box owns the overflow and is the node
@@ -361,7 +360,7 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
   .showcase-media{min-height:52vh;min-height:52svh}
   .showcase-copy{padding-left:var(--pad-x);padding-right:var(--pad-x);
     padding-block:clamp(28px, 6vw, 48px)}
-  .showcase-num{top:2%;font-size:clamp(88px, 26vw, 160px)}
+  .showcase-num{font-size:clamp(72px, 20vw, 120px);margin-bottom:16px}
   .showcase-dek{max-width:60ch}
 }
 
