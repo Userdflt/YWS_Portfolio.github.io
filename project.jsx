@@ -61,11 +61,29 @@ const galleryWipeOpts = (i) => ({
 // onto the top edge as it flattens. Same recipe as the index work/contact bands
 // (Design Spec table W1); the two page modules never co-load, so each states
 // its own copy rather than widening the engine's export surface.
-const BAND_CLIP_SCRUB = [
-  { at: 0, style: { clipPath: 'polygon(0% 34%, 50% 34%, 50% 17%, 100% 17%, 100% 100%, 0% 100%)' } },
-  { at: 1, style: { clipPath: 'polygon(0% 0%, 50% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
-];
-const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.35, releaseOnComplete: true };
+// Step depths are VIEWPORT fractions, not section fractions — on a tall
+// section a %-of-section step plays off-screen. Function keyframes resolve in
+// the engine's READ pass, so the offsetHeight read is batched. Kept in step
+// with app.jsx's bandClipScrub.
+const BAND_STEP_VH = 0.34;
+function bandClipScrub(sectionRef){
+  const stepped = (ctx) => {
+    const h = (sectionRef.current && sectionRef.current.offsetHeight) || ctx.vh;
+    const s1 = Math.min((BAND_STEP_VH * ctx.vh) / h, 1) * 100;
+    const s2 = s1 / 2;
+    return 'polygon(0% ' + s1 + '%, 50% ' + s1 + '%, 50% ' + s2 + '%, 100% ' + s2 + '%, 100% 100%, 0% 100%)';
+  };
+  return [
+    { at: 0, style: { clipPath: stepped } },
+    { at: 1, style: { clipPath: 'polygon(0% 0%, 50% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
+  ];
+}
+// `enter` span = vh × (1 − endAt), so a LOWER endAt is a LONGER, slower step-in
+// and endAt 0 is the mode's ceiling of one whole viewport: 0.06 spends ~94% of a
+// viewport on the staircase, against the previous 0.35 (~65%), which flattened
+// before the steps had been read as steps. Released at 1 — a finished band must
+// not carry a clip into every later paint. Kept in step with app.jsx's copy.
+const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.06, releaseOnComplete: true };
 
 // P5 — the full-bleed band under the project title pushes in slowly across its
 // own crossing. `cross` (not `enter`): the band sits at or above the fold on
@@ -692,7 +710,7 @@ function ProjectPage({ project }){
   const outcomesListRef = useRef(null);
   const pnavRef = useRef(null);
   useScrub(panelRef, RISE_SCRUB, { ...PANEL_RISE_OPTS, triggerRef: overviewRef });
-  useScrub(outcomesRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
+  useScrub(outcomesRef, bandClipScrub(outcomesRef), BAND_CLIP_OPTS);
 
   // The band renders only when the project HAS imagery; without it the header
   // keeps its own compensation padding, because there is nothing to overlap.

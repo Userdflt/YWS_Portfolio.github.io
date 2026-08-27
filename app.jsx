@@ -96,14 +96,32 @@ const HERO_PANEL_OPTS = { mode: 'enter', endAt: 0.65 };
 // W1 / X2 — stepped clip entry for the dark bands: paper shows through the
 // staircase until it flattens. Six vertices on both sides (the interpolator
 // pairs them by index); the middle pair collapses onto the top edge.
-const BAND_CLIP_SCRUB = [
-  { at: 0, style: { clipPath: 'polygon(0% 34%, 50% 34%, 50% 17%, 100% 17%, 100% 100%, 0% 100%)' } },
-  { at: 1, style: { clipPath: 'polygon(0% 0%, 50% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
-];
+//
+// The step depths are VIEWPORT fractions, not section fractions: on a very
+// tall section (13 showcases ≈ 10k px) a %-of-section step sits thousands of
+// px below the top edge and the whole staircase plays off-screen. Function
+// keyframes resolve in the engine's READ pass, so reading offsetHeight here
+// is batched with the frame's other layout reads.
+const BAND_STEP_VH = 0.34; // deepest step, as a fraction of the viewport
+function bandClipScrub(sectionRef){
+  const stepped = (ctx) => {
+    const h = (sectionRef.current && sectionRef.current.offsetHeight) || ctx.vh;
+    const s1 = Math.min((BAND_STEP_VH * ctx.vh) / h, 1) * 100;
+    const s2 = s1 / 2;
+    return 'polygon(0% ' + s1 + '%, 50% ' + s1 + '%, 50% ' + s2 + '%, 100% ' + s2 + '%, 100% 100%, 0% 100%)';
+  };
+  return [
+    { at: 0, style: { clipPath: stepped } },
+    { at: 1, style: { clipPath: 'polygon(0% 0%, 50% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
+  ];
+}
 // Released at 1: a finished band must not carry a clip into every later paint.
-// `enter` span = vh × (1 − endAt), so a LOWER endAt is a LONGER, slower step-in:
-// 0.35 spends ~65% of a viewport on the staircase (Design Spec table W′).
-const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.35, releaseOnComplete: true };
+// `enter` span = vh × (1 − endAt), so a LOWER endAt is a LONGER, slower step-in
+// and endAt 0 is the mode's ceiling of one whole viewport: 0.06 spends ~94% of a
+// viewport on the staircase. The band is the section's own entrance, so it has a
+// full crossing to spend — at the previous 0.35 (~65% of a viewport) the steps
+// flattened before they had been read as steps.
+const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.06, releaseOnComplete: true };
 
 // ─────────────── Tables SC1–SC3 — the project showcase articles ───────────────
 // One article per project, three entries each. Every table is progress through
@@ -297,25 +315,29 @@ function ProjectShowcase({ project, index }){
       ref={articleRef}
       aria-labelledby={titleId}
     >
-      {/* Decoration, and BEFORE .wrap: the wrap carries z-index 1, so document
-          order alone paints the content over the numeral. */}
+      {/* Decoration, and FIRST in the article: both halves carry z-index 1, so
+          document order alone paints the content over the numeral. */}
       <div className="showcase-num" ref={numRef} aria-hidden="true">
         {String(index + 1).padStart(2, '0')}
       </div>
 
-      <div className="wrap">
-        <a className="showcase-media" href={href} aria-label={mediaLabel}>
-          {/* Wipe target and parallax target are SEPARATE elements: the mask has
-              to stand still while the picture drifts through it. */}
-          <div className="showcase-frame" ref={wipeRef}>
-            <figure ref={figureRef}>
-              {thumb
-                ? <img src={thumb} alt="" loading="lazy" decoding="async" />
-                : <span className="mark">{project.mark || '⟁'}</span>}
-            </figure>
-          </div>
-        </a>
+      {/* The ARTICLE is the two-column grid, so the media is a HALF of the
+          section rather than a box inside a content column: no `.wrap` around
+          it, flush to the viewport edge, full article height. Only the copy
+          half carries the content padding. */}
+      <a className="showcase-media" href={href} aria-label={mediaLabel}>
+        {/* Wipe target and parallax target are SEPARATE elements: the mask has
+            to stand still while the picture drifts through it. */}
+        <div className="showcase-frame" ref={wipeRef}>
+          <figure ref={figureRef}>
+            {thumb
+              ? <img src={thumb} alt="" loading="lazy" decoding="async" />
+              : <span className="mark">{project.mark || '⟁'}</span>}
+          </figure>
+        </div>
+      </a>
 
+      <div className="showcase-copy">
         <div className="showcase-text" ref={textRef}>
           <p className="eyebrow">{project.category} · {project.year}</p>
           <div className="mask-line">
@@ -346,7 +368,7 @@ function ProjectShowcase({ project, index }){
 // article's own edges and bleed past them.
 function Work(){
   const sectionRef = useRef(null);
-  useScrub(sectionRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
+  useScrub(sectionRef, bandClipScrub(sectionRef), BAND_CLIP_OPTS);
   return (
     <section id="work" className="sec-dark" data-tone="dark" ref={sectionRef}>
       <div className="wrap">
@@ -429,7 +451,7 @@ function Stack(){
 // ───────────────────────── Contact ─────────────────────────
 function Contact(){
   const sectionRef = useRef(null);
-  useScrub(sectionRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
+  useScrub(sectionRef, bandClipScrub(sectionRef), BAND_CLIP_OPTS);
   return (
     <section id="contact" className="contact sec-dark" data-tone="dark" ref={sectionRef}>
       <div className="wrap">

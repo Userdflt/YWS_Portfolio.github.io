@@ -246,12 +246,25 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 
 /* ─────────────── WORK — project showcases ───────────────
    One article per project, ~90svh each. Three layers, painted back to front:
-   the index numeral (absolute, aria-hidden decoration), the media figure, and
-   the text block. The ARTICLE — not the section — is the numeral's containing
+   the index numeral (absolute, aria-hidden decoration), the media half, and the
+   copy half. The ARTICLE — not the section — is the numeral's containing
    block, and `isolation:isolate` keeps each article's stack its own, so a
-   numeral can never rise over a neighbour's content. */
-.showcase{position:relative;display:flex;align-items:center;isolation:isolate;
+   numeral can never rise over a neighbour's content.
+
+   The ARTICLE ITSELF is the two-column grid, and there is no `.wrap` inside it:
+   a wrap would cap the media at the content width and leave the picture a small
+   box in a full-width band. Instead the media takes a true HALF of the article
+   — flush to the viewport edge, full row height — and only the copy half
+   carries the content padding. */
+.showcase{position:relative;display:grid;grid-template-columns:1fr 1fr;
+  align-items:stretch;isolation:isolate;
   min-height:90vh;min-height:90svh;border-top:1px solid var(--line);
+  /* The copy half's OUTER padding, so the text keeps the site's content rhythm
+     (`--content-max` centred, never tighter than `--pad-x`) while the media
+     half stays flush to the viewport edge. `--showcase-inner` is the old
+     column gap, now the copy half's padding on the media side. */
+  --showcase-gutter:max(var(--pad-x), (100vw - var(--content-max)) / 2);
+  --showcase-inner:clamp(28px, 4vw, 64px);
   /* The numeral is allowed to bleed past the inline edge, and the ARTICLE is
      what cuts it there. Body's `overflow-x:clip` cannot: body propagates its
      overflow to the viewport, so the bleed becomes 29px of real horizontal
@@ -259,28 +272,29 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
      only: `overflow-x:hidden` would coerce overflow-y to `auto` and turn every
      article into a scroll container. */
   overflow-x:clip}
-/* The flex centring above is what holds a short pair of columns in the middle
-   of that box; the wrap has to take the full width for it to work on. */
-.showcase > .wrap{width:100%;display:grid;grid-template-columns:7fr 5fr;
-  gap:clamp(28px, 4vw, 64px);align-items:center}
 
 /* Index numeral. DECORATION ONLY — --ink-faint is below AA at every size, which
-   is why it is aria-hidden in the markup and never takes the pointer. It sits at
-   the media-OPPOSITE edge and is allowed to bleed past it: body's
-   `overflow-x:clip` absorbs the bleed without making the page scroll sideways. */
-.showcase-num{position:absolute;top:6%;right:-2%;
+   is why it is aria-hidden in the markup and never takes the pointer. It is
+   anchored to the COPY half's outer edge (the media-opposite side) rather than
+   to the article's, so it still stands behind the text on a viewport far wider
+   than the content column; the small negative offset lets the glyphs kiss and
+   bleed past that edge, and the article's `overflow-x:clip` absorbs the bleed. */
+.showcase-num{position:absolute;top:6%;left:calc(var(--showcase-gutter) - 0.08em);
   font-family:var(--fs-sans);font-weight:200;font-size:clamp(120px, 24vw, 340px);
   line-height:1;letter-spacing:-0.05em;color:var(--ink-faint);
   font-variant-numeric:tabular-nums;pointer-events:none;user-select:none;-webkit-user-select:none}
-.showcase--flip .showcase-num{right:auto;left:-2%}
+.showcase--flip .showcase-num{left:auto;right:calc(var(--showcase-gutter) - 0.08em)}
 
-/* Media. The WIPE box owns the aspect ratio and the overflow, and is the node
+/* Media half. A one-cell grid, so the WIPE box fills it on both axes without a
+   percentage height to resolve. The wipe box owns the overflow and is the node
    the wipe measures — a clip-path never moves the rect it is read from. The
    inner figure is the parallax target, overscanned by 2 × PARALLAX_MAX_PX
-   (scroll.jsx) so ±24px of drift can never expose a strip of empty box. */
-.showcase-media{display:block;position:relative}
-.showcase-frame{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--panel)}
-.showcase-frame figure{margin:0;height:calc(100% + 48px);margin-top:-24px;
+   (scroll.jsx) via its own insets, so ±24px of drift can never expose a strip
+   of empty box however tall the half grows. */
+.showcase-media{position:relative;z-index:1;display:grid;
+  min-height:72vh;min-height:72svh}
+.showcase-frame{position:relative;overflow:hidden;background:var(--panel)}
+.showcase-frame figure{position:absolute;inset:-24px 0;margin:0;
   display:flex;align-items:center;justify-content:center}
 .showcase-frame img{display:block;width:100%;height:100%;object-fit:cover;
   transition:transform .6s var(--ease-out-soft)}
@@ -288,6 +302,12 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 /* Letter mark — the fallback for a project with no usable image. */
 .showcase-frame .mark{font-family:var(--fs-sans);font-weight:200;
   font-size:clamp(64px, 8vw, 120px);line-height:1;color:var(--accent)}
+
+/* Copy half. Holds the text block at the vertical middle of the article while
+   the media half beside it is stretched to the full row height. */
+.showcase-copy{position:relative;z-index:1;display:grid;align-content:center;
+  padding-left:var(--showcase-gutter);padding-right:var(--showcase-inner);
+  padding-block:clamp(40px, 6vw, 72px)}
 
 /* Text column — ONE rise unit (SC2), so it needs no per-child spacing rhythm
    beyond the gap. */
@@ -309,20 +329,38 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
   transition:gap .25s var(--ease-out-soft)}
 .showcase-cta:hover{gap:14px}
 
-/* The flip is a TWO-COLUMN device: it swaps the order of the grid's children,
-   which only exists above the breakpoint. Below it the column is media-then-text
-   for flipped and unflipped articles alike, so reading order never depends on an
-   article's parity. */
+/* The flip is a TWO-COLUMN device: it assigns the halves to columns, which only
+   exist above the breakpoint. Media takes the right half by default and the
+   left half when flipped; the numeral tracks the copy half on the other side.
+   Below the breakpoint the column is media-then-text for flipped and unflipped
+   articles alike, so reading order never depends on an article's parity — which
+   is also why the assignment lives here and not in the base rule: DOM order
+   alone is the mobile layout.
+
+   Both halves are pinned to row 1 EXPLICITLY. Without it the unflipped article
+   — media in column 2, and first in the DOM — sends sparse auto-placement's
+   cursor past column 1, which it never walks back: the copy landed in a second
+   row and the media stretched to nothing but its own 72svh floor (measured
+   1048px article against a 648px picture). */
 @media (min-width: 900px){
-  .showcase--flip > .wrap > .showcase-media{order:2}
-  .showcase--flip > .wrap > .showcase-text{order:1}
+  .showcase-media{grid-row:1;grid-column:2}
+  .showcase-copy{grid-row:1;grid-column:1}
+  .showcase--flip .showcase-media{grid-column:1}
+  .showcase--flip .showcase-copy{grid-column:2}
 }
 
-/* One column, media above text. The numeral's scrub is retired at exactly this
-   width by SHOWCASE_NUM_OFF_QUERY (app.jsx) — the two must name the same
-   viewport, or the numeral would travel over a layout with no room for it. */
+/* One column, media above text — full-bleed media, padded copy. The rows are
+   centred as a group (`align-content`) instead of stretched, so the media keeps
+   its own height inside the article's 90svh floor. The numeral's scrub is
+   retired at exactly this width by SHOWCASE_NUM_OFF_QUERY (app.jsx) — the two
+   must name the same viewport, or the numeral would travel over a layout with
+   no room for it. */
 @media (max-width: 899px){
-  .showcase > .wrap{grid-template-columns:1fr;gap:clamp(20px, 4vw, 32px)}
+  .showcase{grid-template-columns:1fr;align-content:center;
+    row-gap:clamp(20px, 4vw, 32px)}
+  .showcase-media{min-height:52vh;min-height:52svh}
+  .showcase-copy{padding-left:var(--pad-x);padding-right:var(--pad-x);
+    padding-block:clamp(28px, 6vw, 48px)}
   .showcase-num{top:2%;font-size:clamp(88px, 26vw, 160px)}
   .showcase-dek{max-width:60ch}
 }
