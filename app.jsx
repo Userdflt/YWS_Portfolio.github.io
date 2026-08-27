@@ -244,7 +244,7 @@ function Hero(){
                 opacity 0 by theme.css, never by the engine's first write. */}
             <div className="hero-beat2" ref={beat2Ref}>
               <p className="eyebrow b2-eyebrow">systems · tools · governance</p>
-              <p className="display-2 text-ink b2-line">i make ai work for architecture teams.</p>
+              <p className="display-2 text-ink b2-line">AI and machine learning to real-world architecture and design workflows.</p>
             </div>
 
             <div className="scroll-cue" ref={cueRef} aria-hidden="true">
@@ -437,8 +437,7 @@ function Approach(){
             <div className="mask-line">
               <h2 className="mask-reveal text-ink">from architecture to <span className="acc">applied ai</span>.</h2>
             </div>
-            <p className="reveal reveal-1">seven years across new zealand architecture practices — ignite, woods bagot, rcg — taught me to work with constraints and ship under pressure. now back at ignite as ai specialist, applying generative ai and machine learning to real architecture and design workflows.</p>
-            <p className="reveal reveal-2">i build internal tools — rag, workflow automation, document and compliance support — and stand up the governance, evals, and adoption frameworks that make them safe to scale. aut-accredited in data science &amp; ai (institute of data) and ibm-certified across ai engineering and ai development.</p>
+            <p className="reveal reveal-1">AI Specialist focused on applying generative AI and machine learning to real-world architecture and design workflows. I build practical internal tools, establish safe governance and data practices, and help teams adopt AI with clear standards, improving speed, quality, and consistency across design, documentation, and knowledge retrieval.</p>
           </div>
           <div className="principles">
             {PRINCIPLES.map((p) => (
