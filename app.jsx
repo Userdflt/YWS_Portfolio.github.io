@@ -147,10 +147,13 @@ function statsFadeScrub(fade){
 // `fade` = [in-start, in-end, out-start, out-end]; `count` = the [a, b] slice
 // of the pin the numeral counts across.
 const STATS_SCENES = [
-  { end: PROJECTS.length, label: 'shipped projects',           fade: [0.02, 0.08, 0.26, 0.30], count: [0.06, 0.24] },
-  { end: 7,               label: 'yrs in architecture',        fade: [0.26, 0.32, 0.50, 0.54], count: [0.30, 0.48] },
-  { end: 4,               label: 'multi-agent systems',        fade: [0.50, 0.56, 0.74, 0.78], count: [0.54, 0.72] },
-  { end: 2,               label: 'ibm specializations · 2025', fade: [0.74, 0.80],             count: [0.78, 0.94] },
+  // Readability contract: a scene fades in FULLY before its count starts, and
+  // consecutive scenes never overlap mid-fade — no half-transparent numerals
+  // while a value is changing.
+  { end: PROJECTS.length, label: 'shipped projects',           fade: [0.02, 0.06, 0.27, 0.30], count: [0.06, 0.25] },
+  { end: 7,               label: 'yrs in architecture',        fade: [0.30, 0.34, 0.51, 0.54], count: [0.34, 0.49] },
+  { end: 4,               label: 'multi-agent systems',        fade: [0.54, 0.58, 0.75, 0.78], count: [0.58, 0.73] },
+  { end: 2,               label: 'ibm specializations · 2025', fade: [0.78, 0.82],             count: [0.82, 0.95] },
 ].map(scene => ({ ...scene, scrub: statsFadeScrub(scene.fade) }));
 
 const STATS_SCENE_OPTS = { mode: 'pin', offQuery: STATS_PIN_OFF_QUERY };

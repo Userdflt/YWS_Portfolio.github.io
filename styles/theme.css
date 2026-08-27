@@ -349,8 +349,11 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
    of four numerals must be invisible from the very first paint. */
 .stat-scene{position:absolute;inset:0;display:grid;place-content:center;
   gap:clamp(12px, 1.6vw, 22px);text-align:center;opacity:0;pointer-events:none}
-.stat-scene .ss-num{font-family:var(--fs-sans);font-weight:200;font-size:clamp(96px, 18vw, 280px);
+/* Weight 300 (not the display 200): at 280px on the dark band, 200's strokes
+   thin out below comfortable contrast; 300 keeps the likova lightness legible. */
+.stat-scene .ss-num{font-family:var(--fs-sans);font-weight:300;font-size:clamp(96px, 18vw, 280px);
   line-height:0.86;letter-spacing:-0.05em;color:var(--ink)}
+.stat-scene .eyebrow{font-size:13px;color:var(--ink);opacity:.85}
 
 /* The stable semantic list — the only stats content in the a11y tree, and the
    markup every flattened path shows. Visually hidden rather than display:none
