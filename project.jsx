@@ -139,21 +139,41 @@ const FEATURE_STAGGER_STEP = 0.12;
 const METRIC_STAGGER_STEP = 0.10;
 const OUTCOME_STAGGER_STEP = 0.08;
 
+// F1 / R1 — the facts grid and the comparison rows take the engine's default
+// enter span. Both are dense blocks of short rows read as ONE unit, so a longer
+// entry would leave the last row still rising after the block has been read.
+// Their steps are half the feature grid's: a row is a line, not a card, and the
+// run has up to eight of them.
+const GRID_RISE_OPTS = { mode: 'enter' };
+const COMPARE_STAGGER_STEP = 0.06;
+const FACT_STAGGER_STEP = 0.06;
+
 // ───────── Section numbering ─────────
 // Sections are OPTIONAL, so their numbers cannot be literals: a project with no
 // problem statement and no architecture list must still read 01, 02, 03 with no
 // gaps. The order below is document order; only the keys actually rendered take
 // a number.
-const SECTION_ORDER = ['overview', 'problem', 'approach', 'capabilities', 'architecture', 'media', 'outcomes', 'related'];
+const SECTION_ORDER = ['overview', 'problem', 'approach', 'pipeline', 'capabilities', 'architecture', 'media', 'comparison', 'outcomes', 'related'];
+
+// The optional data-driven sections are presence-tested in exactly ONE place.
+// `sectionNumbers` assigns a number from these predicates and the JSX guards
+// render from the same ones, so a section can never take a number it does not
+// draw — the failure mode a second, hand-written `d.pipeline && …` test invites.
+const isNonEmptyArray = (v) => Array.isArray(v) && v.length > 0;
+const hasPipeline = (d) => isNonEmptyArray(d.pipeline);
+const hasComparison = (d) => !!d.comparison && isNonEmptyArray(d.comparison.rows);
+const hasFacts = (d) => isNonEmptyArray(d.facts);
 
 function sectionNumbers(d, hasPeers){
   const present = {
     overview: true,
     problem: !!d.problem,
     approach: !!(d.approach && d.approach.length),
+    pipeline: hasPipeline(d),
     capabilities: !!(d.features && d.features.length),
     architecture: !!(d.architecture && d.architecture.length),
     media: true,
+    comparison: hasComparison(d),
     outcomes: true,
     related: !!hasPeers,
   };
@@ -455,6 +475,182 @@ function MediaSection({ media, number }){
             return null;
           })}
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ───────── Facts grid (details.facts) ─────────
+
+// One fact = one component, because it owns a ref and a scrub and hooks cannot
+// live inside a `.map()` (GalleryItem precedent). The GRID is the shared
+// trigger: a card is translated by its own entry, so its own rect would feed
+// the scrub's output back into its input, and one trigger keeps the cards on a
+// single staggered run instead of each restarting at its own crossing.
+function FactCard({ fact, index, triggerRef }){
+  const cardRef = useRef(null);
+  useScrub(cardRef, RISE_SCRUB, { ...GRID_RISE_OPTS, triggerRef, delay: index * FACT_STAGGER_STEP });
+  return (
+    <div className="fact" ref={cardRef}>
+      <div className="fk eyebrow">{fact.k}</div>
+      <div className="fv">{fact.v}</div>
+    </div>
+  );
+}
+
+// Rides INSIDE the overview panel, directly under the overview paragraph, and
+// takes no section number of its own: only the ten repo-matched projects carry
+// the field, and a section that exists for ten projects in thirteen would make
+// the numbering read as arbitrary (MetricsBand precedent).
+//
+// Composed motion is accepted here: the grid ref is translated by the PANEL's
+// entry, never by a card's, so there is no self-feedback — and the panel
+// (endAt 0.65) has typically settled before the cards enter.
+function FactsGrid({ facts }){
+  const gridRef = useRef(null);
+  if(!isNonEmptyArray(facts)) return null;
+  return (
+    <div className="facts-grid" ref={gridRef}>
+      {facts.map((f, i) => <FactCard key={f.k} fact={f} index={i} triggerRef={gridRef} />)}
+    </div>
+  );
+}
+
+// ───────── Pipeline (details.pipeline) ─────────
+
+// Badges are CONTENT, not decoration: they state the branch or loop the source
+// README documents, so they inherit the row's slide and register no hook of
+// their own. Only the GLYPH is hidden from assistive tech — "↩" announces as
+// punctuation, while the label beside it already says what the badge means.
+const BADGE_GLYPH = { loop: '↩', branch: '→' };
+
+// One step = one component, on the ApproachRow contract: the WRAPPER is the
+// trigger, because the row itself is translated by this entry.
+function PipeStep({ step, index }){
+  const triggerRef = useRef(null);
+  const rowRef = useRef(null);
+  useScrub(rowRef, (index % 2 === 0) ? SLIDE_LEFT_SCRUB : SLIDE_RIGHT_SCRUB, { ...SLIDE_OPTS, triggerRef });
+  const badges = isNonEmptyArray(step.badges) ? step.badges : [];
+  return (
+    <div className="pipe-trigger" ref={triggerRef}>
+      <div className="pipe-row" ref={rowRef}>
+        <div className="pp-n">{String(index + 1).padStart(2,'0')} /</div>
+        <div>
+          <div className="pp-t">{step.t}</div>
+          {badges.length > 0 && (
+            <div className="pipe-badges">
+              {badges.map((b, i) => (
+                <span className={`pipe-badge pipe-badge--${b.kind}`} key={i}>
+                  <span className="pb-g" aria-hidden="true">{BADGE_GLYPH[b.kind] || BADGE_GLYPH.branch}</span>
+                  <span className="pb-l">{b.label}</span>
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="pp-d">{step.d}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// The hooks run before the empty-field bail-out, never inside it
+// (ArchitectureSection precedent): hook order has to be identical on every
+// render, and a null `lineRef.current` is already the engine's own no-op path.
+//
+// The connector REUSES the architecture tables as-is — same drawn line, same
+// short range, so the new section speaks the page's existing motion grammar. It
+// is decoration (it repeats the sequence the numbered steps already state), so
+// it is hidden from assistive tech rather than described.
+function PipelineSection({ pipeline, number }){
+  const listRef = useRef(null);
+  const lineRef = useRef(null);
+  useScrub(lineRef, ARCH_LINE_SCRUB, { ...ARCH_LINE_OPTS, triggerRef: listRef });
+  if(!isNonEmptyArray(pipeline)) return null;
+  return (
+    <section data-tone="light">
+      <div className="wrap">
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">{sectionMarker(number)}</span><span className="eyebrow">how it works</span><span className="rule"></span>
+          <span>{String(pipeline.length).padStart(2,'0')} steps</span>
+        </div>
+        <div className="pipe-list" ref={listRef}>
+          {pipeline.map((s, i) => <PipeStep key={i} step={s} index={i} />)}
+          <span className="pipe-line" ref={lineRef} aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ───────── Comparison (details.comparison) ─────────
+
+// An ARIA grid-table, NOT a native <table>: per-row transforms on a `<tr>` are
+// engine-inconsistent, while a grid row is a clean transform target. The column
+// template is declared ONCE on the table as `--compare-cols` and inherited by
+// every row, so the header and the body can never disagree about widths.
+const COMPARE_NOTE_ID = 'compare-note';
+const COMPARE_FIRST_COL = 'minmax(160px, 1.6fr)';
+const COMPARE_REST_COL = 'minmax(90px, 1fr)';
+const compareCols = (count) => `${COMPARE_FIRST_COL} repeat(${Math.max(count - 1, 1)}, ${COMPARE_REST_COL})`;
+
+// The first cell is the row's HEADER — it names what the values beside it
+// describe. The winner row states its status in text as well as in colour: an
+// accent border and a tinted fill are not available to a screen reader.
+function CompareRow({ row, index, isWin, triggerRef }){
+  const rowRef = useRef(null);
+  useScrub(rowRef, RISE_SCRUB, { ...GRID_RISE_OPTS, triggerRef, delay: index * COMPARE_STAGGER_STEP });
+  return (
+    <div className={isWin ? 'compare-row compare-row--win' : 'compare-row'} role="row" ref={rowRef}>
+      <span className="compare-cell compare-cell--head" role="rowheader">
+        {row[0]}{isWin && <span className="compare-win-flag">Winner</span>}
+      </span>
+      {row.slice(1).map((cell, i) => (
+        <span className="compare-cell" role="cell" key={i}>{cell}</span>
+      ))}
+    </div>
+  );
+}
+
+// `highlightRow` is data, not a name match: the row is highlighted only where
+// the source names a winner, so a roster table (no winner stated) can never
+// false-positive on one of its own rows.
+function ComparisonSection({ comparison, number }){
+  const tableRef = useRef(null);
+  const rows = (comparison && comparison.rows) || [];
+  if(!isNonEmptyArray(rows)) return null;
+  const columns = comparison.columns || [];
+  const hasNote = !!comparison.note;
+  return (
+    <section data-tone="light">
+      <div className="wrap">
+        <div className="section-tag section-head reveal">
+          <span className="marker section-num">{sectionMarker(number)}</span><span className="eyebrow">results</span><span className="rule"></span>
+          <span>{comparison.title}</span>
+        </div>
+        {/* The scroll box is a FOCUSABLE region: on a narrow viewport it is the
+            only way to reach the right-hand columns, and a scroll container
+            that cannot take focus cannot be scrolled from the keyboard. */}
+        <div className="compare-scroll" role="region" tabIndex={0} aria-label={comparison.title}>
+          <div
+            className="compare-table"
+            role="table"
+            aria-label={comparison.title}
+            aria-describedby={hasNote ? COMPARE_NOTE_ID : undefined}
+            ref={tableRef}
+            style={{ '--compare-cols': compareCols(columns.length) }}
+          >
+            <div className="compare-row compare-row--head reveal" role="row">
+              {columns.map((c, i) => (
+                <span className="compare-cell compare-cell--col eyebrow" role="columnheader" key={i}>{c}</span>
+              ))}
+            </div>
+            {rows.map((r, i) => (
+              <CompareRow key={i} row={r} index={i} isWin={i === comparison.highlightRow} triggerRef={tableRef} />
+            ))}
+          </div>
+        </div>
+        {hasNote && <p className="compare-note" id={COMPARE_NOTE_ID}>{comparison.note}</p>}
       </div>
     </section>
   );
@@ -780,6 +976,9 @@ function ProjectPage({ project }){
             <span className="marker section-num">{sectionMarker(nums.overview)}</span><span className="eyebrow">overview</span><span className="rule"></span>
           </div>
           {d.overview && <p className="reveal">{d.overview}</p>}
+          {/* The verified facts sit with the overview they summarise — inside
+              the panel, under its paragraph, ahead of the problem statement. */}
+          {hasFacts(d) && <FactsGrid facts={d.facts} />}
           {d.problem && (
             <>
               <div className="section-tag section-head reveal" style={{marginTop:'calc(var(--u)*5)'}}>
@@ -807,6 +1006,10 @@ function ProjectPage({ project }){
         </section>
       )}
 
+      {/* How it works — the step-by-step path the README documents, after the
+          approach (why) and before the capabilities (what). */}
+      {hasPipeline(d) && <PipelineSection pipeline={d.pipeline} number={nums.pipeline} />}
+
       {/* Capabilities + architecture — both absent unless the project data
           carries a verified list for them. */}
       <CapabilitiesSection features={d.features} number={nums.capabilities} />
@@ -829,6 +1032,10 @@ function ProjectPage({ project }){
           </div>
         </section>
       )}
+
+      {/* Results — the measured evidence, on paper and before the dark band, so
+          the outcomes stay the page's single dark beat (evidence → conclusion). */}
+      {hasComparison(d) && <ComparisonSection comparison={d.comparison} number={nums.comparison} />}
 
       {/* Outcomes + Stack — the page's one dark band */}
       <section className="sec-dark" data-tone="dark" ref={outcomesRef}>

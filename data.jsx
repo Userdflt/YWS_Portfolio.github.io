@@ -67,11 +67,31 @@ const PROJECTS = [
     tech: ["n8n", "OpenAI GPT-4.1", "Mistral OCR", "Supabase", "Vector search"],
     details: {
       overview: "A multi-agent Retrieval-Augmented Generation system for the New Zealand Building Code, built entirely in n8n. Specialized agents handle specific code sections (B through H) with dedicated Supabase vector stores, while a GPT-4.1 orchestration layer analyzes queries and routes them to the appropriate specialist. Document ingestion is automated: Google Drive triggers detect new PDFs, Mistral OCR extracts text and annotates images, and OpenAI embeddings land in section-specific vector tables.",
+      facts: [
+        { k: "specialist agents", v: "7 (Code B–H)" },
+        { k: "orchestrator", v: "GPT-4.1, temperature 0.4" },
+        { k: "embeddings", v: "text-embedding-3-large, 1536 dims" },
+        { k: "OCR engine", v: "Mistral-OCR-Latest" },
+        { k: "vector stores", v: "7 section-specific Supabase pgvector tables" },
+        { k: "memory", v: "PostgreSQL table orch_agent_history" },
+        { k: "chunking", v: "LangChain RecursiveCharacterTextSplitter" },
+        { k: "formats", v: "PDF, Images" },
+      ],
       problem: "Standard RAG over a long, structured code-document tends to hallucinate cross-references and miss section context. A single retriever can't tell fire from structure.",
       approach: [
         { t: "OCR → chunks → vectors", d: "Mistral OCR + heading-aware chunking → Supabase pgvector." },
         { t: "Router → specialist", d: "A lightweight router classifies the question, then a specialist agent answers with its scoped index." },
         { t: "Visual orchestration", d: "All wiring lives in n8n — easy to audit, fork, and extend with new specialists." },
+      ],
+      pipeline: [
+        { t: "Chat trigger", d: "Webhook endpoint receives the user message." },
+        { t: "Orchestration agent", d: "GPT-4.1 (temp 0.4) analyzes query intent and routes; PostgreSQL memory (orch_agent_history) preserves conversation context.", badges: [
+          { kind: "branch", label: "routes to one of 7 Code-section tools (B–H)" },
+          { kind: "branch", label: "multiple specialists in parallel on cross-sectional regulatory questions" },
+        ] },
+        { t: "Route to specialist", d: "One of 7 Code-section tools (B–H) selected — e.g. Code-C Protection from Fire, Code-H Energy Efficiency." },
+        { t: "Specialist agent retrieval", d: "Code-X agent (GPT-4.1, specialized prompts) runs semantic search in its dedicated Supabase vector store." },
+        { t: "Response generation", d: "Retrieved context synthesized into a Building-Code-compliant answer." },
       ],
       features: [
         { t: "Multi-agent architecture", d: "Seven specialist agents (Code B–H), each with a dedicated knowledge base and prompt-engineered expertise." },
@@ -109,11 +129,31 @@ const PROJECTS = [
     tech: ["FastMCP", "Notion API", "LangChain", "LangGraph", "TTS"],
     details: {
       overview: "Notion MCP Agent turns a Notion workspace into a live, AI-driven knowledge hub with one-click text-to-speech. A FastMCP server exposes a toolbox for manipulating Notion pages; a LangChain agent with GPT-4o orchestrates conversations to read, write, summarise, build tables, manage metadata, and generate MP3s of notes in real time. It runs over SSE transport with a Tkinter desktop GUI, and can run local-first with Ollama LLMs and Coqui TTS at zero cloud cost.",
+      facts: [
+        { k: "MCP tools", v: "13 registered tools across 6 categories" },
+        { k: "tool categories", v: "Content / Read / Properties / Pages / Users / Search / Media" },
+        { k: "LLM", v: "gpt-4o via ChatOpenAI (swappable for any Ollama/OpenAI-compatible model)" },
+        { k: "prompt endpoints", v: "2 — default_prompt + structured_notes_prompt (10-section study guides)" },
+        { k: "transport", v: "SSE (/sse endpoint)" },
+        { k: "TTS", v: "Coqui TTS → downloadable MP3" },
+        { k: "code files", v: "3 — notion_mcp_server.py, notion_agent.py, tts_service.py" },
+      ],
       problem: "Notion is the centre of gravity for personal and team knowledge — but interacting with it through chat usually means dumb question-answering. The agent should be able to *do* things, not just describe them.",
       approach: [
         { t: "FastMCP as the tool layer", d: "Every Notion verb (create, append, query, schema) is a typed MCP tool." },
         { t: "LangChain + LangGraph orchestration", d: "GPT-4o reasons over the workspace and chains tool calls." },
         { t: "TTS output", d: "Spoken summaries of meeting notes, journals, and PRs as MP3." },
+      ],
+      pipeline: [
+        { t: "User types", d: "Question or command entered in the Tkinter GUI." },
+        { t: "Agent plans", d: "LangChain agent decides which MCP tools to invoke (chain-of-thought shown in dev mode).", badges: [
+          { kind: "branch", label: "decides which of 13 registered MCP tools to invoke" },
+        ] },
+        { t: "FastMCP executes", d: "Server hits the Notion API and/or Coqui TTS over SSE.", badges: [
+          { kind: "branch", label: "Notion API or Coqui TTS" },
+        ] },
+        { t: "Agent streams", d: "Answer streamed back, plus an MP3 link when TTS is used." },
+        { t: "Result lands", d: "Change appears instantly in the Notion workspace and desktop chat window." },
       ],
       features: [
         { t: "End-to-end workspace control from chat", d: "Append blocks, build tables, rename pages, manage users, search." },
@@ -151,11 +191,30 @@ const PROJECTS = [
     tech: ["Diffusers", "SDXL", "ControlNet", "PyTorch", "Tkinter"],
     details: {
       overview: "A personal project that transforms rough sketches into photorealistic outputs and supports inpainting edits, built on open-source Stable Diffusion XL pipelines with ControlNet for sketch-based guidance and a Tkinter interface. The sketch — converted to inverted grayscale — conditions generation via StableDiffusionXLControlNetPipeline; an inpainting mode lets you paint a red mask on the result to refine specific regions. Everything can be run locally.",
+      facts: [
+        { k: "ControlNet", v: "xinsir/controlnet-scribble-sdxl-1.0" },
+        { k: "SDXL base", v: "SG161222/RealVisXL_V4.0_Lightning" },
+        { k: "inpainting model", v: "diffusers/stable-diffusion-xl-1.0-inpainting-0.1" },
+        { k: "pipelines", v: "StableDiffusionXLControlNetPipeline + AutoPipelineForInpainting" },
+        { k: "stack", v: "Python 3.9+, CUDA Torch, HF Diffusers, Tkinter, Pillow" },
+        { k: "runs locally", v: "yes — everything can be run locally" },
+      ],
       problem: "Pure text-to-image is too unconstrained for early architectural exploration. You need the image to follow a specific massing, line, or plan — without losing the freedom of generative.",
       approach: [
         { t: "ControlNet for structure", d: "Edge / scribble conditioning lets the generation follow the sketch." },
         { t: "SDXL for fidelity", d: "Higher-resolution base for materials and lighting." },
         { t: "Native UI", d: "Tkinter app keeps the loop fast: sketch → generate → refine." },
+      ],
+      pipeline: [
+        { t: "Sketch", d: "User draws on a white canvas (brush size slider, Ctrl+Z undo, eraser toggle); Pillow ImageDraw mirrors strokes internally." },
+        { t: "Prompt", d: "Subject / Design Features / Environment text fields + negative prompt." },
+        { t: "Condition", d: "Sketch converted to inverted grayscale; ControlNet (xinsir/controlnet-scribble-sdxl-1.0) guides generation via controlnet_conditioning_scale." },
+        { t: "Generate", d: "StableDiffusionXLControlNetPipeline with SDXL base SG161222/RealVisXL_V4.0_Lightning renders the preview." },
+        { t: "Mask (optional)", d: "Inpainting mode — user paints a red mask on regions to change." },
+        { t: "Inpaint", d: "AutoPipelineForInpainting (diffusers/stable-diffusion-xl-1.0-inpainting-0.1) refills masked areas.", badges: [
+          { kind: "loop", label: "user opts to refine — exit back to sketch mode (repeatable)" },
+        ] },
+        { t: "Save", d: "Export in multiple formats (JPEG, PNG, etc.)." },
       ],
       features: [
         { t: "Sketch to image", d: "Real-time inference triggers with customizable subject, design-feature, and environment prompts." },
@@ -199,11 +258,29 @@ const PROJECTS = [
     tech: ["LangChain", "LangGraph", "Ollama", "ChromaDB", "Streamlit"],
     details: {
       overview: "An AI-powered personal project that simplifies information retrieval from NZ Building Code documentation, extracting, indexing, and retrieving both textual and visual data from PDFs with an open-source stack. Images pass through an ImageMetadataExtractor where vision models generate descriptive metadata; text is chunked and embedded; both are stored in Chroma. AI agents retrieve the combined text and image data and generate answers via open-source LLMs behind a Streamlit chat interface.",
+      facts: [
+        { k: "extraction", v: "Unstructured" },
+        { k: "vision analysis", v: "open-source Vision Transformer models (HuggingFace)" },
+        { k: "embeddings", v: "SentenceTransformers" },
+        { k: "vector store", v: "Chroma" },
+        { k: "LLMs", v: "open-source (Ollama models, GPT-Neo, LLaMA)" },
+        { k: "UI", v: "Streamlit (local deployment)" },
+        { k: "processing streams", v: "2 concurrent (vision + text)" },
+      ],
       problem: "Standard text RAG drops the diagrams. For a code document, the diagram often *is* the answer.",
       approach: [
         { t: "Vision-language captioning", d: "LLaMA Vision via Ollama captions every figure on extraction." },
         { t: "Multi-modal index", d: "Captions + text chunks share an embedding space in ChromaDB." },
         { t: "Graph retrieval", d: "LangGraph composes the retrieve → answer → verify path." },
+      ],
+      pipeline: [
+        { t: "PDF identification", d: "Auto-detects Building Code PDFs by filename prefixes/suffixes." },
+        { t: "Content extraction", d: "Text and images extracted (Unstructured)." },
+        { t: "Dual processing", d: "Split into two concurrent streams — image stream and text stream." },
+        { t: "Image metadata", d: "Images stored as paths + base64; ImageMetadataExtractor + vision models generate descriptive metadata → Chroma." },
+        { t: "Text embedding", d: "Text split into chunks, embedded via SentenceTransformers → Chroma." },
+        { t: "Retrieve", d: "AI agents fetch relevant text AND image data by query embedding." },
+        { t: "Answer", d: "Open-source LLM generates the response in the Streamlit chat UI." },
       ],
       features: [
         { t: "Locally deployable", d: "Secure, privacy-focused, and fully open-source end to end." },
@@ -239,11 +316,33 @@ const PROJECTS = [
     tech: ["LangChain", "LangGraph", "ChromaDB", "Ollama"],
     details: {
       overview: "A self-correcting RAG system powered by a local LLM that autonomously decides whether to retrieve from a local Chroma DB vector store or perform a web search, via an indicator routing function. After drafting an answer it runs reflection checks for completeness and hallucination checks for factual correctness, looping through a state-graph workflow to regenerate until the answer passes. Delivered as a notebook, Local_RAG_LLM.ipynb.",
+      facts: [
+        { k: "LLM", v: "local LLM (self-hosted)" },
+        { k: "vector store", v: "Chroma DB (local)" },
+        { k: "fallback", v: "optional web search" },
+        { k: "quality gates", v: "2 — reflection (completeness) + hallucination check (factual correctness)" },
+        { k: "workflow engine", v: "state graph with conditional decisions and loops" },
+        { k: "deliverable", v: "notebook — Local_RAG_LLM.ipynb" },
+      ],
       problem: "Naive RAG returns whatever it retrieves, even when the retrieval is bad. The system should know when it doesn't know.",
       approach: [
         { t: "Grade the retrieval", d: "A grader LLM evaluates whether retrieved chunks actually answer the query." },
         { t: "Rewrite & retry", d: "Failing queries are rewritten; the graph loops until a confident answer or a bounded refusal." },
         { t: "Local-first", d: "Ollama keeps everything on-device for privacy." },
+      ],
+      pipeline: [
+        { t: "Indicator", d: "Routes the user's question to local retrieval or web search.", badges: [
+          { kind: "branch", label: "routes to local retrieval or web search" },
+        ] },
+        { t: "Retrieval / Search", d: "Chroma DB vector store scan, or web search if local docs don't suffice." },
+        { t: "Generation", d: "Local LLM drafts an initial answer." },
+        { t: "Reflection", d: "Evaluates completeness; may add missing details.", badges: [
+          { kind: "loop", label: "answer deemed incomplete — state graph loops back" },
+        ] },
+        { t: "Hallucination check", d: "Screens for factual inaccuracies.", badges: [
+          { kind: "loop", label: "factual inaccuracy detected — answer re-generated" },
+        ] },
+        { t: "Regeneration", d: "Updates context or re-generates the answer if necessary." },
       ],
       features: [
         { t: "Autonomous routing", d: "The graph decides between local retrieval and a web search on its own." },
@@ -268,21 +367,38 @@ const PROJECTS = [
   {
     id: "cv-safety",
     title: "Construction Safety CV",
-    subtitle: "YOLOv9 hazard detection",
+    subtitle: "YOLOv9 PPE detection",
     category: "Computer Vision",
     year: "2024",
     status: "Live",
     href: "https://github.com/Userdflt",
     mark: "Y",
-    blurb: "Real-time object detection for PPE compliance and hazard prevention on construction sites.",
+    blurb: "Real-time object detection for PPE compliance on construction sites.",
     tech: ["YOLOv9", "OpenCV", "PyTorch", "Pandas"],
     details: {
-      overview: "A real-time computer-vision system that detects PPE compliance (helmet, vest, harness) and common site hazards across construction-site footage. Trained on a curated dataset using YOLOv9; deployable to edge devices via ONNX export.",
+      overview: "A real-time computer-vision system that detects PPE compliance — helmets and vests — on construction-site images. Trained on the Kaggle Construction Site Safety Image Dataset (Roboflow) with YOLOv9 across three improvement stages: a baseline model, a normalization run at 70 epochs, and an oversampling-plus-normalization run at 50 epochs. The normalization run gave the best precision/recall balance, and Webcam_Inference.py runs it as local real-time webcam inference.",
+      facts: [
+        { k: "model", v: "YOLOv9" },
+        { k: "dataset", v: "Kaggle Construction Site Safety Image Dataset (Roboflow)" },
+        { k: "image size", v: "640×640" },
+        { k: "class imbalance", v: "Person class most frequent" },
+        { k: "training runs", v: "3 stages — baseline / norm (70 ep) / ovs+norm (50 ep)" },
+        { k: "deployment", v: "Webcam_Inference.py (local webcam, real-time)" },
+      ],
       problem: "Site safety reviews happen after incidents, not before. Real-time detection turns the camera into a passive supervisor that flags non-compliance instantly.",
       approach: [
-        { t: "Curated dataset", d: "Pulled from public site footage and labelled in batches." },
-        { t: "YOLOv9 + ByteTrack", d: "Fast inference with cross-frame tracking for stable IDs." },
-        { t: "ONNX export", d: "Deployable to edge devices for on-site processing." },
+        { t: "Kaggle PPE dataset", d: "Kaggle Construction Site Safety Image Dataset (Roboflow) — PPE-labelled construction images at 640×640, with label-distribution analysis showing the Person class most frequent." },
+        { t: "Three-stage YOLOv9 training", d: "Baseline YOLOv9, then normalization at 70 epochs, then oversampling plus normalization at 50 epochs." },
+        { t: "Local webcam deployment", d: "Webcam_Inference.py runs real-time webcam inference, with object tracking on test videos." },
+      ],
+      pipeline: [
+        { t: "Dataset", d: "Kaggle Construction Site Safety Image Dataset (Roboflow) — PPE-labelled construction images." },
+        { t: "Inspection", d: "Image-size consistency check (640×640); label-distribution analysis found imbalance (Person class most frequent)." },
+        { t: "Baseline", d: "Baseline YOLOv9 model (improvement stage 1)." },
+        { t: "Normalization run", d: "YOLO with normalization, 70 epochs (stage 2)." },
+        { t: "Oversampling run", d: "YOLO with oversampling + normalization, 50 epochs (stage 3)." },
+        { t: "Evaluate", d: "Normalization model gave the best precision/recall balance." },
+        { t: "Deploy", d: "Webcam_Inference.py — local real-time webcam inference; object tracking on test videos." },
       ],
       features: [
         { t: "PPE detection", d: "Helmets, vests, and workers marked with colour-coded bounding boxes." },
@@ -296,7 +412,7 @@ const PROJECTS = [
         "Training runs: 70 epochs with normalization, 50 epochs with oversampling.",
         "Notebooks for dataset inspection and both final models, plus a Python webcam deployment script.",
       ],
-      outcomes: ["Sub-frame inference on commodity GPUs", "Edge-deployable via ONNX"],
+      outcomes: ["Real-time webcam inference through Webcam_Inference.py", "Normalization run chosen — best precision/recall balance"],
       links: [{ label: "view repository", href: "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model" }],
       media: [
         { type: "image", src: "images/optimized/output8.webp", alt: "CV detection output 8" },
@@ -318,11 +434,26 @@ const PROJECTS = [
     tech: ["Python", "YouTube API", "Pandas", "ANOVA"],
     details: {
       overview: "A statistical study of AI / data-science content on YouTube. Data collected via the YouTube API, cleaned, explored, and tested for temporal patterns and engagement shifts across cohorts using ANOVA and follow-up post-hoc tests.",
+      facts: [
+        { k: "question", v: "Has the trend of data-science/AI YouTube videos changed?" },
+        { k: "data source", v: "YouTube API" },
+        { k: "test", v: "ANOVA across years (+ skewness, kurtosis checks)" },
+        { k: "H0", v: "mean view/like/comment counts equal across all years" },
+        { k: "verdict", v: "H0 rejected — significant change; overall decrease" },
+        { k: "deliverable", v: "notebook — YouTube_Statistics_Analysis.ipynb" },
+      ],
       problem: "Anecdotal evidence suggested the AI content boom changed the shape of educational YouTube — but by how much, and across which dimensions? A rigorous study, not vibes.",
       approach: [
         { t: "API ingestion + cleaning", d: "Collected channel and video metadata; normalised across time and category." },
         { t: "EDA → hypotheses", d: "Visualised temporal patterns; formed testable hypotheses about engagement shifts." },
         { t: "ANOVA + post-hoc", d: "Tested cohort differences; reported effect sizes alongside p-values." },
+      ],
+      pipeline: [
+        { t: "Collect", d: "YouTube API — key setup, search-result retrieval for data-science/AI queries." },
+        { t: "Clean", d: "Nulls, duplicates, unnecessary columns; date extraction and feature creation." },
+        { t: "EDA", d: "View/like/comment distributions (histograms, KDE); per-category totals; yearly + monthly trend time series." },
+        { t: "Hypothesis test", d: "Skewness + kurtosis checks, then ANOVA across years (H0: mean view/like/comment counts equal across years)." },
+        { t: "Conclude", d: "Statistically significant changes over recent years; overall decrease in trend." },
       ],
       features: [
         { t: "API data collection", d: "A YouTube API retrieval pipeline gathers the raw dataset." },
@@ -354,12 +485,36 @@ const PROJECTS = [
     tech: ["scikit-learn", "Regression", "Classification", "Feature eng."],
     details: {
       overview: "Machine-learning models for NASA outgassing metrics — TML (Total Mass Loss), CVCM (Collected Volatile Condensable Materials), and WVR (Water Vapour Regained). The goal: predict whether a material will pass space-grade thresholds before physical testing.",
+      facts: [
+        { k: "metrics", v: "TML (mass loss %), CVCM (condensable volatiles %), WVR (water vapor regained)" },
+        { k: "target direction", v: "lower TML / CVCM / WVR = better vacuum performance" },
+        { k: "engineered feature", v: "supplier performance score (from TML+CVCM+WVR, + noise)" },
+        { k: "models compared", v: "2 regression + 3 classification" },
+        { k: "notebooks", v: "4 — data processing, EDA, ML modelling, ML pipeline" },
+        { k: "outlier method", v: "quantile filter + IQR" },
+      ],
       problem: "Outgassing tests are expensive and slow. A reliable predictive model accelerates material selection for satellites and spacecraft.",
       approach: [
         { t: "Feature engineering", d: "Engineered chemical / physical descriptors from raw material data." },
         { t: "Regression + classification", d: "Regression on the three metrics; classification on pass/fail thresholds." },
         { t: "Cross-validated reporting", d: "Reported error bars and confusion matrices honestly." },
       ],
+      pipeline: [
+        { t: "Import", d: "NASA outgassing CSV; 'ID' column set as index." },
+        { t: "Outlier removal", d: "Two passes — quantile-based filtering, then IQR method on TML/CVCM/WVR/Space Code." },
+        { t: "Missing values", d: "Drop columns/rows with significant gaps (Cure, Material Usage, Space Code); dedupe." },
+        { t: "Feature engineering", d: "Supplier performance score from TML + CVCM + WVR; noise added to simulate realistic scenarios." },
+        { t: "Model", d: "Regression (Linear, Random Forest) for performance; classification (Logistic, RF, SVM) for reliability." },
+        { t: "Select", d: "Linear Regression chosen for regression; Logistic Regression for classification." },
+      ],
+      comparison: {
+        title: "Models evaluated",
+        columns: ["Task", "Models", "Selected"],
+        rows: [
+          ["Regression", "Linear Regression, Random Forest Regressor", "Linear Regression (\"based on evaluation scores\")"],
+          ["Classification", "Logistic Regression, Random Forest Classifier, SVM", "Logistic Regression"],
+        ],
+      },
       features: [
         { t: "Data cleaning", d: "Quantile and IQR outlier filtering with missing-value and duplicate handling." },
         { t: "Feature engineering", d: "Supplier performance scores from TML, CVCM, and WVR, with noise added to simulate realistic scenarios." },
@@ -391,12 +546,38 @@ const PROJECTS = [
     tech: ["NLTK", "spaCy", "scikit-learn"],
     details: {
       overview: "An NLP project classifying news articles as fake or true from combined True.csv and Fake.csv datasets. Text is preprocessed (tokenization, stop-word removal, stemming and lemmatization), features are engineered (word count, character count, word density, TF-IDF vectors), and sentiment is analysed with TextBlob and VADER — with Shapiro-Wilk and Mann-Whitney U tests comparing sentiment distributions between AI-generated and human-written articles. Logistic Regression, SVM, and Random Forest classifiers were then evaluated on accuracy, precision, recall, F1, and ROC AUC.",
+      facts: [
+        { k: "datasets", v: "2 — True.csv + Fake.csv" },
+        { k: "classifiers", v: "3 — Logistic Regression, SVM, Random Forest" },
+        { k: "features", v: "word count, char count, word density + TF-IDF vectors" },
+        { k: "sentiment tools", v: "TextBlob + VADER" },
+        { k: "statistical tests", v: "Shapiro-Wilk (normality) + Mann-Whitney U (AI vs human sentiment)" },
+        { k: "notebooks", v: "3 — preprocessing, EDA/feature-eng, classification" },
+      ],
       problem: "Human-written and AI-generated news read alike on the surface. The separable signal sits in measurable stylometric and statistical differences — word count, character count, word density, sentiment distribution — which have to be extracted from the text and titles before anything can classify them.",
       approach: [
         { t: "Stylometric features", d: "Word count, character count, and word density engineered from article text and titles after tokenization, stop-word removal, and stemming / lemmatization." },
         { t: "TF-IDF and sentiment", d: "TF-IDF vectors alongside TextBlob and VADER sentiment, with Shapiro-Wilk and Mann-Whitney U tests comparing the two populations." },
         { t: "Three classifiers compared", d: "Logistic Regression, SVM, and Random Forest evaluated on accuracy, precision, recall, F1, and ROC AUC." },
       ],
+      pipeline: [
+        { t: "Combine", d: "True.csv + Fake.csv merged into one DataFrame with a true/fake target." },
+        { t: "Preprocess", d: "Tokenization, stop-word removal, stemming/lemmatization on text and titles." },
+        { t: "Feature engineering", d: "Word count, character count, word density from cleaned text/title." },
+        { t: "Sentiment + stats", d: "TextBlob + VADER sentiment; Shapiro-Wilk normality test; Mann-Whitney U comparing AI vs human sentiment distributions." },
+        { t: "Vectorize", d: "TF-IDF on text and title." },
+        { t: "Classify + evaluate", d: "Logistic Regression, SVM, Random Forest — accuracy, precision, recall, F1, ROC AUC; confusion matrices + ROC curves." },
+      ],
+      comparison: {
+        title: "Classifiers evaluated",
+        columns: ["Model", "Metrics evaluated"],
+        rows: [
+          ["Logistic Regression", "accuracy, precision, recall, F1, ROC AUC"],
+          ["SVM", "accuracy, precision, recall, F1, ROC AUC"],
+          ["Random Forest", "accuracy, precision, recall, F1, ROC AUC"],
+        ],
+        note: "The README names no winner and no scores.",
+      },
       features: [
         { t: "Three-notebook pipeline", d: "Preprocessing, EDA with feature engineering, then the classification model." },
         { t: "Stylometric and statistical features", d: "Derived from both article text and titles." },
@@ -428,12 +609,49 @@ const PROJECTS = [
     tech: ["scikit-learn", "Regression", "Feature eng."],
     details: {
       overview: "Forecasts wind-turbine power output from three years of historical environmental and temporal data — wind speeds at 10m and 100m, temperature, pressure, and time-of-day, month, and year features. Seven regression models were compared (Linear, Lasso, Ridge, KNN, Decision Tree, Random Forest, AdaBoost); the K-Nearest Neighbors Regressor performed best, with a Test R² of 82.42% and a Test MAE of 0.0731. Preprocessing included datetime feature extraction, dropping the DP_2m feature for multicollinearity, and MinMax scaling.",
+      facts: [
+        { k: "data span", v: "3 years of historical records" },
+        { k: "key features", v: "WS_10m, WS_100m, Temperature, Pressure, TimeOfDay, Month, Year" },
+        { k: "dropped feature", v: "DP_2m (multicollinearity)" },
+        { k: "scaling", v: "MinMaxScaler" },
+        { k: "split", v: "80/20" },
+        { k: "models compared", v: "7" },
+        { k: "best model", v: "KNN — Test R² 82.42%, Test MAE 0.0731" },
+        { k: "mean residual", v: "0.0012 (actual vs predicted)" },
+      ],
       problem: "Turbine output varies with wind speed at two heights, temperature, pressure, and time of day at once, and the relationship is not linear — the Linear, Ridge, and AdaBoost baselines all land near a Test R² of 0.49 on this dataset. The model family has to be chosen by measurement, not assumption.",
       approach: [
         { t: "Three years of environmental and temporal data", d: "Wind speeds at 10m and 100m, temperature, pressure, and time-of-day, month, and year features." },
         { t: "Seven regressors on one split", d: "Linear, Lasso, Ridge, KNN, Decision Tree, Random Forest, and AdaBoost scored on MAE and R² over the same 80/20 split." },
         { t: "KNN won", d: "Test R² 82.42% and Test MAE 0.0731, against 0.777 for Random Forest and 0.492 for the linear baselines." },
       ],
+      pipeline: [
+        { t: "Ingest", d: "Train.csv + Test.csv + column_info.csv — 3 years of environmental/temporal records; zero nulls, zero duplicates." },
+        { t: "Feature engineering", d: "Time → datetime; extract Month, Year, TimeOfDay; drop Time and Unnamed: 0." },
+        { t: "Feature selection", d: "Correlation matrix → drop DP_2m for multicollinearity." },
+        { t: "Scale", d: "MinMaxScaler on numerical features." },
+        { t: "Split + train", d: "80/20 split; 7 regressors trained head-to-head." },
+        { t: "Evaluate", d: "MAE + R² on train and test; KNN wins (Test R² 0.8242)." },
+        { t: "Residual + convolution analysis", d: "Mean actual-vs-predicted difference 0.0012; convolution of each feature vs Power for hidden patterns/lags." },
+      ],
+      comparison: {
+        title: "Seven regressors — 80/20 split",
+        columns: ["Model", "Train MAE", "Train R²", "Test MAE", "Test R²"],
+        // Cells are the README's own strings, never numbers: trailing zeros
+        // ("0.0000", "1.000000") are part of the reported precision and a
+        // numeric literal would drop them.
+        rows: [
+          ["Linear Regression", "0.1384", "0.505355", "0.1403", "0.492294"],
+          ["Lasso Regression", "0.2125", "0.000000", "0.2122", "-0.000039"],
+          ["Ridge Regression", "0.1384", "0.505339", "0.1403", "0.492322"],
+          ["K-Nearest Neighbors", "0.0538", "0.897932", "0.0731", "0.824192"],
+          ["Decision Tree", "0.0000", "1.000000", "0.1118", "0.561457"],
+          ["Random Forest", "0.0318", "0.969111", "0.0858", "0.777471"],
+          ["AdaBoost", "0.1494", "0.498542", "0.1500", "0.492723"],
+        ],
+        highlightRow: 3,
+        note: "K-Nearest Neighbors is the winner bolded in the README; the Decision Tree's perfect train scores are README-flagged overfitting.",
+      },
       features: [
         { t: "Temporal feature engineering", d: "Month, Year, and TimeOfDay derived from the raw Time column." },
         { t: "Correlation-driven selection", d: "DP_2m dropped for multicollinearity, then MinMaxScaler normalization." },

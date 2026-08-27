@@ -482,6 +482,20 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
 /* overview */
 .overview p{color:var(--ink-dim);font-size:15px;line-height:1.75;margin:0 0 16px;max-width:72ch}
 
+/* facts grid — the README-verified key/value pairs, inside the overview panel
+   and directly under its paragraph. Deliberately LIGHTER than .metric: these
+   are reference values read at body size, not headline numbers, so they take
+   the paper surface and a hairline instead of the panel fill and a display
+   scale. auto-fill, so the field carries as many facts as the source states
+   and the cards reflow rather than leave a hole — at 390 that is one column,
+   with no breakpoint of its own. */
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:12px;margin:calc(var(--u)*3) 0 0}
+.fact{display:flex;flex-direction:column;gap:6px;padding:calc(var(--u)*2);background:var(--bg);border:1px solid var(--line);border-top:1px solid var(--line-strong)}
+/* .eyebrow supplies the mono face and the caps; a fact key is a phrase rather
+   than a one-word label, so it gives back some of the tracking. */
+.fact .fk{letter-spacing:0.14em}
+.fact .fv{font-size:15px;line-height:1.45;color:var(--ink)}
+
 /* capabilities — the verified feature grid (details.features).
    A FIXED two columns, which is what lets the per-card stagger key off
    `index % 2` and stay resize-independent (the galleries are auto-fill and
@@ -515,6 +529,36 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
   .arch-row .an{padding-left:12px}
 }
 
+/* pipeline — the README's ordered "how it works" path, written on the
+   architecture row grammar above: the same index column, the same strong
+   hairlines, the same connector drawn down the numbers. A second vocabulary
+   for a second numbered list would only make the page read as two pages.
+   `.pipe-line` reads the same `--scrub` the engine writes, and the same `1`
+   fallback renders the finished connector under reduced motion with no rule
+   of its own. */
+.pipe-list{position:relative}
+.pipe-trigger{display:block}
+.pipe-row{display:grid;grid-template-columns:56px 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--line-strong)}
+.pipe-trigger:last-child .pipe-row{border-bottom:1px solid var(--line-strong)}
+.pipe-row .pp-n{font-family:var(--fs-mono);font-size:11px;color:var(--accent);letter-spacing:0.06em;padding-top:4px;padding-left:18px}
+.pipe-row .pp-t{font-family:var(--fs-sans);font-weight:600;font-size:17px;line-height:1.3;color:var(--ink);letter-spacing:-0.01em;margin-bottom:6px}
+.pipe-row .pp-d{font-size:14px;color:var(--ink-dim);line-height:1.65}
+.pipe-line{position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--accent);transform:scaleY(var(--scrub,1));transform-origin:top}
+
+/* badge chips — a step that branches or loops says so, in the source's own
+   words. Accent ink on the soft accent wash, and sentence case as authored:
+   a sixty-character label in caps stops being readable. The dashed edge is
+   the loop, the solid edge is the branch — the glyph is decoration, so the
+   distinction cannot rest on it alone. */
+.pipe-badges{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.pipe-badge{display:inline-flex;align-items:baseline;gap:7px;padding:4px 10px;font-family:var(--fs-mono);font-size:10.5px;line-height:1.45;letter-spacing:0.04em;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-soft)}
+.pipe-badge--loop{border-style:dashed;border-color:var(--accent)}
+.pipe-badge .pb-g{font-size:11px}
+@media (max-width: 560px){
+  .pipe-row{grid-template-columns:44px 1fr;gap:12px}
+  .pipe-row .pp-n{padding-left:12px}
+}
+
 /* split grid: outcomes + stack side-by-side */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media (max-width: 760px){.split{grid-template-columns:1fr}}
@@ -539,6 +583,40 @@ section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(va
    the element supplies the size. */
 .metric .mv{font-family:var(--fs-sans);font-weight:200;line-height:1;letter-spacing:-0.03em;color:var(--ink);font-variant-numeric:tabular-nums}
 .metric .mk{color:var(--ink-dim)}
+
+/* comparison table — an ARIA grid-table (project.jsx writes role=table / row /
+   columnheader / rowheader / cell), never a native <table>: per-row transforms
+   on a `<tr>` are engine-inconsistent, and a grid row is a clean target. The
+   column template is written ONCE on the table as `--compare-cols` and
+   inherited by every row, so the header and the body cannot disagree.
+
+   The scroll box is the narrow-viewport affordance AND a focus target: the
+   table keeps its full width and scrolls sideways inside it rather than
+   squeezing five columns into 390px, and a scroll container that cannot take
+   focus cannot be scrolled from the keyboard. */
+.compare-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.compare-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+/* The min-width is stated on BOTH the table and the row: the table's is what
+   gives the scroll box something to scroll, the row's is what keeps the grid
+   from collapsing if a row is ever read outside its table. */
+.compare-table{display:block;min-width:560px}
+.compare-row{display:grid;grid-template-columns:var(--compare-cols);gap:16px;align-items:baseline;min-width:560px;padding:13px 14px;border-top:1px solid var(--line);
+  /* every row RESERVES the winner's accent edge, so the highlight paints into
+     reserved space instead of shifting one row 2px out of the column grid */
+  border-left:2px solid transparent}
+.compare-table .compare-row:last-child{border-bottom:1px solid var(--line-strong)}
+.compare-row--head{border-top:1px solid var(--line-strong)}
+.compare-cell{font-size:14px;line-height:1.5;color:var(--ink-dim);font-variant-numeric:tabular-nums}
+.compare-cell--head{font-family:var(--fs-sans);font-weight:600;font-size:15px;color:var(--ink);letter-spacing:-0.01em}
+/* .eyebrow (declared later) supplies the column header's mono caps; the
+   two-class selector is what lets a multi-word header give back tracking. */
+.compare-row--head .compare-cell--col{letter-spacing:0.14em}
+.compare-row--win{border-left-color:var(--accent);background:var(--accent-soft)}
+.compare-row--win .compare-cell{color:var(--ink)}
+/* Announced with the winning row's name, never painted: an accent edge and a
+   tinted fill are not available to a screen reader. */
+.compare-win-flag{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;white-space:nowrap;clip-path:inset(50%);border:0}
+.compare-note{margin:14px 0 0;font-family:var(--fs-mono);font-size:11px;line-height:1.6;color:var(--ink-dim)}
 
 /* gallery — placeholder frames */
 .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
