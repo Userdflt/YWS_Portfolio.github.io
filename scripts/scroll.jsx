@@ -2,8 +2,8 @@
 // scroll.jsx — the scroll/motion runtime.
 //
 // Single responsibility: every scroll-derived UI effect on the site (scrubbed
-// keyframe entries, reveals, progress bar, scroll-spy, parallax, viewport
-// counters, desktop smooth scrolling) and the one motion switch they all
+// keyframe entries, scrubbed counters, reveals, progress bar, scroll-spy,
+// parallax, desktop smooth scrolling) and the one motion switch they all
 // consult.
 //
 // ONE dispatcher for the whole page. Every effect below is an *entry* in a
@@ -55,10 +55,6 @@
   const PARALLAX_MAX_PX = 24;
   const PARALLAX_OFF_QUERY = '(max-width: 720px)';
   const PARALLAX_CLASS = 'motion-parallax';
-
-  // Viewport counter.
-  const COUNTUP_THRESHOLD = 0.5;
-  const COUNTUP_DURATION_MS = 1200;
 
   // Smooth scroll (desktop only — every gate below must hold).
   const SMOOTH_POINTER_QUERY = '(pointer: fine) and (hover: hover)';
@@ -778,6 +774,60 @@
     };
   }
 
+  // ═════════════════ Count entries ═════════════════
+
+  /**
+   * Static validation for a count entry — the keyframeFault counterpart.
+   * Everything checkable without a frame context is checked ONCE, at
+   * registration, so a malformed window can never reach a write pass and leave
+   * a numeral stuck on a nonsense value. Returns a reason string, or null.
+   */
+  function countFault(end, a, b){
+    if(typeof end !== 'number' || !isFinite(end)) return '`end` must be a finite number';
+    if(typeof a !== 'number' || typeof b !== 'number') return '`window` must be a [start, end] pair of numbers';
+    if(!(a >= 0) || !(b <= 1) || !(a < b)) return '`window` must satisfy 0 <= start < end <= 1';
+    return null;
+  }
+
+  /**
+   * A counter whose value IS scroll position: `end × progress across [a, b]`,
+   * rounded. Fully reversible by construction — scrolling back counts back
+   * down, because there is no time anywhere in the mapping.
+   *
+   * The authored textContent (the finished value, which the component renders
+   * statically) is captured at registration and put back on dispose, so every
+   * no-engine path shows exactly what the markup already says.
+   */
+  function createCountEntry(el, trigger, opts){
+    const mode = opts.mode || SCRUB_DEFAULT_MODE;
+    const endAt = (typeof opts.endAt === 'number') ? opts.endAt : SCRUB_DEFAULT_END_AT;
+    const suffix = (typeof opts.suffix === 'string') ? opts.suffix : '';
+    const end = opts.end;
+    const a = opts.window[0];
+    const b = opts.window[1];
+    const authored = el.textContent;
+
+    let next = 0;
+    let written = null;
+
+    return {
+      nodes: (trigger === el) ? [el] : [el, trigger],
+      read(ctx){
+        const rect = trigger.getBoundingClientRect();
+        const p = progressOf(mode, rect, ctx, endAt);
+        next = Math.round(end * clamp01((p - a) / (b - a)));
+      },
+      write(){
+        // One textContent assignment per value CHANGE, never per frame: a
+        // counter holds the same integer across most of its window, so writing
+        // it again would be pure invalidation for an identical pixel.
+        if(next !== written){ written = next; el.textContent = next + suffix; }
+        return false;
+      },
+      dispose(){ el.textContent = authored; },
+    };
+  }
+
   // ═════════════════ Internal entry types ═════════════════
 
   function createParallaxEntry(el, maxPx){
@@ -897,25 +947,96 @@
     }, [targetRef, triggerRef, key, reduced, off]);
   }
 
+  // ─────────────── Scrubbed counter ───────────────
+
+  /**
+   * Counts `targetRef`'s numeral from 0 to `opts.end` across `opts.window` —
+   * the [a, b] slice of the trigger's own progress the count is spread over.
+   *
+   *   opts.end        the finished value. The component MUST also render it as
+   *                   its static text: that is what reduced motion, an off
+   *                   viewport, a faulted registration and a no-JS crawl show.
+   *   opts.suffix     appended to every written value (default '').
+   *   opts.window     [a, b], 0 <= a < b <= 1.
+   *   opts.mode       'cross' (default) | 'enter' (with opts.endAt) | 'pin'.
+   *                   'pin' REQUIRES opts.triggerRef — the pin wrapper.
+   *   opts.offQuery   media query that disables the entry entirely.
+   *
+   * Registration, release and reduced-motion semantics are the scrub entry's,
+   * verbatim: nothing registers when off, and disposal restores the authored
+   * text. The write is imperative on purpose — a React state write per frame
+   * would re-render a component ~60×/s to change one text node (Design Note D5).
+   */
+  function useScrubCount(targetRef, opts){
+    const settings = opts || {};
+    const reduced = useReducedMotion();
+    const off = useMediaQuery(settings.offQuery || NEVER_QUERY);
+
+    // Same snapshot discipline as useScrub: callers pass object literals, whose
+    // identity changes every render, so registration keys on scalars only.
+    const settingsRef = useRef(settings);
+    settingsRef.current = settings;
+
+    const triggerRef = settings.triggerRef || null;
+    const win = Array.isArray(settings.window) ? settings.window : [];
+    // end/suffix/window ARE the entry's behaviour, so they belong in the key:
+    // a re-render that changes one has to re-register, not drift.
+    const key = [
+      settings.mode || SCRUB_DEFAULT_MODE,
+      settings.endAt,
+      settings.end,
+      settings.suffix,
+      win[0],
+      win[1],
+    ].join('|');
+
+    useLayoutEffect(() => {
+      if(reduced || off) return;
+      const el = targetRef && targetRef.current;
+      if(!el) return;
+
+      const active = settingsRef.current;
+      const trigger = (active.triggerRef && active.triggerRef.current) || el;
+      if((active.mode || SCRUB_DEFAULT_MODE) === 'pin' && trigger === el){
+        console.warn('[scroll] useScrubCount: mode "pin" needs opts.triggerRef (the pin wrapper) — entry skipped', el);
+        return;
+      }
+
+      const range = Array.isArray(active.window) ? active.window : [];
+      const fault = countFault(active.end, range[0], range[1]);
+      if(fault){
+        console.warn('[scroll] useScrubCount: ' + fault + ' — entry skipped, numeral left at its authored value', el);
+        return;
+      }
+
+      return registerEntry(createCountEntry(el, trigger, active));
+    }, [targetRef, triggerRef, key, reduced, off]);
+  }
+
   // ─────────────── Smooth scroll ───────────────
 
   /**
    * Desktop inertial scrolling. Call ONCE per page root — the engine keeps a
    * single virtual target for the document (same contract as useScrollProgress).
    *
-   * Every gate must hold: a fine hovering pointer, no touch points at all, a
-   * viewport with room to pin, and no reduced-motion preference. All of them are
-   * LIVE — plug in a display, rotate a hybrid, turn on reduce-motion, and the
-   * listeners come off mid-session and the page is native again, with the glide
-   * cancelled where it stands (never mid-travel).
+   * Every gate must hold: a fine hovering pointer, a viewport with room to pin,
+   * and no reduced-motion preference. All of them are LIVE — plug in a display,
+   * rotate a hybrid, turn on reduce-motion, and the listeners come off
+   * mid-session and the page is native again, with the glide cancelled where it
+   * stands (never mid-travel).
    *
-   * Touch, keyboard and scrollbar input are never intercepted on any device.
+   * The pointer query is the WHOLE device discriminator: a touchscreen laptop
+   * reports `maxTouchPoints > 0` and would be permanently excluded by a
+   * touch-point gate, yet its trackpad is exactly the input this is built for.
+   * Touch panning emits no cancelable wheel event, so it cannot reach the
+   * engine on a phone regardless; touch, keyboard and scrollbar input are never
+   * intercepted on any device.
    */
   function useSmoothScroll(){
     const reduced = useReducedMotion();
     const finePointer = useMediaQuery(SMOOTH_POINTER_QUERY);
     const roomy = useMediaQuery(SMOOTH_VIEWPORT_QUERY);
-    const enabled = !reduced && finePointer && roomy && navigator.maxTouchPoints === 0;
+    const enabled = !reduced && finePointer && roomy;
 
     useEffect(() => {
       if(!enabled) return;
@@ -1043,56 +1164,16 @@
     }, [ref, maxPx, reduced, narrow]);
   }
 
-  // ─────────────── Viewport counter ───────────────
-
-  /**
-   * Counts 0 → end once the number scrolls into view.
-   * Under reduced motion it renders `end` immediately, with no rAF loop and no
-   * IntersectionObserver wait.
-   */
-  function CountUp({ end, duration = COUNTUP_DURATION_MS, suffix = "" }){
-    const reduced = useReducedMotion();
-    const [val, setVal] = useState(() => (reduced ? end : 0));
-    const ref = useRef(null);
-
-    useEffect(() => {
-      if(reduced){ setVal(end); return; }
-      if(!ref.current) return;
-
-      let frame = 0;
-      const io = new IntersectionObserver((entries) => {
-        for(const e of entries){
-          if(e.isIntersecting){
-            const t0 = performance.now();
-            function tick(now){
-              const t = Math.min(1, (now - t0) / duration);
-              const eased = 1 - Math.pow(1 - t, 3);
-              setVal(Math.round(end * eased));
-              if(t < 1) frame = requestAnimationFrame(tick);
-            }
-            frame = requestAnimationFrame(tick);
-            io.disconnect();
-          }
-        }
-      }, { threshold: COUNTUP_THRESHOLD });
-
-      io.observe(ref.current);
-      return () => { io.disconnect(); if(frame) cancelAnimationFrame(frame); };
-    }, [end, duration, reduced]);
-
-    return <span ref={ref} className="num">{val}{suffix}</span>;
-  }
-
   // ─────────────── Public entrypoint ───────────────
 
   Object.assign(window, {
     useReducedMotion,
     useSmoothScroll,
     useScrub,
+    useScrubCount,
     useReveal,
     useScrollProgress,
     useScrollSpy,
     useParallax,
-    CountUp,
   });
 })();

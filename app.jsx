@@ -36,8 +36,8 @@ const HERO_IMAGE = {
 };
 
 // Shared runtime, consumed as window globals — this file owns home sections only:
-//   scripts/scroll.jsx    -> useScrub, useReveal, useScrollProgress,
-//                            useScrollSpy, useSmoothScroll, CountUp
+//   scripts/scroll.jsx    -> useScrub, useScrubCount, useReveal,
+//                            useScrollProgress, useScrollSpy, useSmoothScroll
 //   scripts/shared-ui.jsx -> Nav, Footer
 // Re-declaring any of those names at top level here would shadow the shared copy.
 
@@ -101,7 +101,9 @@ const BAND_CLIP_SCRUB = [
   { at: 1, style: { clipPath: 'polygon(0% 0%, 50% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
 ];
 // Released at 1: a finished band must not carry a clip into every later paint.
-const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.55, releaseOnComplete: true };
+// `enter` span = vh × (1 − endAt), so a LOWER endAt is a LONGER, slower step-in:
+// 0.35 spends ~65% of a viewport on the staircase (Design Spec table W′).
+const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.35, releaseOnComplete: true };
 
 // W2 — each row rises on its own progress, which IS the stagger.
 const WORK_ROW_SCRUB = [
@@ -115,12 +117,43 @@ const WORK_IDX_SCRUB = [
   { at: 1, style: { translateY: -18 } },
 ];
 const WORK_IDX_OPTS = { mode: 'cross', damping: SCRUB_DAMPING };
-// W4 — the stat hairline draws itself left to right (theme.css `.stat::after`).
-const STAT_SCRUB = [
-  { at: 0, style: { '--scrub': 0 } },
-  { at: 1, style: { '--scrub': 1 } },
-];
-const STAT_OPTS = { mode: 'enter', endAt: 0.7 };
+
+// ─────────────── Table S — the pinned stats scene ───────────────
+// Four numerals share ONE 220svh pin: each rises in, counts up on scroll, and
+// hands the stage to the next. Every window below is progress through
+// `.stats-pin`, so the whole sequence reverses exactly on scroll-back.
+//
+// The pin is retired wherever it cannot be held. This query is mirrored
+// BYTE-FOR-BYTE by the flatten @media block in theme.css — a scrubbed scene
+// with no pin and a pinned scene with no scrubs are both broken, so the two
+// must name the same viewports.
+const STATS_PIN_OFF_QUERY = '(max-width: 899px), (max-height: 560px)';
+
+// S-fade — one recipe, four windows: rise 4svh into place, hold, leave upward.
+// The last scene declares no exit pair and HOLDS its arrival state until the
+// pin releases (Design Spec table S).
+function statsFadeScrub(fade){
+  const stops = [
+    { at: fade[0], style: { opacity: 0, translateY: '4svh' } },
+    { at: fade[1], style: { opacity: 1, translateY: '0svh' } },
+  ];
+  if(fade.length === 4){
+    stops.push({ at: fade[2], style: { opacity: 1, translateY: '0svh' } });
+    stops.push({ at: fade[3], style: { opacity: 0, translateY: '-4svh' } });
+  }
+  return stops;
+}
+
+// `fade` = [in-start, in-end, out-start, out-end]; `count` = the [a, b] slice
+// of the pin the numeral counts across.
+const STATS_SCENES = [
+  { end: PROJECTS.length, label: 'shipped projects',           fade: [0.02, 0.08, 0.26, 0.30], count: [0.06, 0.24] },
+  { end: 7,               label: 'yrs in architecture',        fade: [0.26, 0.32, 0.50, 0.54], count: [0.30, 0.48] },
+  { end: 4,               label: 'multi-agent systems',        fade: [0.50, 0.56, 0.74, 0.78], count: [0.54, 0.72] },
+  { end: 2,               label: 'ibm specializations · 2025', fade: [0.74, 0.80],             count: [0.78, 0.94] },
+].map(scene => ({ ...scene, scrub: statsFadeScrub(scene.fade) }));
+
+const STATS_SCENE_OPTS = { mode: 'pin', offQuery: STATS_PIN_OFF_QUERY };
 
 // ───────────────────────── Hero ─────────────────────────
 // A pinned scene plus a paper card. `.hero-pin` is 260svh of scroll distance;
@@ -264,14 +297,81 @@ function WorkRow({ project, index, onMove, onLeave }){
   );
 }
 
-// Same reason: the hairline draw needs a ref per stat.
-function Stat({ end, label }){
-  const ref = useRef(null);
-  useScrub(ref, STAT_SCRUB, STAT_OPTS);
+// Pure markup, no hooks — so it can live inside a `.map()`. The scene is parked
+// invisible by theme.css, never by the engine's first write, so nothing flashes
+// before the pin starts. Its static text is the FINISHED value: that is what
+// shows on every path where the count entry does not register (reduced motion,
+// an off viewport, a validation fault, no JS).
+function StatSceneView({ scene, sceneRef, numRef }){
   return (
-    <div className="stat" ref={ref}>
-      <span className="sn"><CountUp end={end} /></span>
-      <span className="sl">{label}</span>
+    <div className="stat-scene" ref={sceneRef}>
+      <span className="ss-num num" ref={numRef}>{scene.end}</span>
+      <span className="eyebrow">{scene.label}</span>
+    </div>
+  );
+}
+
+// The stats band: 220svh of scroll spent on four numerals, one at a time, in
+// the space the work list is about to fill. It stays INSIDE `#work` so the
+// `#work` anchor, the scroll-spy order and the nav tone observer are untouched.
+//
+// Two layers, one content: `.stats-stage` is the animated DECORATION
+// (aria-hidden, absolutely stacked), and the semantic list below it is the real
+// thing — visually hidden while the pin runs, and the visible static grid on
+// every flattened path.
+//
+// EVERY registration lives HERE, in the component that owns the pin node, for
+// the same reason Hero registers its own pin scrubs: React attaches a host
+// ref during the layout phase that completes AFTER its subtree's layout
+// effects, so a child component registering against an ancestor's ref would
+// find it still null and silently measure itself instead.
+function StatsScene(){
+  const pinRef = useRef(null);
+  // One ref pair per scene, in table order. Fixed length and unconditional —
+  // the Rules of Hooks constrain call ORDER, which an array literal fixes.
+  const sceneRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+  const numRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+  const pinOpts = { ...STATS_SCENE_OPTS, triggerRef: pinRef };
+
+  useScrub(sceneRefs[0], STATS_SCENES[0].scrub, pinOpts);
+  useScrub(sceneRefs[1], STATS_SCENES[1].scrub, pinOpts);
+  useScrub(sceneRefs[2], STATS_SCENES[2].scrub, pinOpts);
+  useScrub(sceneRefs[3], STATS_SCENES[3].scrub, pinOpts);
+  useScrubCount(numRefs[0], { ...pinOpts, end: STATS_SCENES[0].end, window: STATS_SCENES[0].count });
+  useScrubCount(numRefs[1], { ...pinOpts, end: STATS_SCENES[1].end, window: STATS_SCENES[1].count });
+  useScrubCount(numRefs[2], { ...pinOpts, end: STATS_SCENES[2].end, window: STATS_SCENES[2].count });
+  useScrubCount(numRefs[3], { ...pinOpts, end: STATS_SCENES[3].end, window: STATS_SCENES[3].count });
+
+  return (
+    <div className="stats-pin" ref={pinRef}>
+      <div className="stats-sticky">
+        <div className="wrap">
+          <div className="section-tag section-head reveal">
+            <span className="marker section-num">[01]</span>
+            <span className="eyebrow">selected work</span>
+            <span className="rule"></span>
+            <span>{PROJECTS.length} projects</span>
+          </div>
+
+          {/* Only the scenes a ref pair exists for are rendered: a fifth row in
+              the table would otherwise mount un-animated and stay invisible. */}
+          <div className="stats-stage" aria-hidden="true">
+            {sceneRefs.map((sceneRef, i) => STATS_SCENES[i] && (
+              <StatSceneView key={STATS_SCENES[i].label} scene={STATS_SCENES[i]}
+                             sceneRef={sceneRef} numRef={numRefs[i]} />
+            ))}
+          </div>
+
+          <div className="stats stats-semantic">
+            {STATS_SCENES.map(scene => (
+              <div className="stat" key={scene.label}>
+                <span className="sn num">{scene.end}</span>
+                <span className="sl">{scene.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -312,9 +412,11 @@ function WorkEditorial({ projects, previewRef }){
   );
 }
 
-// The dark band of the index. Editorial is the ONLY work renderer — the card
-// and table variants were competing surfaces for the same content, so the page
-// no longer has to declare which one it wants.
+// The dark band of the index: the pinned stats scene, then the list. Editorial
+// is the ONLY work renderer — the card and table variants were competing
+// surfaces for the same content, so the page no longer has to declare which one
+// it wants. The section head lives inside the pin (it heads the whole band, and
+// the pin is the band's opening frame), so the list needs no second one.
 function Work(){
   const previewRef = useRef(null);
   const sectionRef = useRef(null);
@@ -322,21 +424,8 @@ function Work(){
   useScrub(sectionRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
   return (
     <section id="work" className="sec-dark" data-tone="dark" ref={sectionRef}>
+      <StatsScene />
       <div className="wrap">
-        <div className="section-tag section-head reveal">
-          <span className="marker section-num">[01]</span>
-          <span className="eyebrow">selected work</span>
-          <span className="rule"></span>
-          <span>{PROJECTS.length} projects</span>
-        </div>
-
-        <div className="stats">
-          <Stat end={PROJECTS.length} label="shipped projects" />
-          <Stat end={7} label="yrs in architecture" />
-          <Stat end={4} label="multi-agent systems" />
-          <Stat end={2} label="ibm specializations · 2025" />
-        </div>
-
         <WorkEditorial projects={PROJECTS} previewRef={previewRef} />
       </div>
     </section>

@@ -30,16 +30,19 @@ const RISE_SCRUB = [
 const PANEL_RISE_OPTS = { mode: 'enter', endAt: 0.65 };
 const CARD_RISE_OPTS = { mode: 'enter', endAt: 0.75 };
 
-// P2 / P3 — media unmasks bottom-up over roughly one viewport of travel. Four
+// P2 / P3 — media unmasks bottom-up over most of a viewport of travel. Four
 // vertices on both sides: the top edge starts collapsed onto the bottom one and
 // lifts to 0%. Released at 1 so a finished figure carries no clip into later
 // paints — and so the inner figure's ±24px parallax is never cropped by a mask
 // that has already done its job.
+//
+// `enter` span = vh × (1 − endAt), so a LOWER endAt is a LONGER, slower wipe:
+// 0.18 spends ~82% of a viewport unmasking (Design Spec table W′).
 const MEDIA_WIPE_SCRUB = [
   { at: 0, style: { clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' } },
   { at: 1, style: { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
 ];
-const MEDIA_WIPE_OPTS = { mode: 'enter', endAt: 0.35, releaseOnComplete: true };
+const MEDIA_WIPE_OPTS = { mode: 'enter', endAt: 0.18, releaseOnComplete: true };
 
 // P3 — gallery stagger. The offset is the item's index modulo a FIXED column
 // count, never the real one: the grid is `auto-fill`, so its column count
@@ -47,7 +50,7 @@ const MEDIA_WIPE_OPTS = { mode: 'enter', endAt: 0.35, releaseOnComplete: true };
 // engine REMAPS a delayed range rather than truncating it, so every item still
 // reaches 1 and still releases.
 const GALLERY_STAGGER_COLS = 3;
-const GALLERY_STAGGER_STEP = 0.07;
+const GALLERY_STAGGER_STEP = 0.10;
 const galleryWipeOpts = (i) => ({
   ...MEDIA_WIPE_OPTS,
   delay: (i % GALLERY_STAGGER_COLS) * GALLERY_STAGGER_STEP,
@@ -62,7 +65,18 @@ const BAND_CLIP_SCRUB = [
   { at: 0, style: { clipPath: 'polygon(0% 34%, 50% 34%, 50% 17%, 100% 17%, 100% 100%, 0% 100%)' } },
   { at: 1, style: { clipPath: 'polygon(0% 0%, 50% 0%, 50% 0%, 100% 0%, 100% 100%, 0% 100%)' } },
 ];
-const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.55, releaseOnComplete: true };
+const BAND_CLIP_OPTS = { mode: 'enter', endAt: 0.35, releaseOnComplete: true };
+
+// P5 — the full-bleed band under the project title pushes in slowly across its
+// own crossing. `cross` (not `enter`): the band sits at or above the fold on
+// load, so an `enter` range evaluated mid-viewport would rest part-played. The
+// WRAPPER is the trigger and the image is the target — progress may never be
+// read from a node the same entry transforms.
+const PROJECT_BAND_SCRUB = [
+  { at: 0, style: { scale: 1 } },
+  { at: 1, style: { scale: 1.10 } },
+];
+const PROJECT_BAND_OPTS = { mode: 'cross' };
 
 // ───────── Not found ─────────
 function NotFound({ id }){
@@ -416,6 +430,32 @@ function RelatedProjects({ project }){
   );
 }
 
+// ───────── Full-bleed media band ─────────
+
+// The cinematic crop of the project's own imagery, sitting between the title
+// header and the overview panel. Full viewport width, so it is a direct page
+// child and never inside a `.wrap`; the overview's `.panel-overlap` then rides
+// up over its lower edge on the geometry that primitive already owns.
+//
+// The source is the project's THUMBNAIL SOURCE — the first media item that
+// yields a src (image, gif, video poster, or a gallery's first frame), so no
+// project data has to declare a second image. Projects without one render no
+// band at all and keep the padded `.ph-overlapped` path exactly as before.
+//
+// Decorative by construction: the band repeats imagery the media section
+// documents later (this is the crop, that is the annotated record with caption
+// and lightbox), so the meaningful alt stays on the documented copy below.
+function ProjectBand({ src }){
+  const bandRef = useRef(null);
+  const imgRef = useRef(null);
+  useScrub(imgRef, PROJECT_BAND_SCRUB, { ...PROJECT_BAND_OPTS, triggerRef: bandRef });
+  return (
+    <div className="project-band" ref={bandRef}>
+      <img ref={imgRef} src={src} alt="" loading="eager" />
+    </div>
+  );
+}
+
 // ───────── Page ─────────
 function ProjectPage({ project }){
   useReveal();
@@ -429,6 +469,10 @@ function ProjectPage({ project }){
   const pnavRef = useRef(null);
   useScrub(panelRef, RISE_SCRUB, { ...PANEL_RISE_OPTS, triggerRef: overviewRef });
   useScrub(outcomesRef, BAND_CLIP_SCRUB, BAND_CLIP_OPTS);
+
+  // The band renders only when the project HAS imagery; without it the header
+  // keeps its own compensation padding, because there is nothing to overlap.
+  const bandSrc = (typeof window.getProjectThumbnail === 'function') ? window.getProjectThumbnail(project) : null;
 
   // adjacent projects
   const list = window.PROJECTS;
@@ -450,7 +494,7 @@ function ProjectPage({ project }){
         </div>
       </div>
 
-      <section className="ph ph-overlapped" data-tone="light">
+      <section className={bandSrc ? 'ph ph-overlapped ph--banded' : 'ph ph-overlapped'} data-tone="light">
         <div className="wrap">
           <div className="meta reveal">
             <span className="pill"><span className="blip"></span>{project.status}</span>
@@ -475,6 +519,8 @@ function ProjectPage({ project }){
           </div>
         </div>
       </section>
+
+      {bandSrc && <ProjectBand src={bandSrc} />}
 
       {/* Overview */}
       <section className="overview overview-lead" data-tone="light" ref={overviewRef}>
