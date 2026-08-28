@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Young Woo Song">
+  <title>Young Woo Song</title>
+
+  <!-- paper plate + ink hairline — the site's light tone, at tile scale -->
+  <rect width="64" height="64" rx="12" fill="#f0f1f4"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="11.25" fill="none"
+        stroke="#0e1228" stroke-opacity="0.16" stroke-width="1.5"/>
+
+  <!-- 'Y' drawn as geometric strokes, not text: no webfont is available to an
+       icon, and the display face is a thin geometric grotesk either way -->
+  <path d="M18 17 L32 35 L46 17 M32 35 L32 47" fill="none" stroke="#0e1228"
+        stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/>
+</svg>

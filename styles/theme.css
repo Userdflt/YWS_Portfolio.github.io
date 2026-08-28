@@ -1,0 +1,803 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   theme.css — single shared stylesheet for index.html, project.html, 404.html.
+
+   LIGHT-FIRST, TWO TONES. `:root` declares the paper/ink tone. `.sec-dark`
+   re-declares the SAME token names for the ink-navy tone. Every component rule
+   below is therefore written ONCE and renders correctly in either tone — tone
+   is a class on the section, never a fork of the stylesheet.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────── TOKENS: tone-invariant ─────────────── */
+:root{
+  /* Surfaces that never change between tones. `--bg` is the single surface
+     token each tone points at; --paper/--paper-2/--ink-navy are the constants
+     it points to. */
+  --paper: #f0f1f4;
+  --paper-2: #e6e8ee;
+  --ink-navy: #0e1228;
+
+  /* Accent base pairs — tone-neutral by construction. The palette control
+     writes THESE, and each tone maps --accent to the pair that reads on its
+     own surface. Writing --accent directly would only ever reach one tone. */
+  --accent-l: #2c46d8;
+  --accent-2-l: #5a70e8;
+  --accent-soft-l: rgba(44,70,216,0.10);
+  --accent-d: #9db4ff;
+  --accent-2-d: #c3d1ff;
+  --accent-soft-d: rgba(157,180,255,0.14);
+
+  /* Type. Manrope carries body and every display headline; the mono face is
+     confined to eyebrows, meta labels, index numerals, captions, fine print. */
+  --fs-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --fs-display-1: clamp(48px, 8.5vw, 128px);
+  --fs-display-2: clamp(30px, 4.5vw, 56px);
+  --fs-display-3: clamp(22px, 3vw, 34px);
+
+  --u: 8px;
+  --pad-x: clamp(20px, 4.5vw, 72px);
+  --content-max: 1280px;
+
+  --ease-out-soft: cubic-bezier(.22,.61,.36,1);
+  --reveal-dur: 600ms;
+}
+
+/* ─────────────── TOKENS: light tone ───────────────
+   Shared by the page default and by `.panel-overlap`, which is a paper card in
+   BOTH tones and so re-scopes back to light wherever it lands. */
+:root,
+.panel-overlap{
+  --bg: var(--paper);
+  --panel: #ffffff;
+  --ink: #10142c;
+  --ink-dim: rgba(16,20,44,0.62);
+  /* DECORATION ONLY — 2.39:1 on paper, below AA at every size. Text never uses
+     this token; small text uses --ink-dim (4.89:1 on paper). */
+  --ink-faint: rgba(16,20,44,0.38);
+  --line: rgba(16,20,44,0.12);
+  --line-strong: rgba(16,20,44,0.26);
+  --accent: var(--accent-l);
+  --accent-2: var(--accent-2-l);
+  --accent-soft: var(--accent-soft-l);
+  --shadow-card: 0 24px 60px -24px rgba(14,18,40,0.18);
+  --shadow-panel: 0 12px 32px -12px rgba(14,18,40,0.14);
+}
+
+/* ─────────────── TOKENS: dark tone ───────────────
+   Two consumers, one declaration: a section painted ink-navy (.sec-dark) and
+   the nav skin that matches it (.nav--dark). */
+.sec-dark,
+.nav--dark{
+  --bg: var(--ink-navy);
+  --panel: rgba(244,245,248,0.05);
+  --ink: #f4f5f8;
+  --ink-dim: rgba(244,245,248,0.64);
+  /* DECORATION ONLY — 3.59:1 on ink-navy, below AA at every size. */
+  --ink-faint: rgba(244,245,248,0.40);
+  --line: rgba(244,245,248,0.14);
+  --line-strong: rgba(244,245,248,0.30);
+  --accent: var(--accent-d);
+  --accent-2: var(--accent-2-d);
+  --accent-soft: var(--accent-soft-d);
+  --shadow-card: 0 24px 60px -24px rgba(2,4,12,0.55);
+  --shadow-panel: 0 12px 32px -12px rgba(2,4,12,0.45);
+}
+
+/* A tone scope PAINTS. Re-declaring the tokens alone would leave the section
+   transparent over the page's paper background. */
+.sec-dark{background-color:var(--bg);color:var(--ink)}
+
+/* Lifted paper band — the quieter of the two light surfaces. */
+.band-paper{background-color:var(--paper-2)}
+
+/* ─────────────── TOKENS: always-dark component scope ───────────────
+   For surfaces that are dark REGARDLESS of the section they sit in: the
+   lightbox overlay (a fixed body-level layer) and the scrim caption over a
+   gallery thumbnail (a dark gradient inside a light section). Only the ink and
+   line tokens are re-declared — each component paints its own surface, so
+   `--bg` deliberately stays whatever the page tone says it is. */
+.overlay-dark{
+  --ink: #f4f5f8;
+  --ink-dim: rgba(244,245,248,0.64);
+  --ink-faint: rgba(244,245,248,0.40);
+  --line: rgba(244,245,248,0.14);
+  --line-strong: rgba(244,245,248,0.30);
+  color:var(--ink);
+}
+
+/* ─────────────── RESET ─────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--fs-sans);font-size:15px;line-height:1.65;font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+/* `hidden` first as the fallback for engines without `clip`: they lose only the
+   sticky pin, never content. `clip` clips WITHOUT making body a scroll
+   container — `hidden` can, and a body scroll container silently kills
+   `position:sticky` inside it. */
+body{overflow-x:hidden;overflow-x:clip;min-height:100vh}
+a{color:inherit;text-decoration:none}
+/* Keyboard focus, on every link on both pages. `:focus-visible`, not `:focus`,
+   so a mouse click never paints a ring; the accent is a token, so the ring reads
+   on paper and on the ink band without a second rule. */
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--ink)}
+/* No italics — anywhere */
+i,em,.italic,[data-italic]{font-style:normal !important}
+
+/* layout */
+.wrap{position:relative;z-index:1;max-width:var(--content-max);margin:0 auto;padding-left:var(--pad-x);padding-right:var(--pad-x)}
+
+/* utilities */
+.mono{font-family:var(--fs-mono)}
+.upper{text-transform:uppercase;letter-spacing:0.14em;font-size:11px;font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+/* Plain ink headline — replaces the retired silver-gradient recipe. */
+.text-ink{color:var(--ink)}
+/* One accent-ink utility for every inline emphasis span on both pages. */
+.acc{color:var(--accent)}
+
+/* scroll progress bar — a plain ink hairline */
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:60;background:transparent;pointer-events:none}
+.scroll-progress .bar{height:100%;background:var(--ink);width:0%}
+
+/* ─────────────── NAV ───────────────
+   The skin classes are written by the Nav tone observer (scripts/shared-ui.jsx).
+   `.nav--dark` also picks up the dark token block above, so the nav's children
+   need no tone-specific rules of their own. */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(16px) saturate(120%);-webkit-backdrop-filter:blur(16px) saturate(120%);border-bottom:1px solid var(--line);color:var(--ink);
+  transition:background-color .35s var(--ease-out-soft), border-color .35s var(--ease-out-soft), color .35s var(--ease-out-soft)}
+.nav--light{background-color:rgba(240,241,244,0.86)}
+.nav--dark{background-color:rgba(14,18,40,0.86)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:var(--content-max);margin:0 auto;padding-left:var(--pad-x);padding-right:var(--pad-x)}
+.brand{display:flex;align-items:center;font-family:var(--fs-sans);font-size:12px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+/* brand + (project pages only) back-to-work share the left cluster, so
+   .nav-inner keeps exactly three children and its space-between rhythm. */
+.nav-lead{display:flex;align-items:center;gap:14px;min-width:0}
+.nav-links{display:flex;gap:26px}
+.nav-links a,.nav-back{font-family:var(--fs-sans);font-size:11px;font-weight:600;color:var(--ink-dim);letter-spacing:0.14em;text-transform:uppercase;transition:color .2s;position:relative}
+.nav-links a:hover,.nav-back:hover{color:var(--ink)}
+/* active section — ink text plus a hairline underline, so the current section
+   reads without hovering. */
+.nav-links a.active{color:var(--ink)}
+.nav-links a.active::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1px;background:var(--accent)}
+/* back-to-work — distinct from the section links: an arrow, split off the
+   brand by a hairline. Stays visible on mobile, where .nav-links is hidden and
+   this is the only way back. */
+.nav-back{display:inline-flex;align-items:center;gap:7px;padding-left:14px;border-left:1px solid var(--line)}
+.nav-back::before{content:"←";color:var(--accent);transition:transform .2s}
+.nav-back:hover::before{transform:translateX(-3px)}
+.nav-cta{font-family:var(--fs-sans);font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--bg);background:var(--ink);padding:9px 16px;display:inline-flex;gap:8px;align-items:center;transition:background-color .25s var(--ease-out-soft), color .25s var(--ease-out-soft)}
+.nav-cta:hover{background:var(--accent);color:var(--bg)}
+@media (max-width: 760px){.nav-links{display:none}}
+
+/* ─────────────── SECTION FRAME ─────────────── */
+section{position:relative;padding-top:calc(var(--u) * 14);padding-bottom:calc(var(--u) * 14)}
+.section-tag{display:flex;align-items:center;gap:14px;color:var(--ink-dim);margin-bottom:calc(var(--u)*4);font-family:var(--fs-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase}
+.section-tag .rule{flex:1;height:1px;background:var(--line)}
+.section-tag .marker{color:var(--accent)}
+
+/* ─────────────── HERO ─────────────── */
+/* Pinned scene. `.hero-pin` supplies the scroll distance; `.hero-sticky` is the
+   scene that holds still while that distance is consumed. The section's own
+   vertical padding therefore moves ONTO the sticky — left on the section it
+   would scroll away, and the pinned scene would sit under the fixed nav.
+   Both elements paint --bg so the H4 tail (the scene sliding up -25svh over the
+   last 30% of the pin) uncovers paper, never a bare strip. */
+.hero{padding-top:0;padding-bottom:0}
+.hero-pin{position:relative;height:260vh;height:260svh;background-color:var(--bg)}
+.hero-sticky{position:sticky;top:0;min-height:100vh;min-height:100svh;padding-top:calc(var(--u)*17);
+  display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;background-color:var(--bg)}
+/* No room to pin on a short viewport: the wrapper collapses onto its content
+   and the scene rejoins normal flow. Kept in sync with HERO_PIN_OFF_QUERY
+   (app.jsx), which stops the pin scrubs registering at the same breakpoint —
+   a scrubbed scene with no pin would slide content away for no reason. */
+@media (max-height: 560px){
+  .hero-pin{height:auto}
+  .hero-sticky{position:static;min-height:0;overflow:visible}
+  /* The second beat is a PIN device: with no pin there is no swap to make, and
+     the statement would only duplicate the panel copy right below it. */
+  .hero-beat2{display:none}
+}
+.hero-lead{padding-bottom:calc(var(--u)*10)}
+/* mono status line — plain text, no chip, no pulse */
+.hero-status{margin:0 0 clamp(26px, 4vw, 48px);font-family:var(--fs-mono);color:var(--ink-dim)}
+.hero h1{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-1);line-height:0.92;letter-spacing:-0.04em;margin:0;color:var(--ink)}
+.hero-role{margin:clamp(18px, 2.6vw, 30px) 0 0;font-family:var(--fs-sans);font-weight:300;font-size:clamp(20px, 2.6vw, 34px);line-height:1.15;letter-spacing:-0.02em;color:var(--ink-dim)}
+
+/* Second beat (H6b). It occupies the SAME lead area the role line vacates, so
+   it is absolute inside .hero-lead (a .wrap, hence the positioned ancestor) and
+   pinned to the bottom of that box's content edge — where the role line ends.
+   `opacity:0` is AUTHORED, not written by the engine: the parked state must be
+   invisible from the first paint, before any scrub has run. Nothing inside is
+   interactive, and it overlays the lead, so it never takes the pointer. */
+.hero-beat2{position:absolute;left:var(--pad-x);right:var(--pad-x);bottom:calc(var(--u)*10);
+  opacity:0;pointer-events:none}
+.hero-beat2 .b2-eyebrow{margin:0 0 clamp(10px, 1.4vw, 16px)}
+/* The measure is capped on the LINE, not the block: a `ch` cap on the block
+   would resolve against the 15px body font and choke a 56px display line into a
+   column. Explicit px keeps the wrap point the same at every display size. */
+.hero-beat2 .b2-line{margin:0;max-width:min(100%, 620px);font-family:var(--fs-sans);font-weight:200;line-height:1.04;letter-spacing:-0.03em}
+
+/* Full-bleed image band. A direct child of .hero (never inside .wrap) so it
+   spans the viewport, with a fixed band height that crops the sources instead
+   of letting a tall render push the fold down. Its own paper is the mortar the
+   mosaic gaps show, and `overflow:hidden` is what clips the H3 scale — the grid
+   inside grows past the band edges on every side as the pin is consumed. */
+.hero-band{position:relative;width:100%;height:clamp(320px, 58vh, 680px);overflow:hidden;background:var(--paper-2)}
+/* Four flagship projects as one asymmetric plate: a tall lead tile beside two
+   small ones, over a wide tile that spans them both. Areas, not line numbers,
+   because the ≤899px fallback re-shapes the same four names (app.jsx pins each
+   project to its area) and a numeric placement would need resetting per tile.
+   minmax(0,…) floors every track: an <img>'s intrinsic width is its automatic
+   minimum, and 1088px of it would blow the column straight out of the band.
+   NOTHING here may author a `transform` — the H3 scrub reads the computed one
+   at registration and would switch to composing through --scrub-s, which no
+   rule below reads, silently dropping the scale. */
+.hero-mosaic{width:100%;height:100%;display:grid;gap:9px;
+  grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr);
+  grid-template-areas:"a b c"
+                      "a d d"}
+/* Explicit 100%/100% rather than relying on `stretch`: a replaced element with
+   an intrinsic aspect ratio declines that alignment and would sit at its own
+   size inside the cell. Per-tile object-position comes from the data. */
+.hero-mosaic img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;background:var(--paper-2)}
+
+/* Under 900px the 1.6fr lead column would leave the three small tiles too
+   narrow to read as anything, so the asymmetry collapses to an even 2x2. */
+@media (max-width: 899px){
+  .hero-mosaic{grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-areas:"a b"
+                        "c d"}
+}
+
+/* Solid-paper title card pulled up over the band (geometry from .panel-overlap). */
+.hero-panel{padding:clamp(28px, 4vw, 52px)}
+.hero-tag{margin:0;font-size:clamp(15px, 1.5vw, 19px);line-height:1.6;color:var(--ink-dim);max-width:64ch}
+
+.hero-foot{display:flex;align-items:end;justify-content:flex-start;margin-top:40px;gap:48px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
+.hero-foot .col{display:flex;flex-direction:column;gap:6px;min-width:140px}
+.hero-foot .k{font-family:var(--fs-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-dim)}
+.hero-foot .v{font-family:var(--fs-mono);font-size:12.5px;color:var(--ink)}
+.hero-foot .v a{position:relative;transition:color .2s}
+.hero-foot .v a:hover{color:var(--accent)}
+
+/* The cue owns its own centring transform, so the scrub engine hands it a
+   channel (--scrub-y) instead of overwriting the shorthand and un-centring it. */
+.scroll-cue{position:absolute;left:50%;transform:translateX(-50%) translateY(var(--scrub-y,0px));bottom:12px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--ink-dim);font-family:var(--fs-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase}
+.scroll-cue .line{width:1px;height:32px;background:linear-gradient(180deg, transparent, var(--accent));animation:scrollLine 2.2s ease-in-out infinite}
+@keyframes scrollLine{0%,100%{transform:scaleY(.6);opacity:.4}50%{transform:scaleY(1);opacity:1}}
+
+/* ─────────────── WORK — project showcases ───────────────
+   One article per project, ~90svh each. Three layers, painted back to front:
+   the index numeral (absolute, aria-hidden decoration), the media half, and the
+   copy half. The ARTICLE — not the section — is the numeral's containing
+   block, and `isolation:isolate` keeps each article's stack its own, so a
+   numeral can never rise over a neighbour's content.
+
+   The ARTICLE ITSELF is the two-column grid, and there is no `.wrap` inside it:
+   a wrap would cap the media at the content width and leave the picture a small
+   box in a full-width band. Instead the media takes a true HALF of the article
+   — flush to the viewport edge, full row height — and only the copy half
+   carries the content padding. */
+.showcase{position:relative;display:grid;grid-template-columns:1fr 1fr;
+  align-items:stretch;isolation:isolate;
+  min-height:90vh;min-height:90svh;border-top:1px solid var(--line);
+  /* The copy half's OUTER padding, so the text keeps the site's content rhythm
+     (`--content-max` centred, never tighter than `--pad-x`) while the media
+     half stays flush to the viewport edge. `--showcase-inner` is the old
+     column gap, now the copy half's padding on the media side. */
+  --showcase-gutter:max(var(--pad-x), (100vw - var(--content-max)) / 2);
+  --showcase-inner:clamp(28px, 4vw, 64px);
+  /* The numeral is allowed to bleed past the inline edge, and the ARTICLE is
+     what cuts it there. Body's `overflow-x:clip` cannot: body propagates its
+     overflow to the viewport, so the bleed becomes 29px of real horizontal
+     scroll instead (measured). `clip` and not `hidden`, on the inline axis
+     only: `overflow-x:hidden` would coerce overflow-y to `auto` and turn every
+     article into a scroll container. */
+  overflow-x:clip}
+
+/* Index numeral. DECORATION ONLY — --ink-faint is below AA at every size, which
+   is why it is aria-hidden in the markup and never takes the pointer. IN FLOW
+   as the copy column's first child: the layout reserves its box, so it can
+   never overlap the title at any viewport (its old absolute anchoring collided
+   with the vertically-centred text on wide/short screens). The margin-bottom
+   also absorbs the ±16px depth-scrub travel. */
+.showcase-num{font-family:var(--fs-sans);font-weight:200;
+  font-size:clamp(110px, 13vw, 240px);line-height:0.82;letter-spacing:-0.05em;
+  color:var(--ink-faint);margin:0 0 clamp(20px, 3vh, 40px) -0.05em;
+  font-variant-numeric:tabular-nums;pointer-events:none;user-select:none;-webkit-user-select:none}
+
+/* Media half. A one-cell grid, so the WIPE box fills it on both axes without a
+   percentage height to resolve. The wipe box owns the overflow and is the node
+   the wipe measures — a clip-path never moves the rect it is read from. The
+   inner figure is the parallax target, overscanned by 2 × PARALLAX_MAX_PX
+   (scroll.jsx) via its own insets, so ±24px of drift can never expose a strip
+   of empty box however tall the half grows. */
+.showcase-media{position:relative;z-index:1;display:grid;
+  min-height:72vh;min-height:72svh}
+.showcase-frame{position:relative;overflow:hidden;background:var(--panel)}
+.showcase-frame figure{position:absolute;inset:-24px 0;margin:0;
+  display:flex;align-items:center;justify-content:center}
+.showcase-frame img{display:block;width:100%;height:100%;object-fit:cover;
+  transition:transform .6s var(--ease-out-soft)}
+.showcase-media:hover img{transform:scale(1.03)}
+/* Letter mark — the fallback for a project with no usable image. */
+.showcase-frame .mark{font-family:var(--fs-sans);font-weight:200;
+  font-size:clamp(64px, 8vw, 120px);line-height:1;color:var(--accent)}
+
+/* Copy half. Holds the text block at the vertical middle of the article while
+   the media half beside it is stretched to the full row height. */
+.showcase-copy{position:relative;z-index:1;display:grid;align-content:center;
+  padding-left:var(--showcase-gutter);padding-right:var(--showcase-inner);
+  padding-block:clamp(40px, 6vw, 72px)}
+
+/* Text column — ONE rise unit (SC2), so it needs no per-child spacing rhythm
+   beyond the gap. */
+.showcase-text{display:flex;flex-direction:column;align-items:flex-start;
+  gap:clamp(14px, 1.6vw, 20px)}
+.showcase-text .eyebrow{margin:0}
+.showcase-text h2{font-family:var(--fs-sans);font-weight:200;line-height:1.02;
+  letter-spacing:-0.03em;margin:0}
+.showcase-text h2 a{transition:color .25s}
+.showcase-text h2 a:hover{color:var(--accent)}
+/* Two lines, never one: a single clamped line at this measure dies mid-clause. */
+.showcase-dek{margin:0;color:var(--ink-dim);font-size:14.5px;line-height:1.6;max-width:52ch;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* The shared chip row pushes itself to the bottom of a stretched cell; here the
+   column is content-height, so the auto margin is turned off to keep the gap. */
+.showcase-text .stags{margin-top:0}
+.showcase-cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--fs-mono);
+  font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);
+  transition:gap .25s var(--ease-out-soft)}
+.showcase-cta:hover{gap:14px}
+
+/* The flip is a TWO-COLUMN device: it assigns the halves to columns, which only
+   exist above the breakpoint. Media takes the right half by default and the
+   left half when flipped; the numeral tracks the copy half on the other side.
+   Below the breakpoint the column is media-then-text for flipped and unflipped
+   articles alike, so reading order never depends on an article's parity — which
+   is also why the assignment lives here and not in the base rule: DOM order
+   alone is the mobile layout.
+
+   Both halves are pinned to row 1 EXPLICITLY. Without it the unflipped article
+   — media in column 2, and first in the DOM — sends sparse auto-placement's
+   cursor past column 1, which it never walks back: the copy landed in a second
+   row and the media stretched to nothing but its own 72svh floor (measured
+   1048px article against a 648px picture). */
+@media (min-width: 900px){
+  .showcase-media{grid-row:1;grid-column:2}
+  .showcase-copy{grid-row:1;grid-column:1}
+  .showcase--flip .showcase-media{grid-column:1}
+  .showcase--flip .showcase-copy{grid-column:2}
+}
+
+/* One column, media above text — full-bleed media, padded copy. The rows are
+   centred as a group (`align-content`) instead of stretched, so the media keeps
+   its own height inside the article's 90svh floor. The numeral's scrub is
+   retired at exactly this width by SHOWCASE_NUM_OFF_QUERY (app.jsx) — the two
+   must name the same viewport, or the numeral would travel over a layout with
+   no room for it. */
+@media (max-width: 899px){
+  .showcase{grid-template-columns:1fr;align-content:center;
+    row-gap:clamp(20px, 4vw, 32px)}
+  .showcase-media{min-height:52vh;min-height:52svh}
+  .showcase-copy{padding-left:var(--pad-x);padding-right:var(--pad-x);
+    padding-block:clamp(28px, 6vw, 48px)}
+  .showcase-num{font-size:clamp(72px, 20vw, 120px);margin-bottom:16px}
+  .showcase-dek{max-width:60ch}
+}
+
+/* ─────────────── APPROACH ─────────────── */
+.approach-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start}
+@media (max-width: 900px){.approach-grid{grid-template-columns:1fr}}
+.approach h2{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-2);line-height:1.05;letter-spacing:-0.03em;margin:0 0 20px;color:var(--ink)}
+.approach p{color:var(--ink-dim);font-size:14.5px;line-height:1.7;max-width:60ch;margin:0 0 18px}
+.principles{display:flex;flex-direction:column;gap:0}
+.principle{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--line);position:relative}
+.principle:last-child{border-bottom:1px solid var(--line)}
+.principle::before{content:"";position:absolute;left:0;top:0;height:1px;width:0;background:var(--accent);transition:width .8s ease}
+.principle.in::before{width:48px}
+.principle .pn{font-family:var(--fs-mono);font-size:11px;color:var(--accent);letter-spacing:0.06em;padding-top:4px}
+.principle .pt{font-family:var(--fs-sans);font-weight:600;font-size:16px;line-height:1.3;color:var(--ink);margin-bottom:6px;letter-spacing:-0.01em}
+.principle .pd{font-size:13.5px;color:var(--ink-dim);line-height:1.6}
+
+/* approach rows — project page numbered steps.
+   Each row now sits inside its own `.approach-row-trigger`, the static wrapper
+   the scrub measures (the row itself is translated, so it cannot be its own
+   trigger). Every descendant rule below is unaffected, but `:last-child` had to
+   move to the WRAPPER: against the row it would now match every row, since each
+   row is an only child, and every row would draw a bottom rule on top of the
+   next row's top rule. */
+.approach-row-trigger{display:block}
+.approach .row{display:grid;grid-template-columns:80px 1fr;gap:18px;padding:18px 0;border-top:1px solid var(--line);position:relative}
+.approach-row-trigger:last-child .row{border-bottom:1px solid var(--line)}
+.approach .row::before{content:"";position:absolute;left:0;top:0;height:1px;width:0;background:var(--accent);transition:width .9s ease}
+.approach .row.in::before{width:80px}
+.approach .row .pn{font-family:var(--fs-mono);font-size:11px;color:var(--accent);letter-spacing:0.06em;padding-top:4px}
+.approach .row .pt{font-family:var(--fs-sans);font-weight:600;font-size:17px;line-height:1.3;color:var(--ink);margin-bottom:6px;letter-spacing:-0.01em}
+.approach .row .pd{font-size:14px;color:var(--ink-dim);line-height:1.65}
+
+/* ─────────────── STACK ─────────────── */
+.stack-grid{display:grid;grid-template-columns:repeat(4, 1fr);gap:14px}
+@media (max-width: 900px){.stack-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width: 540px){.stack-grid{grid-template-columns:1fr}}
+.stack-cell{padding:calc(var(--u)*3);min-height:200px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);transition:border-color .25s, box-shadow .25s}
+.stack-cell::before{content:"";position:absolute;top:0;left:0;width:0;height:1px;background:var(--accent);transition:width .6s ease}
+.stack-cell.in::before{width:100%}
+.stack-cell:hover{border-color:var(--line-strong);box-shadow:var(--shadow-panel)}
+.stack-cell .sh{font-family:var(--fs-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent)}
+.stack-cell .st{font-family:var(--fs-sans);font-weight:600;font-size:17px;line-height:1.2;color:var(--ink);letter-spacing:-0.01em}
+
+/* tag chips — shared by index .stack-cell and project .cell */
+.stags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.tag{font-family:var(--fs-mono);font-size:11px;color:var(--ink-dim);padding:4px 10px;border:1px solid var(--line);transition:color .2s, border-color .2s}
+.tag:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ─────────────── CONTACT ─────────────── */
+.contact{padding-bottom:calc(var(--u) * 16)}
+.contact-card{position:relative;padding:clamp(28px, 5vw, 64px);overflow:hidden;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow-card)}
+.contact-card h2{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-2);line-height:1.0;letter-spacing:-0.04em;margin:0 0 20px;position:relative;color:var(--ink)}
+.contact-card p{color:var(--ink-dim);font-size:15px;max-width:54ch;margin:0 0 28px;position:relative}
+.contact-actions{display:flex;flex-wrap:wrap;gap:12px;position:relative}
+
+/* ─────────────── BUTTONS (shared) ───────────────
+   Sharp corners, small-caps tracking. Primary is an ink fill that INVERTS with
+   the tone (paper fill on an ink section) because both sides read tokens. */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;font-family:var(--fs-sans);font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;border-radius:0;border:1px solid transparent;
+  transition:background-color .3s var(--ease-out-soft), color .3s var(--ease-out-soft), border-color .3s var(--ease-out-soft)}
+.btn-primary{background-color:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn-primary:hover{background-color:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn-ghost{background-color:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn-ghost:hover{background-color:var(--ink);border-color:var(--ink);color:var(--bg)}
+.btn .ar{font-family:var(--fs-mono);font-size:12px}
+
+/* ─────────────── PROJECT PAGE ─────────────── */
+
+/* breadcrumb */
+.crumbs{padding-top:calc(var(--u)*12);font-family:var(--fs-mono);font-size:11px;color:var(--ink-dim);letter-spacing:0.06em;text-transform:uppercase;display:flex;gap:10px;align-items:center}
+.crumbs a{color:var(--ink-dim);transition:color .2s}
+.crumbs a:hover{color:var(--accent)}
+.crumbs .sep{color:var(--ink-faint)}
+.crumbs .here{color:var(--ink)}
+
+/* project hero header */
+.ph{padding-top:calc(var(--u)*4);padding-bottom:calc(var(--u)*8);border-bottom:1px solid var(--line)}
+.ph .meta{display:flex;flex-wrap:wrap;gap:12px;color:var(--ink-dim);font-family:var(--fs-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:32px}
+.ph .meta .pill{display:inline-flex;gap:8px;align-items:center;padding:7px 14px;color:var(--ink-dim);border:1px solid var(--line)}
+.ph .meta .pill.acc{color:var(--accent);border-color:var(--accent-soft)}
+.ph .meta .pill .blip{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.ph h1{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-1);line-height:0.98;letter-spacing:-0.04em;margin:0 0 20px;color:var(--ink)}
+.ph .sub{font-size:16px;color:var(--ink-dim);max-width:64ch;margin:0 0 28px;line-height:1.6}
+.ph .actions{display:flex;flex-wrap:wrap;gap:12px}
+
+/* Full-bleed media band under the project header — same recipe as .hero-band,
+   one notch shorter: a direct page child (never inside .wrap) so it spans the
+   viewport, with a fixed height that crops the source instead of letting a tall
+   image push the overview down. The overview's .panel-overlap rides up over its
+   lower edge on the geometry that primitive already owns. */
+.project-band{position:relative;width:100%;height:clamp(320px, 52vh, 620px);overflow:hidden;background:var(--paper-2)}
+.project-band img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* overview */
+.overview p{color:var(--ink-dim);font-size:15px;line-height:1.75;margin:0 0 16px;max-width:72ch}
+
+/* facts grid — the README-verified key/value pairs, inside the overview panel
+   and directly under its paragraph. Deliberately LIGHTER than .metric: these
+   are reference values read at body size, not headline numbers, so they take
+   the paper surface and a hairline instead of the panel fill and a display
+   scale. auto-fill, so the field carries as many facts as the source states
+   and the cards reflow rather than leave a hole — at 390 that is one column,
+   with no breakpoint of its own. */
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:12px;margin:calc(var(--u)*3) 0 0}
+.fact{display:flex;flex-direction:column;gap:6px;padding:calc(var(--u)*2);background:var(--bg);border:1px solid var(--line);border-top:1px solid var(--line-strong)}
+/* .eyebrow supplies the mono face and the caps; a fact key is a phrase rather
+   than a one-word label, so it gives back some of the tracking. */
+.fact .fk{letter-spacing:0.14em}
+.fact .fv{font-size:15px;line-height:1.45;color:var(--ink)}
+
+/* capabilities — the verified feature grid (details.features).
+   A FIXED two columns, which is what lets the per-card stagger key off
+   `index % 2` and stay resize-independent (the galleries are auto-fill and
+   cannot). The trigger wrapper is layout-neutral apart from the height chain:
+   the grid stretches the wrapper, the wrapper hands that height to the card, so
+   both cards in a row share an edge even though only the card is animated. */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width: 760px){.feat-grid{grid-template-columns:1fr}}
+.feat-trigger{height:100%}
+.feat-card{height:100%;display:flex;flex-direction:column;gap:8px;padding:calc(var(--u)*3);background:var(--panel);border:1px solid var(--line);
+  /* the one strong edge — the same hairline the approach rows wear, so a card
+     reads as a row that grew a panel rather than a new component */
+  border-top:1px solid var(--line-strong)}
+.feat-card .ft{font-family:var(--fs-sans);font-weight:600;font-size:17px;line-height:1.3;color:var(--ink);letter-spacing:-0.01em}
+.feat-card .fd{font-size:14px;color:var(--ink-dim);line-height:1.65}
+
+/* architecture — numbered stack statements with a connector drawn down the
+   index column. The line's scaleY reads `--scrub`, which scroll.jsx writes on
+   its own entry; the `1` fallback is the FINISHED state, which is why reduced
+   motion (where the engine registers nothing) renders the full connector with
+   no rule of its own. transform-origin:top makes it grow downward. */
+.arch-list{position:relative}
+.arch-trigger{display:block}
+.arch-row{display:grid;grid-template-columns:56px 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--line-strong)}
+.arch-trigger:last-child .arch-row{border-bottom:1px solid var(--line-strong)}
+.arch-row .an{font-family:var(--fs-mono);font-size:11px;color:var(--accent);letter-spacing:0.06em;padding-top:4px;padding-left:18px}
+.arch-row .ad{font-size:14.5px;color:var(--ink-dim);line-height:1.65}
+.arch-line{position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--accent);transform:scaleY(var(--scrub,1));transform-origin:top}
+@media (max-width: 560px){
+  .arch-row{grid-template-columns:44px 1fr;gap:12px}
+  .arch-row .an{padding-left:12px}
+}
+
+/* pipeline — the README's ordered "how it works" path, written on the
+   architecture row grammar above: the same index column, the same strong
+   hairlines, the same connector drawn down the numbers. A second vocabulary
+   for a second numbered list would only make the page read as two pages.
+   `.pipe-line` reads the same `--scrub` the engine writes, and the same `1`
+   fallback renders the finished connector under reduced motion with no rule
+   of its own. */
+.pipe-list{position:relative}
+.pipe-trigger{display:block}
+.pipe-row{display:grid;grid-template-columns:56px 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--line-strong)}
+.pipe-trigger:last-child .pipe-row{border-bottom:1px solid var(--line-strong)}
+.pipe-row .pp-n{font-family:var(--fs-mono);font-size:11px;color:var(--accent);letter-spacing:0.06em;padding-top:4px;padding-left:18px}
+.pipe-row .pp-t{font-family:var(--fs-sans);font-weight:600;font-size:17px;line-height:1.3;color:var(--ink);letter-spacing:-0.01em;margin-bottom:6px}
+.pipe-row .pp-d{font-size:14px;color:var(--ink-dim);line-height:1.65}
+.pipe-line{position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--accent);transform:scaleY(var(--scrub,1));transform-origin:top}
+
+/* badge chips — a step that branches or loops says so, in the source's own
+   words. Accent ink on the soft accent wash, and sentence case as authored:
+   a sixty-character label in caps stops being readable. The dashed edge is
+   the loop, the solid edge is the branch — the glyph is decoration, so the
+   distinction cannot rest on it alone. */
+.pipe-badges{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.pipe-badge{display:inline-flex;align-items:baseline;gap:7px;padding:4px 10px;font-family:var(--fs-mono);font-size:10.5px;line-height:1.45;letter-spacing:0.04em;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-soft)}
+.pipe-badge--loop{border-style:dashed;border-color:var(--accent)}
+.pipe-badge .pb-g{font-size:11px}
+@media (max-width: 560px){
+  .pipe-row{grid-template-columns:44px 1fr;gap:12px}
+  .pipe-row .pp-n{padding-left:12px}
+}
+
+/* split grid: outcomes + stack side-by-side */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width: 760px){.split{grid-template-columns:1fr}}
+.cell{padding:calc(var(--u)*3);display:flex;flex-direction:column;gap:14px;min-height:240px;position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line)}
+.cell::before{content:"";position:absolute;top:0;left:0;width:0;height:1px;background:var(--accent);transition:width .8s ease}
+.cell.in::before{width:100%}
+.cell .sh{font-family:var(--fs-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent)}
+.cell .st{font-family:var(--fs-sans);font-weight:600;font-size:18px;line-height:1.2;color:var(--ink);letter-spacing:-0.01em;margin-bottom:6px}
+.cell ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.cell li{color:var(--ink-dim);font-size:14px;line-height:1.6;padding-left:18px;position:relative}
+.cell li::before{content:"▸";position:absolute;left:0;color:var(--accent)}
+
+/* metrics band — README-stated numbers as stat tiles, inside the dark outcomes
+   band and above the split, so it inherits that section's tone tokens rather
+   than declaring a second dark scope. auto-fit rather than a fixed count: the
+   field carries as many numbers as the source states, and the tiles reflow
+   instead of leaving a hole. Values are static — the tile rises, the number
+   never counts. */
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin-bottom:16px}
+.metric{padding:calc(var(--u)*3);display:flex;flex-direction:column;gap:10px;background:var(--panel);border:1px solid var(--line);border-top:1px solid var(--line-strong)}
+/* tabular numerals so a column of figures aligns on its digits; .display-2 on
+   the element supplies the size. */
+.metric .mv{font-family:var(--fs-sans);font-weight:200;line-height:1;letter-spacing:-0.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+.metric .mk{color:var(--ink-dim)}
+
+/* comparison table — an ARIA grid-table (project.jsx writes role=table / row /
+   columnheader / rowheader / cell), never a native <table>: per-row transforms
+   on a `<tr>` are engine-inconsistent, and a grid row is a clean target. The
+   column template is written ONCE on the table as `--compare-cols` and
+   inherited by every row, so the header and the body cannot disagree.
+
+   The scroll box is the narrow-viewport affordance AND a focus target: the
+   table keeps its full width and scrolls sideways inside it rather than
+   squeezing five columns into 390px, and a scroll container that cannot take
+   focus cannot be scrolled from the keyboard. */
+.compare-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.compare-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+/* The min-width is stated on BOTH the table and the row: the table's is what
+   gives the scroll box something to scroll, the row's is what keeps the grid
+   from collapsing if a row is ever read outside its table. */
+.compare-table{display:block;min-width:560px}
+.compare-row{display:grid;grid-template-columns:var(--compare-cols);gap:16px;align-items:baseline;min-width:560px;padding:13px 14px;border-top:1px solid var(--line);
+  /* every row RESERVES the winner's accent edge, so the highlight paints into
+     reserved space instead of shifting one row 2px out of the column grid */
+  border-left:2px solid transparent}
+.compare-table .compare-row:last-child{border-bottom:1px solid var(--line-strong)}
+.compare-row--head{border-top:1px solid var(--line-strong)}
+.compare-cell{font-size:14px;line-height:1.5;color:var(--ink-dim);font-variant-numeric:tabular-nums}
+.compare-cell--head{font-family:var(--fs-sans);font-weight:600;font-size:15px;color:var(--ink);letter-spacing:-0.01em}
+/* .eyebrow (declared later) supplies the column header's mono caps; the
+   two-class selector is what lets a multi-word header give back tracking. */
+.compare-row--head .compare-cell--col{letter-spacing:0.14em}
+.compare-row--win{border-left-color:var(--accent);background:var(--accent-soft)}
+.compare-row--win .compare-cell{color:var(--ink)}
+/* Announced with the winning row's name, never painted: an accent edge and a
+   tinted fill are not available to a screen reader. */
+.compare-win-flag{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;white-space:nowrap;clip-path:inset(50%);border:0}
+.compare-note{margin:14px 0 0;font-family:var(--fs-mono);font-size:11px;line-height:1.6;color:var(--ink-dim)}
+
+/* gallery — placeholder frames */
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width: 760px){.gallery{grid-template-columns:1fr}}
+.frame{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--paper-2);border:1px solid var(--line)}
+.frame .mark{font-family:var(--fs-sans);font-weight:200;font-size:56px;color:var(--accent);line-height:1}
+.frame .corner{position:absolute;top:10px;left:12px;font-family:var(--fs-mono);color:var(--ink-dim);font-size:9px;letter-spacing:0.1em;text-transform:uppercase}
+.frame .label{position:absolute;bottom:12px;left:12px;font-family:var(--fs-mono);color:var(--ink-dim);font-size:10px;letter-spacing:0.1em;text-transform:uppercase}
+
+/* project link cards — ONE recipe shared by prev/next (.pnav) and the
+   same-category related row (.related). Only size and alignment differ. */
+.pnav .card,.related .card{display:flex;align-items:center;gap:16px;cursor:pointer;background:var(--panel);border:1px solid var(--line);transition:border-color .25s, box-shadow .25s}
+.pnav .card:hover,.related .card:hover{border-color:var(--line-strong);box-shadow:var(--shadow-panel)}
+.pnav .card .card-body,.related .card .card-body{flex:1;min-width:0}
+.pnav .card .t,.related .card .t{font-family:var(--fs-sans);font-weight:300;color:var(--ink);letter-spacing:-0.02em;line-height:1.25}
+.pnav .card:hover .t,.related .card:hover .t{color:var(--accent)}
+.pnav .card .c,.related .card .c{margin-top:6px;font-family:var(--fs-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-dim)}
+
+/* card thumbnail — real media when the project has any, letter mark when not */
+.card-thumb{flex:0 0 auto;width:72px;height:52px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--paper-2)}
+.card-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.card-thumb .mark{font-family:var(--fs-sans);font-weight:200;font-size:22px;line-height:1;color:var(--accent)}
+
+/* nav between projects */
+.pnav{margin-top:calc(var(--u)*8);border-top:1px solid var(--line);padding-top:calc(var(--u)*4);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.pnav .card{flex:1;min-width:240px;padding:22px 24px}
+.pnav .card .l{font-family:var(--fs-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:6px}
+.pnav .card .t{font-size:20px}
+/* mirrored: the thumbnail follows the arrow to the outer edge */
+.pnav .card.next{text-align:right;flex-direction:row-reverse}
+
+/* related projects — same category, rendered only when a peer exists */
+.related{margin-top:calc(var(--u)*8);border-top:1px solid var(--line);padding-top:calc(var(--u)*4)}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width: 900px){.related-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width: 620px){.related-grid{grid-template-columns:1fr}}
+.related .card{padding:16px 18px}
+.related .card .t{font-size:16px}
+
+/* footer */
+.footer{padding:32px 0 48px;border-top:1px solid var(--line);font-family:var(--fs-mono);font-size:11px;color:var(--ink-dim);letter-spacing:0.04em}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.footer-links{display:inline-flex;flex-wrap:wrap;gap:14px}
+.footer-links a{color:var(--ink-dim);transition:color .2s}
+.footer-links a:hover{color:var(--accent)}
+
+/* ─────────────── 404 (static page, no React) ─────────────── */
+.notfound{min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:22px}
+.notfound h1{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-1);line-height:1;letter-spacing:-0.04em;margin:0;color:var(--ink)}
+.notfound p{color:var(--ink-dim);font-size:15px;line-height:1.7;max-width:60ch;margin:0}
+.notfound .actions{display:flex;flex-wrap:wrap;gap:12px}
+
+/* density */
+:root.density-compact{--u:6px}
+:root.density-regular{--u:8px}
+:root.density-spacious{--u:11px}
+
+/* entrance reveals (scroll-driven) */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-1{transition-delay:.05s}
+.reveal-2{transition-delay:.12s}
+.reveal-3{transition-delay:.19s}
+
+/* Masked line reveal. The container CLIPS and nothing else — no transition of
+   its own — so a scrubbed headline (engine-driven) and an IO-revealed one
+   (`.mask-reveal` below) share the same wrapper.
+
+   The doubled class is a deliberate specificity bump: every headline this wraps
+   carries its own `.approach h2{margin:0 0 20px}`-style rule, which outranks a
+   plain `.mask-line > *`. Any margin left on the child grows the clip box past
+   the child's own height, and the line that slid away leaks back into view.
+
+   The padding is a descender cushion, expressed in the CHILD's em so it scales
+   with the headline rather than with the 15px body text around it. It is the
+   only reason the clip box is ever taller than the line box, and it is why
+   `.mask-reveal` parks at 130% rather than 110% — at 110% the cushion would
+   expose the top of the parked line. An upward exit (the scrubbed hero title)
+   is unaffected: bottom padding cannot uncover something that left via the top. */
+.mask-line{overflow:hidden}
+.mask-line.mask-line > *{margin:0;padding-bottom:.16em}
+.mask-reveal{transform:translateY(130%);transition:transform 700ms var(--ease-out-soft)}
+.mask-reveal.in{transform:translateY(0)}
+/* The bottom gap the wrapped headlines gave up; the cushion supplies the rest.
+   All three wrapped headlines declared the same `margin:0 0 20px`, so they take
+   the same replacement. */
+.approach .mask-line,.contact-card .mask-line,.ph .mask-line{margin-bottom:12px}
+
+/* --- editorial primitives --- */
+.eyebrow{font-family:var(--fs-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim)}
+
+/* Overlapping panel — pulls a card up over the block above it. A solid paper
+   card in EITHER tone, which is why it re-scopes to the light token set (see
+   the light token block above): a white card inheriting dark ink would paint
+   near-white text on near-white paper. position:relative so it paints above
+   the preceding in-flow sibling. */
+.panel-overlap{position:relative;z-index:1;margin-top:clamp(-96px, -8vw, -56px);background-color:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:0;box-shadow:var(--shadow-panel)}
+@media (max-width: 720px){.panel-overlap{margin-top:-24px}}
+
+.hairline{width:100%;height:1px;background:var(--line-strong);border:0;margin:0}
+
+.section-num{font-family:var(--fs-sans);font-weight:200;font-size:var(--fs-display-2);color:var(--ink-dim);line-height:1;letter-spacing:-0.03em}
+
+/* motion companions — added and removed by scripts/scroll.jsx for the lifetime
+   of a live entry. The engine owns the animated values; CSS owns the
+   compositing hint, so no inline style has to carry it. */
+.motion-scrub{will-change:transform,opacity,clip-path}
+.motion-parallax{will-change:transform}
+
+/* ─────────────── EDITORIAL GRAMMAR (applied) ───────────────
+   Everything here is STATIC — no new animation — so the reduced-motion block
+   below needs no additions. Both pages wear the same rules, so the grammar
+   cannot drift. */
+
+/* Display ramp as applied classes. */
+.display-1{font-size:var(--fs-display-1)}
+.display-2{font-size:var(--fs-display-2)}
+
+/* Editorial section header. The `[0x]` marker each section already renders
+   becomes the big quiet numeral and the label beside it becomes the eyebrow —
+   no new elements. Bottom alignment puts the numeral's own hairline and the
+   existing .rule gradient on ONE line running to the right edge.
+   Applied via the .section-head modifier so the inline `▸` gallery headers
+   (project.jsx MediaGallery / MediaVideoGallery) keep their small scale. */
+.section-tag.section-head{align-items:flex-end;gap:16px;margin-bottom:calc(var(--u)*5)}
+.section-tag.section-head .marker.section-num{position:relative;color:var(--ink-dim);line-height:.9;padding-bottom:10px}
+.section-tag.section-head .marker.section-num::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line-strong)}
+.section-tag.section-head .eyebrow{padding-bottom:10px;color:var(--ink-dim)}
+.section-tag.section-head > span:last-child:not(.rule){padding-bottom:10px}
+@media (max-width: 560px){
+  .section-tag.section-head{flex-wrap:wrap;gap:12px}
+  .section-tag.section-head .eyebrow{letter-spacing:.14em}
+}
+
+/* Hairline rules between stacked rows — index principles and project approach
+   steps. Both already draw their own border, so the primitive's tone lands on
+   the existing rule instead of inserting an <hr> into the DOM. */
+.approach .principle{border-top-color:var(--line-strong)}
+.approach .principle:last-child{border-bottom-color:var(--line-strong)}
+.approach .row{border-top-color:var(--line-strong)}
+.approach-row-trigger:last-child .row{border-bottom-color:var(--line-strong)}
+
+/* Project overview rides up over the hero's lower padding — the overlapping
+   panel. Three cooperating pieces:
+     .ph-overlapped   surrenders enough bottom padding that the pull lands in
+                      dead space instead of over the actions row, and drops its
+                      own bottom rule (the panel is now the boundary).
+     .overview-lead   gives up the section's top padding, which would otherwise
+                      swallow the negative margin whole.
+     .panel-overlap   supplies the margin itself (see the primitive above) —
+                      NOT restated here. It is declared after .wrap, so its
+                      margin-top wins over that rule's `margin:0 auto`.
+   .wrap pads horizontally only, so the panel adds its own vertical rhythm. */
+.ph.ph-overlapped{padding-bottom:calc(var(--u)*8 + 96px);border-bottom:0}
+.overview-lead{padding-top:0}
+.overview-lead .panel-overlap{padding-top:calc(var(--u)*5);padding-bottom:calc(var(--u)*5)}
+@media (max-width: 720px){
+  .ph.ph-overlapped{padding-bottom:calc(var(--u)*8 + 24px)}
+}
+/* With a band between them, the header surrenders the compensation entirely:
+   the panel now rides up over the BAND, and dead space under the actions row
+   would only push the band off the fold. Three classes, so it outranks both
+   rules above without restating either breakpoint. */
+.ph.ph-overlapped.ph--banded{padding-bottom:calc(var(--u)*8)}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  /* Masked lines render in place: the clip is released so nothing can be caught
+     mid-slide, and the child sits at its final position with no transition. */
+  .mask-line{overflow:visible}
+  .mask-reveal{transform:none;transition:none}
+  /* The pin is a motion device, so it is retired wholesale — the scene rejoins
+     normal flow. The engine registers nothing here, so `transform:none` only
+     covers a class that outlived its hook. */
+  .hero-pin{height:auto}
+  .hero-sticky{position:static;height:auto;min-height:0;overflow:visible;transform:none}
+  /* Same reason as the short-viewport flatten: no pin, no second beat. */
+  .hero-beat2{display:none}
+  .scroll-cue .line{animation:none}
+  /* scroll.jsx writes no transforms under reduced motion and strips these
+     classes on cleanup; this drops the layer promotion if one ever outlives
+     its hook. */
+  .motion-scrub,.motion-parallax{will-change:auto}
+}
