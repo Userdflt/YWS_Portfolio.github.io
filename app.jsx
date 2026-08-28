@@ -279,7 +279,7 @@ function Hero(){
       <div className="wrap">
         <div className="panel-overlap hero-panel" ref={panelRef}>
           <p className="hero-tag">
-            i build and maintain ignite's internal ai applications — generative ai, retrieval and rag, document intelligence, workflow automation, and ai-assisted design — plus the enterprise foundations beneath them: azure data architecture, permission-aware retrieval, evaluation, and monitoring. i set the governance and delivery standards that keep ai reliable, secure, and responsibly deployed.
+            I build and maintain ignite's internal ai applications, generative ai, retrieval and rag, document intelligence, workflow automation, and ai-assisted design — plus the enterprise foundations System Infrastructure for AI Integration beneath them: azure data architecture, permission-aware retrieval, evaluation, and monitoring. I set the governance and delivery standards that keep ai reliable, secure, and responsibly deployed.
           </p>
 
           <div className="hero-foot">
