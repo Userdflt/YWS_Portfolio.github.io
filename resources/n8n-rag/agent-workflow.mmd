@@ -1,0 +1,37 @@
+graph TD
+    A["🔔 Chat Trigger<br/>When message received<br/>Webhook endpoint"] --> ORCH["🧠 Orchestration Agent<br/>GPT-4.1 Main Controller<br/>Query analysis & routing"]
+    
+    B["🤖 OpenAI GPT-4.1<br/>Language Model<br/>Temperature: 0.4"] --> ORCH
+    C["💾 PostgreSQL Memory<br/>Chat History Storage<br/>Table: orch_agent_history"] --> ORCH
+    
+    ORCH --> D["🏗️ Code-B Tool<br/>Stability & Durability<br/>Structural integrity, loads,<br/>seismic, materials"]
+    ORCH --> E["🔥 Code-C Tool<br/>Protection from Fire<br/>Fire prevention, spread,<br/>evacuation, firefighting"]
+    ORCH --> F["♿ Code-D Tool<br/>Access Routes<br/>Accessibility, movement,<br/>disabilities, lifts"]
+    ORCH --> G["💧 Code-E Tool<br/>Moisture Management<br/>Surface water, external,<br/>internal moisture"]
+    ORCH --> H["🛡️ Code-F Tool<br/>Safety of Users<br/>Hazards, falling, warnings,<br/>emergency systems"]
+    ORCH --> I["🔧 Code-G Tool<br/>Services & Facilities<br/>Hygiene, ventilation,<br/>utilities, lighting"]
+    ORCH --> J["🌡️ Code-H Tool<br/>Energy Efficiency<br/>Thermal resistance,<br/>HVAC, hot water"]
+    
+    D --> D1["🔍 Code-B Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+    E --> E1["🔍 Code-C Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+    F --> F1["🔍 Code-D Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+    G --> G1["🔍 Code-E Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+    H --> H1["🔍 Code-F Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+    I --> I1["🔍 Code-G Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+    J --> J1["🔍 Code-H Agent<br/>OpenAI GPT-4.1<br/>Specialized prompts"]
+    
+    D1 --> D2["📊 Supabase Vector Store<br/>Code-B Knowledge Base<br/>+ OpenAI Embeddings"]
+    E1 --> E2["📊 Supabase Vector Store<br/>Code-C Knowledge Base<br/>+ OpenAI Embeddings"]
+    F1 --> F2["📊 Supabase Vector Store<br/>Code-D Knowledge Base<br/>+ OpenAI Embeddings"]
+    G1 --> G2["📊 Supabase Vector Store<br/>Code-E Knowledge Base<br/>+ OpenAI Embeddings"]
+    H1 --> H2["📊 Supabase Vector Store<br/>Code-F Knowledge Base<br/>+ OpenAI Embeddings"]
+    I1 --> I2["📊 Supabase Vector Store<br/>Code-G Knowledge Base<br/>+ OpenAI Embeddings"]
+    J1 --> J2["📊 Supabase Vector Store<br/>Code-H Knowledge Base<br/>+ OpenAI Embeddings"]
+    
+    D2 --> RESP["💬 Specialized Response<br/>Building Code compliant<br/>Context-aware answer"]
+    E2 --> RESP
+    F2 --> RESP
+    G2 --> RESP
+    H2 --> RESP
+    I2 --> RESP
+    J2 --> RESP

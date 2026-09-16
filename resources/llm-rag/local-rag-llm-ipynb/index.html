@@ -1,0 +1,558 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Local LLM retrieval and self-correction — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Local LLM retrieval and self-correction</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-/blob/0f1d8155a075407860de69ed297def7e95e2bef0/Local_RAG_LLM.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="retrieval-augmented-generation-rag-from-pdfs-with-local-vector-storage-chromadb-enhanced-reflection-and-iterative-self-correction">Retrieval-Augmented Generation (RAG) from PDFs with Local Vector Storage (ChromaDB), Enhanced Reflection, and Iterative Self-Correction</h2></section><section class="notebook-note"><h3 id="mermaid-flowchart-optional">Mermaid Flowchart (optional)</h3></section><section class="notebook-note"><h3 id="imports">Imports</h3></section><details class="code-cell"><summary>Code cell 4</summary><pre><code>import os
+from dotenv import load_dotenv
+
+from langchain_community.llms import Ollama
+from langchain.prompts import PromptTemplate
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
+from typing import List
+from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
+from langchain_community.vectorstores import Chroma
+import ollama
+import chromadb</code></pre></details><details class="code-cell"><summary>Code cell 5</summary><pre><code>load_dotenv()
+
+tavily_api_key = os.getenv(&quot;TAVILY_API_KEY&quot;)</code></pre></details><section class="notebook-note"><h3 id="model">Model</h3></section><details class="code-cell"><summary>Code cell 7</summary><pre><code># Embedding models
+JSONparser = JsonOutputParser()
+STRparser = StrOutputParser()
+</code></pre></details><section class="notebook-note"><h3 id="embedding-function">Embedding function</h3></section><details class="code-cell"><summary>Code cell 9</summary><pre><code># Define embedding function
+def get_embedding(text):
+    response = ollama.embeddings(model=&quot;mxbai-embed-large&quot;, prompt=text)
+    return response[&quot;embedding&quot;]</code></pre></details><section class="notebook-note"><h3 id="accessing-pdf-files">Accessing PDF files</h3></section><details class="code-cell"><summary>Code cell 11</summary><pre><code># Process PDF files
+def op2_process_pdf_files(folder_path, prefix, suffix):
+    chunks = []
+    pdf_files = [file for file in os.listdir(folder_path) if file.startswith(prefix) and file.endswith(suffix)]
+    
+    for pdf_file in pdf_files:
+        pdf_path = os.path.join(folder_path, pdf_file)
+        loader = PyPDFLoader(pdf_path)
+        document = loader.load()
+        
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=800,
+            chunk_overlap=80,
+            length_function=len
+        )
+        document = text_splitter.split_documents(document)
+        
+        chunks.extend(document)
+        print(f&quot;Processed: {pdf_file}&quot;)
+        
+    print(f&quot;All {len(pdf_files)} files processed successfully.&quot;)
+    print(f&quot;Total number of chunks loaded: {len(chunks)}&quot;)
+    
+    return chunks
+
+folder_path = r&quot;C:\Users\GGPC\Desktop\Work\RAG_Local_LLM\data&quot;
+prefix = &quot;H1 Residential&quot;
+suffix = &quot;.pdf&quot;
+
+chunks = op2_process_pdf_files(folder_path, prefix, suffix)</code></pre></details><details class="code-cell"><summary>Code cell 12</summary><pre><code>def get_chunk_ids(chunks):
+    # Id format: Page Source : Page Number : Chunk Index
+    
+    chunk_counter = {}
+    
+    for chunk in chunks:
+        page = chunk.metadata.get(&quot;page&quot;)
+        source = chunk.metadata.get(&quot;source&quot;)
+        current_page_id = f&quot;{source}:{page}&quot;
+        
+        # chunk index counter
+        if current_page_id not in chunk_counter:
+            chunk_counter[current_page_id] = 0
+        else:
+            chunk_counter[current_page_id] += 1
+
+        # calculate chunk id
+        chunk_id = f&quot;{current_page_id}:{chunk_counter[current_page_id]}&quot;
+        
+        # update chunk metadata
+        chunk.metadata[&quot;id&quot;] = chunk_id
+    
+    return chunks
+
+# Get chunk ids
+chunks = get_chunk_ids(chunks)</code></pre></details><details class="code-cell"><summary>Code cell 13</summary><pre><code># Initialize the Chroma client
+CHROMA_PATH = &quot;chroma_db2&quot;
+client = chromadb.PersistentClient(path=CHROMA_PATH)</code></pre></details><details class="code-cell"><summary>Code cell 14</summary><pre><code># Get or create a collection
+collection_name = &quot;docs&quot;
+collection = client.get_or_create_collection(name=collection_name)</code></pre></details><details class="code-cell"><summary>Code cell 15</summary><pre><code># Add documents to the collection
+existing_ids = set(collection.get()[&quot;ids&quot;])
+new_chunks = [chunk for chunk in chunks if chunk.metadata.get(&quot;id&quot;) not in existing_ids]
+
+if new_chunks:
+    print(f&quot;👉 Adding new documents: {len(new_chunks)}&quot;)
+    for chunk in new_chunks:
+        embedding = get_embedding(chunk.page_content)
+        collection.add(
+            ids=[chunk.metadata[&quot;id&quot;]],
+            embeddings=[embedding],
+            documents=[chunk.page_content],
+            metadatas=[chunk.metadata]
+        )
+else:
+    print(&quot;✅ No new documents to add&quot;)
+
+print(f&quot;Total documents in DB: {len(collection.get()[&#x27;ids&#x27;])}&quot;)</code></pre></details><section class="notebook-note"><h3 id="embedding-and-retrieval">Embedding and Retrieval</h3></section><details class="code-cell"><summary>Code cell 17</summary><pre><code>class ChromaEmbeddingFunction:
+    def __init__(self, model_name: str):
+        self.model_name = model_name
+
+    def __call__(self, texts: List[str]) -&gt; List[List[float]]:
+        return [self.embed_query(text) for text in texts]
+
+    def embed_query(self, text: str) -&gt; List[float]:
+        response = ollama.embeddings(model=self.model_name, prompt=text)
+        return response[&quot;embedding&quot;]
+
+# Use this wrapper class when creating the vectorstore
+embedding_function = ChromaEmbeddingFunction(&quot;mxbai-embed-large&quot;)</code></pre></details><details class="code-cell"><summary>Code cell 18</summary><pre><code># Create the vectorstore and retriever
+vectorstore = Chroma(
+    client=client,
+    collection_name=collection_name,
+    embedding_function=embedding_function
+)
+retriever = vectorstore.as_retriever()</code></pre></details><details class="code-cell"><summary>Code cell 19</summary><pre><code>retriever = vectorstore.as_retriever()
+
+retriever.invoke(&quot;what are the permitted activities?&quot;)</code></pre></details><details class="text-output"><summary>Text output</summary><pre>[Document(metadata={&#x27;id&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf:1:1&#x27;, &#x27;page&#x27;: 1, &#x27;source&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf&#x27;}, page_content=&#x27;(b) are compatible with the scale and intensity of development anticipated \nwithin the zone; and  \n(c) avoid, remedy or mitigate adverse effects on residential amenity; and  \n(d) will not detract from the vitality of the Business – City Centre  Zone , \nBusiness – Metro politan  Centre Zone and the Business – Town \nCentre Zone.  \nH1.4.  Activity table  \nTable H1.4.1 Activity t able specifies the activity status of land use and development  \nactivities in the Residential – Large Lot Zone pursuant to section 9(3) of the Resource \nManagement Act 1991.    \nTable  H1.4.1 Activity table \nActivity  Activity \nstatus  Standards to be complied with  \nUse \n(A1) Activities not provided for  NC  \nResidential  \n(A2) Camping grounds  D  \n(A3) One dwelling per site  P Standard H1.6.4 Building height;&#x27;),
+ Document(metadata={&#x27;id&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf:9:2&#x27;, &#x27;page&#x27;: 9, &#x27;source&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf&#x27;}, page_content=&#x27;with the surrounding residential area .  \n(c) traffic:  \n(i) whether the activity avoids or mitigates high levels of additional \nnon-residential traffic on local roads.  \n(d) location and design of parking and access :  \n(i) whether access is provided or required.  \n(e) noise, lighting  and hours of operation : \n(i) whether n oise and lighting and the hours of operation of the \nactivity avoids, remedies or mitigates adverse effects on the \nresidential amenity of surrounding properties, by:  \n• locating noisy activities away from neighbouring residential \nboundaries; and&#x27;),
+ Document(metadata={&#x27;id&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf:8:0&#x27;, &#x27;page&#x27;: 8, &#x27;source&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf&#x27;}, page_content=&#x27;H1 Residential – Large Lot Zone  \n \nAuckland Unitary Plan Operative in part   9 Note: Building Act regulations apply. A building consent may be required under the \nBuilding Act.  \nH1.7.  Assessment  – controlled activities  \nThere are no controlled activities in this zone . \nH1.8.  Assessment – restricted discretionary a ctivities  \nH1.8.1.  Matters of discretion  \nThe C ouncil will restrict its discretion to all the following matters when assessing a \nrestricted discretionary activity resource consent application:  \n(1) for supported residential care accommodating up to 10 people per site inclusive \nof staff and residents; boarding houses accommodating up to 10 people per site \ninclusive of staff and residents; and visitor accommodation accommodating up to&#x27;),
+ Document(metadata={&#x27;id&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf:4:0&#x27;, &#x27;page&#x27;: 4, &#x27;source&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf&#x27;}, page_content=&#x27;H1 Residential – Large Lot Zone  \n \nAuckland Unitary Plan Operative in part   5 H1.6.  Standards  \nH1.6.1.  Activities l isted in Table H1.4.1 Activity table  \n(1) Activities and buildings containing activities  listed in Table H1.4.1 Activity table \nmust comply with the standards listed in the column in Table H1.4.1 called  \nStandards to be complied with.  \nH1.6.2.  Home occupations  \nPurpose: to enable people to work from home at a scale that the residential character \nand amenity is maintained.  \n(1) A home occupation must comply with all the following standards : \n(a) at least one person engaged in the home occupation must use the \ndwelling on the  site as their principal place of residence ; \n(b) no more than two people who do not use the dwelling as their principal&#x27;)]</pre></details><section class="notebook-note"><h3 id="setting-up-the-models-and-testing">Setting up the models and Testing</h3></section><details class="code-cell"><summary>Code cell 21</summary><pre><code># Setting up the &#x27;setup&#x27; part of chain
+setup = RunnableParallel(context=retriever, question=RunnablePassthrough())
+setup.invoke(&quot;what are the permitted activities?&quot;)</code></pre></details><details class="text-output"><summary>Text output</summary><pre>{&#x27;context&#x27;: [Document(metadata={&#x27;id&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf:1:1&#x27;, &#x27;page&#x27;: 1, &#x27;source&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf&#x27;}, page_content=&#x27;(b) are compatible with the scale and intensity of development anticipated \nwithin the zone; and  \n(c) avoid, remedy or mitigate adverse effects on residential amenity; and  \n(d) will not detract from the vitality of the Business – City Centre  Zone , \nBusiness – Metro politan  Centre Zone and the Business – Town \nCentre Zone.  \nH1.4.  Activity table  \nTable H1.4.1 Activity t able specifies the activity status of land use and development  \nactivities in the Residential – Large Lot Zone pursuant to section 9(3) of the Resource \nManagement Act 1991.    \nTable  H1.4.1 Activity table \nActivity  Activity \nstatus  Standards to be complied with  \nUse \n(A1) Activities not provided for  NC  \nResidential  \n(A2) Camping grounds  D  \n(A3) One dwelling per site  P Standard H1.6.4 Building height;&#x27;),
+  Document(metadata={&#x27;id&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf:9:2&#x27;, &#x27;page&#x27;: 9, &#x27;source&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf&#x27;}, page_content=&#x27;with the surrounding residential area .  \n(c) traffic:  \n(i) whether the activity avoids or mitigates high levels of additional \nnon-residential traffic on local roads.  \n(d) location and design of parking and access :  \n(i) whether access is provided or required.  \n(e) noise, lighting  and hours of operation : \n(i) whether n oise and lighting and the hours of operation of the \nactivity avoids, remedies or mitigates adverse effects on the \nresidential amenity of surrounding properties, by:  \n• locating noisy activities away from neighbouring residential \nboundaries; and&#x27;),
+  Document(metadata={&#x27;id&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf:8:0&#x27;, &#x27;page&#x27;: 8, &#x27;source&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf&#x27;}, page_content=&#x27;H1 Residential – Large Lot Zone  \n \nAuckland Unitary Plan Operative in part   9 Note: Building Act regulations apply. A building consent may be required under the \nBuilding Act.  \nH1.7.  Assessment  – controlled activities  \nThere are no controlled activities in this zone . \nH1.8.  Assessment – restricted discretionary a ctivities  \nH1.8.1.  Matters of discretion  \nThe C ouncil will restrict its discretion to all the following matters when assessing a \nrestricted discretionary activity resource consent application:  \n(1) for supported residential care accommodating up to 10 people per site inclusive \nof staff and residents; boarding houses accommodating up to 10 people per site \ninclusive of staff and residents; and visitor accommodation accommodating up to&#x27;),
+  Document(metadata={&#x27;id&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf:4:0&#x27;, &#x27;page&#x27;: 4, &#x27;source&#x27;: &#x27;C:\\Users\\GGPC\\Desktop\\Work\\RAG_Local_LLM\\data\\H1 Residential - Large Lot Zone.pdf&#x27;}, page_content=&#x27;H1 Residential – Large Lot Zone  \n \nAuckland Unitary Plan Operative in part   5 H1.6.  Standards  \nH1.6.1.  Activities l isted in Table H1.4.1 Activity table  \n(1) Activities and buildings containing activities  listed in Table H1.4.1 Activity table \nmust comply with the standards listed in the column in Table H1.4.1 called  \nStandards to be complied with.  \nH1.6.2.  Home occupations  \nPurpose: to enable people to work from home at a scale that the residential character \nand amenity is maintained.  \n(1) A home occupation must comply with all the following standards : \n(a) at least one person engaged in the home occupation must use the \ndwelling on the  site as their principal place of residence ; \n(b) no more than two people who do not use the dwelling as their principal&#x27;)],
+ &#x27;question&#x27;: &#x27;what are the permitted activities?&#x27;}</pre></details><details class="code-cell"><summary>Code cell 22</summary><pre><code>### Retrieval Grading
+
+# Local Model
+MODEL = &quot;llama3.1&quot;
+model = Ollama(model=MODEL, format=&quot;json&quot;, temperature=0)# temperature 0 for more accurate / consistnat answers
+
+template = &quot;&quot;&quot;&lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;system&lt;|end_header_id|&gt;
+You are a grader assessing the relevance of a retrieved document to a user question.\n
+Your task is to determine if the document contains any keywords or concepts that directly relate to the user&#x27;s question.\n
+This is a broad relevance test, and you do not need to assess the accuracy of the document&#x27;s content—only whether the document has related keywords or ideas.\n
+
+If the document contains words or concepts that are clearly relevant to the user question, return &quot;yes&quot;.\n
+If the document lacks such keywords or is off-topic, return &quot;no&quot;.\n
+
+Provide your decision as a JSON object with a single key &quot;score&quot; and a binary value (&quot;yes&quot; or &quot;no&quot;). Do not provide any explanation or preamble—just the JSON output.
+&lt;|end_of_text_id|&gt;
+&lt;|start_header_id|&gt;user&lt;|end_header_id|&gt;
+Here is the retrieved document: {document}\n\n
+Here is the user question: {question}\n\n
+&lt;|end_of_text_id|&gt;&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;
+&quot;&quot;&quot;
+
+ret_prompt = PromptTemplate.from_template(template, input=[&quot;document&quot;, &quot;question&quot;])
+retrieval_grader = ret_prompt | model | JSONparser
+
+question = &quot;what are the permitted activities?&quot;
+documents = retriever.invoke(question)
+text = [doc.page_content for doc in documents]
+
+print(retrieval_grader.invoke({&quot;document&quot;: text, &quot;question&quot;: question}))
+</code></pre></details><details class="code-cell"><summary>Code cell 23</summary><pre><code>### Generate
+
+# Local Model
+MODEL = &quot;llama3.1&quot;
+model = Ollama(model=MODEL, temperature=0)# temperature 0 for more accurate / consistnat answers
+
+template = &quot;&quot;&quot;&lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;system&lt;|end_header_id|&gt;
+Extract and provide detailed information from the context to answer the question.\n
+Steps:\n
+1. Analyze the provided context in detail.\n
+2. Answer the question comprehensively, using relevant information from the context.\n
+3. Structure your answer clearly, with appropriate headings, bullet points, or numbered lists if necessary.\n
+4. State the source of the information.\n
+5. If the answer is not present in the context, respond with: &quot;I couldn&#x27;t find any relevant information in the provided context.&quot;\n\n
+&lt;|end_of_text_id|&gt;&lt;|start_header_id|&gt;user&lt;|end_header_id|&gt;
+Context: {context}\n
+Question: {question}\n\n
+Answer: &lt;|end_of_text_id|&gt;&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;
+&quot;&quot;&quot;
+
+rag_prompt = PromptTemplate.from_template(template, input=[&quot;context&quot;, &quot;question&quot;])
+rag_chain = rag_prompt | model | STRparser
+
+question = &quot;what are the permitted activities?&quot;
+documents = retriever.invoke(question)
+
+generation = rag_chain.invoke({&quot;context&quot;: documents, &quot;question&quot;: question})
+print(generation)</code></pre></details><details class="code-cell"><summary>Code cell 24</summary><pre><code>### Hallucination Checker
+
+# Local Model
+MODEL = &quot;llama3.1&quot;
+model = Ollama(model=MODEL, format=&quot;json&quot;, temperature=0)# temperature 0 for more accurate / consistnat answers
+
+template =&quot;&quot;&quot;
+&lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;system&lt;|end_header_id|&gt; You are a grader tasked with checking 
+whether a generated answer contains hallucinations or fabricated information that is factually incorrect.\n
+Your task is to assess the factual accuracy of the answer in relation to the question. \n
+If the answer appears to contain hallucinations or incorrect information, grade it as &#x27;no&#x27;. If the answer appears factually correct, grade it as &#x27;yes&#x27;. \n
+Provide the binary score as a JSON with a single key &#x27;score&#x27; and no preamble or explanation.\n
+&lt;|eot_id|&gt;&lt;|start_header_id|&gt;user&lt;|end_header_id|&gt; 
+Here are the facts:
+\n ------- \n
+{document} 
+\n ------- \n
+Here is the generated answer: {generation} 
+&lt;|eot_id|&gt;&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;&quot;&quot;&quot;
+
+
+hal_prompt = PromptTemplate.from_template(template, input=[&quot;document&quot;, &quot;generation&quot;])
+hal_checker = hal_prompt | model | STRparser
+
+print(hal_checker.invoke({&quot;document&quot;: documents, &quot;generation&quot;: generation}))</code></pre></details><details class="code-cell"><summary>Code cell 25</summary><pre><code>### Reflection Process for Generation and Retrieved Documents
+
+# Local Model
+MODEL = &quot;llama3.1&quot;
+model = Ollama(model=MODEL, format=&quot;json&quot;, temperature=0)# temperature 0 for more accurate / consistnat answers
+
+# Prompt
+
+template=&quot;&quot;&quot;&lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;system&lt;|end_header_id|&gt; You are tasked with reflecting on a generated answer 
+and comparing it with the retrieved documents to check if any additional relevant information is missing.\n
+Review the generated answer, compare it with the documents, and suggest if any more information should be added from the documents.\n
+
+Provide the result as a JSON object with:
+- &#x27;reflection&#x27;: whether the answer is complete or missing important information.\n
+- &#x27;missing_info&#x27;: additional details from the documents to improve the answer, or &#x27;none&#x27; if the answer is complete.\n\n
+
+No additional explanation is required.\n\n &lt;|eot_id|&gt;&lt;|start_header_id|&gt;user&lt;|end_header_id|&gt;
+Here is the generated answer:
+\n ------- \n
+{generation} 
+\n ------- \n
+Here are the retrieved documents:
+\n ------- \n
+{document}
+\n ------- \n
+Here is the user question: {question} &lt;|eot_id|&gt;&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;&quot;&quot;&quot;
+
+
+ref_prompt = PromptTemplate.from_template(template, input=[&quot;generation&quot;, &quot;document&quot;, &quot;question&quot;])
+reflector = ref_prompt | model | JSONparser
+
+print(reflector.invoke({&quot;generation&quot;: generation, &quot;document&quot;: documents, &quot;question&quot;: question}))
+</code></pre></details><details class="code-cell"><summary>Code cell 26</summary><pre><code>### Indicator
+
+# Local Model
+MODEL = &quot;llama3.1&quot;
+model = Ollama(model=MODEL, format=&quot;json&quot;, temperature=0)# temperature 0 for more accurate / consistnat answers
+
+template=&quot;&quot;&quot;&lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;system&lt;|end_header_id|&gt; You are an expert at routing a 
+user question to a vectorstore or web search.\n
+Use the vectorstore for questions on zoning, land use, building controls, or environmental regulations in Auckland.\n 
+You do not need to be stringent with the keywords in the question related to these topics.\n
+Otherwise, use web-search.\n
+Give a binary choice &#x27;web_search&#x27; or &#x27;vectorstore&#x27; based on the question.\n 
+Return the a JSON with a single key &#x27;datasource&#x27; and no premable or explanation.\n\n
+
+Question to route: {question} &lt;|eot_id|&gt;&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;&quot;&quot;&quot;
+
+
+ind_prompt = PromptTemplate.from_template(template, input=[&quot;question&quot;])
+indicator = ind_prompt | model | JSONparser
+question = &quot;what are the permitted activities?&quot;
+documents = retriever.get_relevant_documents(question)
+text = [doc.page_content for doc in documents]
+print(indicator.invoke({&quot;question&quot;: question}))</code></pre></details><details class="code-cell"><summary>Code cell 27</summary><pre><code>### Web_search
+from langchain_community.tools.tavily_search import TavilySearchResults
+
+web_search_tool = TavilySearchResults(k=3)</code></pre></details><section class="notebook-note"><h3 id="imports-for-setting-up-control-flow">Imports for setting up Control Flow</h3></section><details class="code-cell"><summary>Code cell 29</summary><pre><code>from typing import TypedDict
+
+from langchain_core.tools import tool
+from langgraph.graph import END, START, StateGraph</code></pre></details><details class="code-cell"><summary>Code cell 30</summary><pre><code>### State Graph
+
+class GraphState(TypedDict):
+    &quot;&quot;&quot;
+    Represents the state of graph.
+    
+    Attributes:
+        question: question
+        generation: LLM generation
+        documents: list of documents
+    &quot;&quot;&quot;
+    question: str
+    generation: str
+    web_search: str
+    documents: List[str]
+    
+    
+### Nodes
+
+def retrieve(state):
+    &quot;&quot;&quot;
+    Retrieves relevant documents from the vector store.
+    
+    Args:
+        state (dict): The current state of the graph.
+        
+    Returns:
+        state (dict): New key added to state, documents, that contains retrieved documents
+    &quot;&quot;&quot;
+    
+    print(&quot;RETRIEVING...&quot;)
+    
+    question = state[&quot;question&quot;]
+    documents = retriever.invoke(question)
+    
+    return{&quot;documents&quot;: documents, &quot;question&quot;: question}
+
+
+def generate(state):
+    &quot;&quot;&quot;
+    Generate answer using RAG on retrieved documents
+    
+    Args: 
+        state (dict): The current state of the graph.
+        
+    Returns:
+        state (dict): New Key added to state, generation, that contains the LLM generation
+    &quot;&quot;&quot;
+    
+    print(&quot;GENERATING...&quot;)
+    question = state[&quot;question&quot;]
+    documents = state[&quot;documents&quot;]
+    
+    # RAG Generation
+    generation = rag_chain.invoke({&quot;context&quot;: documents, &quot;question&quot;: question})
+    return {&quot;documents&quot;: documents, &quot;question&quot;: question, &quot;generation&quot;: generation}
+
+
+def grade_relevance(state):
+    &quot;&quot;&quot;
+    Determines if the retrieved documents are relevant to the question
+    If any document is not relevant, flag to run web search
+    
+    Args:
+        state (dict): The current state of the graph
+        
+    Returns:
+        state (dict): New key added to state, 
+        &quot;&quot;&quot;
+        
+    print(&quot;GRADING RELEVANCE...&quot;)
+    
+    question = state[&quot;question&quot;]
+    documents = state[&quot;documents&quot;]
+    
+    # Score documents
+    filtered_docs = []
+    web_search = &quot;No&quot;
+    for doc in documents:
+        score = retrieval_grader.invoke({&quot;document&quot;: doc.page_content, &quot;question&quot;: question})
+        grade = score[&quot;score&quot;]
+        
+        # If document is relevant, append to filtered_docs
+        if grade.lower() == &quot;yes&quot;:
+            print(&quot;DOCUMENT IS RELEVANT!&quot;)
+            filtered_docs.append(doc)
+        # If document is irrelevant, set web_search to &quot;Yes&quot; and continue
+        else:
+            print(&quot;DOCUMENT IS IRRELEVANT!&quot;)
+            web_search = &quot;Yes&quot;
+            continue
+    return {&quot;documents&quot;: filtered_docs, &quot;question&quot;: question, &quot;web_search&quot;: web_search}
+
+
+def web_search(state):
+    &quot;&quot;&quot;
+    Web search based on the quesion
+    
+    Args:
+        state (dict): state of the current graph
+        
+    Return:
+        state (dict): Appended web results to documents
+    &quot;&quot;&quot;
+    
+    print(&quot;WEB SEARCHING...&quot;)
+    question = state[&quot;question&quot;]
+    
+    # Invoke web search tool
+    docs = web_search_tool.invoke({&quot;query&quot;: question})
+    web_results = &quot;\n&quot;.join([doc[&quot;content&quot;] for doc in docs])
+    web_results = Document(page_content=web_results)
+    
+    # Create documents list with web results
+    documents = [web_results]
+    return {&quot;documents&quot;: documents, &quot;question&quot;: question}
+
+
+def reflect(state):
+    &quot;&quot;&quot;
+    Reflect on the generated answer and compare it with the retrieved documents.
+    
+    Args:
+        state (dict): The current state of the graph.
+        
+    Returns:
+        state (dict): Updated state with reflection results.
+    &quot;&quot;&quot;
+    
+    print(&quot;REFLECTING...&quot;)
+    
+    generation = state[&quot;generation&quot;]
+    documents = state[&quot;documents&quot;]
+    question = state[&quot;question&quot;]
+    
+    reflection = reflector.invoke({&quot;generation&quot;: generation, &quot;document&quot;: documents, &quot;question&quot;: question})
+    ref_status = reflection[&quot;reflection&quot;]
+    missing_info = reflection[&quot;missing_info&quot;]
+    
+    if ref_status.lower() == &quot;complete&quot;:
+        print(&quot;REFLECTION IS COMPLETE!&quot;)
+        return {&quot;documents&quot;: documents, &quot;question&quot;: question, &quot;generation&quot;: generation, &quot;reflection_status&quot;: &quot;complete&quot;}
+    else:
+        print(&quot;MISSING INFORMATION IN GENERATION!&quot;)
+        
+        updated_documents = documents.copy()
+        updated_documents.append({&quot;page_content&quot;: missing_info})
+
+        return {
+            &quot;documents&quot;: updated_documents,
+            &quot;question&quot;: question,
+            &quot;generation&quot;: generation,
+            &quot;reflection_status&quot;: &quot;incomplete&quot;
+        }
+    
+### Conditional Edge
+
+
+def indication_question(state):
+    &quot;&quot;&quot;
+    Route question to RAG or web search.
+    
+    Args:
+        state (dict): The current state of the graph.
+        
+    Returns:
+        str :Next node to call
+    &quot;&quot;&quot;
+ 
+    print(&quot;CHECKING IF VECTORSTORE IS SUITABLE...&quot;)
+    question = state[&quot;question&quot;]
+    print(question)
+    source = indicator.invoke({&quot;question&quot;: question})
+    print(source)
+    print(source[&quot;datasource&quot;])
+    if source[&quot;datasource&quot;].lower() == &quot;web_search&quot;:
+        print(&quot;ROUTING TO WEB SEARCH&quot;)
+        return &quot;web_search&quot;
+    elif source[&quot;datasource&quot;].lower() == &quot;vectorstore&quot;:
+        print(&quot;ROUTING TO VECTORSTORE&quot;)
+        return &quot;vectorstore&quot;
+    
+
+def generate_or_websearch(state):
+    &quot;&quot;&quot;
+    Determines whether to generate an answer or add web search
+
+    Args:
+        state (dict): The current state of the graph.
+        
+    Returns:
+        str: binary choice for next node call
+    &quot;&quot;&quot;
+
+    print(&quot;DETERMINING NEXT NODE...&quot;)
+    state[&quot;question&quot;]
+    web_search = state[&quot;web_search&quot;]
+    state[&quot;documents&quot;]
+    
+    if web_search.lower() == &quot;yes&quot;:
+        print(&quot;FURTHER INFORMATION IS REQUIRED! ADDING WEB SEARCH RESULTS...&quot;)
+        return &quot;web_search&quot;
+    else:
+        print(&quot;SUFFICIENT INFORMATION! GENERATING ANSWER...&quot;)
+        return &quot;generate&quot;
+        
+
+### Conditional Edge
+
+def check_hallucination(state):
+    &quot;&quot;&quot;
+    Check if the generated answer contains hallucinations.
+    
+    Args:
+        state (dict): The current state of the graph.
+    
+    Returns:
+        str: decision for next node call
+        
+    &quot;&quot;&quot;
+    
+    print(&quot;CHECKING FOR HALLUCINATION...&quot;)
+    question = state[&quot;question&quot;]
+    documents = state[&quot;documents&quot;]
+    generation = state[&quot;generation&quot;]
+    
+    score = hal_checker.invoke({&quot;document&quot;: documents, &quot;generation&quot;: generation})
+    grade = score[&quot;score&quot;]
+    
+    # checking hallucination
+    if grade.lower() == &quot;yes&quot;:
+        print(&quot;GENERATION IS GROUNDED IN FACTS!&quot;)
+        return &quot;useful&quot;
+    else:
+        print(&quot;GENERATION CONTAINS HALLUCINATION!&quot;)
+        return &quot;not_useful&quot;
+    
+
+
+### Creating workflow
+
+workflow = StateGraph(GraphState)
+
+# Define nodes
+workflow.add_node(&quot;websearch&quot;, web_search)
+workflow.add_node(&quot;retrieve&quot;, retrieve)
+workflow.add_node(&quot;grade_relevance&quot;, grade_relevance)
+workflow.add_node(&quot;generate&quot;, generate)
+workflow.add_node(&quot;reflect&quot;, reflect)
+</code></pre></details><section class="notebook-note"><h3 id="building-graph">Building Graph</h3></section><details class="code-cell"><summary>Code cell 32</summary><pre><code># Define edges
+workflow.add_conditional_edges(
+    START,
+    indication_question,
+    {
+        &quot;web_search&quot;: &quot;websearch&quot;,
+        &quot;vectorstore&quot;: &quot;retrieve&quot;,
+    },
+)
+workflow.add_edge(&quot;retrieve&quot;, &quot;grade_relevance&quot;)
+workflow.add_edge(&quot;websearch&quot;, &quot;grade_relevance&quot;)
+workflow.add_conditional_edges(
+    &quot;grade_relevance&quot;,
+    generate_or_websearch,
+    {
+        &quot;web_search&quot;: &quot;websearch&quot;,
+        &quot;generate&quot;: &quot;generate&quot;
+    }
+)
+workflow.add_edge(&quot;generate&quot;, &quot;reflect&quot;)
+workflow.add_conditional_edges(
+    &quot;reflect&quot;,
+    lambda x: &quot;complete&quot; if x[&quot;reflection_status&quot;] == &quot;complete&quot; else &quot;incomplete&quot;,
+    {
+        &quot;complete&quot;: END,
+        &quot;incomplete&quot;: &quot;generate&quot;
+    }
+)</code></pre></details><section class="notebook-note"><h3 id="compile">Compile</h3></section><details class="code-cell"><summary>Code cell 34</summary><pre><code># Compile 
+app = workflow.compile()
+
+# Test
+inputs = {&quot;question&quot;: &quot;what are the permitted activities?&quot;}
+for output in app.stream(inputs):
+    for key, value in output.items():
+        pprint(f&quot;Finished running {key}:&quot;)
+pprint(value[&quot;generation&quot;])
+</code></pre></details><details class="code-cell"><summary>Code cell 35</summary><pre><code># Compile
+app = workflow.compile()
+
+# Test
+inputs = {&quot;question&quot;: &quot;What is LLM?&quot;}
+for output in app.stream(inputs):
+    for key, value in output.items():
+        pprint(f&quot;Finished running: {key}:&quot;)
+pprint(value[&quot;generation&quot;])</code></pre></details></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Materials prediction pipeline — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Materials prediction pipeline</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_ML_Pipeline.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><details class="code-cell"><summary>Code cell 1</summary><pre><code>import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import mean_squared_error, r2_score, accuracy_score, confusion_matrix, classification_report
+
+# Reading the data
+data_path = r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_2\project_NASA_Materials_Project\data\result\cleaned_Outgassing_Db_20240702.csv&#x27;
+material_df = pd.read_csv(data_path)
+
+# Feature Engineering
+def feature_engineering(df):
+    noise = np.random.normal(0, 0.65, size=df.shape[0])
+    scaler = StandardScaler()
+    df[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]] = scaler.fit_transform(df[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]])
+    df[&#x27;performance_score&#x27;] = (1 - df[&#x27;TML&#x27;]) + (1 - df[&#x27;CVCM&#x27;]) + (1 - df[&#x27;WVR&#x27;]) + noise
+    return df
+
+material_df = feature_engineering(material_df)
+
+# Linear Regression Pipeline
+linear_regression_pipeline = Pipeline([
+    # (&#x27;scaler&#x27;, StandardScaler()),
+    (&#x27;linear_regression&#x27;, LinearRegression())
+])
+
+# Logistic Regression Pipeline
+logistic_regression_pipeline = Pipeline([
+    # (&#x27;scaler&#x27;, StandardScaler()),
+    (&#x27;logistic_regression&#x27;, LogisticRegression())
+])
+
+# Preparing data for Linear Regression
+X_lr = material_df[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]]
+y_lr = material_df[&#x27;performance_score&#x27;]
+X_train_lr, X_test_lr, y_train_lr, y_test_lr = train_test_split(X_lr, y_lr, test_size=0.2, random_state=1)
+
+# Fitting the Linear Regression model
+linear_regression_pipeline.fit(X_train_lr, y_train_lr)
+y_pred_lr = linear_regression_pipeline.predict(X_test_lr)
+lr_mse = mean_squared_error(y_test_lr, y_pred_lr)
+lr_r2 = r2_score(y_test_lr, y_pred_lr)
+
+print(f&#x27;Linear Regression Mean Squared Error: {lr_mse}&#x27;)
+print(f&#x27;Linear Regression R_squared: {lr_r2}&#x27;)
+
+# Preparing data for Logistic Regression
+# Create performance categories using pd.qcut
+material_df[&#x27;performance_category&#x27;] = pd.qcut(material_df[&#x27;performance_score&#x27;], q=3, labels=[&#x27;Low&#x27;, &#x27;Medium&#x27;, &#x27;High&#x27;])
+
+# Encoding the target variable
+y_logreg = material_df[&#x27;performance_category&#x27;].astype(&#x27;category&#x27;).cat.codes
+
+X_train_logreg, X_test_logreg, y_train_logreg, y_test_logreg = train_test_split(X_lr, y_logreg, test_size=0.2, random_state=1)
+
+# Fitting the Logistic Regression model
+logistic_regression_pipeline.fit(X_train_logreg, y_train_logreg)
+y_pred_logreg = logistic_regression_pipeline.predict(X_test_logreg)
+logreg_accuracy = accuracy_score(y_test_logreg, y_pred_logreg)
+conf_matrix = confusion_matrix(y_test_logreg, y_pred_logreg)
+class_report = classification_report(y_test_logreg, y_pred_logreg)
+
+print(f&#x27;Logistic Regression Accuracy: {logreg_accuracy}&#x27;)
+print(f&#x27;Confusion Matrix:\n{conf_matrix}&#x27;)
+print(f&#x27;Classification Report:\n{class_report}&#x27;)
+</code></pre></details></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

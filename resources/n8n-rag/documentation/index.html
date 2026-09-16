@@ -1,0 +1,230 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>n8n Building Code RAG · Documentation — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>n8n Building Code RAG · Documentation</h1><p>Project documentation from GitHub. Diagrams and demonstrations are available in the project resource library.</p><a href="https://github.com/Userdflt/n8n_RAG_Workflow/blob/322a134e5b653999b8380dae77c17a15e3b2e526/README.md" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><h2 id="n8n-multi-agent-rag-system">n8n Multi-Agent RAG System</h2>
+<p>A sophisticated multi-agent Retrieval-Augmented Generation system for the New Zealand Building Code, built entirely in n8n. Each specialized agent handles specific code sections with dedicated vector stores, while an orchestration layer intelligently routes queries for accurate, code-compliant responses.</p>
+<h2 id="system-architecture-diagrams">📊 System Architecture Diagrams</h2>
+<h3 id="code-orchestration-agent-workflow">Code Orchestration Agent Workflow</h3>
+<pre><code>graph TD
+    A[&quot;🔔 Chat Trigger&lt;br/&gt;When message received&lt;br/&gt;Webhook endpoint&quot;] --&gt; ORCH[&quot;🧠 Orchestration Agent&lt;br/&gt;GPT-4.1 Main Controller&lt;br/&gt;Query analysis &amp; routing&quot;]
+
+    B[&quot;🤖 OpenAI GPT-4.1&lt;br/&gt;Language Model&lt;br/&gt;Temperature: 0.4&quot;] --&gt; ORCH
+    C[&quot;💾 PostgreSQL Memory&lt;br/&gt;Chat History Storage&lt;br/&gt;Table: orch_agent_history&quot;] --&gt; ORCH
+
+    ORCH --&gt; D[&quot;🏗️ Code-B Tool&lt;br/&gt;Stability &amp; Durability&lt;br/&gt;Structural integrity, loads,&lt;br/&gt;seismic, materials&quot;]
+    ORCH --&gt; E[&quot;🔥 Code-C Tool&lt;br/&gt;Protection from Fire&lt;br/&gt;Fire prevention, spread,&lt;br/&gt;evacuation, firefighting&quot;]
+    ORCH --&gt; F[&quot;♿ Code-D Tool&lt;br/&gt;Access Routes&lt;br/&gt;Accessibility, movement,&lt;br/&gt;disabilities, lifts&quot;]
+    ORCH --&gt; G[&quot;💧 Code-E Tool&lt;br/&gt;Moisture Management&lt;br/&gt;Surface water, external,&lt;br/&gt;internal moisture&quot;]
+    ORCH --&gt; H[&quot;🛡️ Code-F Tool&lt;br/&gt;Safety of Users&lt;br/&gt;Hazards, falling, warnings,&lt;br/&gt;emergency systems&quot;]
+    ORCH --&gt; I[&quot;🔧 Code-G Tool&lt;br/&gt;Services &amp; Facilities&lt;br/&gt;Hygiene, ventilation,&lt;br/&gt;utilities, lighting&quot;]
+    ORCH --&gt; J[&quot;🌡️ Code-H Tool&lt;br/&gt;Energy Efficiency&lt;br/&gt;Thermal resistance,&lt;br/&gt;HVAC, hot water&quot;]
+
+    D --&gt; D1[&quot;🔍 Code-B Agent&lt;br/&gt;OpenAI GPT-4.1&lt;br/&gt;Specialized prompts&quot;]
+    E --&gt; E1[&quot;🔍 Code-C Agent&lt;br/&gt;OpenAI GPT-4.1&lt;br/&gt;Specialized prompts&quot;]
+    F --&gt; F1[&quot;🔍 Code-D Agent&lt;br/&gt;OpenAI GPT-4.1&lt;br/&gt;Specialized prompts&quot;]
+    G --&gt; G1[&quot;🔍 Code-E Agent&lt;br/&gt;OpenAI GPT-4.1&lt;br/&gt;Specialized prompts&quot;]
+    H --&gt; H1[&quot;🔍 Code-F Agent&lt;br/&gt;OpenAI GPT-4.1&lt;br/&gt;Specialized prompts&quot;]
+    I --&gt; I1[&quot;🔍 Code-G Agent&lt;br/&gt;OpenAI GPT-4.1&lt;br/&gt;Specialized prompts&quot;]
+    J --&gt; J1[&quot;🔍 Code-H Agent&lt;br/&gt;OpenAI GPT-4.1&lt;br/&gt;Specialized prompts&quot;]
+
+    D1 --&gt; D2[&quot;📊 Supabase Vector Store&lt;br/&gt;Code-B Knowledge Base&lt;br/&gt;+ OpenAI Embeddings&quot;]
+    E1 --&gt; E2[&quot;📊 Supabase Vector Store&lt;br/&gt;Code-C Knowledge Base&lt;br/&gt;+ OpenAI Embeddings&quot;]
+    F1 --&gt; F2[&quot;📊 Supabase Vector Store&lt;br/&gt;Code-D Knowledge Base&lt;br/&gt;+ OpenAI Embeddings&quot;]
+    G1 --&gt; G2[&quot;📊 Supabase Vector Store&lt;br/&gt;Code-E Knowledge Base&lt;br/&gt;+ OpenAI Embeddings&quot;]
+    H1 --&gt; H2[&quot;📊 Supabase Vector Store&lt;br/&gt;Code-F Knowledge Base&lt;br/&gt;+ OpenAI Embeddings&quot;]
+    I1 --&gt; I2[&quot;📊 Supabase Vector Store&lt;br/&gt;Code-G Knowledge Base&lt;br/&gt;+ OpenAI Embeddings&quot;]
+    J1 --&gt; J2[&quot;📊 Supabase Vector Store&lt;br/&gt;Code-H Knowledge Base&lt;br/&gt;+ OpenAI Embeddings&quot;]
+
+    D2 --&gt; RESP[&quot;💬 Specialized Response&lt;br/&gt;Building Code compliant&lt;br/&gt;Context-aware answer&quot;]
+    E2 --&gt; RESP
+    F2 --&gt; RESP
+    G2 --&gt; RESP
+    H2 --&gt; RESP
+    I2 --&gt; RESP
+    J2 --&gt; RESP
+</code></pre>
+<h3 id="rag-document-ingestion-pipeline">RAG Document Ingestion Pipeline</h3>
+<pre><code>graph TD
+    START[&quot;📁 Google Drive Trigger&lt;br/&gt;Monitor Building Code folders&lt;br/&gt;Auto-detect new PDFs&quot;] --&gt; DOC[&quot;📄 Document Detection&lt;br/&gt;New file uploaded&lt;br/&gt;Trigger processing pipeline&quot;]
+
+    DOC --&gt; OCR[&quot;🔍 Mistral OCR Engine&lt;br/&gt;mistral-ocr-latest&lt;br/&gt;Text extraction &amp; image annotation&lt;br/&gt;Bounding box processing&quot;]
+
+    OCR --&gt; EXTRACT[&quot;📝 Content Extraction&lt;br/&gt;Page-by-page processing&lt;br/&gt;Text &amp; image separation&lt;br/&gt;Metadata preservation&quot;]
+
+    EXTRACT --&gt; SPLIT[&quot;✂️ Text Chunking&lt;br/&gt;LangChain RecursiveCharacterTextSplitter&lt;br/&gt;Context-aware splitting&lt;br/&gt;Optimal chunk sizes&quot;]
+    EXTRACT --&gt; IMG[&quot;🖼️ Image Processing&lt;br/&gt;Supabase Storage upload&lt;br/&gt;Caption generation&lt;br/&gt;Metadata tagging&quot;]
+
+    SPLIT --&gt; EMBED_TEXT[&quot;🔢 Text Embeddings&lt;br/&gt;OpenAI text-embedding-3-large&lt;br/&gt;High-dimensional semantic vectors&lt;br/&gt;1536 dimensions&quot;]
+    IMG --&gt; EMBED_IMG[&quot;📊 Image Embeddings&lt;br/&gt;Caption vectorization&lt;br/&gt;Visual content representation&lt;br/&gt;Searchable image metadata&quot;]
+
+    EMBED_TEXT --&gt; STORE_B[&quot;📊 Code-B Vector Store&lt;br/&gt;Stability &amp; Durability&lt;br/&gt;Supabase pgvector&lt;br/&gt;Structural requirements&quot;]
+    EMBED_TEXT --&gt; STORE_C[&quot;📊 Code-C Vector Store&lt;br/&gt;Protection from Fire&lt;br/&gt;Supabase pgvector&lt;br/&gt;Fire safety standards&quot;]
+    EMBED_TEXT --&gt; STORE_D[&quot;📊 Code-D Vector Store&lt;br/&gt;Access Routes&lt;br/&gt;Supabase pgvector&lt;br/&gt;Accessibility standards&quot;]
+    EMBED_TEXT --&gt; STORE_E[&quot;📊 Code-E Vector Store&lt;br/&gt;Moisture Management&lt;br/&gt;Supabase pgvector&lt;br/&gt;Water protection&quot;]
+    EMBED_TEXT --&gt; STORE_F[&quot;📊 Code-F Vector Store&lt;br/&gt;Safety of Users&lt;br/&gt;Supabase pgvector&lt;br/&gt;User safety requirements&quot;]
+    EMBED_TEXT --&gt; STORE_G[&quot;📊 Code-G Vector Store&lt;br/&gt;Services &amp; Facilities&lt;br/&gt;Supabase pgvector&lt;br/&gt;Building services&quot;]
+    EMBED_TEXT --&gt; STORE_H[&quot;📊 Code-H Vector Store&lt;br/&gt;Energy Efficiency&lt;br/&gt;Supabase pgvector&lt;br/&gt;Energy performance&quot;]
+
+    EMBED_IMG --&gt; STORE_B
+    EMBED_IMG --&gt; STORE_C
+    EMBED_IMG --&gt; STORE_D
+    EMBED_IMG --&gt; STORE_E
+    EMBED_IMG --&gt; STORE_F
+    EMBED_IMG --&gt; STORE_G
+    EMBED_IMG --&gt; STORE_H
+
+    STORE_B --&gt; READY[&quot;✅ Knowledge Base Ready&lt;br/&gt;Multi-modal RAG system&lt;br/&gt;Text + Image vectors&lt;br/&gt;Section-specific expertise&quot;]
+    STORE_C --&gt; READY
+    STORE_D --&gt; READY
+    STORE_E --&gt; READY
+    STORE_F --&gt; READY
+    STORE_G --&gt; READY
+    STORE_H --&gt; READY
+
+    READY --&gt; SYNC[&quot;🔄 Real-time Sync&lt;br/&gt;Google Drive monitoring&lt;br/&gt;Automatic updates&lt;br/&gt;Version control&quot;]
+
+    SYNC --&gt; RETRIEVAL[&quot;🔍 Ready for Queries&lt;br/&gt;Semantic search enabled&lt;br/&gt;Agent tool integration&lt;br/&gt;Building Code expertise&quot;]
+</code></pre>
+<h2 id="project-overview">🏗️ Project Overview</h2>
+<p>This portfolio project demonstrates a <strong>production-grade multi-agent RAG system</strong> specifically designed for the New Zealand Building Code. Built entirely within <strong>n8n's visual workflow environment</strong>, it showcases advanced knowledge retrieval architecture using specialized agents, each responsible for different code sections (B, C, D, … H).</p>
+<p>The system features intelligent document ingestion with OCR processing, vector embeddings for semantic search, and an orchestration layer that routes user queries to the most appropriate specialist agent. This approach ensures accurate, contextual responses while maintaining separation of concerns across different regulatory domains.</p>
+<h2 id="key-capabilities">✨ Key Capabilities</h2>
+<ul>
+<li><strong>Multi-Agent Architecture</strong> – Specialized agents for each Building Code section with dedicated knowledge bases and prompt-engineered expertise</li>
+<li><strong>Intelligent Query Routing</strong> – Orchestration agent with custom prompt engineering determines the most appropriate specialist for each query</li>
+<li><strong>Advanced Image Ingestion</strong> – Image processing that reformats text and images with annotations for vector storage, enabling LLM to render relevant images in chat responses</li>
+<li><strong>Automated Document Processing</strong> – OCR-powered ingestion pipeline with text and image extraction, maintaining visual context</li>
+<li><strong>Vector Search &amp; Retrieval</strong> – Semantic search using OpenAI embeddings and Supabase vector storage for both text and image content</li>
+<li><strong>Real-Time Updates</strong> – Google Drive integration for automatic document synchronization</li>
+<li><strong>Contextual Memory</strong> – PostgreSQL-backed conversation memory for follow-up queries</li>
+<li><strong>Prompt-Engineered Agents</strong> – All agents including orchestration are specifically prompt-engineered for their specialized tasks</li>
+</ul>
+<h2 id="system-architecture">🏛️ System Architecture</h2>
+<p>The system employs a sophisticated multi-layered architecture with specialized components for document ingestion, vector storage, and intelligent query routing:</p>
+<h3 id="1-document-ingestion">1. Document Ingestion</h3>
+<p>Google Drive triggers detect new PDFs, triggering parallel OCR processing via Mistral.ai for text extraction and image annotation with bounding boxes.</p>
+<h3 id="2-content-processing">2. Content Processing</h3>
+<p>Pages are split and processed, with text chunked using RecursiveCharacterTextSplitter and images uploaded to Supabase Storage with metadata preservation.</p>
+<h3 id="3-vector-embedding">3. Vector Embedding</h3>
+<p>OpenAI embeddings are generated for both text chunks and image captions, stored in clause-specific Supabase vector tables for efficient retrieval.</p>
+<h3 id="4-query-orchestration">4. Query Orchestration</h3>
+<p>The orchestration workflow analyzes user queries and routes them to appropriate clause agents using GPT-4.1 with conversation context preservation.</p>
+<h3 id="5-specialized-retrieval">5. Specialized Retrieval</h3>
+<p>Each clause agent performs semantic search within its dedicated vector store, retrieving the most relevant chunks for accurate, contextual responses.</p>
+<h3 id="6-response-generation">6. Response Generation</h3>
+<p>Retrieved context is synthesized by the specialist agent's OpenAI model to generate comprehensive, Building Code-compliant answers.</p>
+<h2 id="specialist-agent-network">🤖 Specialist Agent Network</h2>
+<h3 id="multi-agent-system">Multi-Agent System</h3>
+<ul>
+<li><strong>Code B Agent</strong> - Stability &amp; Durability: Structural integrity, load calculations, seismic requirements, and material durability standards</li>
+<li><strong>Code C Agent</strong> - Protection from Fire: Fire safety systems, evacuation planning, sprinkler requirements, and passive fire protection</li>
+<li><strong>Code D Agent</strong> - Access Routes: Accessibility compliance, universal design principles, lift requirements, and barrier-free access</li>
+<li><strong>Code E Agent</strong> - Moisture Management: Waterproofing systems, vapor barriers, drainage solutions, and moisture control</li>
+<li><strong>Code F Agent</strong> - Safety of Users: Occupational safety, hazard mitigation, fall protection, and emergency response systems</li>
+<li><strong>Code G Agent</strong> - Services &amp; Facilities: HVAC systems, plumbing standards, electrical safety, and building services integration</li>
+<li><strong>Code H Agent</strong> - Energy Efficiency: Thermal performance, insulation standards, energy modeling, and sustainable building practices</li>
+</ul>
+<h3 id="central-orchestration-agent">Central Orchestration Agent</h3>
+<ul>
+<li><strong>Query Analysis Engine</strong> - Advanced NLP analysis identifies query intent, topic domain, and complexity level using GPT-4.1</li>
+<li><strong>Context Extraction</strong> - Extracts Building Code section references, regulatory keywords, and cross-domain dependencies</li>
+<li><strong>Multi-Agent Coordination</strong> - Orchestrates parallel agent queries for complex cross-sectional regulatory questions</li>
+<li><strong>Response Synthesis</strong> - Aggregates multi-agent responses with conflict resolution and coherence validation</li>
+</ul>
+<h2 id="technology-stack">📊 Technology Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Orchestration</strong></td>
+<td>n8n (JavaScript workflows)</td>
+</tr>
+<tr>
+<td><strong>LLM &amp; Embeddings</strong></td>
+<td>OpenAI GPT-4.1, OpenAI Embeddings API</td>
+</tr>
+<tr>
+<td><strong>OCR &amp; Processing</strong></td>
+<td>Mistral.ai OCR (mistral-ocr-latest)</td>
+</tr>
+<tr>
+<td><strong>Vector Database</strong></td>
+<td>Supabase Vector Store</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>Supabase Storage Buckets</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>PostgreSQL (n8n memoryPostgresChat)</td>
+</tr>
+<tr>
+<td><strong>Document Source</strong></td>
+<td>Google Drive (triggered ingestion)</td>
+</tr>
+<tr>
+<td><strong>Code Processing</strong></td>
+<td>n8n Code nodes (JS for markdown &amp; images)</td>
+</tr>
+<tr>
+<td><strong>Text Splitting</strong></td>
+<td>LangChain RecursiveCharacterTextSplitter</td>
+</tr>
+<tr>
+<td><strong>Deployment</strong></td>
+<td>Cloud-native with auto-scaling capabilities</td>
+</tr>
+</tbody>
+</table>
+<h2 id="advanced-data-ingestion-workflows">🔧 Advanced Data Ingestion Workflows</h2>
+<h3 id="multi-modal-document-processing">Multi-Modal Document Processing</h3>
+<ul>
+<li><strong>Google Drive Trigger</strong> - Monitors code-specific folders for PDF/image uploads with intelligent pre-processing</li>
+<li><strong>Advanced Image Ingestion &amp; OCR</strong> - Mistral OCR with image reformatting, text/image annotation, and vector storage optimization</li>
+<li><strong>Intelligent Chunking</strong> - Context-aware text splitting with optimized chunk sizes and semantic overlap preservation</li>
+<li><strong>Vector Embedding</strong> - OpenAI text-embedding-3-large generates high-dimensional semantic vectors for search</li>
+<li><strong>Supabase Storage</strong> - Section-specific vector stores with optimized indexing and similarity search capabilities</li>
+</ul>
+<h3 id="technical-specifications">Technical Specifications</h3>
+<ul>
+<li><strong>OCR Engine</strong>: Mistral-OCR-Latest</li>
+<li><strong>Supported Formats</strong>: PDF, Images</li>
+<li><strong>Image Annotation</strong>: Full Metadata Preservation</li>
+<li><strong>LLM Integration</strong>: Image Rendering in Chat</li>
+<li><strong>Health Monitoring</strong>: Real-time Alerts</li>
+<li><strong>Rollback Capability</strong>: Version Control</li>
+</ul>
+<h2 id="memory-management-system">🧠 Memory Management System</h2>
+<h3 id="postgresql-chat-memory">PostgreSQL Chat Memory</h3>
+<ul>
+<li><strong>Session Tracking</strong> - Maintains conversation context across multiple queries with automatic session management</li>
+<li><strong>Context Compression</strong> - Intelligent summarization of long conversations to maintain relevant context within token limits</li>
+</ul>
+<h3 id="temporal-context-awareness">Temporal Context Awareness</h3>
+<ul>
+<li><strong>Conversation Flow</strong> - Tracks question progression and maintains semantic coherence across related queries</li>
+</ul>
+<h2 id="why-this-architecture-matters">🎯 Why This Architecture Matters</h2>
+<ul>
+<li><strong>Scalability</strong> – Adding new Building Code sections requires simple workflow duplication</li>
+<li><strong>Separation of Concerns</strong> – Each agent maintains its own knowledge domain without cross-contamination</li>
+<li><strong>Extensibility</strong> – Modular design allows easy integration of new OCR providers, LLMs, or vector databases</li>
+<li><strong>Production-Ready</strong> – Automated monitoring and updates ensure system reliability for regulatory compliance</li>
+</ul>
+<h2 id="features">🚀 Features</h2>
+<h3 id="multi-agent-system_1">Multi-Agent System</h3>
+<p>Specialized agents for each Building Code section (B-H) with dedicated vector stores, ensuring focused expertise and preventing topic cross-contamination.</p>
+<h3 id="prompt-engineered-agents">Prompt-Engineered Agents</h3>
+<p>All agents including the orchestration layer are specifically prompt-engineered for their specialized tasks, ensuring precise, domain-expert responses with optimal reasoning patterns.</p>
+<h3 id="advanced-image-ingestion">Advanced Image Ingestion</h3>
+<p>Sophisticated image processing that reformats text and images with annotations for vector storage, enabling the LLM to render relevant images directly in chat responses with full context preservation.</p>
+<h3 id="vector-search">Vector Search</h3>
+<p>OpenAI embeddings with Supabase vector storage enable semantic search across both textual content and image descriptions for comprehensive retrieval.</p>
+<h3 id="intelligent-query-routing">Intelligent Query Routing</h3>
+<p>GPT-4.1 orchestration agent with custom prompt engineering analyzes query intent and routes to the most appropriate specialist, ensuring accurate domain-specific responses.</p>
+<h3 id="conversation-memory">Conversation Memory</h3>
+<p>PostgreSQL-backed chat memory maintains context across interactions, enabling natural follow-up questions and complex query sequences.</p>
+<hr></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

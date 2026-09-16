@@ -1,0 +1,694 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Materials exploratory analysis — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Materials exploratory analysis</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_EDA.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="outgassing-materials-eda"><strong>Outgassing Materials EDA</strong></h2></section><section class="notebook-note"><h2 id="contents">Contents</h2>
+<ol>
+<li>
+<p><strong>Introduction - About Data</strong></p>
+</li>
+<li>
+<p><strong>Business Aspects of the Project</strong></p>
+</li>
+<li>
+<p><strong>Exploratory Data Analysis (EDA)</strong></p>
+<ul>
+<li>Overall correlation analysis</li>
+<li>Visualizations and initial insights<ul>
+<li>Material Performance Analysis</li>
+<li>Supplier Analysis</li>
+<li>Material Usage Patterns</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Findings and Insights</strong><ul>
+<li>Summary of findings and implications</li>
+</ul>
+</li>
+</ol></section><section class="notebook-note"><h2 id="1-introduction-about-data"><strong>1. Introduction - About Data</strong></h2>
+<p>The dataset "Outgassing Db" on NASA's Open Data Portal provides information on materials that have been tested for outgassing, 
+which is the release of gas that was dissolved, trapped, frozen, or absorbed in some material. </p>
+<p>The database includes material descriptions, test conditions, and results of total mass loss (TML) and collected volatile condensable materials (CVCM).</p>
+<h2 id="2-business-aspects-of-the-project"><strong>2. Business Aspects of the Project:</strong></h2>
+<p><strong>Objective:</strong> Evaluate the performance of different materials based on the test values of materials they provide.</p>
+<p><strong>Outcome:</strong> Use ML methods to create a material performance evaluation framework to consistently monitor and assess material reliability and material quality.</p>
+<p><strong>Impact:</strong> This framework will help in making informed decisions about Material selection ensuring the procurement of high-quality materials.</p></section><section class="notebook-note"><h2 id="learning-about-the-dataset">Learning about the dataset</h2>
+<ol>
+<li><strong>Sample Material</strong>: This column describes the material of the sample being tested. It includes information about the composition and form of the material, such as tapes, films, adhesives, etc.</li>
+<li>
+<p><strong>ID</strong>: A unique identifier for each sample, used for tracking and reference.</p>
+</li>
+<li>
+<p><strong>MFR</strong>: Manufacturer code or name, indicating the company that produced the material.</p>
+</li>
+<li><strong>TML (Total Mass Loss)</strong>: This measures the percentage of a material's mass lost during a test where the material is exposed to a high vacuum and temperature (125°C) for 24 hours. It is a key parameter for evaluating the material's stability in such conditions. A lower TML indicates better performance in vacuum environments【11†source】【12†source】.</li>
+<li><strong>Category</strong>: A numerical code that categorizes the material based on its type or use, such as adhesives, tapes, or coatings.</li>
+<li><strong>CVCM (Collected Volatile Condensable Material)</strong>: This parameter measures the percentage of volatile material that can condense on a cold surface during the outgassing test. Materials with lower CVCM values are preferable for high-vacuum environments, as they release fewer contaminants that can condense on critical surfaces【11†source】【13†source】.</li>
+<li><strong>Space Code</strong>: This likely refers to a code indicating the suitability or rating of the material for space applications, though specific details may vary.</li>
+<li><strong>WVR (Water Vapor Regained)</strong>: This measures the amount of water vapor a material regains after the TML and CVCM tests. It indicates how much moisture the material can absorb back under normal atmospheric conditions【13†source】.</li>
+<li><strong>Material Usage</strong>: Describes the typical application or usage of the material, such as for blankets, tapes, or adhesives.</li>
+<li><strong>Cure</strong>: Information about the curing process of the material, which could include details about whether the material is cured or uncured, and the conditions under which it was cured if applicable.</li>
+</ol></section><section class="notebook-note"><h3 id="categories">Categories</h3>
+<p>Dictionary of Category</p>
+<ol>
+<li><strong>Adhesives</strong>:<ul>
+<li>Includes various types like film adhesives, conductive adhesives, and foam adhesives.</li>
+</ul>
+</li>
+<li><strong>Conformal Coatings</strong>:<ul>
+<li>Protective coatings applied to electronic components.</li>
+</ul>
+</li>
+<li><strong>Tapes</strong>:<ul>
+<li>Includes different types of tapes such as electrical tape, thermal tape, and adhesive transfer tape.</li>
+</ul>
+</li>
+<li><strong>Marking Materials</strong>:<ul>
+<li>Materials used for labeling and marking, including high-temperature labels and shrink tubing.</li>
+</ul>
+</li>
+<li><strong>Greases and Lubricants</strong>:<ul>
+<li>Materials used for lubrication in spacecraft mechanisms.</li>
+</ul>
+</li>
+<li><strong>Paints and Coatings</strong>:<ul>
+<li>Includes thermal control paints and other protective coatings.</li>
+</ul>
+</li>
+<li><strong>Potting Compounds</strong>:<ul>
+<li>Materials used to encapsulate electronic components.</li>
+</ul>
+</li>
+<li><strong>Sealants and Sealant Compounds</strong>:<ul>
+<li>Used for sealing purposes, ensuring air-tight and water-tight applications.</li>
+</ul>
+</li>
+<li><strong>Structural Materials</strong>:<ul>
+<li>Includes composites, metals, and other materials used in the structural components of spacecraft.</li>
+</ul>
+</li>
+<li><strong>Thermal Insulation</strong>:<ul>
+<li>Materials used for thermal protection, such as thermal blankets and tapes.</li>
+</ul>
+</li>
+<li><strong>Electrical Insulation</strong>:<ul>
+<li>Insulating materials for electrical components.</li>
+</ul>
+</li>
+<li><strong>Films and Laminates</strong>:<ul>
+<li>Thin layers of materials used for various applications, including insulation and protection.</li>
+</ul>
+</li>
+<li><strong>Foams</strong>:<ul>
+<li>Lightweight materials used for cushioning and insulation.</li>
+</ul>
+</li>
+<li><strong>Elastomers and O-rings</strong>:<ul>
+<li>Rubber-like materials used for seals and gaskets.</li>
+</ul>
+</li>
+<li><strong>Optical Materials</strong>:<ul>
+<li>Includes materials used in optical systems, such as lenses and mirrors.</li>
+</ul>
+</li>
+<li><strong>Conductive Materials</strong>:<ul>
+<li>Materials that conduct electricity, used in grounding and shielding applications.</li>
+</ul>
+</li>
+<li><strong>Biological Materials</strong>:<ul>
+<li>Materials used in life support systems and biological experiments.</li>
+</ul>
+</li>
+<li><strong>Miscellaneous</strong>:<ul>
+<li>Any other materials that do not fit into the above categories but are used in spacecraft applications.</li>
+</ul>
+</li>
+</ol></section><section class="notebook-note"><h3 id="imports-always-run-before-starting">Imports (Always run before starting)</h3></section><details class="code-cell"><summary>Code cell 7</summary><pre><code>import numpy as np
+import pandas as pd
+%matplotlib inline
+import matplotlib.pyplot as plt
+from sklearn import datasets
+import seaborn as sns
+from sklearn import svm
+from sklearn.datasets import make_blobs
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, classification_report
+import matplotlib.lines as mlines</code></pre></details><section class="notebook-note"><p>For Logging</p></section><details class="code-cell"><summary>Code cell 9</summary><pre><code>import gossipcat as gc
+
+
+log_name = &#x27;NASA_Materials_Project_EDA&#x27;
+log_file = r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_2\project_NASA_Materials_Project\log\NASA_Materials_Project_EDA.log&#x27;
+
+logger = gc.get_logger(logName=log_name, logFile=log_file)
+</code></pre></details><details class="code-cell"><summary>Code cell 10</summary><pre><code>csv = r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_2\project_NASA_Materials_Project\data\result\cleaned_Outgassing_Db_20240702.csv&#x27;
+data = pd.read_csv(csv)
+
+material_df = pd.DataFrame(data)
+</code></pre></details><details class="code-cell"><summary>Code cell 11</summary><pre><code>material_df</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>ID</th>
+      <th>Sample Material</th>
+      <th>MFR</th>
+      <th>TML</th>
+      <th>Category</th>
+      <th>CVCM</th>
+      <th>Space Code</th>
+      <th>WVR</th>
+      <th>Material Usage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>GSC33214</td>
+      <td>"V" MATERIAL IN CLICKBOND CB4023V, GLASS/PEI -...</td>
+      <td>CLB</td>
+      <td>0.37</td>
+      <td>12</td>
+      <td>0.00</td>
+      <td>1.0</td>
+      <td>0.35</td>
+      <td>CLICKBOND</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>GSC33217</td>
+      <td>"VC" MATERIAL IN CLICKBOND CB9257VC, CARBON FI...</td>
+      <td>CLB</td>
+      <td>0.52</td>
+      <td>12</td>
+      <td>0.00</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>CLICKBOND</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>GSC34174</td>
+      <td>0667 BLACK EPDM</td>
+      <td>PRS</td>
+      <td>0.65</td>
+      <td>15</td>
+      <td>0.13</td>
+      <td>1.0</td>
+      <td>0.07</td>
+      <td>ORING</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>GSC33829</td>
+      <td>1 INCH COPPER TAPE</td>
+      <td>MMM</td>
+      <td>0.24</td>
+      <td>16</td>
+      <td>0.08</td>
+      <td>1.0</td>
+      <td>0.01</td>
+      <td>TAPE</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>GSC33397</td>
+      <td>100 DUN-LAM, GE COATED BLACK KAPTON XC</td>
+      <td>DUN</td>
+      <td>0.89</td>
+      <td>6</td>
+      <td>0.01</td>
+      <td>1.0</td>
+      <td>0.67</td>
+      <td>COND BLANKET FILM</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>7554</th>
+      <td>GSC11657</td>
+      <td>ZYTEL 101L BLACK EXTRUDED RODS</td>
+      <td>DUP</td>
+      <td>1.19</td>
+      <td>4</td>
+      <td>0.00</td>
+      <td>1.0</td>
+      <td>0.36</td>
+      <td>CONN INSUL</td>
+    </tr>
+    <tr>
+      <th>7555</th>
+      <td>GSC16742</td>
+      <td>ZYTEL 101L WHITE MODIFIED NYLON 66</td>
+      <td>DUP</td>
+      <td>1.14</td>
+      <td>12</td>
+      <td>0.01</td>
+      <td>1.0</td>
+      <td>0.29</td>
+      <td>MOLD CPND</td>
+    </tr>
+    <tr>
+      <th>7556</th>
+      <td>GSC17898</td>
+      <td>ZYTEL 70G33HRLUG59D14 262-060-02 OLIVE DRAB</td>
+      <td>UNN</td>
+      <td>0.81</td>
+      <td>12</td>
+      <td>0.03</td>
+      <td>1.0</td>
+      <td>0.46</td>
+      <td>MOLD CPND</td>
+    </tr>
+    <tr>
+      <th>7557</th>
+      <td>GSC17900</td>
+      <td>ZYTEL 70GSSHRLUG59D14 262-060-04 BLACK</td>
+      <td>UNN</td>
+      <td>0.81</td>
+      <td>12</td>
+      <td>0.04</td>
+      <td>1.0</td>
+      <td>0.47</td>
+      <td>MOLD CPND</td>
+    </tr>
+    <tr>
+      <th>7558</th>
+      <td>GSC21870</td>
+      <td>ZYTEL FR-50 NYLON 6/6 25% GLASS FLAME RETARD TAN</td>
+      <td>DUP</td>
+      <td>1.16</td>
+      <td>12</td>
+      <td>0.03</td>
+      <td>1.0</td>
+      <td>0.39</td>
+      <td>MOLD CPND</td>
+    </tr>
+  </tbody>
+</table>
+<p>7559 rows × 9 columns</p>
+</div><section class="notebook-note"><h2 id="3-exploratory-data-analysis-eda">3. <strong>Exploratory Data Analysis (EDA)</strong></h2></section><section class="notebook-note"><h2 id="overall-correlation-analysis">Overall correlation analysis</h2></section><details class="code-cell"><summary>Code cell 14</summary><pre><code>#selecting numerical columns for overall statistics
+material_df.select_dtypes(include=[&#x27;number&#x27;]).describe()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>TML</th>
+      <th>Category</th>
+      <th>CVCM</th>
+      <th>Space Code</th>
+      <th>WVR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>7559.000000</td>
+      <td>7559.000000</td>
+      <td>7559.000000</td>
+      <td>7559.000000</td>
+      <td>7559.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>0.741569</td>
+      <td>10.823389</td>
+      <td>0.058144</td>
+      <td>1.168541</td>
+      <td>0.186828</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.706367</td>
+      <td>19.566800</td>
+      <td>0.075064</td>
+      <td>0.472487</td>
+      <td>0.193611</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>0.250000</td>
+      <td>1.000000</td>
+      <td>0.010000</td>
+      <td>1.000000</td>
+      <td>0.030000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>0.530000</td>
+      <td>6.000000</td>
+      <td>0.020000</td>
+      <td>1.000000</td>
+      <td>0.120000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1.000000</td>
+      <td>13.000000</td>
+      <td>0.080000</td>
+      <td>1.000000</td>
+      <td>0.280000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>4.110000</td>
+      <td>99.000000</td>
+      <td>0.330000</td>
+      <td>9.000000</td>
+      <td>0.800000</td>
+    </tr>
+  </tbody>
+</table>
+</div><details class="code-cell"><summary>Code cell 15</summary><pre><code>material_df.shape</code></pre></details><details class="text-output"><summary>Text output</summary><pre>(7559, 9)</pre></details><details class="code-cell"><summary>Code cell 16</summary><pre><code># heatmap for overall correlation
+plt.figure(figsize=(10, 10))
+
+sns.heatmap(material_df.select_dtypes(include=[&#x27;number&#x27;]).corr(), annot=True, cmap=&#x27;coolwarm&#x27;)
+
+plt.title(&#x27;Correlation Heatmap&#x27;)
+
+plt.show()</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="Materials exploratory analysis — output chart 1, following code cell 16" width="772" height="836" loading="lazy"></a><figcaption>Output 1 · Code cell 16 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>TML and WVR: The strongest positive correlation (0.57) exists between TML and WVR. This indicates that materials with higher TML also tend to have higher WVR values</li>
+</ul></section><details class="code-cell"><summary>Code cell 18</summary><pre><code>#extract nuimerical columns
+num_columns = material_df.select_dtypes(include=[&#x27;number&#x27;])
+correlation = num_columns.corr()
+
+#unstack for information on top corr
+corr_unstack = correlation.unstack()
+corr_material_df = pd.DataFrame(corr_unstack, columns = [&#x27;Correlation&#x27;])
+
+#resetting index and sorting
+corr_material_df.reset_index(inplace=True)
+corr_material_df = corr_material_df[corr_material_df[&#x27;level_0&#x27;]!= corr_material_df[&#x27;level_1&#x27;]]
+
+corr_material_df_sorted = corr_material_df.sort_values(by=&#x27;Correlation&#x27;, ascending=False)
+
+print(correlation)
+print(f&#x27;\n {corr_material_df_sorted.head(10)}&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 19</summary><pre><code>logger.info(&#x27;Correlation Analysis Finished&#x27;)</code></pre></details><section class="notebook-note"><h2 id="visualsations-and-initial-insights">Visualsations and initial insights</h2></section><section class="notebook-note"><h3 id="material-performance-analysis">Material Performance Analysis</h3></section><section class="notebook-note"><p>Distribution of TML</p></section><details class="code-cell"><summary>Code cell 23</summary><pre><code>plt.figure(figsize=(10,6))
+sns.histplot(material_df[&#x27;TML&#x27;], bins=20, kde=True, zorder=2)
+plt.title(&#x27;Distribution of Total Mass Loss (TML)&#x27;, fontweight=&#x27;bold&#x27;, fontsize=15)
+plt.xlabel(&#x27;Total Mass Loss (TML)&#x27;, fontsize=12)
+plt.ylabel(&#x27;Number of Materials&#x27;, fontsize=12)
+plt.grid(zorder=1)
+plt.show()
+</code></pre></details><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="Materials exploratory analysis — output chart 2, following code cell 23" width="863" height="553" loading="lazy"></a><figcaption>Output 2 · Code cell 23 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>The histogram shows that the majority of materials have a low TML, with a significant number of materials having TML values close to zero.</li>
+<li>The frequency decreases as TML increases, indicating that materials with higher TML are less common.</li>
+</ul></section><section class="notebook-note"><p>Distribution of CVCM</p></section><details class="code-cell"><summary>Code cell 26</summary><pre><code>plt.figure(figsize=(10,6))
+sns.histplot(material_df[&#x27;CVCM&#x27;], bins=20, kde=True, zorder=2)
+plt.title(&#x27;Distribution of Collected Volatile Condensable Materials (CVCM)&#x27;, fontweight=&#x27;bold&#x27;, fontsize=15)
+plt.xlabel(&#x27;Collected Volatile Condensable Materials (CVCM)&#x27;, fontsize=12)
+plt.ylabel(&#x27;Number of Materials&#x27;, fontsize=12)
+plt.grid(zorder=1)
+plt.show()
+</code></pre></details><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="Materials exploratory analysis — output chart 3, following code cell 26" width="863" height="553" loading="lazy"></a><figcaption>Output 3 · Code cell 26 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>Histogram for CVCM displays a similar pattern to TML, where most materials have very low CVCM values, clustering near zero.</li>
+<li>The frequency drops sharply as CVCM values increase, suggesting that high CVCM values are rare.</li>
+</ul></section><section class="notebook-note"><p>Distribution of WVR</p></section><details class="code-cell"><summary>Code cell 29</summary><pre><code>plt.figure(figsize=(10,6))
+sns.histplot(material_df[&#x27;WVR&#x27;], bins=20, kde=True, zorder=2)
+plt.title(&#x27;Distribution of Water Vapor Regain (WVR)&#x27;, fontweight=&#x27;bold&#x27;, fontsize=15)
+plt.xlabel(&#x27;Water Vapor Regain (WVR)&#x27;, fontsize=12)
+plt.ylabel(&#x27;Number of Materials&#x27;, fontsize=12)
+plt.grid(zorder=1)
+plt.show()</code></pre></details><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="Materials exploratory analysis — output chart 4, following code cell 29" width="863" height="553" loading="lazy"></a><figcaption>Output 4 · Code cell 29 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>The WVR distribution shows that the majority of materials have WVR values close to zero, with the frequency decreasing as WVR increases.</li>
+<li>This indicates that most materials do not significantly regain water vapor.</li>
+</ul></section><section class="notebook-note"><p>Average by Category</p></section><details class="code-cell"><summary>Code cell 32</summary><pre><code>#mapping category to names
+category_names = {1: &#x27;Adhesives&#x27;,
+                  2: &#x27;Conformal Coatings&#x27;,
+                  3: &#x27;Tapes&#x27;,
+                  4: &#x27;Marking Materials&#x27;,
+                  5: &#x27;Greases and Lubricants&#x27;,
+                  6: &#x27;Paints and Coatings&#x27;,
+                  7: &#x27;Potting Compounds&#x27;,
+                  8: &#x27;Sealants and Sealant Compounds&#x27;,
+                  9: &#x27;Structural Materials&#x27;,
+                  10: &#x27;Thermal Insulation&#x27;,
+                  11: &#x27;Electrical Insulation&#x27;,
+                  12: &#x27;Films and Laminates&#x27;,
+                  13: &#x27;Foams&#x27;,
+                  14: &#x27;Elastomers and O-rings&#x27;,
+                  15: &#x27;Optical Materials&#x27;,
+                  16: &#x27;Conductive Materials&#x27;,
+                  17: &#x27;Biological Materials&#x27;,
+                  18: &#x27;Miscellaneous&#x27;
+                  }
+#creating category_name
+material_df[&#x27;category_name&#x27;] = material_df[&#x27;Category&#x27;].map(category_names)
+
+#order TML
+order_tml = material_df.groupby(&#x27;category_name&#x27;)[&#x27;TML&#x27;].mean().sort_values(ascending=False).index.tolist()
+#order WVR
+order_wvr = material_df.groupby(&#x27;category_name&#x27;)[&#x27;WVR&#x27;].mean().sort_values(ascending=False).index.tolist()   
+#order CVCM
+order_cvcm = material_df.groupby(&#x27;category_name&#x27;)[&#x27;CVCM&#x27;].mean().sort_values(ascending=False).index.tolist()                       
+</code></pre></details><details class="code-cell"><summary>Code cell 33</summary><pre><code>plt.figure(figsize=(12,10))
+sns.barplot(x=&#x27;category_name&#x27;, y=&#x27;TML&#x27;, data=material_df, palette=&#x27;tab20&#x27;, errorbar=None, order=order_tml)
+plt.title(&#x27;Average Total Mass Loss (TML) by Category&#x27;, fontweight=&#x27;bold&#x27;, fontsize=15)
+plt.xlabel(&#x27;Categories&#x27;, fontsize=12)
+plt.ylabel(&#x27;Average Total Mass Loss (TML)&#x27;, fontsize=12)
+
+plt.xticks(rotation=70)
+plt.tight_layout()
+plt.show()
+</code></pre></details><figure><a href="chart-05.webp" target="_blank" rel="noopener noreferrer"><img src="chart-05.webp" alt="Materials exploratory analysis — output chart 5, following code cell 33" width="1189" height="989" loading="lazy"></a><figcaption>Output 5 · Code cell 33 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>The bar chart shows that Foams have the highest average TML, followed by Tapes and Electrical Insulation. </li>
+<li>Categories like Miscellaneous and Biological Materials have the lowest average TML, indicating their better performance in terms of lower mass loss.</li>
+</ul></section><details class="code-cell"><summary>Code cell 35</summary><pre><code>plt.figure(figsize=(12,10))
+sns.barplot(x=&#x27;category_name&#x27;, y=&#x27;WVR&#x27;, data=material_df, palette=&#x27;tab20&#x27;, errorbar=None, order=order_wvr)
+plt.title(&#x27;Average Water Vapor Regain (WVR) by Category&#x27;, fontweight=&#x27;bold&#x27;, fontsize=15)
+plt.xlabel(&#x27;Categories&#x27;, fontsize=12)
+plt.ylabel(&#x27;Average Water Vapor Regain (WVR)&#x27;, fontsize=12)
+
+plt.xticks(rotation=70)
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-06.webp" target="_blank" rel="noopener noreferrer"><img src="chart-06.webp" alt="Materials exploratory analysis — output chart 6, following code cell 35" width="1186" height="989" loading="lazy"></a><figcaption>Output 6 · Code cell 35 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>Similar to the TML chart, Foams have the highest average WVR, followed by Electrical Insulation and Tapes. </li>
+<li>Categories like Biological Materials and Miscellaneous have the lowest WVR, indicating less moisture absorption.</li>
+</ul></section><details class="code-cell"><summary>Code cell 37</summary><pre><code>plt.figure(figsize=(12,10))
+sns.barplot(x=&#x27;category_name&#x27;, y=&#x27;CVCM&#x27;, data=material_df, palette=&#x27;tab20&#x27;, errorbar=None, order=order_cvcm)
+plt.title(&#x27;Average Collected Volatile Condensable Materials (CVCM) by Category&#x27;, fontweight=&#x27;bold&#x27;, fontsize=15)
+plt.xlabel(&#x27;Categories&#x27;, fontsize=12)
+plt.ylabel(&#x27;Average Collected Volatile Condensable Materials (CVCM)&#x27;, fontsize=12)
+
+plt.xticks(rotation=70)
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-07.webp" target="_blank" rel="noopener noreferrer"><img src="chart-07.webp" alt="Materials exploratory analysis — output chart 7, following code cell 37" width="1189" height="989" loading="lazy"></a><figcaption>Output 7 · Code cell 37 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>Optical Materials and Biological Materials have the highest average CVCM values, indicating higher condensable volatile material loss. </li>
+<li>Categories like Thermal Insulation and Miscellaneous have the lowest average CVCM, showing better performance in terms of lower volatile condensable material loss.</li>
+</ul></section><details class="code-cell"><summary>Code cell 39</summary><pre><code>plt.figure(figsize=(30, 10))
+
+# First scatter plot: TML vs WVR
+plt.subplot(1, 3, 1)
+sns.scatterplot(x=&#x27;TML&#x27;, y=&#x27;WVR&#x27;, data=material_df, hue=&#x27;category_name&#x27;, legend=False)
+sns.regplot(x=&#x27;TML&#x27;, y=&#x27;WVR&#x27;, data=material_df, scatter=False, color=&#x27;blue&#x27;, ci=None)
+plt.title(&#x27;TML vs WVR&#x27;, fontweight=&#x27;bold&#x27;, fontsize=15)
+plt.xlabel(&#x27;Total Mass Loss (TML)&#x27;, fontsize=12)
+plt.ylabel(&#x27;Water Vapor Regain (WVR)&#x27;, fontsize=12)
+plt.legend()
+
+# Second scatter plot: TML vs CVCM
+plt.subplot(1, 3, 2)
+sns.scatterplot(x=&#x27;TML&#x27;, y=&#x27;CVCM&#x27;, data=material_df, hue=&#x27;category_name&#x27;)
+sns.regplot(x=&#x27;TML&#x27;, y=&#x27;CVCM&#x27;, data=material_df, scatter=False, color=&#x27;blue&#x27;, ci=None)
+plt.title(&#x27;TML vs CVCM&#x27;, fontweight=&#x27;bold&#x27;, fontsize=15)
+plt.xlabel(&#x27;Total Mass Loss (TML)&#x27;, fontsize=12)
+plt.ylabel(&#x27;Collected Volatile Condensable Materials (CVCM)&#x27;, fontsize=12)
+plt.legend(title=&#x27;Category Name&#x27;, bbox_to_anchor=(1.05, 1), loc=&#x27;upper left&#x27;)
+
+plt.show()</code></pre></details><figure><a href="chart-08.webp" target="_blank" rel="noopener noreferrer"><img src="chart-08.webp" alt="Materials exploratory analysis — output chart 8, following code cell 39" width="1905" height="861" loading="lazy"></a><figcaption>Output 8 · Code cell 39 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>The scatter plot shows a diverse distribution of materials across different TML, WVR, and CVCM values. </li>
+<li>General positive correlation between TML vs WVR and TML vs CVCM, indicating that materials with high TML generally have high WVR and CVCM.</li>
+</ul></section><details class="code-cell"><summary>Code cell 41</summary><pre><code>plt.figure(figsize=(20,10))
+sns.boxplot(x=&#x27;category_name&#x27;, y=&#x27;TML&#x27;, data=material_df, color=&#x27;steelblue&#x27;)
+plt.title(&#x27;TML per Category&#x27;)
+plt.xlabel(&#x27;Categories&#x27;)
+plt.ylabel(&#x27;Total Mass Loss (TML)&#x27;)
+
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-09.webp" target="_blank" rel="noopener noreferrer"><img src="chart-09.webp" alt="Materials exploratory analysis — output chart 9, following code cell 41" width="1990" height="989" loading="lazy"></a><figcaption>Output 9 · Code cell 41 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>The box plot shows that Foams and Electrical Insulation have higher median TML values, with notable variability and outliers. </li>
+<li>Categories like Biological Materials and Miscellaneous have lower median TML values, indicating more stable performance with less mass loss.</li>
+</ul></section><details class="code-cell"><summary>Code cell 43</summary><pre><code>plt.figure(figsize=(20,10))
+sns.boxplot(x=&#x27;category_name&#x27;, y=&#x27;WVR&#x27;, data=material_df, color=&#x27;steelblue&#x27;)
+plt.title(&#x27;WVR per Category&#x27;)
+plt.xlabel(&#x27;Categories&#x27;)
+plt.ylabel(&#x27;Water Vapor Regained (WVR)&#x27;)
+
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-10.webp" target="_blank" rel="noopener noreferrer"><img src="chart-10.webp" alt="Materials exploratory analysis — output chart 10, following code cell 43" width="1990" height="989" loading="lazy"></a><figcaption>Output 10 · Code cell 43 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>The box plot highlights that Foams and Electrical Insulation have higher median WVR values, with significant variability and outliers. </li>
+<li>Categories like Biological Materials and Miscellaneous have lower median WVR values and less variability, indicating consistent performance.</li>
+</ul></section><details class="code-cell"><summary>Code cell 45</summary><pre><code>plt.figure(figsize=(20,10))
+sns.boxplot(x=&#x27;category_name&#x27;, y=&#x27;CVCM&#x27;, data=material_df, color=&#x27;steelblue&#x27;)
+plt.title(&#x27;CVCM per Category&#x27;)
+plt.xlabel(&#x27;Categories&#x27;)
+plt.ylabel(&#x27;Water Vapor Regained (CVCM)&#x27;)
+
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-11.webp" target="_blank" rel="noopener noreferrer"><img src="chart-11.webp" alt="Materials exploratory analysis — output chart 11, following code cell 45" width="1990" height="989" loading="lazy"></a><figcaption>Output 11 · Code cell 45 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h3 id="insights-for-material-performance-analysis">Insights for Material Performance Analysis</h3>
+<ul>
+<li>
+<p>Most materials exhibit low TML, CVCM, and WVR values, indicating their suitability for spacecraft use. High-performance materials are prevalent, with only a few exhibiting higher loss or regain values.</p>
+</li>
+<li>
+<p><strong>Foams and Electrical Insulation</strong>: These categories consistently show higher average and median values for TML, WVR, and CVCM, suggesting they are less efficient in terms of material loss and moisture absorption.</p>
+</li>
+<li>
+<p><strong>Miscellaneous and Biological Materials</strong>: These categories perform well across all metrics, with low average and median values for TML, WVR, and CVCM, indicating high efficiency and durability.</p>
+</li>
+</ul></section><section class="notebook-note"><h3 id="supplier-analysis">Supplier Analysis</h3></section><details class="code-cell"><summary>Code cell 48</summary><pre><code>material_df[&#x27;MFR&#x27;]</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0       CLB
+1       CLB
+2       PRS
+3       MMM
+4       DUN
+       ... 
+7554    DUP
+7555    DUP
+7556    UNN
+7557    UNN
+7558    DUP
+Name: MFR, Length: 7559, dtype: object</pre></details><details class="code-cell"><summary>Code cell 49</summary><pre><code>
+avg_TML_by_supplier = material_df.groupby([&#x27;MFR&#x27;, &#x27;category_name&#x27;])[&#x27;TML&#x27;].mean().reset_index()
+avg_TML_by_supplier = avg_TML_by_supplier.sort_values(by=&#x27;TML&#x27;, ascending=False)
+#too many supplier - show top N items
+# Filter for top N suppliers
+N = 50
+top_suppliers = avg_TML_by_supplier.head(N)
+bottom_suppliers = avg_TML_by_supplier.tail(N)
+
+plt.figure(figsize=(15, 10))
+sns.barplot(x=&#x27;MFR&#x27;, y=&#x27;TML&#x27;, hue=&#x27;category_name&#x27;, data=top_suppliers, dodge=False)
+plt.title(&#x27;Top Average Total Mass Loss (TML) by Supplier with Category&#x27;)
+plt.xlabel(&#x27;Top 50 Suppliers&#x27;)
+plt.ylabel(&#x27;Average Total Mass Loss (TML)&#x27;)
+plt.xticks(rotation=90)
+plt.legend(title=&#x27;Category&#x27;, bbox_to_anchor=(1, 1), loc=&#x27;upper left&#x27;)
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(15, 10))
+sns.barplot(x=&#x27;MFR&#x27;, y=&#x27;TML&#x27;, hue=&#x27;category_name&#x27;, data=bottom_suppliers, dodge=False)
+plt.title(&#x27;Bottom Average TML by Supplier with Category&#x27;)
+plt.xlabel(&#x27;Bottom 50 Suppliers&#x27;)
+plt.ylabel(&#x27;Average Total Mass Loss (TML)&#x27;)
+plt.xticks(rotation=90)
+plt.legend(title=&#x27;Category&#x27;, bbox_to_anchor=(1, 1), loc=&#x27;upper left&#x27;)
+plt.tight_layout()
+plt.show()
+</code></pre></details><figure><a href="chart-12.webp" target="_blank" rel="noopener noreferrer"><img src="chart-12.webp" alt="Materials exploratory analysis — output chart 12, following code cell 49" width="1489" height="989" loading="lazy"></a><figcaption>Output 12 · Code cell 49 · Open image to enlarge</figcaption></figure><figure><a href="chart-13.webp" target="_blank" rel="noopener noreferrer"><img src="chart-13.webp" alt="Materials exploratory analysis — output chart 13, following code cell 49" width="1489" height="989" loading="lazy"></a><figcaption>Output 13 · Code cell 49 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>Suppliers in the top 50 have the highest TML, indicating materials with significant mass loss.</li>
+<li>Suppliers in the bottom 50 have the lowest TML, suggesting high-quality materials with minimal mass loss.</li>
+</ul></section><details class="code-cell"><summary>Code cell 51</summary><pre><code>avg_WVR_by_supplier = material_df.groupby([&#x27;MFR&#x27;, &#x27;category_name&#x27;])[&#x27;WVR&#x27;].mean().reset_index()
+avg_WVR_by_supplier = avg_WVR_by_supplier.sort_values(by=&#x27;WVR&#x27;, ascending=False)
+#too many supplier - show top N items
+# Filter for top N suppliers
+N = 50
+top_suppliers = avg_WVR_by_supplier.head(N)
+bottom_suppliers = avg_WVR_by_supplier.tail(N)
+
+plt.figure(figsize=(15, 10))
+sns.barplot(x=&#x27;MFR&#x27;, y=&#x27;WVR&#x27;, hue=&#x27;category_name&#x27;, data=top_suppliers, dodge=False)
+plt.title(&#x27;Top Average Water Vapor Regained (WVR) by Supplier with Category&#x27;)
+plt.xlabel(&#x27;Top 50 Suppliers&#x27;)
+plt.ylabel(&#x27;Average Water Vapor Regained (WVR)&#x27;)
+plt.xticks(rotation=90)
+plt.legend(title=&#x27;Category&#x27;, bbox_to_anchor=(1, 1), loc=&#x27;upper left&#x27;)
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(15, 10))
+sns.barplot(x=&#x27;MFR&#x27;, y=&#x27;WVR&#x27;, hue=&#x27;category_name&#x27;, data=bottom_suppliers, dodge=False)
+plt.title(&#x27;Bottom Average WVR by Supplier with Category&#x27;)
+plt.xlabel(&#x27;Bottom 50 Suppliers&#x27;)
+plt.ylabel(&#x27;Average Water Vapor Regained (WVR)&#x27;)
+plt.xticks(rotation=90)
+plt.legend(title=&#x27;Category&#x27;, bbox_to_anchor=(1, 1), loc=&#x27;upper left&#x27;)
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-14.webp" target="_blank" rel="noopener noreferrer"><img src="chart-14.webp" alt="Materials exploratory analysis — output chart 14, following code cell 51" width="1489" height="989" loading="lazy"></a><figcaption>Output 14 · Code cell 51 · Open image to enlarge</figcaption></figure><figure><a href="chart-15.webp" target="_blank" rel="noopener noreferrer"><img src="chart-15.webp" alt="Materials exploratory analysis — output chart 15, following code cell 51" width="1489" height="990" loading="lazy"></a><figcaption>Output 15 · Code cell 51 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>Suppliers in the top 50 have the highest WVR, indicating materials that absorb the most water vapor.</li>
+<li>Suppliers in the bottom 50 have materials that regain the least amount of water vapor.</li>
+<li>Overall most suppliers seem to show single category performance which means they are specialized suppliers</li>
+</ul></section><details class="code-cell"><summary>Code cell 53</summary><pre><code># Heatmap of TML, CVCM, WVR by supplier
+supplier_performance = material_df.groupby(&#x27;MFR&#x27;)[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]].mean()
+
+# sampling as there are too many suppliers to fit onto graph.
+N = 50
+sample_suppliers = supplier_performance.sample(N)
+
+
+plt.figure(figsize=(12, 30))
+sns.heatmap(sample_suppliers, annot=True, cmap=&#x27;coolwarm&#x27;)
+plt.title(&#x27;Heatmap of TML, CVCM, WVR by Supplier&#x27;)
+plt.xlabel(&#x27;Performance Metrics&#x27;)
+plt.yticks(rotation=90)
+plt.ylabel(&#x27;Supplier&#x27;)
+plt.show()
+</code></pre></details><figure><a href="chart-16.webp" target="_blank" rel="noopener noreferrer"><img src="chart-16.webp" alt="Materials exploratory analysis — output chart 16, following code cell 53" width="836" height="2000" loading="lazy"></a><figcaption>Output 16 · Code cell 53 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>the heatmap shows an overall comparison of TML, CVCM, and WVR across different suppliers.</li>
+<li>there are some correlation between TML and WVR, indicating that materials with higher TML tend to have higher WVR.</li>
+<li>CVCM show consistant overall low values across the sampled suppliers, with a few high values.</li>
+</ul></section><section class="notebook-note"><p>Material Usage Pattern</p></section><details class="code-cell"><summary>Code cell 56</summary><pre><code>plt.figure(figsize=(15, 15))
+
+material_usage_counts = material_df[&#x27;category_name&#x27;].value_counts()
+
+material_usage_counts.plot(kind=&#x27;pie&#x27;, autopct=&#x27;%1.1f%%&#x27;, labels=None)
+
+plt.legend(material_usage_counts.index, bbox_to_anchor=(1.05, 1), loc=&#x27;upper left&#x27;)
+plt.ylabel(&#x27;&#x27;)
+plt.xlabel(&#x27;&#x27;)
+plt.title(&#x27;Distribution of Material Usage Categories&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-17.webp" target="_blank" rel="noopener noreferrer"><img src="chart-17.webp" alt="Materials exploratory analysis — output chart 17, following code cell 56" width="1524" height="1197" loading="lazy"></a><figcaption>Output 17 · Code cell 56 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>Adhesives make up the largest portion (25.5%), followed by Elastomers and O-rings (7.7%), and Paints and Coatings (7.1%).</li>
+<li>This distribution indicates the predominant use of certain materials, which might correlate with their performance metrics in the dataset.</li>
+</ul></section><section class="notebook-note"><h3 id="insights-for-suppplier-analysis">Insights for Suppplier Analysis</h3></section><section class="notebook-note"><ul>
+<li>
+<p><strong>Material Selection:</strong> Prioritize materials with low TML and WVR values for critical applications. </p>
+</li>
+<li>
+<p><strong>Improvement Areas</strong>: Suppliers with high TML and WVR, like SCH and ELI, should be targeted for improvements. Collaboration with these suppliers to enhance their material properties can lead to overall better performance.</p>
+</li>
+<li>
+<p><strong>Category Insights</strong>: The diversity in performance across categories indicates that good quality is not limited to specific types of materials. However, focusing on the most used categories, like Adhesives, for optimization can have a significant positive impact.</p>
+</li>
+</ul></section><section class="notebook-note"><h2 id="4-findings-and-insights">4. <strong>Findings and Insights</strong></h2></section><section class="notebook-note"><ul>
+<li>
+<p><strong>TML and WVR Relationship</strong>: The strong positive correlation between TML and WVR (0.57) indicates that materials prone to higher mass loss are also likely to absorb more water vapor. This suggests that efforts to reduce TML can concurrently reduce WVR, leading to materials that are both stable and moisture-resistant.</p>
+</li>
+<li>
+<p><strong>Consistent Performance Across Categories:</strong> High-performing suppliers (low TML and WVR) provide materials across various categories, indicating that achieving high-quality materials is not restricted to specific material types. </p>
+</li>
+<li>
+<p>This suggests <strong>quality control measures</strong> can be applied across the board to improve material performance.</p>
+</li>
+<li>
+<p><strong>Focus on High-Usage Categories:</strong> The significant proportion of Adhesives (25.5%) in the material usage distribution highlights the importance of optimizing this category.</p>
+</li>
+</ul></section><section class="notebook-note"><hr>
+<hr>
+<h2 id="end">END</h2>
+<p>For Modelling please find 'NASA_Materials_ML_Modelling.ipynb'</p>
+<hr>
+<hr></section></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

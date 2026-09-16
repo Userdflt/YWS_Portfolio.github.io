@@ -1,0 +1,3 @@
+const routes={"codevision":"projects/code-vision.html","vision-studio":"projects/gemini-vision.html","n8n-rag":"projects/n8n_rag.html","notion-mcp":"projects/notion_mcp.html","stable-diffusion":"projects/stablediffusion.html","vision-rag":"projects/vision_model.html","llm-rag":"projects/llm.html","cv-safety":"projects/cv.html","youtube-analytics":"projects/youtube-analytics.html","nasa-outgassing":"projects/nasa-outgassing.html","ai-detection":"projects/ai-detection.html","wind-energy":"projects/wind-energy.html","ai-visualizations":"projects/ai-visualizations.html"};
+const id=new URLSearchParams(location.search).get('id');
+if(routes[id])location.replace(routes[id]+location.hash);

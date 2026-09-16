@@ -1,0 +1,2573 @@
+[
+  {
+    "id": "codevision",
+    "title": "CodeVision",
+    "subtitle": "Building-code agent for the web",
+    "category": "App Development",
+    "year": "2025",
+    "status": "Past personal project",
+    "blurb": "Web app for real-time NZ Building Code assistance. Specialised AI agents, vector retrieval, deployed on Cloud Run.",
+    "tech": [
+      "Next.js",
+      "TypeScript",
+      "FastAPI",
+      "OpenAI Agents SDK",
+      "Supabase",
+      "pgvector",
+      "Firebase"
+    ],
+    "details": {
+      "overview": "CodeVision is a web application that delivers real-time NZ Building Code guidance to designers, builders, and compliance staff. A team of specialised AI agents — each scoped to a section of the code — collaborate via the OpenAI Agents SDK to answer questions, surface citations, and flag ambiguity.",
+      "problem": "Building code is dense, fragmented, and slow to navigate. Practitioners lose hours flipping between PDFs, amendments, and acceptable solutions when they need a confident, sourced answer.",
+      "approach": [
+        {
+          "t": "Agents over a single model",
+          "d": "Specialist agents for fire, structure, weathertightness, and accessibility — orchestrated via the OpenAI Agents SDK with a routing layer."
+        },
+        {
+          "t": "Sourced answers",
+          "d": "pgvector + Supabase auth backs every reply with citations to the exact clause."
+        },
+        {
+          "t": "Production-first",
+          "d": "Next.js + FastAPI deployed on Firebase Hosting and Google Cloud Run. Streaming responses, persistent sessions, evaluation hooks."
+        }
+      ],
+      "outcomes": [
+        "Specialist routing for Building Code queries",
+        "Clause-level citations for source review",
+        "Persistent sessions and streaming responses"
+      ],
+      "links": []
+    },
+    "slug": "code-vision",
+    "discipline": "AI applications",
+    "cover": "images/optimized/code_vision.webp",
+    "repository": null,
+    "repositoryNote": "The web application source is not publicly linked. Explore the related open-source retrieval prototype below.",
+    "gallery": [
+      {
+        "source": "images/code_vision.png",
+        "src": "images/optimized/code_vision.webp",
+        "owner": "codevision",
+        "group": "Project imagery",
+        "alt": "CodeVision web application",
+        "caption": "CodeVision web application"
+      }
+    ],
+    "videos": [
+      {
+        "src": "Videos/codeVision_test01.mp4",
+        "caption": "CodeVision walkthrough"
+      }
+    ],
+    "demos": []
+  },
+  {
+    "id": "vision-studio",
+    "title": "Vision Studio",
+    "subtitle": "Multi-agent image generation",
+    "category": "Generative AI",
+    "year": "2025",
+    "status": "Past personal project",
+    "blurb": "Turns short briefs into detailed prompts and professional visuals via Gemini. Specialised agents for inpainting, plans, and scene generation.",
+    "tech": [
+      "React",
+      "TypeScript",
+      "Tailwind",
+      "Gemini 2.5 Flash",
+      "IndexedDB"
+    ],
+    "details": {
+      "overview": "Vision Studio is a multi-agent image-generation tool that converts a one-line brief into a structured prompt, then routes it to specialist agents — inpainting, floorplan layout, scene composition — powered by Google's Gemini 2.5 Flash.",
+      "problem": "Most image tools take raw prompts and deliver one-shot results. Architecture and design briefs need a structured pipeline — context, references, intent — before a useful image can be produced.",
+      "approach": [
+        {
+          "t": "Brief → prompt agent",
+          "d": "Expands a sparse brief into a detailed, model-ready prompt with style, materials, lighting."
+        },
+        {
+          "t": "Specialist routing",
+          "d": "Different agents handle inpainting, plan generation, and free-form scenes."
+        },
+        {
+          "t": "Local persistence",
+          "d": "IndexedDB stores sessions, references, and history without a backend."
+        }
+      ],
+      "outcomes": [
+        "100% client-side; deployable as a static site",
+        "Mid-brief refinement loops without re-prompting"
+      ],
+      "links": []
+    },
+    "slug": "gemini-vision",
+    "discipline": "Generative AI",
+    "cover": "images/optimized/Vision_Studio_Hero.webp",
+    "repository": null,
+    "repositoryNote": "A public repository is not currently available.",
+    "gallery": [],
+    "videos": [],
+    "demos": []
+  },
+  {
+    "id": "n8n-rag",
+    "title": "n8n Building Code RAG",
+    "subtitle": "Multi-agent retrieval system",
+    "category": "Multi-agent RAG",
+    "year": "2025",
+    "status": "Past personal project",
+    "blurb": "Sophisticated multi-agent RAG over NZ Building Code, built end-to-end in n8n. Specialist agents, OCR, intelligent query routing, Supabase vector store.",
+    "tech": [
+      "n8n",
+      "OpenAI GPT-4.1",
+      "Mistral OCR",
+      "Supabase",
+      "Vector search"
+    ],
+    "details": {
+      "overview": "A multi-agent Retrieval-Augmented Generation system for the New Zealand Building Code, built entirely in n8n. Specialized agents handle specific code sections (B through H) with dedicated Supabase vector stores, while a GPT-4.1 orchestration layer analyzes queries and routes them to the appropriate specialist. Document ingestion is automated: Google Drive triggers detect new PDFs, Mistral OCR extracts text and annotates images, and OpenAI embeddings land in section-specific vector tables.",
+      "facts": [
+        {
+          "k": "specialist agents",
+          "v": "7 (Code B–H)"
+        },
+        {
+          "k": "orchestrator",
+          "v": "GPT-4.1, temperature 0.4"
+        },
+        {
+          "k": "embeddings",
+          "v": "text-embedding-3-large, 1536 dims"
+        },
+        {
+          "k": "OCR engine",
+          "v": "Mistral-OCR-Latest"
+        },
+        {
+          "k": "vector stores",
+          "v": "7 section-specific Supabase pgvector tables"
+        },
+        {
+          "k": "memory",
+          "v": "PostgreSQL table orch_agent_history"
+        },
+        {
+          "k": "chunking",
+          "v": "LangChain RecursiveCharacterTextSplitter"
+        },
+        {
+          "k": "formats",
+          "v": "PDF, Images"
+        }
+      ],
+      "problem": "Standard RAG over a long, structured code-document tends to hallucinate cross-references and miss section context. A single retriever can't tell fire from structure.",
+      "approach": [
+        {
+          "t": "OCR → chunks → vectors",
+          "d": "Mistral OCR + heading-aware chunking → Supabase pgvector."
+        },
+        {
+          "t": "Router → specialist",
+          "d": "A lightweight router classifies the question, then a specialist agent answers with its scoped index."
+        },
+        {
+          "t": "Visual orchestration",
+          "d": "All wiring lives in n8n — easy to audit, fork, and extend with new specialists."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "Chat trigger",
+          "d": "Webhook endpoint receives the user message."
+        },
+        {
+          "t": "Orchestration agent",
+          "d": "GPT-4.1 (temp 0.4) analyzes query intent and routes; PostgreSQL memory (orch_agent_history) preserves conversation context.",
+          "badges": [
+            {
+              "kind": "branch",
+              "label": "routes to one of 7 Code-section tools (B–H)"
+            },
+            {
+              "kind": "branch",
+              "label": "multiple specialists in parallel on cross-sectional regulatory questions"
+            }
+          ]
+        },
+        {
+          "t": "Route to specialist",
+          "d": "One of 7 Code-section tools (B–H) selected — e.g. Code-C Protection from Fire, Code-H Energy Efficiency."
+        },
+        {
+          "t": "Specialist agent retrieval",
+          "d": "Code-X agent (GPT-4.1, specialized prompts) runs semantic search in its dedicated Supabase vector store."
+        },
+        {
+          "t": "Response generation",
+          "d": "Retrieved context synthesized into a Building-Code-compliant answer."
+        }
+      ],
+      "features": [
+        {
+          "t": "Multi-agent architecture",
+          "d": "Seven specialist agents (Code B–H), each with a dedicated knowledge base and prompt-engineered expertise."
+        },
+        {
+          "t": "Intelligent query routing",
+          "d": "A GPT-4.1 orchestration agent analyzes the query and routes it to the appropriate specialist."
+        },
+        {
+          "t": "Advanced image ingestion",
+          "d": "Images are reformatted and annotated for vector storage, so the LLM can render relevant images in chat responses."
+        },
+        {
+          "t": "Automated OCR pipeline",
+          "d": "Mistral-OCR-Latest runs over every document, triggered by Google Drive uploads."
+        },
+        {
+          "t": "Semantic vector search",
+          "d": "Text and image content share OpenAI embeddings in Supabase."
+        },
+        {
+          "t": "Conversation memory",
+          "d": "PostgreSQL-backed history keeps follow-up queries in context."
+        }
+      ],
+      "architecture": [
+        "n8n JavaScript workflows drive all orchestration; LangChain's RecursiveCharacterTextSplitter handles chunking.",
+        "OpenAI GPT-4.1 at temperature 0.4 for the orchestrator, with text-embedding-3-large for vectors.",
+        "Mistral.ai OCR (mistral-ocr-latest) with bounding-box image annotation.",
+        "Supabase vector stores (pgvector) plus Supabase Storage buckets — one store per code section.",
+        "PostgreSQL chat memory via the n8n memoryPostgresChat node, table orch_agent_history."
+      ],
+      "outcomes": [
+        "End-to-end in n8n — no bespoke runtime to maintain",
+        "Auditable flow per query"
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/n8n_RAG_Workflow"
+        }
+      ]
+    },
+    "slug": "n8n_rag",
+    "discipline": "Agents & automation",
+    "cover": "images/optimized/n8n.webp",
+    "repository": "https://github.com/Userdflt/n8n_RAG_Workflow",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/ingest.png",
+        "src": "images/optimized/ingest.webp",
+        "owner": "n8n-rag",
+        "group": "Project imagery",
+        "alt": "Document ingestion workflow",
+        "caption": "Document ingestion workflow"
+      },
+      {
+        "source": "images/orch.png",
+        "src": "images/optimized/orch.webp",
+        "owner": "n8n-rag",
+        "group": "Project imagery",
+        "alt": "Specialist agent orchestration",
+        "caption": "Specialist agent orchestration"
+      }
+    ],
+    "videos": [
+      {
+        "src": "Videos/YouCut_20250729_161540173.mp4",
+        "caption": "n8n RAG demo"
+      }
+    ],
+    "demos": []
+  },
+  {
+    "id": "notion-mcp",
+    "title": "Notion MCP Agent",
+    "subtitle": "Live knowledge hub over Notion",
+    "category": "AI Agent",
+    "year": "2025",
+    "status": "Past personal project",
+    "blurb": "FastMCP server exposing Notion as a toolbox. LangChain + GPT-4o orchestration for read, write, summarise, tables, metadata — even MP3s of notes.",
+    "tech": [
+      "FastMCP",
+      "Notion API",
+      "LangChain",
+      "LangGraph",
+      "TTS"
+    ],
+    "details": {
+      "overview": "Notion MCP Agent turns a Notion workspace into a live, AI-driven knowledge hub with one-click text-to-speech. A FastMCP server exposes a toolbox for manipulating Notion pages; a LangChain agent with GPT-4o orchestrates conversations to read, write, summarise, build tables, manage metadata, and generate MP3s of notes in real time. It runs over SSE transport with a Tkinter desktop GUI, and can run local-first with Ollama LLMs and Coqui TTS at zero cloud cost.",
+      "facts": [
+        {
+          "k": "MCP tools",
+          "v": "13 registered tools across 6 categories"
+        },
+        {
+          "k": "tool categories",
+          "v": "Content / Read / Properties / Pages / Users / Search / Media"
+        },
+        {
+          "k": "LLM",
+          "v": "gpt-4o via ChatOpenAI (swappable for any Ollama/OpenAI-compatible model)"
+        },
+        {
+          "k": "prompt endpoints",
+          "v": "2 — default_prompt + structured_notes_prompt (10-section study guides)"
+        },
+        {
+          "k": "transport",
+          "v": "SSE (/sse endpoint)"
+        },
+        {
+          "k": "TTS",
+          "v": "Coqui TTS → downloadable MP3"
+        },
+        {
+          "k": "code files",
+          "v": "3 — notion_mcp_server.py, notion_agent.py, tts_service.py"
+        }
+      ],
+      "problem": "Notion is the centre of gravity for personal and team knowledge — but interacting with it through chat usually means dumb question-answering. The agent should be able to *do* things, not just describe them.",
+      "approach": [
+        {
+          "t": "FastMCP as the tool layer",
+          "d": "Every Notion verb (create, append, query, schema) is a typed MCP tool."
+        },
+        {
+          "t": "LangChain + LangGraph orchestration",
+          "d": "GPT-4o reasons over the workspace and chains tool calls."
+        },
+        {
+          "t": "TTS output",
+          "d": "Spoken summaries of meeting notes, journals, and PRs as MP3."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "User types",
+          "d": "Question or command entered in the Tkinter GUI."
+        },
+        {
+          "t": "Agent plans",
+          "d": "LangChain agent decides which MCP tools to invoke (chain-of-thought shown in dev mode).",
+          "badges": [
+            {
+              "kind": "branch",
+              "label": "decides which of 13 registered MCP tools to invoke"
+            }
+          ]
+        },
+        {
+          "t": "FastMCP executes",
+          "d": "Server hits the Notion API and/or Coqui TTS over SSE.",
+          "badges": [
+            {
+              "kind": "branch",
+              "label": "Notion API or Coqui TTS"
+            }
+          ]
+        },
+        {
+          "t": "Agent streams",
+          "d": "Answer streamed back, plus an MP3 link when TTS is used."
+        },
+        {
+          "t": "Result lands",
+          "d": "Change appears instantly in the Notion workspace and desktop chat window."
+        }
+      ],
+      "features": [
+        {
+          "t": "End-to-end workspace control from chat",
+          "d": "Append blocks, build tables, rename pages, manage users, search."
+        },
+        {
+          "t": "Text-to-speech",
+          "d": "Any content becomes a downloadable MP3 via Coqui TTS."
+        },
+        {
+          "t": "Structured-Notes mode",
+          "d": "Generates ten-section pedagogical study guides."
+        },
+        {
+          "t": "Real-time interaction",
+          "d": "Conversations run over SSE transport on an /sse endpoint."
+        },
+        {
+          "t": "Local-first desktop app",
+          "d": "Works offline with local LLMs."
+        },
+        {
+          "t": "Extensible tool surface",
+          "d": "New MCP tools can be added without touching core logic."
+        }
+      ],
+      "architecture": [
+        "A FastMCP / MCP-Python server registering content, page, user, search, and media tools — append_content, create_table, get_page_text, search_notion, text_to_speech.",
+        "LangChain + LangGraph orchestration; ChatOpenAI gpt-4o by default, swappable for any Ollama or OpenAI-compatible model.",
+        "notion_client SDK, Coqui TTS, a Tkinter GUI, asyncio over SSE transport.",
+        "Code layout: notion_mcp_server.py, notion_agent.py, tts_service.py."
+      ],
+      "outcomes": [
+        "Conversational read/write over Notion",
+        "Audio recap of long notes in seconds"
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/Notion-MCP-Agent"
+        }
+      ]
+    },
+    "slug": "notion_mcp",
+    "discipline": "Agents & automation",
+    "cover": "images/optimized/notion_w_w.webp",
+    "repository": "https://github.com/Userdflt/Notion-MCP-Agent",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/notion_mcp.png",
+        "src": "images/optimized/notion_mcp.webp",
+        "owner": "notion-mcp",
+        "group": "Project imagery",
+        "alt": "Notion agent in use",
+        "caption": "Notion agent in use"
+      }
+    ],
+    "videos": [],
+    "demos": [
+      {
+        "type": "gif",
+        "src": "gifs/Table_Creation.gif",
+        "alt": "Table creation in Notion via MCP",
+        "caption": "Table creation"
+      },
+      {
+        "type": "gif",
+        "src": "gifs/writing_structured_notes.gif",
+        "alt": "Writing structured notes",
+        "caption": "Structured note authoring"
+      },
+      {
+        "type": "gif",
+        "src": "gifs/page_with_notes.gif",
+        "alt": "Creating a Notion page with notes",
+        "caption": "Creating a Notion page with notes"
+      },
+      {
+        "type": "gif",
+        "src": "gifs/TTS.gif",
+        "alt": "Text-to-speech output",
+        "caption": "Text-to-speech output"
+      }
+    ]
+  },
+  {
+    "id": "stable-diffusion",
+    "title": "Sketch to Render",
+    "subtitle": "Stable Diffusion XL + ControlNet",
+    "category": "Generative AI",
+    "year": "2025",
+    "status": "Past personal project",
+    "blurb": "Interactive sketch-to-image tool with ControlNet conditioning for precise architectural exploration.",
+    "tech": [
+      "Diffusers",
+      "SDXL",
+      "ControlNet",
+      "PyTorch",
+      "Tkinter"
+    ],
+    "details": {
+      "overview": "A personal project that transforms rough sketches into photorealistic outputs and supports inpainting edits, built on open-source Stable Diffusion XL pipelines with ControlNet for sketch-based guidance and a Tkinter interface. The sketch — converted to inverted grayscale — conditions generation via StableDiffusionXLControlNetPipeline; an inpainting mode lets you paint a red mask on the result to refine specific regions. Everything can be run locally.",
+      "facts": [
+        {
+          "k": "ControlNet",
+          "v": "xinsir/controlnet-scribble-sdxl-1.0"
+        },
+        {
+          "k": "SDXL base",
+          "v": "SG161222/RealVisXL_V4.0_Lightning"
+        },
+        {
+          "k": "inpainting model",
+          "v": "diffusers/stable-diffusion-xl-1.0-inpainting-0.1"
+        },
+        {
+          "k": "pipelines",
+          "v": "StableDiffusionXLControlNetPipeline + AutoPipelineForInpainting"
+        },
+        {
+          "k": "stack",
+          "v": "Python 3.9+, CUDA Torch, HF Diffusers, Tkinter, Pillow"
+        },
+        {
+          "k": "runs locally",
+          "v": "yes — everything can be run locally"
+        }
+      ],
+      "problem": "Pure text-to-image is too unconstrained for early architectural exploration. You need the image to follow a specific massing, line, or plan — without losing the freedom of generative.",
+      "approach": [
+        {
+          "t": "ControlNet for structure",
+          "d": "Edge / scribble conditioning lets the generation follow the sketch."
+        },
+        {
+          "t": "SDXL for fidelity",
+          "d": "Higher-resolution base for materials and lighting."
+        },
+        {
+          "t": "Native UI",
+          "d": "Tkinter app keeps the loop fast: sketch → generate → refine."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "Sketch",
+          "d": "User draws on a white canvas (brush size slider, Ctrl+Z undo, eraser toggle); Pillow ImageDraw mirrors strokes internally."
+        },
+        {
+          "t": "Prompt",
+          "d": "Subject / Design Features / Environment text fields + negative prompt."
+        },
+        {
+          "t": "Condition",
+          "d": "Sketch converted to inverted grayscale; ControlNet (xinsir/controlnet-scribble-sdxl-1.0) guides generation via controlnet_conditioning_scale."
+        },
+        {
+          "t": "Generate",
+          "d": "StableDiffusionXLControlNetPipeline with SDXL base SG161222/RealVisXL_V4.0_Lightning renders the preview."
+        },
+        {
+          "t": "Mask (optional)",
+          "d": "Inpainting mode — user paints a red mask on regions to change."
+        },
+        {
+          "t": "Inpaint",
+          "d": "AutoPipelineForInpainting (diffusers/stable-diffusion-xl-1.0-inpainting-0.1) refills masked areas.",
+          "badges": [
+            {
+              "kind": "loop",
+              "label": "user opts to refine — exit back to sketch mode (repeatable)"
+            }
+          ]
+        },
+        {
+          "t": "Save",
+          "d": "Export in multiple formats (JPEG, PNG, etc.)."
+        }
+      ],
+      "features": [
+        {
+          "t": "Sketch to image",
+          "d": "Real-time inference triggers with customizable subject, design-feature, and environment prompts."
+        },
+        {
+          "t": "Inpainting mode",
+          "d": "Paint a mask over the generated image and re-fill the masked area through the SDXL inpainting pipeline."
+        },
+        {
+          "t": "Sketch controls",
+          "d": "Undo (Ctrl+Z) and an eraser / brush toggle in sketch mode."
+        },
+        {
+          "t": "Prompt-based generation",
+          "d": "Negative-prompt support alongside the main prompt."
+        },
+        {
+          "t": "Multi-format export",
+          "d": "Save outputs as JPEG, PNG, and other formats."
+        }
+      ],
+      "architecture": [
+        "Hugging Face Diffusers: StableDiffusionXLControlNetPipeline and AutoPipelineForInpainting.",
+        "ControlNet model xinsir/controlnet-scribble-sdxl-1.0 for sketch conditioning.",
+        "SDXL base SG161222/RealVisXL_V4.0_Lightning; inpainting via diffusers/stable-diffusion-xl-1.0-inpainting-0.1.",
+        "Python 3.9+, CUDA Torch, a Tkinter GUI, Pillow for canvas state."
+      ],
+      "outcomes": [
+        "Real-time iteration on architectural concepts",
+        "Repeatable style and structure across variations"
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/InteractiveSketchToRender"
+        }
+      ]
+    },
+    "slug": "stablediffusion",
+    "discipline": "Generative AI",
+    "cover": "images/optimized/stable_sketch.webp",
+    "repository": "https://github.com/Userdflt/InteractiveSketchToRender",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/3.jpeg",
+        "src": "images/optimized/3.webp",
+        "owner": "stable-diffusion",
+        "group": "Project imagery",
+        "alt": "Architectural generation study",
+        "caption": "Architectural generation study"
+      },
+      {
+        "source": "images/6.jpeg",
+        "src": "images/optimized/6.webp",
+        "owner": "stable-diffusion",
+        "group": "Project imagery",
+        "alt": "Facade and material study",
+        "caption": "Facade and material study"
+      },
+      {
+        "source": "images/Screenshot 2025-06-04 093010.png",
+        "src": "images/optimized/Screenshot 2025-06-04 093010.webp",
+        "owner": "stable-diffusion",
+        "group": "Project imagery",
+        "alt": "Sketch-to-render desktop interface",
+        "caption": "Sketch-to-render desktop interface"
+      },
+      {
+        "source": "images/stable.jpeg",
+        "src": "images/optimized/stable.webp",
+        "owner": "stable-diffusion",
+        "group": "Project imagery",
+        "alt": "Generated architectural facade",
+        "caption": "Generated architectural facade"
+      },
+      {
+        "source": "images/stable_sketch.png",
+        "src": "images/optimized/stable_sketch.webp",
+        "owner": "stable-diffusion",
+        "group": "Project imagery",
+        "alt": "Original sketch and generated architecture",
+        "caption": "Original sketch and generated architecture"
+      }
+    ],
+    "videos": [],
+    "demos": [
+      {
+        "type": "gif",
+        "src": "gifs/sd1.gif",
+        "alt": "Stable Diffusion run 1"
+      },
+      {
+        "type": "gif",
+        "src": "gifs/sd2.gif",
+        "alt": "Stable Diffusion run 2"
+      }
+    ]
+  },
+  {
+    "id": "vision-rag",
+    "title": "Vision Model RAG",
+    "subtitle": "ViT + RAG over building code PDFs",
+    "category": "ViT & RAG",
+    "year": "2025",
+    "status": "Past personal project",
+    "blurb": "Extracts, indexes, and retrieves text and visual data from NZ Building Code PDFs with open-source vision models.",
+    "tech": [
+      "LangChain",
+      "LangGraph",
+      "Ollama",
+      "ChromaDB",
+      "Streamlit"
+    ],
+    "details": {
+      "overview": "An AI-powered personal project that simplifies information retrieval from NZ Building Code documentation, extracting, indexing, and retrieving both textual and visual data from PDFs with an open-source stack. Images pass through an ImageMetadataExtractor where vision models generate descriptive metadata; text is chunked and embedded; both are stored in Chroma. AI agents retrieve the combined text and image data and generate answers via open-source LLMs behind a Streamlit chat interface.",
+      "facts": [
+        {
+          "k": "extraction",
+          "v": "Unstructured"
+        },
+        {
+          "k": "vision analysis",
+          "v": "open-source Vision Transformer models (HuggingFace)"
+        },
+        {
+          "k": "embeddings",
+          "v": "SentenceTransformers"
+        },
+        {
+          "k": "vector store",
+          "v": "Chroma"
+        },
+        {
+          "k": "LLMs",
+          "v": "open-source (Ollama models, GPT-Neo, LLaMA)"
+        },
+        {
+          "k": "UI",
+          "v": "Streamlit (local deployment)"
+        },
+        {
+          "k": "processing streams",
+          "v": "2 concurrent (vision + text)"
+        }
+      ],
+      "problem": "Standard text RAG drops the diagrams. For a code document, the diagram often *is* the answer.",
+      "approach": [
+        {
+          "t": "Vision-language captioning",
+          "d": "LLaMA Vision via Ollama captions every figure on extraction."
+        },
+        {
+          "t": "Multi-modal index",
+          "d": "Captions + text chunks share an embedding space in ChromaDB."
+        },
+        {
+          "t": "Graph retrieval",
+          "d": "LangGraph composes the retrieve → answer → verify path."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "PDF identification",
+          "d": "Auto-detects Building Code PDFs by filename prefixes/suffixes."
+        },
+        {
+          "t": "Content extraction",
+          "d": "Text and images extracted (Unstructured)."
+        },
+        {
+          "t": "Dual processing",
+          "d": "Split into two concurrent streams — image stream and text stream."
+        },
+        {
+          "t": "Image metadata",
+          "d": "Images stored as paths + base64; ImageMetadataExtractor + vision models generate descriptive metadata → Chroma."
+        },
+        {
+          "t": "Text embedding",
+          "d": "Text split into chunks, embedded via SentenceTransformers → Chroma."
+        },
+        {
+          "t": "Retrieve",
+          "d": "AI agents fetch relevant text AND image data by query embedding."
+        },
+        {
+          "t": "Answer",
+          "d": "Open-source LLM generates the response in the Streamlit chat UI."
+        }
+      ],
+      "features": [
+        {
+          "t": "Locally deployable",
+          "d": "Secure, privacy-focused, and fully open-source end to end."
+        },
+        {
+          "t": "Dual processing streams",
+          "d": "Vision-model image extraction runs alongside text chunk embedding."
+        },
+        {
+          "t": "Combined retrieval",
+          "d": "Text and visual data are retrieved together for comprehensive results."
+        },
+        {
+          "t": "Conversational retrieval",
+          "d": "Quick, context-sensitive answers over the indexed documentation."
+        }
+      ],
+      "architecture": [
+        "Document extraction with Unstructured.",
+        "Vision analysis via open-source Vision Transformer models on HuggingFace.",
+        "SentenceTransformers embeddings held in a Chroma vector store.",
+        "Open-source LLMs (Ollama models, GPT-Neo, LLaMA) behind a Streamlit UI."
+      ],
+      "outcomes": [
+        "Figures retrievable by semantic question",
+        "Open-source end-to-end — fully local"
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval"
+        }
+      ]
+    },
+    "slug": "vision_model",
+    "discipline": "AI applications",
+    "cover": "images/optimized/codevision.webp",
+    "repository": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/codevision.png",
+        "src": "images/optimized/codevision.webp",
+        "owner": "vision-rag",
+        "group": "Project imagery",
+        "alt": "CodeVision NZ retrieval prototype",
+        "caption": "CodeVision NZ retrieval prototype"
+      },
+      {
+        "source": "images/codevision_app.png",
+        "src": "images/optimized/codevision_app.webp",
+        "owner": "vision-rag",
+        "group": "Project imagery",
+        "alt": "Building Code question and answer interface",
+        "caption": "Building Code question and answer interface"
+      },
+      {
+        "source": "images/Local_Deployment_Example.png",
+        "src": "images/optimized/Local_Deployment_Example.webp",
+        "owner": "vision-rag",
+        "group": "Project imagery",
+        "alt": "Local deployment",
+        "caption": "Local deployment"
+      },
+      {
+        "source": "images/Sample_extracted.png",
+        "src": "images/optimized/Sample_extracted.webp",
+        "owner": "vision-rag",
+        "group": "Project imagery",
+        "alt": "Extracted images from source documents",
+        "caption": "Extracted images from source documents"
+      }
+    ],
+    "videos": [],
+    "demos": []
+  },
+  {
+    "id": "llm-rag",
+    "title": "Self-correcting RAG",
+    "subtitle": "Autonomous decision graph",
+    "category": "Advanced RAG",
+    "year": "2025",
+    "status": "Past personal project",
+    "blurb": "Self-correcting retrieval with autonomous decision-making for more accurate, reliable answers under ambiguity.",
+    "tech": [
+      "LangChain",
+      "LangGraph",
+      "ChromaDB",
+      "Ollama"
+    ],
+    "details": {
+      "overview": "A self-correcting RAG system powered by a local LLM that autonomously decides whether to retrieve from a local Chroma DB vector store or perform a web search, via an indicator routing function. After drafting an answer it runs reflection checks for completeness and hallucination checks for factual correctness, looping through a state-graph workflow to regenerate until the answer passes. Delivered as a notebook, Local_RAG_LLM.ipynb.",
+      "facts": [
+        {
+          "k": "LLM",
+          "v": "local LLM (self-hosted)"
+        },
+        {
+          "k": "vector store",
+          "v": "Chroma DB (local)"
+        },
+        {
+          "k": "fallback",
+          "v": "optional web search"
+        },
+        {
+          "k": "quality gates",
+          "v": "2 — reflection (completeness) + hallucination check (factual correctness)"
+        },
+        {
+          "k": "workflow engine",
+          "v": "state graph with conditional decisions and loops"
+        },
+        {
+          "k": "deliverable",
+          "v": "notebook — Local_RAG_LLM.ipynb"
+        }
+      ],
+      "problem": "Naive RAG returns whatever it retrieves, even when the retrieval is bad. The system should know when it doesn't know.",
+      "approach": [
+        {
+          "t": "Grade the retrieval",
+          "d": "A grader LLM evaluates whether retrieved chunks actually answer the query."
+        },
+        {
+          "t": "Rewrite & retry",
+          "d": "Failing queries are rewritten; the graph loops until a confident answer or a bounded refusal."
+        },
+        {
+          "t": "Local-first",
+          "d": "Ollama keeps everything on-device for privacy."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "Indicator",
+          "d": "Routes the user's question to local retrieval or web search.",
+          "badges": [
+            {
+              "kind": "branch",
+              "label": "routes to local retrieval or web search"
+            }
+          ]
+        },
+        {
+          "t": "Retrieval / Search",
+          "d": "Chroma DB vector store scan, or web search if local docs don't suffice."
+        },
+        {
+          "t": "Generation",
+          "d": "Local LLM drafts an initial answer."
+        },
+        {
+          "t": "Reflection",
+          "d": "Evaluates completeness; may add missing details.",
+          "badges": [
+            {
+              "kind": "loop",
+              "label": "answer deemed incomplete — state graph loops back"
+            }
+          ]
+        },
+        {
+          "t": "Hallucination check",
+          "d": "Screens for factual inaccuracies.",
+          "badges": [
+            {
+              "kind": "loop",
+              "label": "factual inaccuracy detected — answer re-generated"
+            }
+          ]
+        },
+        {
+          "t": "Regeneration",
+          "d": "Updates context or re-generates the answer if necessary."
+        }
+      ],
+      "features": [
+        {
+          "t": "Autonomous routing",
+          "d": "The graph decides between local retrieval and a web search on its own."
+        },
+        {
+          "t": "Local vector store",
+          "d": "Chroma DB holds the document context."
+        },
+        {
+          "t": "Reflection and hallucination checks",
+          "d": "Completeness and factual correctness are verified before a response is finalized."
+        },
+        {
+          "t": "Relevance grading",
+          "d": "Iterative refinement drives goal-oriented behaviour."
+        },
+        {
+          "t": "State-graph workflow",
+          "d": "Conditional decisions and loops until the answer passes."
+        }
+      ],
+      "architecture": [
+        "A local LLM with Chroma DB vector storage and an optional web-search fallback.",
+        "Flow: indicator → retrieval or search → generation → reflection → hallucination check → regeneration."
+      ],
+      "outcomes": [
+        "Higher answer precision on ambiguous queries",
+        "Graceful refusal instead of hallucination"
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-"
+        }
+      ]
+    },
+    "slug": "llm",
+    "discipline": "Agents & automation",
+    "cover": "images/optimized/LLM.webp",
+    "repository": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/llm_flow_chart.jpeg",
+        "src": "images/optimized/llm_flow_chart.webp",
+        "owner": "llm-rag",
+        "group": "Project imagery",
+        "alt": "Retrieval workflow diagram",
+        "caption": "Retrieval workflow diagram"
+      },
+      {
+        "source": "images/llm_flow_chart_1.jpeg",
+        "src": "images/optimized/llm_flow_chart_1.webp",
+        "owner": "llm-rag",
+        "group": "Project imagery",
+        "alt": "Agent flow and decision points",
+        "caption": "Agent flow and decision points"
+      },
+      {
+        "source": "images/llm_flow_chart_2.jpeg",
+        "src": "images/optimized/llm_flow_chart_2.webp",
+        "owner": "llm-rag",
+        "group": "Project imagery",
+        "alt": "Self-correction workflow",
+        "caption": "Self-correction workflow"
+      },
+      {
+        "source": "images/Workflow_Diagram.jpeg",
+        "src": "images/optimized/Workflow_Diagram.webp",
+        "owner": "llm-rag",
+        "group": "Project imagery",
+        "alt": "System architecture diagram",
+        "caption": "System architecture diagram"
+      }
+    ],
+    "videos": [],
+    "demos": []
+  },
+  {
+    "id": "cv-safety",
+    "title": "Construction Safety Vision",
+    "subtitle": "YOLOv9 PPE detection",
+    "category": "Computer Vision",
+    "year": "2025",
+    "status": "Past personal project",
+    "blurb": "Real-time object detection for PPE compliance on construction sites.",
+    "tech": [
+      "YOLOv9",
+      "OpenCV",
+      "PyTorch",
+      "Pandas"
+    ],
+    "details": {
+      "overview": "A real-time computer-vision system that detects PPE compliance — helmets and vests — on construction-site images. Trained on the Kaggle Construction Site Safety Image Dataset (Roboflow) with YOLOv9 across three improvement stages: a baseline model, a normalization run at 70 epochs, and an oversampling-plus-normalization run at 50 epochs. The normalization run gave the best precision/recall balance, and Webcam_Inference.py runs it as local real-time webcam inference.",
+      "facts": [
+        {
+          "k": "model",
+          "v": "YOLOv9"
+        },
+        {
+          "k": "dataset",
+          "v": "Kaggle Construction Site Safety Image Dataset (Roboflow)"
+        },
+        {
+          "k": "image size",
+          "v": "640×640"
+        },
+        {
+          "k": "class imbalance",
+          "v": "Person class most frequent"
+        },
+        {
+          "k": "training runs",
+          "v": "3 stages — baseline / norm (70 ep) / ovs+norm (50 ep)"
+        },
+        {
+          "k": "deployment",
+          "v": "Webcam_Inference.py (local webcam, real-time)"
+        }
+      ],
+      "problem": "Site safety reviews happen after incidents, not before. Real-time detection turns the camera into a passive supervisor that flags non-compliance instantly.",
+      "approach": [
+        {
+          "t": "Kaggle PPE dataset",
+          "d": "Kaggle Construction Site Safety Image Dataset (Roboflow) — PPE-labelled construction images at 640×640, with label-distribution analysis showing the Person class most frequent."
+        },
+        {
+          "t": "Three-stage YOLOv9 training",
+          "d": "Baseline YOLOv9, then normalization at 70 epochs, then oversampling plus normalization at 50 epochs."
+        },
+        {
+          "t": "Local webcam deployment",
+          "d": "Webcam_Inference.py runs real-time webcam inference, with object tracking on test videos."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "Dataset",
+          "d": "Kaggle Construction Site Safety Image Dataset (Roboflow) — PPE-labelled construction images."
+        },
+        {
+          "t": "Inspection",
+          "d": "Image-size consistency check (640×640); label-distribution analysis found imbalance (Person class most frequent)."
+        },
+        {
+          "t": "Baseline",
+          "d": "Baseline YOLOv9 model (improvement stage 1)."
+        },
+        {
+          "t": "Normalization run",
+          "d": "YOLO with normalization, 70 epochs (stage 2)."
+        },
+        {
+          "t": "Oversampling run",
+          "d": "YOLO with oversampling + normalization, 50 epochs (stage 3)."
+        },
+        {
+          "t": "Evaluate",
+          "d": "Normalization model gave the best precision/recall balance."
+        },
+        {
+          "t": "Deploy",
+          "d": "Webcam_Inference.py — local real-time webcam inference; object tracking on test videos."
+        }
+      ],
+      "features": [
+        {
+          "t": "PPE detection",
+          "d": "Helmets, vests, and workers marked with colour-coded bounding boxes."
+        },
+        {
+          "t": "Real-time detection and tracking",
+          "d": "Including webcam inference through Webcam_Inference.py."
+        },
+        {
+          "t": "Three-stage model improvement",
+          "d": "Baseline, then normalization, then oversampling plus normalization."
+        },
+        {
+          "t": "Class-imbalance handling",
+          "d": "Addresses the Person class dominating the training set."
+        },
+        {
+          "t": "Documented case study",
+          "d": "A linked presentation and full written report accompany the models."
+        }
+      ],
+      "architecture": [
+        "YOLOv9 trained on the Kaggle Construction Site Safety image dataset (Roboflow), 640×640 labelled images.",
+        "Training runs: 70 epochs with normalization, 50 epochs with oversampling.",
+        "Notebooks for dataset inspection and both final models, plus a Python webcam deployment script."
+      ],
+      "outcomes": [
+        "Real-time webcam inference through Webcam_Inference.py",
+        "Normalization run chosen — best precision/recall balance"
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model"
+        }
+      ]
+    },
+    "slug": "cv",
+    "discipline": "Computer vision",
+    "cover": "images/optimized/output8.webp",
+    "repository": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/output1.png",
+        "src": "images/optimized/output1.webp",
+        "owner": "cv-safety",
+        "group": "Project imagery",
+        "alt": "Detection across sample images",
+        "caption": "Detection across sample images"
+      },
+      {
+        "source": "images/output8.png",
+        "src": "images/optimized/output8.webp",
+        "owner": "cv-safety",
+        "group": "Project imagery",
+        "alt": "Object detection sample output",
+        "caption": "Object detection sample output"
+      }
+    ],
+    "videos": [],
+    "demos": [
+      {
+        "type": "gif",
+        "src": "gifs/construction_workers.gif",
+        "alt": "Construction workers PPE detection",
+        "caption": "Live PPE detection"
+      }
+    ]
+  },
+  {
+    "id": "youtube-analytics",
+    "title": "YouTube Analytics",
+    "subtitle": "Statistical study of AI content trends",
+    "category": "Data Science",
+    "year": "2024",
+    "status": "Past personal project",
+    "blurb": "EDA + hypothesis testing on YouTube AI/data-science content. Temporal patterns, engagement, ANOVA across cohorts.",
+    "tech": [
+      "Python",
+      "YouTube API",
+      "Pandas",
+      "ANOVA"
+    ],
+    "details": {
+      "overview": "A statistical study of AI / data-science content on YouTube. Data collected via the YouTube API, cleaned, explored, and tested for temporal patterns and engagement shifts across cohorts using ANOVA and follow-up post-hoc tests.",
+      "facts": [
+        {
+          "k": "question",
+          "v": "Has the trend of data-science/AI YouTube videos changed?"
+        },
+        {
+          "k": "data source",
+          "v": "YouTube API"
+        },
+        {
+          "k": "test",
+          "v": "ANOVA across years (+ skewness, kurtosis checks)"
+        },
+        {
+          "k": "H0",
+          "v": "mean view/like/comment counts equal across all years"
+        },
+        {
+          "k": "verdict",
+          "v": "H0 rejected — significant change; overall decrease"
+        },
+        {
+          "k": "deliverable",
+          "v": "notebook — YouTube_Statistics_Analysis.ipynb"
+        }
+      ],
+      "problem": "Anecdotal evidence suggested the AI content boom changed the shape of educational YouTube — but by how much, and across which dimensions? A rigorous study, not vibes.",
+      "approach": [
+        {
+          "t": "API ingestion + cleaning",
+          "d": "Collected channel and video metadata; normalised across time and category."
+        },
+        {
+          "t": "EDA → hypotheses",
+          "d": "Visualised temporal patterns; formed testable hypotheses about engagement shifts."
+        },
+        {
+          "t": "ANOVA + post-hoc",
+          "d": "Tested cohort differences; reported effect sizes alongside p-values."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "Collect",
+          "d": "YouTube API — key setup, search-result retrieval for data-science/AI queries."
+        },
+        {
+          "t": "Clean",
+          "d": "Nulls, duplicates, unnecessary columns; date extraction and feature creation."
+        },
+        {
+          "t": "EDA",
+          "d": "View/like/comment distributions (histograms, KDE); per-category totals; yearly + monthly trend time series."
+        },
+        {
+          "t": "Hypothesis test",
+          "d": "Skewness + kurtosis checks, then ANOVA across years (H0: mean view/like/comment counts equal across years)."
+        },
+        {
+          "t": "Conclude",
+          "d": "Statistically significant changes over recent years; overall decrease in trend."
+        }
+      ],
+      "features": [
+        {
+          "t": "API data collection",
+          "d": "A YouTube API retrieval pipeline gathers the raw dataset."
+        },
+        {
+          "t": "Cleaning pipeline",
+          "d": "Nulls, duplicates, date extraction, and feature creation."
+        },
+        {
+          "t": "Exploratory analysis",
+          "d": "Distributions, per-category view counts, and yearly / monthly trend visualization."
+        },
+        {
+          "t": "Hypothesis testing",
+          "d": "Skewness and kurtosis checks, then ANOVA across years."
+        }
+      ],
+      "architecture": [
+        "A single notebook, YouTube_Statistics_Analysis.ipynb, carries the whole pipeline.",
+        "Data collected through the YouTube API."
+      ],
+      "outcomes": [
+        "Statistically significant cohort effects on engagement",
+        "Reproducible notebook"
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/YouTube_Analytics"
+        }
+      ]
+    },
+    "slug": "youtube-analytics",
+    "discipline": "Data science",
+    "cover": "images/optimized/youtube_analytics.webp",
+    "repository": "https://github.com/Userdflt/YouTube_Analytics",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/youtube_analytics.png",
+        "src": "images/optimized/youtube_analytics.webp",
+        "owner": "youtube-analytics",
+        "group": "Project imagery",
+        "alt": "YouTube analytics dashboard",
+        "caption": "YouTube analytics dashboard"
+      }
+    ],
+    "videos": [],
+    "demos": []
+  },
+  {
+    "id": "nasa-outgassing",
+    "title": "NASA Outgassing",
+    "subtitle": "ML for space-grade materials",
+    "category": "Data Science",
+    "year": "2024",
+    "status": "Past personal project",
+    "blurb": "Predictive models on TML, CVCM, WVR metrics for space-grade material evaluation and QC.",
+    "tech": [
+      "scikit-learn",
+      "Regression",
+      "Classification",
+      "Feature eng."
+    ],
+    "details": {
+      "overview": "Machine-learning models for NASA outgassing metrics — TML (Total Mass Loss), CVCM (Collected Volatile Condensable Materials), and WVR (Water Vapour Regained). The goal: predict whether a material will pass space-grade thresholds before physical testing.",
+      "facts": [
+        {
+          "k": "metrics",
+          "v": "TML (mass loss %), CVCM (condensable volatiles %), WVR (water vapor regained)"
+        },
+        {
+          "k": "target direction",
+          "v": "lower TML / CVCM / WVR = better vacuum performance"
+        },
+        {
+          "k": "engineered feature",
+          "v": "supplier performance score (from TML+CVCM+WVR, + noise)"
+        },
+        {
+          "k": "models compared",
+          "v": "2 regression + 3 classification"
+        },
+        {
+          "k": "notebooks",
+          "v": "4 — data processing, EDA, ML modelling, ML pipeline"
+        },
+        {
+          "k": "outlier method",
+          "v": "quantile filter + IQR"
+        }
+      ],
+      "problem": "Outgassing tests are expensive and slow. A reliable predictive model accelerates material selection for satellites and spacecraft.",
+      "approach": [
+        {
+          "t": "Feature engineering",
+          "d": "Engineered chemical / physical descriptors from raw material data."
+        },
+        {
+          "t": "Regression + classification",
+          "d": "Regression on the three metrics; classification on pass/fail thresholds."
+        },
+        {
+          "t": "Cross-validated reporting",
+          "d": "Reported error bars and confusion matrices honestly."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "Import",
+          "d": "NASA outgassing CSV; 'ID' column set as index."
+        },
+        {
+          "t": "Outlier removal",
+          "d": "Two passes — quantile-based filtering, then IQR method on TML/CVCM/WVR/Space Code."
+        },
+        {
+          "t": "Missing values",
+          "d": "Drop columns/rows with significant gaps (Cure, Material Usage, Space Code); dedupe."
+        },
+        {
+          "t": "Feature engineering",
+          "d": "Supplier performance score from TML + CVCM + WVR; noise added to simulate realistic scenarios."
+        },
+        {
+          "t": "Model",
+          "d": "Regression (Linear, Random Forest) for performance; classification (Logistic, RF, SVM) for reliability."
+        },
+        {
+          "t": "Select",
+          "d": "Linear Regression chosen for regression; Logistic Regression for classification."
+        }
+      ],
+      "comparison": {
+        "title": "Models evaluated",
+        "columns": [
+          "Task",
+          "Models",
+          "Selected"
+        ],
+        "rows": [
+          [
+            "Regression",
+            "Linear Regression, Random Forest Regressor",
+            "Linear Regression (\"based on evaluation scores\")"
+          ],
+          [
+            "Classification",
+            "Logistic Regression, Random Forest Classifier, SVM",
+            "Logistic Regression"
+          ]
+        ]
+      },
+      "features": [
+        {
+          "t": "Data cleaning",
+          "d": "Quantile and IQR outlier filtering with missing-value and duplicate handling."
+        },
+        {
+          "t": "Feature engineering",
+          "d": "Supplier performance scores from TML, CVCM, and WVR, with noise added to simulate realistic scenarios."
+        },
+        {
+          "t": "Regression models",
+          "d": "Linear Regression and a Random Forest Regressor predict material performance."
+        },
+        {
+          "t": "Classification models",
+          "d": "Logistic Regression, Random Forest, and SVM assess procurement reliability."
+        },
+        {
+          "t": "Model selection",
+          "d": "Linear Regression selected for regression, Logistic Regression for classification."
+        }
+      ],
+      "architecture": [
+        "A four-notebook pipeline — data processing, EDA, ML modelling, ML pipeline — over a CSV of NASA outgassing materials.",
+        "Regression (Linear, Random Forest) and classification (Logistic Regression, Random Forest, SVM) run over the same engineered features."
+      ],
+      "outcomes": [
+        "Pass/fail prediction with reportable confidence",
+        "Honest error analysis"
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/NASA-Outgassing-DB"
+        }
+      ]
+    },
+    "slug": "nasa-outgassing",
+    "discipline": "Data science",
+    "cover": "images/optimized/nasa_outgassing.webp",
+    "repository": "https://github.com/Userdflt/NASA-Outgassing-DB",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [],
+    "videos": [],
+    "demos": []
+  },
+  {
+    "id": "ai-detection",
+    "title": "AI Content Detection",
+    "subtitle": "Human vs. AI news classifier",
+    "category": "NLP",
+    "year": "2024",
+    "status": "Past personal project",
+    "blurb": "NLP system distinguishing human-written from AI-generated news with stylometric features, TF-IDF, and classical ML classifiers.",
+    "tech": [
+      "NLTK",
+      "spaCy",
+      "scikit-learn"
+    ],
+    "details": {
+      "overview": "An NLP project classifying news articles as fake or true from combined True.csv and Fake.csv datasets. Text is preprocessed (tokenization, stop-word removal, stemming and lemmatization), features are engineered (word count, character count, word density, TF-IDF vectors), and sentiment is analysed with TextBlob and VADER — with Shapiro-Wilk and Mann-Whitney U tests comparing sentiment distributions between AI-generated and human-written articles. Logistic Regression, SVM, and Random Forest classifiers were then evaluated on accuracy, precision, recall, F1, and ROC AUC.",
+      "facts": [
+        {
+          "k": "datasets",
+          "v": "2 — True.csv + Fake.csv"
+        },
+        {
+          "k": "classifiers",
+          "v": "3 — Logistic Regression, SVM, Random Forest"
+        },
+        {
+          "k": "features",
+          "v": "word count, char count, word density + TF-IDF vectors"
+        },
+        {
+          "k": "sentiment tools",
+          "v": "TextBlob + VADER"
+        },
+        {
+          "k": "statistical tests",
+          "v": "Shapiro-Wilk (normality) + Mann-Whitney U (AI vs human sentiment)"
+        },
+        {
+          "k": "notebooks",
+          "v": "3 — preprocessing, EDA/feature-eng, classification"
+        }
+      ],
+      "problem": "Human-written and AI-generated news read alike on the surface. The separable signal sits in measurable stylometric and statistical differences — word count, character count, word density, sentiment distribution — which have to be extracted from the text and titles before anything can classify them.",
+      "approach": [
+        {
+          "t": "Stylometric features",
+          "d": "Word count, character count, and word density engineered from article text and titles after tokenization, stop-word removal, and stemming / lemmatization."
+        },
+        {
+          "t": "TF-IDF and sentiment",
+          "d": "TF-IDF vectors alongside TextBlob and VADER sentiment, with Shapiro-Wilk and Mann-Whitney U tests comparing the two populations."
+        },
+        {
+          "t": "Three classifiers compared",
+          "d": "Logistic Regression, SVM, and Random Forest evaluated on accuracy, precision, recall, F1, and ROC AUC."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "Combine",
+          "d": "True.csv + Fake.csv merged into one DataFrame with a true/fake target."
+        },
+        {
+          "t": "Preprocess",
+          "d": "Tokenization, stop-word removal, stemming/lemmatization on text and titles."
+        },
+        {
+          "t": "Feature engineering",
+          "d": "Word count, character count, word density from cleaned text/title."
+        },
+        {
+          "t": "Sentiment + stats",
+          "d": "TextBlob + VADER sentiment; Shapiro-Wilk normality test; Mann-Whitney U comparing AI vs human sentiment distributions."
+        },
+        {
+          "t": "Vectorize",
+          "d": "TF-IDF on text and title."
+        },
+        {
+          "t": "Classify + evaluate",
+          "d": "Logistic Regression, SVM, Random Forest — accuracy, precision, recall, F1, ROC AUC; confusion matrices + ROC curves."
+        }
+      ],
+      "comparison": {
+        "title": "Classifiers evaluated",
+        "columns": [
+          "Model",
+          "Metrics evaluated"
+        ],
+        "rows": [
+          [
+            "Logistic Regression",
+            "accuracy, precision, recall, F1, ROC AUC"
+          ],
+          [
+            "SVM",
+            "accuracy, precision, recall, F1, ROC AUC"
+          ],
+          [
+            "Random Forest",
+            "accuracy, precision, recall, F1, ROC AUC"
+          ]
+        ],
+        "note": "The README names no winner and no scores."
+      },
+      "features": [
+        {
+          "t": "Three-notebook pipeline",
+          "d": "Preprocessing, EDA with feature engineering, then the classification model."
+        },
+        {
+          "t": "Stylometric and statistical features",
+          "d": "Derived from both article text and titles."
+        },
+        {
+          "t": "Sentiment analysis",
+          "d": "TextBlob and VADER, with Shapiro-Wilk and Mann-Whitney U hypothesis testing."
+        },
+        {
+          "t": "TF-IDF vectorization",
+          "d": "Feeding Logistic Regression, SVM, and Random Forest classifiers."
+        },
+        {
+          "t": "Evaluation artifacts",
+          "d": "Confusion matrices, ROC curves, and classification reports."
+        }
+      ],
+      "architecture": [
+        "Notebook-based, over the combined True.csv and Fake.csv news datasets.",
+        "NLP preprocessing feeding classical ML classifiers — Logistic Regression, SVM, Random Forest."
+      ],
+      "outcomes": [
+        "Three classifiers compared on one labelled news corpus",
+        "Accuracy, precision, recall, F1, and ROC AUC reported per model"
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News"
+        }
+      ]
+    },
+    "slug": "ai-detection",
+    "discipline": "Data science",
+    "cover": "images/optimized/ai_detection.webp",
+    "repository": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/ai_detection.png",
+        "src": "images/optimized/ai_detection.webp",
+        "owner": "ai-detection",
+        "group": "Project imagery",
+        "alt": "Human and AI news classification",
+        "caption": "Human and AI news classification"
+      }
+    ],
+    "videos": [],
+    "demos": []
+  },
+  {
+    "id": "wind-energy",
+    "title": "Wind Energy Prediction",
+    "subtitle": "Forecasting turbine output",
+    "category": "Data Science",
+    "year": "2025",
+    "status": "Past personal project",
+    "blurb": "Predicting wind-turbine power output from three years of environmental and temporal data — seven regression models compared, KNN best.",
+    "tech": [
+      "scikit-learn",
+      "Regression",
+      "Feature eng."
+    ],
+    "details": {
+      "overview": "Forecasts wind-turbine power output from three years of historical environmental and temporal data — wind speeds at 10m and 100m, temperature, pressure, and time-of-day, month, and year features. Seven regression models were compared (Linear, Lasso, Ridge, KNN, Decision Tree, Random Forest, AdaBoost); the K-Nearest Neighbors Regressor performed best, with a Test R² of 82.42% and a Test MAE of 0.0731. Preprocessing included datetime feature extraction, dropping the DP_2m feature for multicollinearity, and MinMax scaling.",
+      "facts": [
+        {
+          "k": "data span",
+          "v": "3 years of historical records"
+        },
+        {
+          "k": "key features",
+          "v": "WS_10m, WS_100m, Temperature, Pressure, TimeOfDay, Month, Year"
+        },
+        {
+          "k": "dropped feature",
+          "v": "DP_2m (multicollinearity)"
+        },
+        {
+          "k": "scaling",
+          "v": "MinMaxScaler"
+        },
+        {
+          "k": "split",
+          "v": "80/20"
+        },
+        {
+          "k": "models compared",
+          "v": "7"
+        },
+        {
+          "k": "best model",
+          "v": "KNN — Test R² 82.42%, Test MAE 0.0731"
+        },
+        {
+          "k": "mean residual",
+          "v": "0.0012 (actual vs predicted)"
+        }
+      ],
+      "problem": "Turbine output varies with wind speed at two heights, temperature, pressure, and time of day at once, and the relationship is not linear — the Linear, Ridge, and AdaBoost baselines all land near a Test R² of 0.49 on this dataset. The model family has to be chosen by measurement, not assumption.",
+      "approach": [
+        {
+          "t": "Three years of environmental and temporal data",
+          "d": "Wind speeds at 10m and 100m, temperature, pressure, and time-of-day, month, and year features."
+        },
+        {
+          "t": "Seven regressors on one split",
+          "d": "Linear, Lasso, Ridge, KNN, Decision Tree, Random Forest, and AdaBoost scored on MAE and R² over the same 80/20 split."
+        },
+        {
+          "t": "KNN won",
+          "d": "Test R² 82.42% and Test MAE 0.0731, against 0.777 for Random Forest and 0.492 for the linear baselines."
+        }
+      ],
+      "pipeline": [
+        {
+          "t": "Ingest",
+          "d": "Train.csv + Test.csv + column_info.csv — 3 years of environmental/temporal records; zero nulls, zero duplicates."
+        },
+        {
+          "t": "Feature engineering",
+          "d": "Time → datetime; extract Month, Year, TimeOfDay; drop Time and Unnamed: 0."
+        },
+        {
+          "t": "Feature selection",
+          "d": "Correlation matrix → drop DP_2m for multicollinearity."
+        },
+        {
+          "t": "Scale",
+          "d": "MinMaxScaler on numerical features."
+        },
+        {
+          "t": "Split + train",
+          "d": "80/20 split; 7 regressors trained head-to-head."
+        },
+        {
+          "t": "Evaluate",
+          "d": "MAE + R² on train and test; KNN wins (Test R² 0.8242)."
+        },
+        {
+          "t": "Residual + convolution analysis",
+          "d": "Mean actual-vs-predicted difference 0.0012; convolution of each feature vs Power for hidden patterns/lags."
+        }
+      ],
+      "comparison": {
+        "title": "Seven regressors — 80/20 split",
+        "columns": [
+          "Model",
+          "Train MAE",
+          "Train R²",
+          "Test MAE",
+          "Test R²"
+        ],
+        "rows": [
+          [
+            "Linear Regression",
+            "0.1384",
+            "0.505355",
+            "0.1403",
+            "0.492294"
+          ],
+          [
+            "Lasso Regression",
+            "0.2125",
+            "0.000000",
+            "0.2122",
+            "-0.000039"
+          ],
+          [
+            "Ridge Regression",
+            "0.1384",
+            "0.505339",
+            "0.1403",
+            "0.492322"
+          ],
+          [
+            "K-Nearest Neighbors",
+            "0.0538",
+            "0.897932",
+            "0.0731",
+            "0.824192"
+          ],
+          [
+            "Decision Tree",
+            "0.0000",
+            "1.000000",
+            "0.1118",
+            "0.561457"
+          ],
+          [
+            "Random Forest",
+            "0.0318",
+            "0.969111",
+            "0.0858",
+            "0.777471"
+          ],
+          [
+            "AdaBoost",
+            "0.1494",
+            "0.498542",
+            "0.1500",
+            "0.492723"
+          ]
+        ],
+        "highlightRow": 3,
+        "note": "K-Nearest Neighbors is the winner bolded in the README; the Decision Tree's perfect train scores are README-flagged overfitting."
+      },
+      "features": [
+        {
+          "t": "Temporal feature engineering",
+          "d": "Month, Year, and TimeOfDay derived from the raw Time column."
+        },
+        {
+          "t": "Correlation-driven selection",
+          "d": "DP_2m dropped for multicollinearity, then MinMaxScaler normalization."
+        },
+        {
+          "t": "Seven-model comparison",
+          "d": "MAE and R² measured head-to-head on an 80/20 split."
+        },
+        {
+          "t": "Residual analysis",
+          "d": "Run on the winning KNN model, with convolution analysis of feature and target patterns."
+        }
+      ],
+      "architecture": [
+        "A single notebook (Notebook.ipynb) over the Train.csv and Test.csv datasets.",
+        "The scikit-learn regressor suite: Linear, Lasso, Ridge, KNN, Decision Tree, Random Forest, AdaBoost."
+      ],
+      "outcomes": [
+        "KNN best of seven models — Test R² 82.42%, Test MAE 0.0731",
+        "Residual analysis on the winner — mean actual-vs-predicted difference 0.0012"
+      ],
+      "metrics": [
+        {
+          "k": "best model",
+          "v": "KNN"
+        },
+        {
+          "k": "test R²",
+          "v": "82.42%"
+        },
+        {
+          "k": "test MAE",
+          "v": "0.0731"
+        },
+        {
+          "k": "models compared",
+          "v": "7"
+        }
+      ],
+      "links": [
+        {
+          "label": "View on GitHub",
+          "href": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction"
+        }
+      ]
+    },
+    "slug": "wind-energy",
+    "discipline": "Data science",
+    "cover": "images/optimized/wind_energy.webp",
+    "repository": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction",
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/wind_energy.png",
+        "src": "images/optimized/wind_energy.webp",
+        "owner": "wind-energy",
+        "group": "Project imagery",
+        "alt": "Wind turbine power prediction",
+        "caption": "Wind turbine power prediction"
+      }
+    ],
+    "videos": [],
+    "demos": []
+  },
+  {
+    "id": "ai-visualizations",
+    "title": "AI Architectural Visualisations",
+    "subtitle": "Generative AI for AEC visual workflows",
+    "category": "Generative AI",
+    "year": "2024",
+    "status": "Past personal project",
+    "blurb": "Generative AI experiments for AEC visual workflows — text, sketches, models, plans, and masterplans translated into images and walkthrough videos.",
+    "tech": [
+      "ComfyUI",
+      "Stable Diffusion",
+      "ControlNet",
+      "Sketch-to-render",
+      "AI video"
+    ],
+    "details": {
+      "overview": "A collection of generative AI experiments for AEC visual workflows, showing how prompts, sketches, plans, and model inputs can be processed into images and video. The focus is on AI tooling and workflow exploration.",
+      "approach": [
+        {
+          "t": "Text → render",
+          "d": "Conceptual scenes from prompts: residential village, cafes, entries, interiors."
+        },
+        {
+          "t": "Sketch → render",
+          "d": "Freehand sketches conditioned through ControlNet to produce coherent architectural variations."
+        },
+        {
+          "t": "Model → render",
+          "d": "Massing and model exports re-rendered into day and night photoreal scenes."
+        },
+        {
+          "t": "Plan → render",
+          "d": "Floor plans expanded into rendered interiors and elevations."
+        },
+        {
+          "t": "AI video",
+          "d": "Cabin construction, shopping mall, residential village, and morning residence walkthroughs."
+        }
+      ],
+      "links": []
+    },
+    "slug": "ai-visualizations",
+    "discipline": "Generative AI",
+    "cover": "images/optimized/ai_visual_images/text_to_render/final_w_ppl.webp",
+    "repository": null,
+    "repositoryNote": "A visual research collection; no standalone code repository.",
+    "gallery": [
+      {
+        "source": "images/ai_visual_images/bg_add_render/17A886EA-A552-4357-AF06-4D71327E8A8C.png",
+        "src": "images/ai_visual_images/bg_add_render/17A886EA-A552-4357-AF06-4D71327E8A8C.png",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Architectural context study",
+        "caption": "Architectural context study"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/76DDAC7E-E7EE-4A31-9C26-9D614CF1BBEB.png",
+        "src": "images/ai_visual_images/bg_add_render/76DDAC7E-E7EE-4A31-9C26-9D614CF1BBEB.png",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Architectural context study",
+        "caption": "Architectural context study"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/797884DB-9BA8-4516-829F-27B3769AD778.png",
+        "src": "images/ai_visual_images/bg_add_render/797884DB-9BA8-4516-829F-27B3769AD778.png",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Architectural context study",
+        "caption": "Architectural context study"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/bg.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/bg.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Bg",
+        "caption": "Bg"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/concept_1.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/concept_1.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Concept 1",
+        "caption": "Concept 1"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/concept_2.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/concept_2.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Concept 2",
+        "caption": "Concept 2"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/concept_2_w_ppl.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/concept_2_w_ppl.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Concept 2 W Ppl",
+        "caption": "Concept 2 W Ppl"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/first_concept.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/first_concept.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "First Concept",
+        "caption": "First Concept"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/first_concept_modified.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/first_concept_modified.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "First Concept Modified",
+        "caption": "First Concept Modified"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/first_concept_w_ppl.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/first_concept_w_ppl.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "First Concept W Ppl",
+        "caption": "First Concept W Ppl"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_1.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 1",
+        "caption": "Interior Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_10.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_10.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 10",
+        "caption": "Interior Render 10"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_11.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_11.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 11",
+        "caption": "Interior Render 11"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_2.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 2",
+        "caption": "Interior Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_3.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_3.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 3",
+        "caption": "Interior Render 3"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_4.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_4.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 4",
+        "caption": "Interior Render 4"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_5.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_5.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 5",
+        "caption": "Interior Render 5"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_6.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_6.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 6",
+        "caption": "Interior Render 6"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_7.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_7.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 7",
+        "caption": "Interior Render 7"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_8.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_8.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 8",
+        "caption": "Interior Render 8"
+      },
+      {
+        "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_9.png",
+        "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_9.webp",
+        "owner": "ai-visualizations",
+        "group": "bg_add_render",
+        "alt": "Interior Render 9",
+        "caption": "Interior Render 9"
+      },
+      {
+        "source": "images/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.jpg",
+        "src": "images/optimized/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.webp",
+        "owner": "ai-visualizations",
+        "group": "ComfyUI_workflow",
+        "alt": "Cabin Render Highq",
+        "caption": "Cabin Render Highq"
+      },
+      {
+        "source": "images/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.png",
+        "src": "images/optimized/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.webp",
+        "owner": "ai-visualizations",
+        "group": "ComfyUI_workflow",
+        "alt": "Cabin Sample Model",
+        "caption": "Cabin Sample Model"
+      },
+      {
+        "source": "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.png",
+        "src": "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.webp",
+        "owner": "ai-visualizations",
+        "group": "ComfyUI_workflow",
+        "alt": "ComfyUI 00013 ",
+        "caption": "ComfyUI 00013 "
+      },
+      {
+        "source": "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.png",
+        "src": "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.webp",
+        "owner": "ai-visualizations",
+        "group": "ComfyUI_workflow",
+        "alt": "ComfyUI 00014 ",
+        "caption": "ComfyUI 00014 "
+      },
+      {
+        "source": "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.png",
+        "src": "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.webp",
+        "owner": "ai-visualizations",
+        "group": "ComfyUI_workflow",
+        "alt": "ComfyUI 00018 ",
+        "caption": "ComfyUI 00018 "
+      },
+      {
+        "source": "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.png",
+        "src": "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.webp",
+        "owner": "ai-visualizations",
+        "group": "ComfyUI_workflow",
+        "alt": "ComfyUI 00022 ",
+        "caption": "ComfyUI 00022 "
+      },
+      {
+        "source": "images/ai_visual_images/masterplan_render/masterplan_1.png",
+        "src": "images/optimized/ai_visual_images/masterplan_render/masterplan_1.webp",
+        "owner": "ai-visualizations",
+        "group": "masterplan_render",
+        "alt": "Masterplan 1",
+        "caption": "Masterplan 1"
+      },
+      {
+        "source": "images/ai_visual_images/masterplan_render/masterplan_1_render_1.png",
+        "src": "images/optimized/ai_visual_images/masterplan_render/masterplan_1_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "masterplan_render",
+        "alt": "Masterplan 1 Render 1",
+        "caption": "Masterplan 1 Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/masterplan_render/masterplan_1_render_2.png",
+        "src": "images/optimized/ai_visual_images/masterplan_render/masterplan_1_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "masterplan_render",
+        "alt": "Masterplan 1 Render 2",
+        "caption": "Masterplan 1 Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/masterplan_render/masterplan_1_render_4.png",
+        "src": "images/optimized/ai_visual_images/masterplan_render/masterplan_1_render_4.webp",
+        "owner": "ai-visualizations",
+        "group": "masterplan_render",
+        "alt": "Masterplan 1 Render 4",
+        "caption": "Masterplan 1 Render 4"
+      },
+      {
+        "source": "images/ai_visual_images/masterplan_render/materplan_1_render_3.png",
+        "src": "images/optimized/ai_visual_images/masterplan_render/materplan_1_render_3.webp",
+        "owner": "ai-visualizations",
+        "group": "masterplan_render",
+        "alt": "Materplan 1 Render 3",
+        "caption": "Materplan 1 Render 3"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/AI_interior_render_1.jpg",
+        "src": "images/optimized/ai_visual_images/model_to_render/AI_interior_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "AI Interior Render 1",
+        "caption": "AI Interior Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/AI_interior_render_2.jpg",
+        "src": "images/optimized/ai_visual_images/model_to_render/AI_interior_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "AI Interior Render 2",
+        "caption": "AI Interior Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/interior_render_1.png",
+        "src": "images/optimized/ai_visual_images/model_to_render/interior_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "Interior Render 1",
+        "caption": "Interior Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/interior_render_2.png",
+        "src": "images/optimized/ai_visual_images/model_to_render/interior_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "Interior Render 2",
+        "caption": "Interior Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/model_1.png",
+        "src": "images/optimized/ai_visual_images/model_to_render/model_1.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "Model 1",
+        "caption": "Model 1"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/model_1_render_1.png",
+        "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "Model 1 Render 1",
+        "caption": "Model 1 Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/model_1_render_1_night.png",
+        "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_1_night.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "Model 1 Render 1 Night",
+        "caption": "Model 1 Render 1 Night"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/model_1_render_2.png",
+        "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "Model 1 Render 2",
+        "caption": "Model 1 Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/model_1_render_2_night.png",
+        "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_2_night.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "Model 1 Render 2 Night",
+        "caption": "Model 1 Render 2 Night"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/model_1_render_3.png",
+        "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_3.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "Model 1 Render 3",
+        "caption": "Model 1 Render 3"
+      },
+      {
+        "source": "images/ai_visual_images/model_to_render/model_1_render_3_night.png",
+        "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_3_night.webp",
+        "owner": "ai-visualizations",
+        "group": "model_to_render",
+        "alt": "Model 1 Render 3 Night",
+        "caption": "Model 1 Render 3 Night"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_1.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_1.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 1",
+        "caption": "Plan 1"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_1_render_1.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_1_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 1 Render 1",
+        "caption": "Plan 1 Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_1_render_2.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_1_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 1 Render 2",
+        "caption": "Plan 1 Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_2.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_2.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 2",
+        "caption": "Plan 2"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_2_render_1.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_2_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 2 Render 1",
+        "caption": "Plan 2 Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_2_render_2.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_2_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 2 Render 2",
+        "caption": "Plan 2 Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_3.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_3.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 3",
+        "caption": "Plan 3"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_3_render_1.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_3_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 3 Render 1",
+        "caption": "Plan 3 Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_3_render_2.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_3_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 3 Render 2",
+        "caption": "Plan 3 Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_4.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_4.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 4",
+        "caption": "Plan 4"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_4_render_1.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_4_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 4 Render 1",
+        "caption": "Plan 4 Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_1.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 1 Interior Render 1",
+        "caption": "Plan 1 Interior Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_2.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 1 Interior Render 2",
+        "caption": "Plan 1 Interior Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_3.png",
+        "src": "images/optimized/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_3.webp",
+        "owner": "ai-visualizations",
+        "group": "plan_to_render",
+        "alt": "Plan 1 Interior Render 3",
+        "caption": "Plan 1 Interior Render 3"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/nano-banana-image-22.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/nano-banana-image-22.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Nano-Banana-Image-22",
+        "caption": "Nano-Banana-Image-22"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1.jpg",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 1",
+        "caption": "Sketch 1"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 1 Render 1",
+        "caption": "Sketch 1 Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1b.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1b.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 1 Render 1b",
+        "caption": "Sketch 1 Render 1b"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_2.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 1 Render 2",
+        "caption": "Sketch 1 Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_3.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_3.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 1 Render 3",
+        "caption": "Sketch 1 Render 3"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_4.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_4.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 1 Render 4",
+        "caption": "Sketch 1 Render 4"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_5.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_5.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 1 Render 5",
+        "caption": "Sketch 1 Render 5"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_2.jpg",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_2.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 2",
+        "caption": "Sketch 2"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_2_render_1.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_2_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 2 Render 1",
+        "caption": "Sketch 2 Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-1 (3).png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-1 (3).webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Nano-Banana-Image-1 (3)",
+        "caption": "Nano-Banana-Image-1 (3)"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-22.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-22.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Nano-Banana-Image-22",
+        "caption": "Nano-Banana-Image-22"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_2/sketch_2.jpg",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_2/sketch_2.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 2",
+        "caption": "Sketch 2"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3.jpg",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 3",
+        "caption": "Sketch 3"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_1.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 3 Render 1",
+        "caption": "Sketch 3 Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_2.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 3 Render 2",
+        "caption": "Sketch 3 Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_3.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_3.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "Sketch 3 Render 3",
+        "caption": "Sketch 3 Render 3"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_4/20220705_175328.jpg",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_4/20220705_175328.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "20220705 175328",
+        "caption": "20220705 175328"
+      },
+      {
+        "source": "images/ai_visual_images/sketch_to_render/sketch_4/2025-11-09_10-23.png",
+        "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_4/2025-11-09_10-23.webp",
+        "owner": "ai-visualizations",
+        "group": "sketch_to_render",
+        "alt": "2025-11-09 10-23",
+        "caption": "2025-11-09 10-23"
+      },
+      {
+        "source": "images/ai_visual_images/text_to_render/cafe_w_ppl.png",
+        "src": "images/optimized/ai_visual_images/text_to_render/cafe_w_ppl.webp",
+        "owner": "ai-visualizations",
+        "group": "text_to_render",
+        "alt": "Cafe W Ppl",
+        "caption": "Cafe W Ppl"
+      },
+      {
+        "source": "images/ai_visual_images/text_to_render/entry_w_ppl.png",
+        "src": "images/optimized/ai_visual_images/text_to_render/entry_w_ppl.webp",
+        "owner": "ai-visualizations",
+        "group": "text_to_render",
+        "alt": "Entry W Ppl",
+        "caption": "Entry W Ppl"
+      },
+      {
+        "source": "images/ai_visual_images/text_to_render/final_w_ppl.png",
+        "src": "images/optimized/ai_visual_images/text_to_render/final_w_ppl.webp",
+        "owner": "ai-visualizations",
+        "group": "text_to_render",
+        "alt": "Final W Ppl",
+        "caption": "Final W Ppl"
+      },
+      {
+        "source": "images/ai_visual_images/text_to_render/interior_render_1.png",
+        "src": "images/optimized/ai_visual_images/text_to_render/interior_render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "text_to_render",
+        "alt": "Interior Render 1",
+        "caption": "Interior Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/text_to_render/interior_render_2.png",
+        "src": "images/optimized/ai_visual_images/text_to_render/interior_render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "text_to_render",
+        "alt": "Interior Render 2",
+        "caption": "Interior Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/text_to_render/render_1.png",
+        "src": "images/optimized/ai_visual_images/text_to_render/render_1.webp",
+        "owner": "ai-visualizations",
+        "group": "text_to_render",
+        "alt": "Render 1",
+        "caption": "Render 1"
+      },
+      {
+        "source": "images/ai_visual_images/text_to_render/render_2.png",
+        "src": "images/optimized/ai_visual_images/text_to_render/render_2.webp",
+        "owner": "ai-visualizations",
+        "group": "text_to_render",
+        "alt": "Render 2",
+        "caption": "Render 2"
+      },
+      {
+        "source": "images/ai_visual_images/text_to_render/residentail_units_w_ppl.png",
+        "src": "images/optimized/ai_visual_images/text_to_render/residentail_units_w_ppl.webp",
+        "owner": "ai-visualizations",
+        "group": "text_to_render",
+        "alt": "Residentail Units W Ppl",
+        "caption": "Residentail Units W Ppl"
+      }
+    ],
+    "videos": [
+      {
+        "src": "Videos/cabin_construction.mp4#t=0.1",
+        "caption": "Cabin Construction Process"
+      },
+      {
+        "src": "Videos/shopping_mall.mp4#t=0.1",
+        "caption": "Shopping Mall Visualization"
+      },
+      {
+        "src": "Videos/resi_village_v2.mp4#t=0.1",
+        "caption": "Residential Village"
+      },
+      {
+        "src": "Videos/morning_architecture.mp4#t=0.1",
+        "caption": "Morning Residence"
+      }
+    ],
+    "demos": []
+  }
+]

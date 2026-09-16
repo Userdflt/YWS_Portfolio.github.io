@@ -1,0 +1,550 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>News dataset preprocessing — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>News dataset preprocessing</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Data_Pre-Processing.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="fakenews-data-pre-processing"><strong>FakeNews Data Pre-Processing</strong></h2></section><section class="notebook-note"><h2 id="datasets"><strong>Datasets:</strong></h2>
+<p><code>True.csv:</code> Contains true news articles.
+<code>Fake.csv:</code> Contains fake news articles.</p>
+<p>load these datasets and combine them into a single dataset with a target variable indicating whether the news is true or fake.</p></section><section class="notebook-note"><h2 id="data-preprocessing"><strong>Data Preprocessing</strong></h2>
+<p>Steps for preprocessing the text data:</p>
+<p><code>Loading Data:</code> Combine True.csv and Fake.csv into a single DataFrame.</p>
+<p><code>Tokenization:</code> Splitting text into individual words or tokens.</p>
+<p><code>Removing Stop Words:</code> Removing common words that do not contribute to the meaning (e.g., "and", "the").</p>
+<p><code>Stemming/Lemmatization:</code> Reducing words to their base or root form.</p></section><details class="code-cell"><summary>Code cell 4</summary><pre><code>#IMPORTS
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+
+import numpy as np
+import pandas as pd
+
+import string
+import spacy
+
+from collections import Counter
+
+from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import LinearSVC
+
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
+import spacy
+import re
+from spacy.lang.en.stop_words import STOP_WORDS
+
+
+</code></pre></details><details class="code-cell"><summary>Code cell 5</summary><pre><code>#checcking data
+true_df = pd.read_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\True.csv&#x27;)
+fake_df = pd.read_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\Fake.csv&#x27;)
+
+true_df.sample(10), fake_df.sample(10)</code></pre></details><details class="text-output"><summary>Text output</summary><pre>(                                                   title  \
+ 11765  Mexican governor requests leave to run for pre...   
+ 10315  South Carolina Governor Haley supports Cruz in...   
+ 12872  Iraq demands U.S. backtrack on Jerusalem, summ...   
+ 3178   White House does not yet have plan on debt lim...   
+ 15665  Riding high, Xi looks to soothe Trump as U.S. ...   
+ 3874   Trump to make decision on Paris climate pact a...   
+ 1232   Republican Senator Corker blasts Trump for &#x27;ca...   
+ 19208  North Korea says rockets to U.S. &#x27;inevitable&#x27; ...   
+ 15995  Russia invites Syrian Kurds to people&#x27;s congre...   
+ 16285  U.N. special envoy urges Poland to open up deb...   
+ 
+                                                     text       subject  \
+ 11765  MEXICO CITY (Reuters) - The governor of Nuevo ...     worldnews   
+ 10315  WASHINGTON (Reuters) - South Carolina Governor...  politicsNews   
+ 12872  BAGHDAD (Reuters) - Iraq demanded on Thursday ...     worldnews   
+ 3178   WASHINGTON (Reuters) - The White House has not...  politicsNews   
+ 15665  BEIJING (Reuters) - When they met at U.S. Pres...     worldnews   
+ 3874   WASHINGTON (Reuters) - U.S. President Donald T...  politicsNews   
+ 1232   WASHINGTON (Reuters) - U.S. Republican Senator...  politicsNews   
+ 19208  UNITED NATIONS/WASHINGTON (Reuters) - North Ko...     worldnews   
+ 15995  BEIRUT (Reuters) - Russia has invited the Kurd...     worldnews   
+ 16285  WARSAW (Reuters) - Poland s political establis...     worldnews   
+ 
+                       date  
+ 11765   December 21, 2017   
+ 10315      March 16, 2016   
+ 12872    December 7, 2017   
+ 3178        June 15, 2017   
+ 15665    November 5, 2017   
+ 3874          May 9, 2017   
+ 1232     October 14, 2017   
+ 19208  September 23, 2017   
+ 15995    October 31, 2017   
+ 16285    October 27, 2017   ,
+                                                    title  \
+ 22419  FBI Director Comey’s ‘Leaked’ Memo Explains Wh...   
+ 5513    Trump’s ‘Spiritual Advisor’ Is Just Another C...   
+ 17979  KID ROCK GOES OFF On Colin Kaepernick, Obamaca...   
+ 12869  HILLARY SUPPORTERS Launch VILE ATTACK On Woman...   
+ 12082  OHIO ELECTOR TORCHES Anti-Trump Letters He Rec...   
+ 13426  “ALLAHU AKBAR” MUSLIM EXTREMISTS Forced Cathol...   
+ 4513    Trump Campaign Official Predicts The Future: ...   
+ 19822  BREAKING BOMBSHELL: UNDERCOVER VIDEO Shows NY ...   
+ 1036    Tired Of Bigotry, California Enacts Travel Ba...   
+ 22179  EP #16: Patrick Henningsen LIVE – ‘Official Wa...   
+ 
+                                                     text    subject  \
+ 22419  21st Century Wire says 21WIRE reported on Frid...    US_News   
+ 5513   It seems that every time we turn around, there...       News   
+ 17979  Kid Rock hasn t officially announced his run f...  left-news   
+ 12869  Alleged Bill Clinton sexual victim Juanita Bro...   politics   
+ 12082  pic.twitter.com/KMnLrwB6t1  Richard K. Jones (...   politics   
+ 13426  FRANCE HAS THE BLOOD OF THIS PRIEST ON THIER H...   politics   
+ 4513   A member of Donald Trump s presidential campai...       News   
+ 19822  This video will leave you breathless, as you w...  left-news   
+ 1036   Donald Trump keeps trying and failing to enact...       News   
+ 22179  Join Patrick every Wednesday at Independent Ta...    US_News   
+ 
+                      date  
+ 22419    October 29, 2016  
+ 5513        July 11, 2016  
+ 17979        Sep 14, 2017  
+ 12869         Oct 1, 2016  
+ 12082        Dec 21, 2016  
+ 13426        Jul 26, 2016  
+ 4513   September 23, 2016  
+ 19822        Oct 11, 2016  
+ 1036        June 23, 2017  
+ 22179       March 9, 2017  )</pre></details><details class="code-cell"><summary>Code cell 6</summary><pre><code># 
+true_df[&#x27;label&#x27;] = 1
+fake_df[&#x27;label&#x27;] = 0
+
+df = pd.concat([true_df, fake_df]).reset_index(drop=True)
+
+df</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>title</th>
+      <th>text</th>
+      <th>subject</th>
+      <th>date</th>
+      <th>label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>As U.S. budget fight looms, Republicans flip t...</td>
+      <td>WASHINGTON (Reuters) - The head of a conservat...</td>
+      <td>politicsNews</td>
+      <td>December 31, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>U.S. military to accept transgender recruits o...</td>
+      <td>WASHINGTON (Reuters) - Transgender people will...</td>
+      <td>politicsNews</td>
+      <td>December 29, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Senior U.S. Republican senator: 'Let Mr. Muell...</td>
+      <td>WASHINGTON (Reuters) - The special counsel inv...</td>
+      <td>politicsNews</td>
+      <td>December 31, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>FBI Russia probe helped by Australian diplomat...</td>
+      <td>WASHINGTON (Reuters) - Trump campaign adviser ...</td>
+      <td>politicsNews</td>
+      <td>December 30, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Trump wants Postal Service to charge 'much mor...</td>
+      <td>SEATTLE/WASHINGTON (Reuters) - President Donal...</td>
+      <td>politicsNews</td>
+      <td>December 29, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>44893</th>
+      <td>McPain: John McCain Furious That Iran Treated ...</td>
+      <td>21st Century Wire says As 21WIRE reported earl...</td>
+      <td>Middle-east</td>
+      <td>January 16, 2016</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44894</th>
+      <td>JUSTICE? Yahoo Settles E-mail Privacy Class-ac...</td>
+      <td>21st Century Wire says It s a familiar theme. ...</td>
+      <td>Middle-east</td>
+      <td>January 16, 2016</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44895</th>
+      <td>Sunnistan: US and Allied ‘Safe Zone’ Plan to T...</td>
+      <td>Patrick Henningsen  21st Century WireRemember ...</td>
+      <td>Middle-east</td>
+      <td>January 15, 2016</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44896</th>
+      <td>How to Blow $700 Million: Al Jazeera America F...</td>
+      <td>21st Century Wire says Al Jazeera America will...</td>
+      <td>Middle-east</td>
+      <td>January 14, 2016</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44897</th>
+      <td>10 U.S. Navy Sailors Held by Iranian Military ...</td>
+      <td>21st Century Wire says As 21WIRE predicted in ...</td>
+      <td>Middle-east</td>
+      <td>January 12, 2016</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>44898 rows × 5 columns</p>
+</div><details class="code-cell"><summary>Code cell 7</summary><pre><code>df.info()</code></pre></details><details class="code-cell"><summary>Code cell 8</summary><pre><code>df.isnull().sum()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>title      0
+text       0
+subject    0
+date       0
+label      0
+dtype: int64</pre></details><details class="code-cell"><summary>Code cell 9</summary><pre><code>df.duplicated().sum()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>209</pre></details><details class="code-cell"><summary>Code cell 10</summary><pre><code>df = df.drop_duplicates()</code></pre></details><details class="code-cell"><summary>Code cell 11</summary><pre><code>df.duplicated().sum()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0</pre></details><details class="code-cell"><summary>Code cell 12</summary><pre><code>df</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>title</th>
+      <th>text</th>
+      <th>subject</th>
+      <th>date</th>
+      <th>label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>As U.S. budget fight looms, Republicans flip t...</td>
+      <td>WASHINGTON (Reuters) - The head of a conservat...</td>
+      <td>politicsNews</td>
+      <td>December 31, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>U.S. military to accept transgender recruits o...</td>
+      <td>WASHINGTON (Reuters) - Transgender people will...</td>
+      <td>politicsNews</td>
+      <td>December 29, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Senior U.S. Republican senator: 'Let Mr. Muell...</td>
+      <td>WASHINGTON (Reuters) - The special counsel inv...</td>
+      <td>politicsNews</td>
+      <td>December 31, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>FBI Russia probe helped by Australian diplomat...</td>
+      <td>WASHINGTON (Reuters) - Trump campaign adviser ...</td>
+      <td>politicsNews</td>
+      <td>December 30, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Trump wants Postal Service to charge 'much mor...</td>
+      <td>SEATTLE/WASHINGTON (Reuters) - President Donal...</td>
+      <td>politicsNews</td>
+      <td>December 29, 2017</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>44893</th>
+      <td>McPain: John McCain Furious That Iran Treated ...</td>
+      <td>21st Century Wire says As 21WIRE reported earl...</td>
+      <td>Middle-east</td>
+      <td>January 16, 2016</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44894</th>
+      <td>JUSTICE? Yahoo Settles E-mail Privacy Class-ac...</td>
+      <td>21st Century Wire says It s a familiar theme. ...</td>
+      <td>Middle-east</td>
+      <td>January 16, 2016</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44895</th>
+      <td>Sunnistan: US and Allied ‘Safe Zone’ Plan to T...</td>
+      <td>Patrick Henningsen  21st Century WireRemember ...</td>
+      <td>Middle-east</td>
+      <td>January 15, 2016</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44896</th>
+      <td>How to Blow $700 Million: Al Jazeera America F...</td>
+      <td>21st Century Wire says Al Jazeera America will...</td>
+      <td>Middle-east</td>
+      <td>January 14, 2016</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44897</th>
+      <td>10 U.S. Navy Sailors Held by Iranian Military ...</td>
+      <td>21st Century Wire says As 21WIRE predicted in ...</td>
+      <td>Middle-east</td>
+      <td>January 12, 2016</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>44689 rows × 5 columns</p>
+</div><section class="notebook-note"><p>Takes too long for spacy</p></section><details class="code-cell"><summary>Code cell 14</summary><pre><code># nlp = spacy.load(&#x27;en_core_web_sm&#x27;)
+
+# def convert_text(text):
+#     text = re.sub(r&quot;&#x27;&quot;, &quot;&quot;, text)
+#     text = re.sub(r&quot;[^a-zA-Z\s]&quot;, &quot;&quot;, text)
+#     text = re.sub(r&quot;\b[a-zA-Z]\b&quot;, &quot;&quot;, text)
+#     text = re.sub(r&quot;\d+&quot;, &quot;&quot;, text)
+#     text = re.sub(r&quot;\s+&quot;, &quot; &quot;, text)
+    
+#     doc = nlp(text)
+    
+#     cleaned_text = []
+#     for token in doc:
+#         if token.text in STOP_WORDS:
+#             continue
+#         if token.is_alpha:
+#             cleaned_text.append(token.lemma_.lower())
+#         else:
+#             cleaned_text.append(token.text)
+#     return &#x27; &#x27;.join(cleaned_text)
+
+# df_clean = df.copy()
+# df_clean[&#x27;clean_title&#x27;] = df_clean[&#x27;title&#x27;].apply(convert_text)
+# df_clean[&#x27;clean_text&#x27;] = df_clean[&#x27;text&#x27;].apply(convert_text)
+
+# df_clean</code></pre></details><section class="notebook-note"><h2 id="cleaning-texts-and-title">Cleaning Texts and Title</h2></section><details class="code-cell"><summary>Code cell 16</summary><pre><code>stop_words = set(stopwords.words(&#x27;english&#x27;))
+lemmatizer = WordNetLemmatizer()
+
+
+def tokenize(text):
+    tokens = word_tokenize(text.lower())
+    tokens = [lemmatizer.lemmatize(word) for word in tokens if word.isalpha() and word not in stop_words and word != &#x27;reuters&#x27;]
+    return &#x27; &#x27;.join(tokens)
+
+df_clean = df.copy()
+
+df_clean[&#x27;clean_title&#x27;] = df_clean[&#x27;title&#x27;].apply(tokenize)
+df_clean[&#x27;clean_text&#x27;] = df_clean[&#x27;text&#x27;].apply(tokenize)
+
+df_clean</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>title</th>
+      <th>text</th>
+      <th>subject</th>
+      <th>date</th>
+      <th>label</th>
+      <th>clean_title</th>
+      <th>clean_text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>As U.S. budget fight looms, Republicans flip t...</td>
+      <td>WASHINGTON (Reuters) - The head of a conservat...</td>
+      <td>politicsNews</td>
+      <td>December 31, 2017</td>
+      <td>1</td>
+      <td>budget fight loom republican flip fiscal script</td>
+      <td>washington head conservative republican factio...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>U.S. military to accept transgender recruits o...</td>
+      <td>WASHINGTON (Reuters) - Transgender people will...</td>
+      <td>politicsNews</td>
+      <td>December 29, 2017</td>
+      <td>1</td>
+      <td>military accept transgender recruit monday pen...</td>
+      <td>washington transgender people allowed first ti...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Senior U.S. Republican senator: 'Let Mr. Muell...</td>
+      <td>WASHINGTON (Reuters) - The special counsel inv...</td>
+      <td>politicsNews</td>
+      <td>December 31, 2017</td>
+      <td>1</td>
+      <td>senior republican senator mueller job</td>
+      <td>washington special counsel investigation link ...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>FBI Russia probe helped by Australian diplomat...</td>
+      <td>WASHINGTON (Reuters) - Trump campaign adviser ...</td>
+      <td>politicsNews</td>
+      <td>December 30, 2017</td>
+      <td>1</td>
+      <td>fbi russia probe helped australian diplomat nyt</td>
+      <td>washington trump campaign adviser george papad...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Trump wants Postal Service to charge 'much mor...</td>
+      <td>SEATTLE/WASHINGTON (Reuters) - President Donal...</td>
+      <td>politicsNews</td>
+      <td>December 29, 2017</td>
+      <td>1</td>
+      <td>trump want postal service charge amazon shipment</td>
+      <td>president donald trump called postal service f...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>44893</th>
+      <td>McPain: John McCain Furious That Iran Treated ...</td>
+      <td>21st Century Wire says As 21WIRE reported earl...</td>
+      <td>Middle-east</td>
+      <td>January 16, 2016</td>
+      <td>0</td>
+      <td>mcpain john mccain furious iran treated u sail...</td>
+      <td>century wire say reported earlier week unlikel...</td>
+    </tr>
+    <tr>
+      <th>44894</th>
+      <td>JUSTICE? Yahoo Settles E-mail Privacy Class-ac...</td>
+      <td>21st Century Wire says It s a familiar theme. ...</td>
+      <td>Middle-east</td>
+      <td>January 16, 2016</td>
+      <td>0</td>
+      <td>justice yahoo settle privacy lawyer user</td>
+      <td>century wire say familiar theme whenever dispu...</td>
+    </tr>
+    <tr>
+      <th>44895</th>
+      <td>Sunnistan: US and Allied ‘Safe Zone’ Plan to T...</td>
+      <td>Patrick Henningsen  21st Century WireRemember ...</td>
+      <td>Middle-east</td>
+      <td>January 15, 2016</td>
+      <td>0</td>
+      <td>sunnistan u allied safe zone plan take territo...</td>
+      <td>patrick henningsen century wireremember obama ...</td>
+    </tr>
+    <tr>
+      <th>44896</th>
+      <td>How to Blow $700 Million: Al Jazeera America F...</td>
+      <td>21st Century Wire says Al Jazeera America will...</td>
+      <td>Middle-east</td>
+      <td>January 14, 2016</td>
+      <td>0</td>
+      <td>blow million al jazeera america finally call q...</td>
+      <td>century wire say al jazeera america go history...</td>
+    </tr>
+    <tr>
+      <th>44897</th>
+      <td>10 U.S. Navy Sailors Held by Iranian Military ...</td>
+      <td>21st Century Wire says As 21WIRE predicted in ...</td>
+      <td>Middle-east</td>
+      <td>January 12, 2016</td>
+      <td>0</td>
+      <td>navy sailor held iranian military sign neocon ...</td>
+      <td>century wire say predicted new year look ahead...</td>
+    </tr>
+  </tbody>
+</table>
+<p>44689 rows × 7 columns</p>
+</div><details class="code-cell"><summary>Code cell 17</summary><pre><code>df_clean[&#x27;clean_text&#x27;]</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0        washington head conservative republican factio...
+1        washington transgender people allowed first ti...
+2        washington special counsel investigation link ...
+3        washington trump campaign adviser george papad...
+4        president donald trump called postal service f...
+                               ...                        
+44893    century wire say reported earlier week unlikel...
+44894    century wire say familiar theme whenever dispu...
+44895    patrick henningsen century wireremember obama ...
+44896    century wire say al jazeera america go history...
+44897    century wire say predicted new year look ahead...
+Name: clean_text, Length: 44689, dtype: object</pre></details><section class="notebook-note"><h2 id="extracting-features">Extracting Features</h2></section><details class="code-cell"><summary>Code cell 19</summary><pre><code>df_clean[&#x27;clean_text&#x27;] = df_clean[&#x27;clean_text&#x27;].astype(str)
+df_clean[&#x27;clean_title&#x27;] = df_clean[&#x27;clean_title&#x27;].astype(str)</code></pre></details><details class="code-cell"><summary>Code cell 20</summary><pre><code>nlp = spacy.load(&#x27;en_core_web_sm&#x27;)
+
+def count_features(text):
+    doc = nlp(text)
+    pos_counts = Counter([token.pos_ for token in doc])
+
+    char_count = len(text)
+    word_count = len(text.split())
+    word_density = char_count / word_count if word_count else 0
+    
+
+    features = {
+        &#x27;char_count&#x27;: char_count,
+        &#x27;word_count&#x27;: word_count,
+        &#x27;word_density&#x27;: word_density,
+        &#x27;adj_count&#x27;: pos_counts.get(&#x27;ADJ&#x27;, 0),
+        &#x27;adv_count&#x27;: pos_counts.get(&#x27;ADV&#x27;, 0),
+        &#x27;noun_count&#x27;: pos_counts.get(&#x27;NOUN&#x27;, 0),
+        &#x27;pron_count&#x27;: pos_counts.get(&#x27;PRON&#x27;, 0),
+        &#x27;propn_count&#x27;: pos_counts.get(&#x27;PROPN&#x27;, 0),
+        &#x27;verb_count&#x27;: pos_counts.get(&#x27;VERB&#x27;, 0)
+    }
+
+    return features
+
+text_features = df_clean[&#x27;clean_text&#x27;].apply(count_features).apply(pd.Series)
+title_features = df_clean[&#x27;clean_title&#x27;].apply(count_features).apply(pd.Series)
+
+text_features_df = pd.DataFrame(text_features)
+title_features_df = pd.DataFrame(title_features)</code></pre></details><section class="notebook-note"><h2 id="saving-csv-for-eda">Saving csv for EDA</h2></section><details class="code-cell"><summary>Code cell 22</summary><pre><code>text_features_df.to_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\text_features.csv&#x27;)
+title_features_df.to_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\title_features.csv&#x27;)
+df_clean.to_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\Clean.csv&#x27;)</code></pre></details></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

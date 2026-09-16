@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Self-correcting RAG · Documentation — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Self-correcting RAG · Documentation</h1><p>Project documentation from GitHub. Diagrams and demonstrations are available in the project resource library.</p><a href="https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-/blob/0f1d8155a075407860de69ed297def7e95e2bef0/README.md" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><h2 id="self-correcting-retrieval-augmented-generation-rag-with-a-local-llm"><strong>Self-Correcting Retrieval-Augmented Generation (RAG) with a Local LLM</strong></h2>
+<p>A system demonstrating <strong>autonomous decision-making</strong> to answer user questions, powered by a local vector store (Chroma DB) and optional web search. Through <strong>reflection</strong> and <strong>hallucination checks</strong>, it iteratively refines generated answers for higher accuracy.</p>
+<p></p>
+<p><a href="https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-/blob/0f1d8155a075407860de69ed297def7e95e2bef0/Local_RAG_LLM.ipynb" target="_blank" rel="noopener noreferrer">CLICK FOR NOTEBOOK - CODE</a></p>
+<h2 id="table-of-contents"><strong>Table of Contents</strong></h2>
+<ol>
+<li><a href="#overview">Overview</a>  </li>
+<li><a href="#key-features">Key Features</a>  </li>
+<li><a href="#technical-flow">Technical Flow</a>  </li>
+<li><a href="#workflow-steps">Workflow Steps</a>  </li>
+<li><a href="#summary">Summary</a></li>
+</ol>
+<hr>
+<h2 id="1-overview"><strong>1. Overview</strong> <a id="overview"></a></h2>
+<p>This project leverages a local Large Language Model (LLM) that autonomously decides whether to retrieve documents from a <strong>local vector store</strong> or perform a <strong>web search</strong>. After generating an initial answer, the system performs both <strong>reflection</strong> (to gauge completeness) and <strong>hallucination checks</strong> (to ensure factual correctness) before finalizing the response.</p>
+<hr>
+<h2 id="2-key-features"><strong>2. Key Features</strong> <a id="key-features"></a></h2>
+<ul>
+<li><strong>Autonomous Decision-Making</strong><br>
+  Routes user questions to local retrieval or web search based on context, via an <code>indicator</code> function.</li>
+<li><strong>Local Vector Store (Chroma DB)</strong><br>
+  Efficiently stores and retrieves relevant documents for context.</li>
+<li><strong>Optional Web Search</strong><br>
+  Gathers external data if the local store doesn’t suffice.</li>
+<li><strong>Reflection &amp; Hallucination Checks</strong><br>
+  Ensures answers remain accurate and complete.</li>
+<li><strong>Goal-Oriented Behavior</strong><br>
+  Uses relevance grading and iterative refinement to achieve thorough responses.</li>
+<li><strong>State Graph Workflow</strong><br>
+  Manages tasks (retrieval, generation, reflection) with conditional decisions and loops.</li>
+</ul>
+<hr>
+<h2 id="3-technical-flow"><strong>3. Technical Flow</strong> <a id="technical-flow"></a></h2>
+<ol>
+<li><strong>Indicator Function</strong> – Routes the user’s question to local retrieval or web search.  </li>
+<li><strong>Retrieval / Search</strong> – Gathers relevant information from local vector storage or online sources.  </li>
+<li><strong>Generation</strong> – Drafts an initial answer using an LLM.  </li>
+<li><strong>Reflection</strong> – Evaluates completeness and may add missing details.  </li>
+<li><strong>Hallucination Checking</strong> – Screens for factual inaccuracies.  </li>
+<li><strong>Regeneration</strong> – Updates the context or re-generates the answer if necessary.</li>
+</ol>
+<hr>
+<h2 id="4-workflow-steps"><strong>4. Workflow Steps</strong> <a id="workflow-steps"></a></h2>
+<ol>
+<li><strong>Autonomous Decision-Making</strong><br>
+   The <code>indicator</code> function automatically routes queries to local or web-based retrieval.  </li>
+<li><strong>Perception &amp; Interaction</strong>  </li>
+<li><strong>Retrieval (Chroma DB)</strong> – Scans the local vector store for relevant documents.  </li>
+<li><strong>Web Search</strong> – Executes search queries if local docs aren’t sufficient.  </li>
+<li><strong>Action Execution</strong>  </li>
+<li><strong>Generation</strong> – Produces an initial response from the LLM.  </li>
+<li><strong>Reflection</strong> – Checks for completeness.  </li>
+<li><strong>Hallucination Checking</strong> – Verifies factual correctness.  </li>
+<li><strong>Goal-Oriented Behavior</strong><br>
+   Continuously refines responses through reflection and relevance grading.  </li>
+<li><strong>Adaptability</strong><br>
+   Uses a state graph to loop back for re-generation when reflection deems the answer incomplete.</li>
+</ol>
+<hr>
+<h2 id="5-summary"><strong>5. Summary</strong> <a id="summary"></a></h2>
+<p>This project showcases a <strong>fully autonomous AI agent</strong> that processes user inputs, retrieves or searches for context, and iteratively revises its answers. By combining <strong>retrieval</strong>, <strong>generation</strong>, <strong>reflection</strong>, and <strong>hallucination checks</strong>, it delivers thorough, context-rich responses aimed at achieving a specific goal with minimal human oversight.</p></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

@@ -1,0 +1,277 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Materials data processing — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Materials data processing</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_Data_Processing.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="outgassing-materials-data-processing"><strong>Outgassing Materials Data Processing</strong></h2></section><section class="notebook-note"><h4 id="imports-always-run-before-starting">Imports (Always run before starting)</h4></section><details class="code-cell"><summary>Code cell 3</summary><pre><code>import numpy as np
+import pandas as pd
+%matplotlib inline
+import matplotlib.pyplot as plt
+from sklearn import datasets
+import seaborn as sns
+from sklearn import svm
+from sklearn.datasets import make_blobs
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, classification_report</code></pre></details><section class="notebook-note"><h2 id="contents">Contents</h2>
+<ol>
+<li><strong>Data Preprocessing</strong><ul>
+<li>Cleaning and feature extraction code</li>
+</ul>
+</li>
+</ol></section><section class="notebook-note"><p>For Logging</p></section><details class="code-cell"><summary>Code cell 6</summary><pre><code>import gossipcat as gc
+
+log_name = &#x27;NASA_Materials_Project&#x27;
+log_file = r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_2\project_NASA_Materials_Project\log\NASA_Materials_Project_EDA.log&#x27;
+
+logger = gc.get_logger(logName=log_name, logFile=log_file)</code></pre></details><section class="notebook-note"><p>Importing data</p></section><details class="code-cell"><summary>Code cell 8</summary><pre><code># Importing dataset
+csv = r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_2\project_NASA_Materials_Project\data\raw\Outgassing_Db_20240702.csv&#x27;
+data = pd.read_csv(csv)
+material_df = pd.DataFrame(data)</code></pre></details><section class="notebook-note"><h2 id="1-data-preprocessing">1. <strong>Data Preprocessing</strong></h2></section><section class="notebook-note"><p>Reading in imported dataset and initial exploration of dataset</p></section><details class="code-cell"><summary>Code cell 11</summary><pre><code># logger.info(&#x27;Imported dataset for initial exploration&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 12</summary><pre><code>material_df.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Sample Material</th>
+      <th>ID</th>
+      <th>MFR</th>
+      <th>TML</th>
+      <th>Category</th>
+      <th>CVCM</th>
+      <th>Space Code</th>
+      <th>WVR</th>
+      <th>Material Usage</th>
+      <th>Cure</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>"V" MATERIAL IN CLICKBOND CB4023V, GLASS/PEI -...</td>
+      <td>GSC33214</td>
+      <td>CLB</td>
+      <td>0.37</td>
+      <td>12</td>
+      <td>0.00</td>
+      <td>1.0</td>
+      <td>0.35</td>
+      <td>CLICKBOND</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>"VC" MATERIAL IN CLICKBOND CB9257VC, CARBON FI...</td>
+      <td>GSC33217</td>
+      <td>CLB</td>
+      <td>0.52</td>
+      <td>12</td>
+      <td>0.00</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>CLICKBOND</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.5 MIL KAPTON KEVLAR, SHELDAHL 177544</td>
+      <td>GSC32950</td>
+      <td>SCH</td>
+      <td>2.48</td>
+      <td>6</td>
+      <td>0.05</td>
+      <td>1.0</td>
+      <td>1.97</td>
+      <td>BLANKET MATERIAL</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0667 BLACK EPDM</td>
+      <td>GSC34174</td>
+      <td>PRS</td>
+      <td>0.65</td>
+      <td>15</td>
+      <td>0.13</td>
+      <td>1.0</td>
+      <td>0.07</td>
+      <td>ORING</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1 INCH COPPER TAPE</td>
+      <td>GSC33829</td>
+      <td>MMM</td>
+      <td>0.24</td>
+      <td>16</td>
+      <td>0.08</td>
+      <td>1.0</td>
+      <td>0.01</td>
+      <td>TAPE</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div><details class="code-cell"><summary>Code cell 13</summary><pre><code>material_df.info()</code></pre></details><details class="code-cell"><summary>Code cell 14</summary><pre><code>material_df = material_df.set_index(&#x27;ID&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 15</summary><pre><code>material_df.describe()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>TML</th>
+      <th>Category</th>
+      <th>CVCM</th>
+      <th>Space Code</th>
+      <th>WVR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>12858.000000</td>
+      <td>12859.000000</td>
+      <td>12853.000000</td>
+      <td>12857.000000</td>
+      <td>10047.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>2.151247</td>
+      <td>10.497628</td>
+      <td>0.407235</td>
+      <td>1.167535</td>
+      <td>0.342308</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>5.521467</td>
+      <td>19.563948</td>
+      <td>2.237969</td>
+      <td>0.470268</td>
+      <td>1.235159</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>0.340000</td>
+      <td>1.000000</td>
+      <td>0.010000</td>
+      <td>1.000000</td>
+      <td>0.040000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>0.810000</td>
+      <td>6.000000</td>
+      <td>0.040000</td>
+      <td>1.000000</td>
+      <td>0.150000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1.850000</td>
+      <td>13.000000</td>
+      <td>0.180000</td>
+      <td>1.000000</td>
+      <td>0.370000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>100.000000</td>
+      <td>99.000000</td>
+      <td>99.990000</td>
+      <td>9.000000</td>
+      <td>99.990000</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><ul>
+<li>TML: High variance with values ranging from 0 to 100.</li>
+<li>CVCM: Also shows high variance, suggesting outliers or diverse material behaviors.</li>
+<li>Space Code: Predominantly around 1, indicating similar ratings for most materials.</li>
+<li>WVR: High variance with values ranging from 0 to 99.99.</li>
+</ul></section><details class="code-cell"><summary>Code cell 17</summary><pre><code># TML_filtered = material_df[&#x27;TML&#x27;].quantile(0.75)
+# CVCM_filtered = material_df[&#x27;CVCM&#x27;].quantile(0.75)
+# WVR_filtered = material_df[&#x27;WVR&#x27;].quantile(0.75)
+# Space_Code_filtered = material_df[&#x27;Space Code&#x27;].quantile(0.90)
+
+# material_df_filtered = material_df[(material_df[&#x27;TML&#x27;] &lt;= TML_filtered) &amp;
+#                                     (material_df[&#x27;CVCM&#x27;] &lt;= CVCM_filtered) &amp;
+#                                     (material_df[&#x27;WVR&#x27;] &lt;= WVR_filtered) &amp;
+#                                     (material_df[&#x27;Space Code&#x27;] &lt;= Space_Code_filtered)
+#                                     ]</code></pre></details><details class="code-cell"><summary>Code cell 18</summary><pre><code># logger.info(&#x27;Filtered dataset to remove outliers&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 19</summary><pre><code>material_df.hist(column=[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;, &#x27;Space Code&#x27;], bins=50, figsize=(20,20), color=&#x27;steelblue&#x27;, edgecolor=&#x27;black&#x27;)
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="Materials data processing — output chart 1, following code cell 19" width="1990" height="1990" loading="lazy"></a><figcaption>Output 1 · Code cell 19 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>'do anaysis of the graphs...'</p></section><section class="notebook-note"><p>Box plots for each category to visualize outliers</p></section><details class="code-cell"><summary>Code cell 22</summary><pre><code>material_df.boxplot(column = [&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;, &#x27;Space Code&#x27;])
+plt.tight_layout()
+plt.title(&#x27;Checking for Outliers&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="Materials data processing — output chart 2, following code cell 22" width="630" height="490" loading="lazy"></a><figcaption>Output 2 · Code cell 22 · Open image to enlarge</figcaption></figure><details class="code-cell"><summary>Code cell 23</summary><pre><code># logger.info(&#x27;Removing further outliers&#x27;)</code></pre></details><section class="notebook-note"><p>Interquartile range (IQR) method to further remove outliers</p></section><details class="code-cell"><summary>Code cell 25</summary><pre><code># Making IQR function to remove outliers
+def remove_outliers(df, column):
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    
+    df = df[(df[column] &gt;= lower_bound) &amp; (df[column] &lt;= upper_bound)]
+    
+    return df
+
+# Removing outliers from the dataset
+material_no_outliers = material_df.copy()
+material_no_outliers = remove_outliers(material_no_outliers, &#x27;TML&#x27;)
+material_no_outliers = remove_outliers(material_no_outliers, &#x27;CVCM&#x27;)
+material_no_outliers = remove_outliers(material_no_outliers, &#x27;WVR&#x27;)
+
+#checking
+material_no_outliers.shape</code></pre></details><details class="text-output"><summary>Text output</summary><pre>(7571, 9)</pre></details><details class="code-cell"><summary>Code cell 26</summary><pre><code>#checking hist for updated data distribution
+material_no_outliers.hist(column=[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;], bins=50, figsize=(20,20), color=&#x27;steelblue&#x27;, edgecolor=&#x27;black&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="Materials data processing — output chart 3, following code cell 26" width="1615" height="1604" loading="lazy"></a><figcaption>Output 3 · Code cell 26 · Open image to enlarge</figcaption></figure><details class="code-cell"><summary>Code cell 27</summary><pre><code>#chceking with graph
+material_no_outliers.boxplot(column = [&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;], figsize=(15,20) )
+plt.tight_layout()
+plt.title(&#x27;Checking for Outliers&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="Materials data processing — output chart 4, following code cell 27" width="1482" height="2000" loading="lazy"></a><figcaption>Output 4 · Code cell 27 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>Handling missing values</p></section><details class="code-cell"><summary>Code cell 29</summary><pre><code>material_no_outliers.isnull().sum()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>Sample Material       0
+MFR                   0
+TML                   0
+Category              0
+CVCM                  0
+Space Code            1
+WVR                   0
+Material Usage        2
+Cure               3474
+dtype: int64</pre></details><section class="notebook-note"><p>dropping and checking missing values</p></section><details class="code-cell"><summary>Code cell 31</summary><pre><code>material_cleaned = material_no_outliers.copy()
+
+material_cleaned = material_cleaned.drop(&#x27;Cure&#x27;, axis=1)
+
+material_cleaned = material_cleaned.dropna(subset=[&#x27;Material Usage&#x27;], axis=0)
+material_cleaned = material_cleaned.dropna(subset=[&#x27;Space Code&#x27;], axis=0)
+
+material_cleaned.isnull().sum()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>Sample Material    0
+MFR                0
+TML                0
+Category           0
+CVCM               0
+Space Code         0
+WVR                0
+Material Usage     0
+dtype: int64</pre></details><details class="code-cell"><summary>Code cell 32</summary><pre><code>material_final = pd.DataFrame(material_cleaned)
+
+material_final.columns</code></pre></details><details class="text-output"><summary>Text output</summary><pre>Index([&#x27;Sample Material&#x27;, &#x27;MFR&#x27;, &#x27;TML&#x27;, &#x27;Category&#x27;, &#x27;CVCM&#x27;, &#x27;Space Code&#x27;,
+       &#x27;WVR&#x27;, &#x27;Material Usage&#x27;],
+      dtype=&#x27;object&#x27;)</pre></details><section class="notebook-note"><p>Handing any duplicates</p></section><details class="code-cell"><summary>Code cell 34</summary><pre><code>#Checking for duplicates
+material_final.duplicated().sum()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>9</pre></details><details class="code-cell"><summary>Code cell 35</summary><pre><code>#dropping all duplicates
+material_final = material_final.drop_duplicates()
+#checking for duplicates again
+material_final.duplicated().sum()
+</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0</pre></details><details class="code-cell"><summary>Code cell 36</summary><pre><code># logger.info(&#x27;Final dataset for EDA saved in result as cleaned_Outgassing_Db_20240702.csv&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 37</summary><pre><code>#saving final dataset as csv file
+material_final.to_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_2\project_NASA_Materials_Project\data\result\cleaned_Outgassing_Db_20240702.csv&#x27;)</code></pre></details><section class="notebook-note"><hr>
+<hr>
+<h2 id="end">END</h2>
+<p>For EDA please find 'Outgassing_Materials_EDA.ipynb'</p>
+<hr>
+<hr></section><section class="notebook-note"></section></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

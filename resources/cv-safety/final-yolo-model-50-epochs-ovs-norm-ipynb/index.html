@@ -1,0 +1,585 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>YOLO training · 50 epochs with oversampling — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>YOLO training · 50 epochs with oversampling</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Final_YOLO_Model_50_epochs_ovs_norm.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="fine-tuned-yolo-model-with-oversampling-and-normalization">Fine-Tuned YOLO Model with Oversampling and Normalization</h2></section><section class="notebook-note"><h2 id="main-features">Main Features</h2>
+<p>The modeling process focused on the safety of construction workers and the presence of PPE gear. The following classes were used to train the model:</p>
+<ul>
+<li>Hardhat</li>
+<li>Mask</li>
+<li>NO-Hardhat</li>
+<li>NO-Mask</li>
+<li>NO-Safety Vest</li>
+<li>Person</li>
+<li>Safety Cone</li>
+<li>Safety Vest</li>
+<li>Machinery</li>
+<li>Vehicle</li>
+</ul>
+<h2 id="model-choice">Model Choice</h2>
+<p>The <strong>YOLOv9</strong> model was selected due to its efficient object detection capabilities.</p>
+<h3 id="key-features-considered">Key Features Considered:</h3>
+<ul>
+<li>
+<p><strong>Convolutional Neural Network (CNN) Backbone</strong>: Utilizes CNN for feature extraction, essential for detecting and classifying objects in images.</p>
+</li>
+<li>
+<p><strong>CSPDarknet Architecture</strong>: The model leverages CSPDarknet, which helps in focusing on the crucial details in the image, optimizing both speed and accuracy in feature extraction.</p>
+</li>
+<li>
+<p><strong>Anchor-Free Detection</strong>: YOLOv9 uses an anchor-free approach, meaning it doesn’t rely on predefined areas (anchors) for object detection. Instead, it dynamically adapts to objects of varying sizes and shapes, enhancing detection accuracy across different object scales.</p>
+</li>
+</ul></section><section class="notebook-note"><h3 id="package-to-install">Package to install</h3></section><details class="code-cell"><summary>Code cell 4</summary><pre><code># !pip install ultralytics</code></pre></details><section class="notebook-note"><h3 id="imports">Imports</h3></section><details class="code-cell"><summary>Code cell 6</summary><pre><code>import warnings
+warnings.filterwarnings(&quot;ignore&quot;)
+
+import os
+import re
+import glob
+import torch
+import random
+import yaml
+import shutil
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+import seaborn as sns
+
+import IPython.display as display
+from PIL import Image
+import cv2
+
+from ultralytics import YOLO
+from google.colab import drive</code></pre></details><section class="notebook-note"><h3 id="pre-setup-for-drive-access-and-configuration-for-yolo-model">Pre setup for drive access and configuration for YOLO model</h3></section><section class="notebook-note"><h3 id="fine-tuning-applied">Fine-Tuning Applied:</h3>
+<ul>
+<li><strong>Epochs</strong>: 50  </li>
+<li>
+<p>Reduced the number of epochs to prevent overfitting, which could occur due to the oversampling applied.</p>
+</li>
+<li>
+<p><strong>Batch Size</strong>: 16  </p>
+</li>
+<li>
+<p>The number of training examples used in one iteration, set to 16 for better generalization.</p>
+</li>
+<li>
+<p><strong>Learning Rate</strong>: 1e-3  </p>
+</li>
+<li>
+<p>Defines the speed at which the model learns from the data.</p>
+</li>
+<li>
+<p><strong>Learning Rate Factor</strong>: 0.01  </p>
+</li>
+<li>
+<p>Controls the gradual reduction of the learning rate during training, allowing for faster initial learning and finer adjustments later.</p>
+</li>
+<li>
+<p><strong>Weight Decay</strong>: 5e-4  </p>
+</li>
+<li>
+<p>Penalizes large weights to prevent overfitting, ensuring the model generalizes well to new data.</p>
+</li>
+<li>
+<p><strong>Patience</strong>: 20  </p>
+</li>
+<li>
+<p>Specifies the number of epochs to wait without improvement in validation, helping to prevent overfitting by stopping training when further progress stalls.</p>
+</li>
+<li>
+<p><strong>Image Size (Imgsz)</strong>: 640  </p>
+</li>
+<li>
+<p>Consistent image size of 640x640 pixels was maintained for uniformity in training.</p>
+</li>
+<li>
+<p><strong>Optimizer</strong>: ‘Auto’  </p>
+</li>
+<li>The optimizer adjusts the weights of the model during training to minimize the loss function, with automatic selection based on the model’s configuration.</li>
+</ul></section><details class="code-cell"><summary>Code cell 9</summary><pre><code># Mount Google Drive
+drive.mount(&#x27;/content/drive&#x27;)
+
+# Define paths in Google Drive
+drive_base_path = &#x27;/content/drive/MyDrive/Capstone&#x27;
+
+# Directory paths
+TRAIN_IMAGE_PATH = os.path.join(drive_base_path, &#x27;data&#x27;, &#x27;images&#x27;, &#x27;train&#x27;)
+TEST_IMAGE_PATH = os.path.join(drive_base_path, &#x27;data&#x27;, &#x27;images&#x27;, &#x27;test&#x27;)
+VALID_IMAGE_PATH = os.path.join(drive_base_path, &#x27;data&#x27;, &#x27;images&#x27;, &#x27;valid&#x27;)
+
+TRAIN_LABEL_PATH = os.path.join(drive_base_path, &#x27;data&#x27;, &#x27;labels&#x27;, &#x27;train&#x27;)
+VALID_LABEL_PATH = os.path.join(drive_base_path, &#x27;data&#x27;, &#x27;labels&#x27;, &#x27;valid&#x27;)
+TEST_LABEL_PATH = os.path.join(drive_base_path, &#x27;data&#x27;, &#x27;labels&#x27;, &#x27;test&#x27;)
+
+OUTPUT_DIR = os.path.join(drive_base_path, &#x27;model&#x27;)
+
+class CFG:
+    DEBUG = False
+    FRACTION = 0.05 if DEBUG else 1.0
+    SEED = 88
+    CLASSES = [&#x27;Hardhat&#x27;, &#x27;Mask&#x27;, &#x27;NO-Hardhat&#x27;, &#x27;NO-Mask&#x27;,
+               &#x27;NO-Safety Vest&#x27;, &#x27;Person&#x27;, &#x27;Safety Cone&#x27;,
+               &#x27;Safety Vest&#x27;, &#x27;machinery&#x27;, &#x27;vehicle&#x27;]
+    NUM_CLASSES = len(CLASSES)
+
+    # training
+    EPOCHS = 3 if DEBUG else 50 # updated
+    BATCH_SIZE = 16
+    BASE_MODEL = &#x27;yolov9e&#x27;
+    BASE_MODEL_WEIGHTS = f&#x27;{BASE_MODEL}.pt&#x27;
+    EXP_NAME = f&#x27;ppe_css_{EPOCHS}_epochs&#x27;
+
+    OPTIMIZER = &#x27;auto&#x27;
+    LR = 1e-3
+    LR_FACTOR = 0.01
+    WEIGHT_DECAY = 5e-4
+    DROPOUT = 0.0
+    PATIENCE = 20
+    PROFILE = False
+    LABEL_SMOOTHING = 0.1 #updated
+    DEVICE = &#x27;cuda&#x27; if torch.cuda.is_available() else &#x27;cpu&#x27;</code></pre></details><section class="notebook-note"><h2 id="oversampling">Oversampling</h2>
+<p>multiple runs were required with changes to the unwanted class parameters and specific classes to achieve more generalized oversampling results.</p></section><details class="code-cell"><summary>Code cell 11</summary><pre><code>import os
+import glob
+import shutil
+
+def oversample_specific_classes(image_path, label_path, specific_classes, additional_count=1):
+    # Initialize class counts
+    class_counts = {cls: 0 for cls in CFG.CLASSES}
+
+    # Set of unwanted classes (Person and machinery)
+    unwanted_classes = {&#x27;Person&#x27;, &#x27;Safety Cone&#x27;, &#x27;machinery&#x27;}
+
+    # Count instances of each class and filter labels containing only specific classes
+    valid_label_files = []
+    for label_file in glob.glob(os.path.join(label_path, &#x27;*.txt&#x27;)):
+        with open(label_file, &#x27;r&#x27;) as f:
+            lines = f.readlines()
+            classes_in_file = set(int(line.split()[0]) for line in lines)
+            # Convert class IDs to class names
+            classes_in_file_names = {CFG.CLASSES[class_id] for class_id in classes_in_file}
+            # Check if the label file contains only specific classes and no unwanted classes
+            if classes_in_file_names.issubset(set(specific_classes)) and not classes_in_file_names.intersection(unwanted_classes):
+                valid_label_files.append(label_file)
+                for class_id in classes_in_file:
+                    class_counts[CFG.CLASSES[class_id]] += 1
+
+    # Identify classes that need oversampling
+    low_count_classes = [cls for cls in specific_classes if class_counts[cls] &lt; 500]
+
+    print(f&quot;Classes to be oversampled: {low_count_classes}&quot;)
+
+    for label_file in valid_label_files:
+        with open(label_file, &#x27;r&#x27;) as f:
+            lines = f.readlines()
+
+        for line in lines:
+            class_id = int(line.split()[0])
+            if CFG.CLASSES[class_id] in low_count_classes:
+                # Duplicate the image and label file
+                base_name = os.path.basename(label_file).replace(&#x27;.txt&#x27;, &#x27;&#x27;)
+                img_file = os.path.join(image_path, base_name + &#x27;.jpg&#x27;)
+
+                for i in range(additional_count):
+                    new_img_file = os.path.join(image_path, f&quot;{base_name}_aug_{i}.jpg&quot;)
+                    new_label_file = os.path.join(label_path, f&quot;{base_name}_aug_{i}.txt&quot;)
+
+                    shutil.copy(img_file, new_img_file)
+                    shutil.copy(label_file, new_label_file)
+
+    print(&quot;Oversampling complete.&quot;)
+
+# Define the specific classes you want to oversample
+specific_classes = [&#x27;Hardhat&#x27;, &#x27;Mask&#x27;, &#x27;NO-Hardhat&#x27;, &#x27;NO-Mask&#x27;,
+                    &#x27;NO-Safety Vest&#x27;, &#x27;Safety Vest&#x27;, &#x27;vehicle&#x27;]
+
+# Apply oversampling to the training dataset
+oversample_specific_classes(TRAIN_IMAGE_PATH, TRAIN_LABEL_PATH, specific_classes)
+
+</code></pre></details><section class="notebook-note"><h2 id="oversampling-results-checking">Oversampling results checking</h2></section><details class="code-cell"><summary>Code cell 13</summary><pre><code>import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Define the class labels
+class_labels = [&#x27;Hardhat&#x27;, &#x27;Mask&#x27;, &#x27;NO-Hardhat&#x27;, &#x27;NO-Mask&#x27;, &#x27;NO-Safety Vest&#x27;,
+                &#x27;Person&#x27;, &#x27;Safety Cone&#x27;, &#x27;Safety Vest&#x27;, &#x27;machinery&#x27;, &#x27;vehicle&#x27;]
+
+# Path to the training labels directory after oversampling
+train_label_dir = TRAIN_LABEL_PATH
+
+# Initialize a dictionary to count each class
+class_counts = {label: 0 for label in class_labels}
+
+# Iterate through the training label directory
+for label_file in os.listdir(train_label_dir):
+    if label_file.endswith(&#x27;.txt&#x27;):
+        with open(os.path.join(train_label_dir, label_file), &#x27;r&#x27;) as f:
+            for line in f:
+                class_idx = int(line.split()[0])
+                class_counts[class_labels[class_idx]] += 1
+
+# Plot the class distribution for the training set
+plt.figure(figsize=(12, 8))
+ax = sns.barplot(x=list(class_counts.keys()), y=list(class_counts.values()), palette=&#x27;viridis&#x27;)
+
+# Add text annotations on the bars
+for i in range(len(class_counts)):
+    ax.text(i, list(class_counts.values())[i], str(list(class_counts.values())[i]), ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;)
+
+plt.title(&#x27;Class Distribution for Training Set After Oversampling&#x27;)
+plt.xlabel(&#x27;Class Labels&#x27;)
+plt.ylabel(&#x27;Number of Instances&#x27;)
+plt.xticks(rotation=45)
+plt.show()</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="YOLO training · 50 epochs with oversampling — output chart 1, following code cell 13" width="1023" height="771" loading="lazy"></a><figcaption>Output 1 · Code cell 13 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li><strong>Instance Ratio:</strong> </li>
+<li>
+<p>The overall ratio between the ‘Person’ class and other classes did not change significantly, as most images had a person labeled.</p>
+</li>
+<li>
+<p><strong>Increase in Instances:</strong></p>
+</li>
+<li>
+<p>Significant improvements were observed in the number of instances for the classes ‘Mask,’ ‘No-Safety Vest,’ ‘Safety Cone,’ ‘Machinery,’ and ‘Vehicle,’ with increases of up to over 1200 instances for some classes.</p>
+</li>
+<li>
+<p><strong>Safety Cone Class:</strong></p>
+</li>
+<li>The drastic increase in the ‘Safety Cone’ class was unavoidable due to many images containing safety cones, leading to a higher instance count.</li>
+</ul></section><section class="notebook-note"><h3 id="creating-yaml-file-for-yolo-model-to-access">Creating yaml file for YOLO model to access</h3></section><details class="code-cell"><summary>Code cell 16</summary><pre><code>def create_yaml_file():
+    dict_file = {
+        &#x27;train&#x27;: TRAIN_IMAGE_PATH,
+        &#x27;val&#x27;: VALID_IMAGE_PATH,
+        &#x27;test&#x27;: TEST_IMAGE_PATH,
+        &#x27;nc&#x27;: CFG.NUM_CLASSES,
+        &#x27;names&#x27;: CFG.CLASSES
+    }
+    yaml_path = os.path.join(OUTPUT_DIR, &#x27;data.yaml&#x27;)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    with open(yaml_path, &#x27;w+&#x27;) as file:
+        yaml.dump(dict_file, file)
+    return yaml_path</code></pre></details><details class="code-cell"><summary>Code cell 17</summary><pre><code>### read yaml file created
+def read_yaml_file(file_path = OUTPUT_DIR):
+    with open(file_path, &#x27;r&#x27;) as file:
+        try:
+            data = yaml.safe_load(file)
+            return data
+        except yaml.YAMLError as e:
+            print(&quot;Error reading YAML:&quot;, e)
+            return None
+
+### print it with newlines
+def print_yaml_data(data):
+    formatted_yaml = yaml.dump(data, default_style=False)
+    print(formatted_yaml)
+
+file_path = os.path.join(OUTPUT_DIR, &#x27;data.yaml&#x27;)
+yaml_data = read_yaml_file(file_path)
+
+if yaml_data:
+    print_yaml_data(yaml_data)</code></pre></details><section class="notebook-note"><h3 id="checking-image-sizes">Checking Image Sizes</h3></section><details class="code-cell"><summary>Code cell 19</summary><pre><code>mode_paths = {
+    &#x27;train&#x27;: TRAIN_IMAGE_PATH,
+    &#x27;valid&#x27;: VALID_IMAGE_PATH,
+    &#x27;test&#x27;: TEST_IMAGE_PATH,
+}
+
+for mode, path in mode_paths.items():
+    print(f&#x27;\nImage sizes in {mode} set:&#x27;)
+
+    img_size = 0
+    for file in glob.glob(os.path.join(path, &#x27;*&#x27;)):
+        image = Image.open(file)
+
+        if image.size != img_size:
+            print(f&#x27;{image.size}&#x27;)
+            img_size = image.size
+            print(&#x27;\n&#x27;)</code></pre></details><section class="notebook-note"><h3 id="normalisation-process">Normalisation Process</h3></section><details class="code-cell"><summary>Code cell 21</summary><pre><code>from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+
+def preprocess_image(image_path):
+    try:
+        with Image.open(image_path) as img:
+            img_array = np.array(img)
+            normalized_image_array = img_array / 255.0  # Normalize to [0,1]
+            return normalized_image_array, img_array
+    except Exception as e:
+        print(f&quot;Error processing image at {image_path}: {e}&quot;)
+        return None, None
+
+def save_normalized_image(normalized_array, original_image_path, save_dir):
+    save_path = os.path.join(save_dir, os.path.basename(original_image_path))
+    normalized_img = Image.fromarray((normalized_array * 255).astype(np.uint8))  # Convert back to uint8
+    normalized_img.save(save_path)
+    print(f&quot;Saved normalized image to {save_path}&quot;)
+
+def display_image(normalized_array):
+    plt.imshow(normalized_array)
+    plt.axis(&#x27;off&#x27;)
+    plt.show()
+
+# Directory paths
+train_image_path = TRAIN_IMAGE_PATH
+test_image_path = TEST_IMAGE_PATH
+valid_image_path = VALID_IMAGE_PATH
+
+# Save directories
+normalized_train_dir = os.path.join(drive_base_path, &#x27;data&#x27;, &#x27;normalized_images&#x27;, &#x27;train&#x27;)
+normalized_test_dir = os.path.join(drive_base_path, &#x27;data&#x27;, &#x27;normalized_images&#x27;, &#x27;test&#x27;)
+normalized_valid_dir = os.path.join(drive_base_path, &#x27;data&#x27;, &#x27;normalized_images&#x27;, &#x27;valid&#x27;)
+
+os.makedirs(normalized_train_dir, exist_ok=True)
+os.makedirs(normalized_test_dir, exist_ok=True)
+os.makedirs(normalized_valid_dir, exist_ok=True)
+
+# Process and save images of train
+if os.access(train_image_path, os.R_OK):
+    for filename in os.listdir(train_image_path):
+        if filename.endswith(&#x27;.jpg&#x27;) or filename.endswith(&#x27;.png&#x27;):
+            image_path = os.path.join(train_image_path, filename)
+            print(f&quot;Processing image: {image_path}&quot;)
+            normalized_array, _ = preprocess_image(image_path)
+            if normalized_array is not None:
+                save_normalized_image(normalized_array, image_path, normalized_train_dir)
+else:
+    print(f&quot;Cannot access {train_image_path} for reading images.&quot;)
+
+# Process and save images of test
+if os.access(test_image_path, os.R_OK):
+    for filename in os.listdir(test_image_path):
+        if filename.endswith(&#x27;.jpg&#x27;) or filename.endswith(&#x27;.png&#x27;):
+            image_path = os.path.join(test_image_path, filename)
+            print(f&quot;Processing image: {image_path}&quot;)
+            normalized_array, _ = preprocess_image(image_path)
+            if normalized_array is not None:
+                save_normalized_image(normalized_array, image_path, normalized_test_dir)
+else:
+    print(f&quot;Cannot access {test_image_path} for reading images.&quot;)
+
+# Process and save images of valid
+if os.access(valid_image_path, os.R_OK):
+    for filename in os.listdir(valid_image_path):
+        if filename.endswith(&#x27;.jpg&#x27;) or filename.endswith(&#x27;.png&#x27;):
+            image_path = os.path.join(valid_image_path, filename)
+            print(f&quot;Processing image: {image_path}&quot;)
+            normalized_array, _ = preprocess_image(image_path)
+            if normalized_array is not None:
+                save_normalized_image(normalized_array, image_path, normalized_valid_dir)
+else:
+    print(f&quot;Cannot access {valid_image_path} for reading images.&quot;)
+
+# Display one normalized image for verification
+sample_image_path = os.path.join(normalized_train_dir, os.listdir(normalized_train_dir)[0])
+normalized_array, _ = preprocess_image(sample_image_path)
+if normalized_array is not None:
+    print(f&quot;Displaying normalized image: {sample_image_path}&quot;)
+    display_image(normalized_array)</code></pre></details><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="YOLO training · 50 epochs with oversampling — output chart 2, following code cell 21" width="389" height="389" loading="lazy"></a><figcaption>Output 2 · Code cell 21 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h3 id="normalisation-process-2">Normalisation Process</h3></section><details class="code-cell"><summary>Code cell 23</summary><pre><code>def get_image_properties(image_path):
+    # Read the image file
+    img = cv2.imread(image_path)
+
+    # Check if the image file is read successfully
+    if img is None:
+        raise ValueError(&quot;Could not read image file&quot;)
+
+    # Get image properties
+    properties = {
+        &quot;width&quot;: img.shape[1],
+        &quot;height&quot;: img.shape[0],
+        &quot;channels&quot;: img.shape[2] if len(img.shape) == 3 else 1,
+        &quot;dtype&quot;: img.dtype,
+    }
+
+    return properties</code></pre></details><details class="code-cell"><summary>Code cell 24</summary><pre><code>example_file_path = &#x27;/content/drive/MyDrive/Capstone/data/images/test/image_53_jpg.rf.3446e366b5d4d905a32e1aedc8fe87de.jpg&#x27;
+
+image_properties = get_image_properties(example_file_path)
+image_properties</code></pre></details><details class="text-output"><summary>Text output</summary><pre>{&#x27;width&#x27;: 640, &#x27;height&#x27;: 640, &#x27;channels&#x27;: 3, &#x27;dtype&#x27;: dtype(&#x27;uint8&#x27;)}</pre></details><section class="notebook-note"><p>Checking model</p></section><details class="code-cell"><summary>Code cell 26</summary><pre><code>CFG.BASE_MODEL_WEIGHTS</code></pre></details><details class="text-output"><summary>Text output</summary><pre>&#x27;yolov9e.pt&#x27;</pre></details><section class="notebook-note"><h3 id="yolo-model-baseline-inference">YOLO model baseline inference</h3></section><details class="code-cell"><summary>Code cell 28</summary><pre><code>model = YOLO(CFG.BASE_MODEL_WEIGHTS)
+device_str = CFG.DEVICE if CFG.DEVICE == &#x27;cpu&#x27; else &#x27;cuda:0&#x27;
+
+results = model.predict(
+    source = example_file_path,
+
+    classes = [0],
+    conf = 0.30,
+    device = device_str,
+    imgsz = (image_properties[&#x27;height&#x27;], image_properties[&#x27;width&#x27;]),
+
+    save = True,
+    save_txt = True,
+    save_conf = True,
+    exist_ok = True,
+)</code></pre></details><details class="code-cell"><summary>Code cell 29</summary><pre><code>def resize_image(image_path, img_size):
+    img = Image.open(image_path)
+    img = img.resize((img_size, img_size))
+    return img
+
+def display_image(image_path, img_size=640, print_info=True, hide_axis=False):
+    img = resize_image(image_path, img_size)
+    plt.figure(figsize=(10, 10))
+    plt.imshow(img)
+    if print_info:
+        print(&#x27;Type: &#x27;, type(img))
+        print(&#x27;Shape: &#x27;, np.array(img).shape)
+    if hide_axis:
+        plt.axis(&#x27;off&#x27;)
+    plt.show()</code></pre></details><details class="code-cell"><summary>Code cell 30</summary><pre><code>example_image_inference_output = example_file_path.split(&#x27;/&#x27;)[-1]
+display_image(f&#x27;/content/runs/detect/predict/{example_image_inference_output}&#x27;)</code></pre></details><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="YOLO training · 50 epochs with oversampling — output chart 3, following code cell 30" width="826" height="818" loading="lazy"></a><figcaption>Output 3 · Code cell 30 · Open image to enlarge</figcaption></figure><details class="code-cell"><summary>Code cell 31</summary><pre><code>print(&#x27;Model: &#x27;, CFG.BASE_MODEL_WEIGHTS)
+print(&#x27;Epochs: &#x27;, CFG.EPOCHS)
+print(&#x27;Batch: &#x27;, CFG.BATCH_SIZE)</code></pre></details><section class="notebook-note"><h3 id="assigning-yaml-and-creating-fine-tuned-yolo-model">Assigning yaml and creating fine tuned YOLO model</h3></section><details class="code-cell"><summary>Code cell 33</summary><pre><code>yaml_path = create_yaml_file()</code></pre></details><details class="code-cell"><summary>Code cell 34</summary><pre><code>def train_model(yaml_path):
+    model = YOLO(CFG.BASE_MODEL_WEIGHTS)
+
+    img_properties = {&#x27;width&#x27;: 640, &#x27;height&#x27;: 640}
+
+    # Use &#x27;cuda&#x27; or &#x27;cuda:0&#x27; if you have a single GPU
+    device_str = CFG.DEVICE if CFG.DEVICE == &#x27;cpu&#x27; else &#x27;cuda:0&#x27;
+
+    model.train(
+        data=yaml_path,
+        task=&#x27;detect&#x27;,
+        imgsz=(img_properties[&#x27;height&#x27;], img_properties[&#x27;width&#x27;]),
+        epochs=CFG.EPOCHS,
+        batch=CFG.BATCH_SIZE,
+        optimizer=CFG.OPTIMIZER,
+        lr0=CFG.LR,
+        lrf=CFG.LR_FACTOR,
+        weight_decay=CFG.WEIGHT_DECAY,
+        dropout=CFG.DROPOUT,
+        fraction=CFG.FRACTION,
+        patience=CFG.PATIENCE,
+        profile=CFG.PROFILE,
+        label_smoothing=CFG.LABEL_SMOOTHING,
+        name=f&#x27;{CFG.BASE_MODEL}_{CFG.EXP_NAME}&#x27;,
+        seed=CFG.SEED,
+        val=True,
+        amp=True,
+        exist_ok=True,
+        resume=False,
+        device=device_str,  # Changed to use single GPU or CPU
+        verbose=False,
+    )
+
+    return model</code></pre></details><details class="code-cell"><summary>Code cell 35</summary><pre><code>model = train_model(yaml_path)</code></pre></details><details class="code-cell"><summary>Code cell 36</summary><pre><code>image_properties</code></pre></details><details class="text-output"><summary>Text output</summary><pre>{&#x27;width&#x27;: 640, &#x27;height&#x27;: 640, &#x27;channels&#x27;: 3, &#x27;dtype&#x27;: dtype(&#x27;uint8&#x27;)}</pre></details><section class="notebook-note"><h3 id="exporting-model-for-deployment-and-testing">Exporting model for deployment and testing</h3></section><details class="code-cell"><summary>Code cell 38</summary><pre><code>def export_model(model):
+    # Export the model for deployment
+    model.export(
+        format=&#x27;onnx&#x27;,  # Could be &#x27;openvino&#x27;, &#x27;engine&#x27;, &#x27;tflite&#x27;, etc.
+        imgsz=(640, 640),
+        half=False,
+        int8=False,
+        simplify=False,
+        nms=False,
+    )</code></pre></details><details class="code-cell"><summary>Code cell 39</summary><pre><code>export_model(model)</code></pre></details><section class="notebook-note"><h3 id="checking-model-evaluation">Checking Model Evaluation</h3></section><details class="code-cell"><summary>Code cell 41</summary><pre><code>results_paths = [
+    i for i in
+    glob.glob(f&#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/*.png&#x27;) +
+    glob.glob(f&#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/*.jpg&#x27;)
+    if &#x27;batch&#x27; not in i
+]
+
+results_paths</code></pre></details><details class="text-output"><summary>Text output</summary><pre>[&#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/R_curve.png&#x27;,
+ &#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/P_curve.png&#x27;,
+ &#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/PR_curve.png&#x27;,
+ &#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/confusion_matrix_normalized.png&#x27;,
+ &#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/F1_curve.png&#x27;,
+ &#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/results.png&#x27;,
+ &#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/confusion_matrix.png&#x27;,
+ &#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/labels.jpg&#x27;,
+ &#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/labels_correlogram.jpg&#x27;]</pre></details><section class="notebook-note"><h3 id="please-refer-to-my-report-for-evaluation-of-the-important-results">Please refer to my report for evaluation of the important results</h3></section><details class="code-cell"><summary>Code cell 43</summary><pre><code>for file in sorted(results_paths):
+    print(file)
+    display_image(file, print_info=False, hide_axis=True)
+    print(&#x27;\n&#x27;)</code></pre></details><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="YOLO training · 50 epochs with oversampling — output chart 4, following code cell 43" width="790" height="790" loading="lazy"></a><figcaption>Output 4 · Code cell 43 · Open image to enlarge</figcaption></figure><figure><a href="chart-05.webp" target="_blank" rel="noopener noreferrer"><img src="chart-05.webp" alt="YOLO training · 50 epochs with oversampling — output chart 5, following code cell 43" width="790" height="790" loading="lazy"></a><figcaption>Output 5 · Code cell 43 · Open image to enlarge</figcaption></figure><figure><a href="chart-06.webp" target="_blank" rel="noopener noreferrer"><img src="chart-06.webp" alt="YOLO training · 50 epochs with oversampling — output chart 6, following code cell 43" width="790" height="790" loading="lazy"></a><figcaption>Output 6 · Code cell 43 · Open image to enlarge</figcaption></figure><figure><a href="chart-07.webp" target="_blank" rel="noopener noreferrer"><img src="chart-07.webp" alt="YOLO training · 50 epochs with oversampling — output chart 7, following code cell 43" width="790" height="790" loading="lazy"></a><figcaption>Output 7 · Code cell 43 · Open image to enlarge</figcaption></figure><figure><a href="chart-08.webp" target="_blank" rel="noopener noreferrer"><img src="chart-08.webp" alt="YOLO training · 50 epochs with oversampling — output chart 8, following code cell 43" width="790" height="790" loading="lazy"></a><figcaption>Output 8 · Code cell 43 · Open image to enlarge</figcaption></figure><figure><a href="chart-09.webp" target="_blank" rel="noopener noreferrer"><img src="chart-09.webp" alt="YOLO training · 50 epochs with oversampling — output chart 9, following code cell 43" width="790" height="790" loading="lazy"></a><figcaption>Output 9 · Code cell 43 · Open image to enlarge</figcaption></figure><figure><a href="chart-10.webp" target="_blank" rel="noopener noreferrer"><img src="chart-10.webp" alt="YOLO training · 50 epochs with oversampling — output chart 10, following code cell 43" width="790" height="790" loading="lazy"></a><figcaption>Output 10 · Code cell 43 · Open image to enlarge</figcaption></figure><figure><a href="chart-11.webp" target="_blank" rel="noopener noreferrer"><img src="chart-11.webp" alt="YOLO training · 50 epochs with oversampling — output chart 11, following code cell 43" width="790" height="790" loading="lazy"></a><figcaption>Output 11 · Code cell 43 · Open image to enlarge</figcaption></figure><figure><a href="chart-12.webp" target="_blank" rel="noopener noreferrer"><img src="chart-12.webp" alt="YOLO training · 50 epochs with oversampling — output chart 12, following code cell 43" width="790" height="790" loading="lazy"></a><figcaption>Output 12 · Code cell 43 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h3 id="saving-numeriacal-results-to-access-as-csv">Saving numeriacal results to access as csv</h3></section><details class="code-cell"><summary>Code cell 45</summary><pre><code>results = pd.read_csv(&#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/results.csv&#x27;)
+results.to_csv(f&#x27;{OUTPUT_DIR}/results.csv&#x27;, index=False)</code></pre></details><section class="notebook-note"><h3 id="plotting-training-metrics-from-csv">Plotting training metrics from CSV</h3></section><details class="code-cell"><summary>Code cell 47</summary><pre><code># Function to plot training metrics from CSV
+def plot_training_metrics(df):
+    metrics = [&#x27;box_loss&#x27;, &#x27;cls_loss&#x27;, &#x27;dfl_loss&#x27;]
+    titles = [&#x27;Box Loss&#x27;, &#x27;Cls Loss&#x27;, &#x27;DFL Loss&#x27;]
+
+    plt.figure(figsize=(15, 10))
+
+    for i, metric in enumerate(metrics):
+        plt.subplot(3, 1, i + 1)
+        plt.plot(df[&#x27;epoch&#x27;], df[f&#x27;train/{metric}&#x27;], label=f&#x27;Training {metric}&#x27;)
+        plt.plot(df[&#x27;epoch&#x27;], df[f&#x27;val/{metric}&#x27;], label=f&#x27;Validation {metric}&#x27;)
+        plt.title(titles[i])
+        plt.xlabel(&#x27;Epoch&#x27;)
+        plt.legend()
+
+    plt.tight_layout()
+    plt.show()</code></pre></details><details class="code-cell"><summary>Code cell 48</summary><pre><code>def print_best_performance(df):
+    print(&#x27;*&#x27; * 50)
+    print(&#x27;\nBest Training Box loss: &#x27;, df[&#x27;train/box_loss&#x27;].min(), &#x27;, on epoch: &#x27;, df[&#x27;train/box_loss&#x27;].idxmin() + 1, &#x27;\n&#x27;)
+    print(&#x27;Best Validation Box loss: &#x27;, df[&#x27;val/box_loss&#x27;].min(), &#x27;, on epoch: &#x27;, df[&#x27;val/box_loss&#x27;].idxmin() + 1, &#x27;\n&#x27;)
+
+    print(&#x27;=&#x27; * 50)
+    print(&#x27;\nBest Training Cls loss: &#x27;, df[&#x27;train/cls_loss&#x27;].min(), &#x27;, on epoch: &#x27;, df[&#x27;train/cls_loss&#x27;].idxmin() + 1, &#x27;\n&#x27;)
+    print(&#x27;Best Validation Cls loss: &#x27;, df[&#x27;val/cls_loss&#x27;].min(), &#x27;, on epoch: &#x27;, df[&#x27;val/cls_loss&#x27;].idxmin() + 1, &#x27;\n&#x27;)
+
+    print(&#x27;=&#x27; * 50)
+    print(&#x27;\nBest Training DFL loss: &#x27;, df[&#x27;train/dfl_loss&#x27;].min(), &#x27;, on epoch: &#x27;, df[&#x27;train/dfl_loss&#x27;].idxmin() + 1, &#x27;\n&#x27;)
+    print(&#x27;Best Validation DFL loss: &#x27;, df[&#x27;val/dfl_loss&#x27;].min(), &#x27;, on epoch: &#x27;, df[&#x27;val/dfl_loss&#x27;].idxmin() + 1, &#x27;\n&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 49</summary><pre><code>df = pd.read_csv(r&#x27;/content/runs/detect/yolov9e_ppe_css_50_epochs/results.csv&#x27;)
+df = df.rename(columns=lambda x: x.replace(&quot; &quot;, &quot;&quot;))
+df.to_csv(f&#x27;{OUTPUT_DIR}/training_log_df.csv&#x27;, index=False)
+plot_training_metrics(df)
+print_best_performance(df)</code></pre></details><figure><a href="chart-13.webp" target="_blank" rel="noopener noreferrer"><img src="chart-13.webp" alt="YOLO training · 50 epochs with oversampling — output chart 13, following code cell 49" width="1489" height="989" loading="lazy"></a><figcaption>Output 13 · Code cell 49 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h3 id="testing-model-on-all-testing-images">Testing model on all testing images</h3></section><details class="code-cell"><summary>Code cell 51</summary><pre><code>model = YOLO(f&#x27;{drive_base_path}/yolov9e_ppe_css_50_epochs_w_loss/yolov9e_ppe_css_50_epochs_w_loss/weights/best.pt&#x27;)
+def perform_inference_and_visualize_all(model):
+    model = YOLO(f&#x27;{drive_base_path}/yolov9e_ppe_css_50_epochs_w_loss/yolov9e_ppe_css_50_epochs_w_loss/weights/best.pt&#x27;)
+    # List all image files in the test directory
+    test_image_files = [f for f in os.listdir(TEST_IMAGE_PATH) if f.endswith((&#x27;.jpg&#x27;, &#x27;.png&#x27;, &#x27;.jpeg&#x27;))]
+
+    # Iterate over each test image
+    for image_file in test_image_files:
+        test_image_path = os.path.join(TEST_IMAGE_PATH, image_file)
+
+        # Perform inference on the test image
+        results = model.predict(test_image_path, conf=0.25, device=CFG.DEVICE)
+
+        # Display the result
+        result_image = results[0].plot()
+        plt.figure(figsize=(12, 12))
+        plt.imshow(cv2.cvtColor(result_image, cv2.COLOR_BGR2RGB))
+        plt.axis(&#x27;off&#x27;)
+        plt.title(f&#x27;Test Image Prediction: {image_file}&#x27;)
+        plt.show()</code></pre></details><details class="code-cell"><summary>Code cell 52</summary><pre><code>perform_inference_and_visualize_all(model)</code></pre></details><section class="notebook-note"><h3 id="saving-the-model-to-drive-to-download">Saving the model to drive to download</h3></section><details class="code-cell"><summary>Code cell 54</summary><pre><code>import shutil
+
+# Source directory path in Colab
+source_dir = &#x27;/content/runs/detect&#x27;  # Replace with your actual directory path
+
+# Destination directory in Google Drive
+destination_dir = &#x27;/content/drive/MyDrive/Capstone/yolov9e_ppe_css_51_epochs_w_loss&#x27;  # Replace with the desired path in Google Drive
+
+# Copy the directory to Google Drive
+shutil.copytree(source_dir, destination_dir)
+print(&quot;Directory saved to Google Drive.&quot;)</code></pre></details><section class="notebook-note"><h3 id="applying-the-model-to-test-on-video-using-bytetrack">Applying the model to test on video using 'Bytetrack'</h3></section><details class="code-cell"><summary>Code cell 56</summary><pre><code>import os
+from google.colab import drive
+from IPython.display import HTML
+from base64 import b64encode
+from ultralytics import YOLO
+
+# Mount Google Drive
+drive.mount(&#x27;/content/drive&#x27;)
+
+# Define paths
+drive_base_path = &#x27;/content/drive/MyDrive/Capstone&#x27;
+weights_dir = os.path.join(drive_base_path, &#x27;yolov9e_ppe_css_50_epochs_w_loss&#x27;, &#x27;yolov9e_ppe_css_50_epochs&#x27;, &#x27;weights&#x27;)
+video_path = os.path.join(drive_base_path, &#x27;construction workers.mp4&#x27;)  # Update this path to the actual video location
+save_dir = os.path.join(drive_base_path, &#x27;tracking_results_50_epochs&#x27;)
+
+# Load the trained detection model
+model = YOLO(os.path.join(weights_dir, &#x27;best.pt&#x27;))
+
+# Run tracking
+tracking_results = model.track(
+    source=video_path,
+    show=True,
+    save=True,
+    name=save_dir,
+    imgsz=640,
+    tracker=&quot;bytetrack.yaml&quot;  # Using ByteTrack
+)
+
+Convert output video from .avi to .mp4
+!ffmpeg -i /content/drive/MyDrive/Capstone/tracking_results_50_epochs/construction workers.avi /content/drive/MyDrive/Capstone/tracking_results_50_epochs/construction_workersg.mp4
+# !ffmpeg -i /content/drive/MyDrive/Capstone/tracking_results2/JapanPPE.avi /content/drive/MyDrive/Capstone/tracking_results2/JapanPPEc.mp4
+
+</code></pre></details><details class="code-cell"><summary>Code cell 57</summary><pre><code>def play_video(filename):
+    video_data = open(filename, &#x27;rb&#x27;).read()
+    video_src = &#x27;data:video/mp4;base64,&#x27; + b64encode(video_data).decode()
+
+    html = f&#x27;&lt;video width=1000 controls autoplay loop&gt;&lt;source src=&quot;{video_src}&quot; type=&quot;video/mp4&quot;&gt;&lt;/video&gt;&#x27;
+    return HTML(html)
+
+# Display the converted video
+play_video(&#x27;/content/drive/MyDrive/Capstone/tracking_results/construction_workersg.mp4&#x27;)
+</code></pre></details></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

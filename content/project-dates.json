@@ -1,0 +1,100 @@
+[
+  {
+    "project": "codevision",
+    "sourceType": "project",
+    "year": "2025",
+    "source": "data.jsx"
+  },
+  {
+    "project": "vision-studio",
+    "sourceType": "project",
+    "year": "2025",
+    "source": "data.jsx"
+  },
+  {
+    "project": "n8n-rag",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/n8n_RAG_Workflow",
+    "commit": "322a134e5b653999b8380dae77c17a15e3b2e526",
+    "committedAt": "2025-08-21T00:28:57Z",
+    "source": "https://github.com/Userdflt/n8n_RAG_Workflow/commit/322a134e5b653999b8380dae77c17a15e3b2e526"
+  },
+  {
+    "project": "notion-mcp",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/Notion-MCP-Agent",
+    "commit": "2d6f816be7500af20ec31acce30052fe16a4f5ff",
+    "committedAt": "2025-05-22T10:17:03Z",
+    "source": "https://github.com/Userdflt/Notion-MCP-Agent/commit/2d6f816be7500af20ec31acce30052fe16a4f5ff"
+  },
+  {
+    "project": "stable-diffusion",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/InteractiveSketchToRender",
+    "commit": "48c249368a6e6ea7158b185655b9a0002d470a63",
+    "committedAt": "2025-04-01T22:37:30Z",
+    "source": "https://github.com/Userdflt/InteractiveSketchToRender/commit/48c249368a6e6ea7158b185655b9a0002d470a63"
+  },
+  {
+    "project": "vision-rag",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval",
+    "commit": "787695d8e3bb2351d31bb34c71f425dc5c7f344b",
+    "committedAt": "2025-03-16T05:36:41Z",
+    "source": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval/commit/787695d8e3bb2351d31bb34c71f425dc5c7f344b"
+  },
+  {
+    "project": "llm-rag",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-",
+    "commit": "0f1d8155a075407860de69ed297def7e95e2bef0",
+    "committedAt": "2025-04-02T23:12:19Z",
+    "source": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-/commit/0f1d8155a075407860de69ed297def7e95e2bef0"
+  },
+  {
+    "project": "cv-safety",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model",
+    "commit": "83f3d3a69af9ecee9b32221fc910bda690e7077b",
+    "committedAt": "2025-04-03T05:04:25Z",
+    "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/commit/83f3d3a69af9ecee9b32221fc910bda690e7077b"
+  },
+  {
+    "project": "youtube-analytics",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/YouTube_Analytics",
+    "commit": "37afa0af947929fd7e617af9c73d5871f935618e",
+    "committedAt": "2024-10-13T22:45:53Z",
+    "source": "https://github.com/Userdflt/YouTube_Analytics/commit/37afa0af947929fd7e617af9c73d5871f935618e"
+  },
+  {
+    "project": "nasa-outgassing",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/NASA-Outgassing-DB",
+    "commit": "7e84996e82441c5763006a75865551784c28e870",
+    "committedAt": "2024-08-13T07:40:13Z",
+    "source": "https://github.com/Userdflt/NASA-Outgassing-DB/commit/7e84996e82441c5763006a75865551784c28e870"
+  },
+  {
+    "project": "ai-detection",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News",
+    "commit": "a32b362f84acceb7f17a726fb9903a42643c689e",
+    "committedAt": "2024-09-27T04:33:38Z",
+    "source": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/commit/a32b362f84acceb7f17a726fb9903a42643c689e"
+  },
+  {
+    "project": "wind-energy",
+    "sourceType": "repository",
+    "repository": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction",
+    "commit": "7f74c09952010680be4590c312d103659599e6cf",
+    "committedAt": "2025-07-06T01:07:17Z",
+    "source": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction/commit/7f74c09952010680be4590c312d103659599e6cf"
+  },
+  {
+    "project": "ai-visualizations",
+    "sourceType": "project",
+    "year": "2024",
+    "source": "data.jsx"
+  }
+]

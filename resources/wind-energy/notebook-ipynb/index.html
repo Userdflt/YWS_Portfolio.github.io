@@ -1,0 +1,574 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Wind energy prediction notebook — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Wind energy prediction notebook</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction/blob/7f74c09952010680be4590c312d103659599e6cf/Notebook.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="1-business-understanding">1. Business Understanding</h2>
+<ul>
+<li>
+<p><strong>Forecasting Power Output:</strong> The primary goal is to accurately predict power output using historical environmental and temporal data. This forecasting is essential for efficient energy management, cost reduction, and optimizing operations within the energy sector.</p>
+</li>
+<li>
+<p><strong>Prediction Approach:</strong> Since we aim to predict continuous values of power output, regression techniques are the appropriate modeling approach for this project.</p>
+</li>
+<li>
+<p><strong>Data Scope:</strong> The project utilizes data collected over a period of 3 years, providing a substantial historical basis for accurate forecasting.</p>
+</li>
+</ul></section><section class="notebook-note"><h2 id="2-data-understanding">2. Data Understanding</h2></section><section class="notebook-note"><p>We begin by importing the necessary libraries and loading the datasets.</p></section><details class="code-cell"><summary>Code cell 4</summary><pre><code>import pandas as pd
+import numpy as np</code></pre></details><section class="notebook-note"><p>Load the training data (Train.csv), testing data (Test.csv), and the column information (column_info.csv).</p></section><details class="code-cell"><summary>Code cell 6</summary><pre><code>df = pd.read_csv(r&quot;C:\Users\GGPC\Desktop\Work\Personal Projects\Forcast Transactions\data\Train.csv&quot;)
+df2 = pd.read_csv(r&quot;C:\Users\GGPC\Desktop\Work\Personal Projects\Forcast Transactions\data\Test.csv&quot;)
+df_col_info = pd.read_csv(r&quot;C:\Users\GGPC\Desktop\Work\Personal Projects\Forcast Transactions\data\column_info.csv&quot;)</code></pre></details><details class="code-cell"><summary>Code cell 7</summary><pre><code>df_col_info.columns = [&#x27;variable&#x27;, &#x27;description&#x27;]
+df_col_info</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>variable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Time</td>
+      <td>Readings timestamp</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Temp_2m</td>
+      <td>Temperature at 2 mtrs above surface</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>RelHum_2m</td>
+      <td>Relative Humidity at 2 mtrs above surface</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>DP_2m</td>
+      <td>Dew Point at 3 mtrs above surface</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>WS_10m</td>
+      <td>Wind Speed at 10 mtrs above surface</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>WS_100m</td>
+      <td>Wind Speed at 100 mtrs above surface</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>WD_10m</td>
+      <td>Wind Direction at 10 mtrs above surface</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>WD_100m</td>
+      <td>Wind Direction at 100 mtrs above surface</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>WG_10m</td>
+      <td>Wind Gusts at 100 mtrs above surface</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Power</td>
+      <td>Turbine power generation, normalized between 0...</td>
+    </tr>
+  </tbody>
+</table>
+</div><details class="code-cell"><summary>Code cell 8</summary><pre><code>df.info()</code></pre></details><details class="code-cell"><summary>Code cell 9</summary><pre><code>df.describe()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Location</th>
+      <th>Temp_2m</th>
+      <th>RelHum_2m</th>
+      <th>DP_2m</th>
+      <th>WS_10m</th>
+      <th>WS_100m</th>
+      <th>WD_10m</th>
+      <th>WD_100m</th>
+      <th>WG_10m</th>
+      <th>Power</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+      <td>140160.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>17519.500000</td>
+      <td>2.500000</td>
+      <td>45.912162</td>
+      <td>70.420512</td>
+      <td>35.867228</td>
+      <td>4.352948</td>
+      <td>6.924278</td>
+      <td>200.684417</td>
+      <td>200.649010</td>
+      <td>8.027673</td>
+      <td>0.312437</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>10115.212797</td>
+      <td>1.118038</td>
+      <td>21.930554</td>
+      <td>17.000203</td>
+      <td>20.979720</td>
+      <td>2.027149</td>
+      <td>3.056636</td>
+      <td>100.079917</td>
+      <td>101.105919</td>
+      <td>3.626641</td>
+      <td>0.253774</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>-31.420400</td>
+      <td>8.664205</td>
+      <td>-36.627405</td>
+      <td>0.165389</td>
+      <td>0.007799</td>
+      <td>0.051683</td>
+      <td>-0.942685</td>
+      <td>0.436515</td>
+      <td>-0.000004</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>8759.750000</td>
+      <td>1.750000</td>
+      <td>29.579600</td>
+      <td>57.664205</td>
+      <td>21.172595</td>
+      <td>2.815389</td>
+      <td>4.747799</td>
+      <td>128.051683</td>
+      <td>127.057315</td>
+      <td>5.236515</td>
+      <td>0.099696</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>17519.500000</td>
+      <td>2.500000</td>
+      <td>45.879600</td>
+      <td>72.664205</td>
+      <td>35.672595</td>
+      <td>4.055389</td>
+      <td>6.717799</td>
+      <td>211.051683</td>
+      <td>211.057315</td>
+      <td>7.636515</td>
+      <td>0.246896</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>26279.250000</td>
+      <td>3.250000</td>
+      <td>64.579600</td>
+      <td>84.664205</td>
+      <td>53.872595</td>
+      <td>5.575389</td>
+      <td>8.847799</td>
+      <td>287.051683</td>
+      <td>289.057315</td>
+      <td>10.236515</td>
+      <td>0.486396</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>35039.000000</td>
+      <td>4.000000</td>
+      <td>94.479600</td>
+      <td>99.664205</td>
+      <td>78.272595</td>
+      <td>18.695389</td>
+      <td>24.597799</td>
+      <td>359.051683</td>
+      <td>359.057315</td>
+      <td>28.936515</td>
+      <td>0.988796</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><h2 id="3-data-preparation">3. Data Preparation</h2></section><section class="notebook-note"><p>Define a function to transform the Time column into datetime format and extract new features like Month, Year, and TimeOfDay.</p></section><details class="code-cell"><summary>Code cell 12</summary><pre><code>def transform_time(df):
+    df[&#x27;Time&#x27;] = pd.to_datetime(df[&#x27;Time&#x27;], format=&#x27;%d-%m-%Y %H:%M&#x27;)
+    df[&#x27;Month&#x27;] = df[&#x27;Time&#x27;].dt.month
+    df[&#x27;Year&#x27;] = df[&#x27;Time&#x27;].dt.year
+    df[&#x27;TimeOfDay&#x27;] = df[&#x27;Time&#x27;].dt.hour
+    df.drop(columns=&#x27;Time&#x27;, inplace=True)
+    df.drop(columns=&#x27;Unnamed: 0&#x27;, inplace=True)
+    
+    return df
+
+train_df = transform_time(df)
+test_df = transform_time(df2)</code></pre></details><section class="notebook-note"><p>Preview the transformed datasets.</p></section><details class="code-cell"><summary>Code cell 14</summary><pre><code>print(f&#x27;{train_df.head()}\n\n\n{test_df.head()}&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 15</summary><pre><code>train_df.info()</code></pre></details><details class="code-cell"><summary>Code cell 16</summary><pre><code>test_df.info()</code></pre></details><section class="notebook-note"><p>Verify data quality by checking for null values and duplicates in both datasets.</p></section><details class="code-cell"><summary>Code cell 18</summary><pre><code>print(f&#x27;Train data Null:{train_df.isnull().sum().sum()} \nTest data Null:{test_df.isnull().sum().sum()}&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 19</summary><pre><code>print(f&#x27;Train data Duplicates: {train_df.duplicated().sum()} \nTest data Duplicates: {test_df.duplicated().sum()}&#x27;)</code></pre></details><section class="notebook-note"><p>Calculate the correlation matrix to identify relationships between variables.</p></section><details class="code-cell"><summary>Code cell 21</summary><pre><code>import seaborn as sns
+import matplotlib.pyplot as plt
+
+corr_matrix = train_df.corr()
+
+plt.figure(figsize=(10, 10))
+
+sns.heatmap(corr_matrix, cmap=&#x27;coolwarm&#x27;, annot=True)
+plt.title(&#x27;Initial Correlation Matrix&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="Wind energy prediction notebook — output chart 1, following code cell 21" width="853" height="905" loading="lazy"></a><figcaption>Output 1 · Code cell 21 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>Flatten the correlation matrix and sort to find highly correlated feature pairs.</p></section><details class="code-cell"><summary>Code cell 23</summary><pre><code>corr_df = (corr_matrix.unstack()
+           .reset_index()
+           .rename(columns={&#x27;level_0&#x27;: &#x27;variable_1&#x27;, &#x27;level_1&#x27;: &#x27;variable_2&#x27;, 0: &#x27;correlation&#x27;})
+           .query(&#x27;variable_1 != variable_2&#x27;)
+           .sort_values(by=&#x27;correlation&#x27;, ascending=False))
+
+print(corr_df.head(10))
+        </code></pre></details><section class="notebook-note"><p>Visualize the correlation matrix again after removing the highly correlated feature.</p></section><details class="code-cell"><summary>Code cell 25</summary><pre><code># Remove the DP_2m column due to high correlation with other features to reduce multicollinearity.
+train_df.drop(columns=&#x27;DP_2m&#x27;, inplace=True)
+
+plt.figure(figsize=(10, 10))
+
+sns.heatmap(corr_matrix, cmap=&#x27;coolwarm&#x27;, annot=True)
+plt.title(&#x27;Correlation Matrix after removing DP_2m&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="Wind energy prediction notebook — output chart 2, following code cell 25" width="853" height="905" loading="lazy"></a><figcaption>Output 2 · Code cell 25 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h2 id="4-exploratory-data-analysis">4. Exploratory Data Analysis</h2></section><section class="notebook-note"><p>Plot histograms for all features to understand their distributions.</p></section><details class="code-cell"><summary>Code cell 28</summary><pre><code>train_df.hist(figsize=(12, 10))
+plt.show()</code></pre></details><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="Wind energy prediction notebook — output chart 3, following code cell 28" width="1005" height="836" loading="lazy"></a><figcaption>Output 3 · Code cell 28 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>Create pair plots to visualize pairwise relationships between features and the target variable.</p></section><details class="code-cell"><summary>Code cell 30</summary><pre><code>import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+sns.pairplot(train_df)
+plt.show()</code></pre></details><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="Wind energy prediction notebook — output chart 4, following code cell 30" width="2000" height="2000" loading="lazy"></a><figcaption>Output 4 · Code cell 30 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>Analyze how Power varies with TimeOfDay, Month, and Year.</p></section><details class="code-cell"><summary>Code cell 32</summary><pre><code>fig, ax = plt.subplots(3, 1, figsize=(12, 8))
+
+plt.subplot(311)
+sns.lineplot(x=&#x27;TimeOfDay&#x27;, y=&#x27;Power&#x27;, data=train_df, marker=&#x27;o&#x27;, errorbar=None)
+
+plt.subplot(312)
+sns.lineplot(x=&#x27;Month&#x27;, y=&#x27;Power&#x27;, data=train_df, marker=&#x27;o&#x27;, errorbar=None)
+
+plt.subplot(313)
+sns.lineplot(x=&#x27;Year&#x27;, y=&#x27;Power&#x27;, data=train_df, marker=&#x27;o&#x27;, errorbar=None)
+
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-05.webp" target="_blank" rel="noopener noreferrer"><img src="chart-05.webp" alt="Wind energy prediction notebook — output chart 5, following code cell 32" width="1189" height="789" loading="lazy"></a><figcaption>Output 5 · Code cell 32 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>Investigate the monthly average wind speeds at 10 meters and 100 meters above the surface.</p></section><details class="code-cell"><summary>Code cell 34</summary><pre><code>monthly_avg = train_df.groupby(&#x27;Month&#x27;).mean()[[&#x27;WS_10m&#x27;, &#x27;WS_100m&#x27;]]
+
+plt.figure(figsize=(10, 10))
+
+plt.plot(monthly_avg.index, monthly_avg[&#x27;WS_10m&#x27;], label=&#x27;Average Wind Speed at 10 mtrs above surface&#x27;, marker=&#x27;o&#x27;)
+plt.plot(monthly_avg.index, monthly_avg[&#x27;WS_100m&#x27;], label=&#x27;Average Wind Speed at 100 mtrs above surface&#x27;, marker=&#x27;o&#x27;)
+
+plt.title(&#x27;Monthly Average Wind Speed&#x27;)
+plt.xlabel(&#x27;Month&#x27;)
+plt.ylabel(&#x27;Wind Speed&#x27;)
+plt.legend()
+plt.show()</code></pre></details><figure><a href="chart-06.webp" target="_blank" rel="noopener noreferrer"><img src="chart-06.webp" alt="Wind energy prediction notebook — output chart 6, following code cell 34" width="833" height="855" loading="lazy"></a><figcaption>Output 6 · Code cell 34 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>Plot the correlation coefficients of each feature with the target variable Power.</p></section><details class="code-cell"><summary>Code cell 36</summary><pre><code>correlations_with_power = corr_matrix[&#x27;Power&#x27;].drop(&#x27;Power&#x27;)
+plt.figure(figsize=(8, 5))
+correlations_with_power.plot(kind=&#x27;bar&#x27;, color=&#x27;b&#x27;)
+plt.title(&quot;Correlation of Variables with Power&quot;)
+plt.ylabel(&quot;Correlation Coefficient&quot;)
+plt.show()
+</code></pre></details><figure><a href="chart-07.webp" target="_blank" rel="noopener noreferrer"><img src="chart-07.webp" alt="Wind energy prediction notebook — output chart 7, following code cell 36" width="702" height="520" loading="lazy"></a><figcaption>Output 7 · Code cell 36 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>The purpose of performing convolution between different variables (such as weather, time, and location data) and the 'Power' variable is to analyze how these factors influence power generation or consumption over time. By using convolution, you are essentially combining two signals (in this case, a column from the dataset and the 'Power' variable) to identify patterns, relationships, and interactions between them.</p></section><details class="code-cell"><summary>Code cell 38</summary><pre><code>def convolve_columns(df, target_column):
+    convolution_results = {}
+    for column in df.columns:
+        if column != target_column:
+            try:
+                convolution_results[column] = np.convolve(df[column], df[target_column], mode=&#x27;same&#x27;)
+            except:
+                print(f&#x27;Error Convolving {column} with {target_column} Skipping...&#x27;)
+    return convolution_results
+
+convol_dict = convolve_columns(train_df, &#x27;Power&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 39</summary><pre><code>for column, convolution_result in convol_dict.items():
+    plt.figure(figsize=(10, 5))
+    plt.plot(convolution_result)
+    plt.title(f&quot;Convolution of {column} with Power&quot;)
+    plt.xlabel(&quot;Index&quot;)
+    plt.ylabel(&quot;Convolution Result&quot;)
+    plt.show()</code></pre></details><figure><a href="chart-08.webp" target="_blank" rel="noopener noreferrer"><img src="chart-08.webp" alt="Wind energy prediction notebook — output chart 8, following code cell 39" width="877" height="470" loading="lazy"></a><figcaption>Output 8 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-09.webp" target="_blank" rel="noopener noreferrer"><img src="chart-09.webp" alt="Wind energy prediction notebook — output chart 9, following code cell 39" width="846" height="470" loading="lazy"></a><figcaption>Output 9 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-10.webp" target="_blank" rel="noopener noreferrer"><img src="chart-10.webp" alt="Wind energy prediction notebook — output chart 10, following code cell 39" width="855" height="470" loading="lazy"></a><figcaption>Output 10 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-11.webp" target="_blank" rel="noopener noreferrer"><img src="chart-11.webp" alt="Wind energy prediction notebook — output chart 11, following code cell 39" width="877" height="470" loading="lazy"></a><figcaption>Output 11 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-12.webp" target="_blank" rel="noopener noreferrer"><img src="chart-12.webp" alt="Wind energy prediction notebook — output chart 12, following code cell 39" width="876" height="470" loading="lazy"></a><figcaption>Output 12 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-13.webp" target="_blank" rel="noopener noreferrer"><img src="chart-13.webp" alt="Wind energy prediction notebook — output chart 13, following code cell 39" width="833" height="470" loading="lazy"></a><figcaption>Output 13 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-14.webp" target="_blank" rel="noopener noreferrer"><img src="chart-14.webp" alt="Wind energy prediction notebook — output chart 14, following code cell 39" width="833" height="470" loading="lazy"></a><figcaption>Output 14 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-15.webp" target="_blank" rel="noopener noreferrer"><img src="chart-15.webp" alt="Wind energy prediction notebook — output chart 15, following code cell 39" width="876" height="470" loading="lazy"></a><figcaption>Output 15 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-16.webp" target="_blank" rel="noopener noreferrer"><img src="chart-16.webp" alt="Wind energy prediction notebook — output chart 16, following code cell 39" width="876" height="470" loading="lazy"></a><figcaption>Output 16 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-17.webp" target="_blank" rel="noopener noreferrer"><img src="chart-17.webp" alt="Wind energy prediction notebook — output chart 17, following code cell 39" width="833" height="470" loading="lazy"></a><figcaption>Output 17 · Code cell 39 · Open image to enlarge</figcaption></figure><figure><a href="chart-18.webp" target="_blank" rel="noopener noreferrer"><img src="chart-18.webp" alt="Wind energy prediction notebook — output chart 18, following code cell 39" width="876" height="470" loading="lazy"></a><figcaption>Output 18 · Code cell 39 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h3 id="1-convolution-of-location-with-power">1. <strong>Convolution of Location with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: The graph has a smooth rise to a peak and then gradually declines, forming a symmetric curve.</li>
+<li><strong>Insight</strong>: This indicates that 'Location' has a consistent and gradually increasing influence on 'Power' over time until it peaks, after which the influence diminishes. The symmetry suggests that 'Location' affects power in a relatively balanced manner, with no sharp fluctuations. This could indicate a direct relationship, where power generation or usage increases steadily with respect to location factors like distance or geographical area.</li>
+</ul>
+<h3 id="2-convolution-of-temp_2m-with-power">2. <strong>Convolution of Temp_2m with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: The graph shows a wave-like pattern superimposed on a gradual rise and fall.</li>
+<li><strong>Insight</strong>: This suggests that temperature at 2 meters has a periodic influence on 'Power,' likely due to diurnal or seasonal temperature fluctuations. The peaks and valleys show that temperature changes have a cyclic effect on power, possibly increasing power usage during hot periods (due to air conditioning, for example) and decreasing during cooler periods. The overall rise and fall pattern indicates that temperature has a time-bound effect, peaking at a certain point and gradually diminishing.</li>
+</ul>
+<h3 id="3-convolution-of-relhum_2m-with-power">3. <strong>Convolution of RelHum_2m with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: A smooth triangular pattern, rising steadily to a peak and then declining.</li>
+<li><strong>Insight</strong>: Relative humidity at 2 meters has a consistent, linear influence on 'Power,' similar to 'Location.' The steady rise indicates that as humidity increases, its impact on 'Power' becomes more significant, likely due to its influence on heating or cooling systems. The decline suggests that beyond a certain point, the effect diminishes. This relationship is smooth, meaning the impact of relative humidity changes predictably over time.</li>
+</ul>
+<h3 id="4-convolution-of-ws_10m-with-power">4. <strong>Convolution of WS_10m with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: A jagged, step-like pattern with a rise and fall.</li>
+<li><strong>Insight</strong>: Wind speed at 10 meters affects 'Power' in a more <strong>non-linear</strong> manner, with distinct jumps or fluctuations. This might be due to wind speed thresholds, where certain speeds cause significant changes in power generation (such as with wind turbines). The jagged nature reflects variability in wind speeds and their corresponding effects on power.</li>
+</ul>
+<h3 id="5-convolution-of-ws_100m-with-power">5. <strong>Convolution of WS_100m with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: Similar to the WS_10m graph, but with larger overall values and more pronounced peaks.</li>
+<li><strong>Insight</strong>: Wind speed at 100 meters has a similar but stronger influence on 'Power.' Since wind at higher altitudes tends to be stronger and more consistent, the effect is larger and more impactful. The periodic peaks and troughs indicate how changes in wind speed at different altitudes affect power generation or usage.</li>
+</ul>
+<h3 id="6-convolution-of-wd_10m-with-power">6. <strong>Convolution of WD_10m with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: A smooth rise and fall, with no significant jaggedness.</li>
+<li><strong>Insight</strong>: Wind direction at 10 meters influences 'Power' in a relatively steady manner, without the dramatic fluctuations seen with wind speed. This may suggest that wind direction has a more <strong>consistent</strong> impact on power generation, potentially guiding wind turbines or affecting air flow patterns.</li>
+</ul>
+<h3 id="7-convolution-of-wd_100m-with-power">7. <strong>Convolution of WD_100m with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: Similar to WD_10m but with larger values.</li>
+<li><strong>Insight</strong>: Wind direction at 100 meters follows the same trend as at 10 meters but with a larger influence, likely due to the more stable wind directions at higher altitudes. This steady influence might reflect directional consistency at higher altitudes, making it more reliable for energy generation.</li>
+</ul>
+<h3 id="8-convolution-of-wg_10m-with-power">8. <strong>Convolution of WG_10m with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: A jagged pattern similar to WS_10m, but with larger fluctuations.</li>
+<li><strong>Insight</strong>: Wind gusts (WG_10m) have a more sporadic influence on 'Power,' with sudden jumps that reflect their unpredictable nature. Wind gusts can cause spikes in energy generation or consumption (e.g., increased wind power generation or increased strain on power grids). The jagged nature highlights the irregularity of gusts compared to steady wind speeds.</li>
+</ul>
+<h3 id="9-convolution-of-month-with-power">9. <strong>Convolution of Month with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: A clear, periodic wave-like pattern with regular peaks and troughs.</li>
+<li><strong>Insight</strong>: The 'Month' variable shows a strong seasonal influence on 'Power,' with consistent, periodic peaks corresponding to certain months of the year. This is likely due to seasonal changes in energy consumption or production, such as higher energy usage in winter months for heating or in summer for cooling. The regularity of the pattern indicates a strong, predictable seasonal cycle.</li>
+</ul>
+<h3 id="10-convolution-of-year-with-power">10. <strong>Convolution of Year with Power</strong>:</h3>
+<ul>
+<li><strong>Observation</strong>: A smooth, large-scale rise and fall.</li>
+<li><strong>Insight</strong>: The 'Year' variable shows a longer-term trend in its influence on 'Power.' The gradual increase followed by a peak and a decline might reflect technological advancements, population growth, or changes in energy policies or infrastructures that affect power generation or consumption over a longer time span. The smoothness suggests that these changes occur gradually over time, without sudden shifts.</li>
+</ul>
+<h3 id="updated-general-observations">Updated General Observations:</h3>
+<ul>
+<li>The convolution results provide a quantitative way to <strong>analyze the relationship between variables</strong> (like temperature, wind, and time) and power.</li>
+<li><strong>Peaks and troughs</strong> in the graphs highlight periods of <strong>maximum and minimum influence</strong> of each variable on power, while the overall shape of the curves reflects the <strong>nature of the relationship</strong>—whether it is smooth, periodic, or jagged.</li>
+<li><strong>Weather-related variables</strong> (temperature, wind speed, humidity) exhibit more <strong>cyclic or periodic patterns</strong>, showing how natural environmental factors impact power usage or generation on a seasonal or daily basis.</li>
+<li><strong>Time-related variables</strong> (month, year) display longer-term trends, with periodic or gradual effects on power, likely driven by seasonal cycles or long-term shifts in energy consumption patterns.</li>
+</ul>
+<p>These insights provide a clearer understanding of how different environmental factors and time affect power usage or production, revealing both <strong>cyclic patterns</strong> and <strong>gradual trends</strong> in the data.</p></section><section class="notebook-note"><h2 id="5-model-training-evaluation">5. Model Training &amp; Evaluation</h2></section><section class="notebook-note"><p>Import necessary libraries for model training and evaluation.</p></section><details class="code-cell"><summary>Code cell 43</summary><pre><code>from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor,AdaBoostRegressor
+from sklearn.linear_model import LinearRegression, Ridge,Lasso
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+from sklearn.model_selection import RandomizedSearchCV
+import warnings</code></pre></details><section class="notebook-note"><p>Ensure the test dataset matches the training dataset by dropping the DP_2m column.</p></section><details class="code-cell"><summary>Code cell 45</summary><pre><code># Remove the DP_2m column due to high correlation with other features to reduce multicollinearity.
+test_df.drop(columns=&#x27;DP_2m&#x27;, inplace=True)</code></pre></details><section class="notebook-note"><p>Prepare the feature matrix X and target vector y, and apply Min-Max scaling to numerical features.</p></section><details class="code-cell"><summary>Code cell 47</summary><pre><code>from sklearn.preprocessing import MinMaxScaler
+from sklearn.compose import ColumnTransformer
+
+X = train_df.drop(columns=&#x27;Power&#x27;)
+y = train_df[&#x27;Power&#x27;]
+
+num_features = X.select_dtypes(exclude=&#x27;object&#x27;).columns
+cat_features = X.select_dtypes(include=&#x27;object&#x27;).columns
+
+numeric_transformer = MinMaxScaler()
+
+preprocessor = ColumnTransformer(
+    [
+        (&#x27;MinMaxScaler&#x27;, numeric_transformer, num_features),
+    ]
+)</code></pre></details><details class="code-cell"><summary>Code cell 48</summary><pre><code>X = preprocessor.fit_transform(X)
+X.shape</code></pre></details><details class="text-output"><summary>Text output</summary><pre>(140160, 11)</pre></details><section class="notebook-note"><p>Define a function to evaluate models using Mean Absolute Error (MAE), Mean Squared Error (MSE), and R² Score.</p></section><details class="code-cell"><summary>Code cell 50</summary><pre><code>def evaluate_model(true, predicted):
+    mae = mean_absolute_error(true, predicted)
+    mse = mean_squared_error(true, predicted)
+    r2_square = r2_score(true, predicted)
+    return mae, mse, r2_square</code></pre></details><section class="notebook-note"><p>Split the data into training and testing sets to assess the model's generalization.</p></section><details class="code-cell"><summary>Code cell 52</summary><pre><code>#train and test split
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+X_train.shape, X_test.shape</code></pre></details><details class="text-output"><summary>Text output</summary><pre>((112128, 11), (28032, 11))</pre></details><section class="notebook-note"><p>Initialize a dictionary of regression models to evaluate.</p></section><details class="code-cell"><summary>Code cell 54</summary><pre><code>models = {
+    &#x27;LinearRegression&#x27;: LinearRegression(),
+    &quot;Lasso&quot;: Lasso(),
+    &quot;Ridge&quot;: Ridge(),
+    &quot;K-Neighbors Regressor&quot;: KNeighborsRegressor(),
+    &quot;Decision Tree&quot;: DecisionTreeRegressor(),
+    &quot;Random Forest Regressor&quot;: RandomForestRegressor(),
+    &quot;AdaBoost Regressor&quot;: AdaBoostRegressor()
+}</code></pre></details><section class="notebook-note"><p>Train each model and evaluate their performance on both the training and testing datasets.
+It is important to check both training and testing results to ensure that the model is not overfitting.</p></section><details class="code-cell"><summary>Code cell 56</summary><pre><code>model_list = []
+r2_score_list = []
+mae_list = []
+    
+for i in range(len(list(models))):
+    model = list(models.values())[i]
+    model.fit(X_train, y_train)
+    
+    y_train_pred = model.predict(X_train)
+    y_test_pred = model.predict(X_test)
+    
+    model_train_mae , model_train_mse, model_train_r2 = evaluate_model(y_train, y_train_pred)
+    model_test_mae , model_test_mse, model_test_r2 = evaluate_model(y_test, y_test_pred)
+    
+    print(list(models.keys())[i])
+    model_list.append(list(models.keys())[i])
+    
+    print(&#x27;Model performance for Training set&#x27;)
+    print(f&#x27;- Mean Absolute Error: {model_train_mae:.4f}&#x27;)
+    print(f&#x27; - R2 Score: {model_train_r2:4f}&#x27;)
+
+    print(&#x27;----------------------------------&#x27;)
+    
+    print(&#x27;Model performance for Test set&#x27;)
+    print(f&#x27;- Mean Absolute Error: {model_test_mae:.4f}&#x27;)
+    print(f&#x27; - R2 Score: {model_test_r2:4f}&#x27;)
+    
+    r2_score_list.append(model_test_r2)
+    mae_list.append(model_test_mae)
+    
+    print(&#x27;=&#x27;*35)
+    print(&#x27;\n&#x27;)</code></pre></details><section class="notebook-note"><p>Compile the evaluation metrics into a DataFrame for comparison.</p></section><details class="code-cell"><summary>Code cell 58</summary><pre><code>pd.DataFrame(list(zip(model_list, r2_score_list, mae_list)), 
+            columns=[&#x27;Model Name&#x27;, &#x27;R2 Score&#x27;, &#x27;MAE&#x27;]).sort_values(by=[&#x27;R2 Score&#x27;], 
+            ascending=False)</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Model Name</th>
+      <th>R2 Score</th>
+      <th>MAE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3</th>
+      <td>K-Neighbors Regressor</td>
+      <td>0.824192</td>
+      <td>0.073055</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Random Forest Regressor</td>
+      <td>0.776302</td>
+      <td>0.086155</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Decision Tree</td>
+      <td>0.559951</td>
+      <td>0.112014</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Ridge</td>
+      <td>0.492322</td>
+      <td>0.140277</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>LinearRegression</td>
+      <td>0.492294</td>
+      <td>0.140275</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>AdaBoost Regressor</td>
+      <td>0.475720</td>
+      <td>0.153964</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Lasso</td>
+      <td>-0.000039</td>
+      <td>0.212220</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><p>Best performing model is K-Neighbors Regressor</p>
+<p>Train the K-Neighbors Regressor on the entire training set and evaluate its performance.</p></section><details class="code-cell"><summary>Code cell 60</summary><pre><code>K_model = KNeighborsRegressor()
+K_model.fit(X_train, y_train)
+
+y_pred = K_model.predict(X_test)
+score = r2_score(y_test, y_pred)*100
+print(f&#x27;R2 score: {score:.2f}%&#x27;)</code></pre></details><section class="notebook-note"><p>Create a DataFrame to compare the actual and predicted values along with their differences.</p></section><details class="code-cell"><summary>Code cell 62</summary><pre><code>pred_df=pd.DataFrame({&#x27;Actual Value&#x27;:y_test,&#x27;Predicted Value&#x27;:y_pred,&#x27;Difference&#x27;:y_test-y_pred})
+pred_df</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Actual Value</th>
+      <th>Predicted Value</th>
+      <th>Difference</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>24950</th>
+      <td>0.387496</td>
+      <td>0.376016</td>
+      <td>0.01148</td>
+    </tr>
+    <tr>
+      <th>17553</th>
+      <td>0.692396</td>
+      <td>0.322356</td>
+      <td>0.37004</td>
+    </tr>
+    <tr>
+      <th>19265</th>
+      <td>0.580596</td>
+      <td>0.692156</td>
+      <td>-0.11156</td>
+    </tr>
+    <tr>
+      <th>32546</th>
+      <td>0.169296</td>
+      <td>0.166896</td>
+      <td>0.00240</td>
+    </tr>
+    <tr>
+      <th>67423</th>
+      <td>0.001196</td>
+      <td>0.006836</td>
+      <td>-0.00564</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>26519</th>
+      <td>0.641096</td>
+      <td>0.817176</td>
+      <td>-0.17608</td>
+    </tr>
+    <tr>
+      <th>213</th>
+      <td>0.909396</td>
+      <td>0.911676</td>
+      <td>-0.00228</td>
+    </tr>
+    <tr>
+      <th>131967</th>
+      <td>0.100796</td>
+      <td>0.054536</td>
+      <td>0.04626</td>
+    </tr>
+    <tr>
+      <th>11856</th>
+      <td>0.589596</td>
+      <td>0.598836</td>
+      <td>-0.00924</td>
+    </tr>
+    <tr>
+      <th>94438</th>
+      <td>0.225896</td>
+      <td>0.292056</td>
+      <td>-0.06616</td>
+    </tr>
+  </tbody>
+</table>
+<p>28032 rows × 3 columns</p>
+</div><section class="notebook-note"><p>Calculate the mean difference between the actual and predicted values to assess the model's accuracy.</p></section><details class="code-cell"><summary>Code cell 64</summary><pre><code>mean_difference = pred_df[&#x27;Difference&#x27;].mean()
+print(f&#x27;Mean difference: {mean_difference:.4f}&#x27;)</code></pre></details><section class="notebook-note"><h2 id="conclusion">Conclusion</h2>
+<p>In this project, we successfully developed a predictive model to forecast power output using historical environmental and temporal data over a three-year period. The primary objective was to enhance energy management efficiency by accurately predicting continuous power output values based on factors such as wind speed, temperature, pressure, and time-related variables.</p></section></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Vision Model RAG · Documentation — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Vision Model RAG · Documentation</h1><p>Project documentation from GitHub. Diagrams and demonstrations are available in the project resource library.</p><a href="https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval/blob/787695d8e3bb2351d31bb34c71f425dc5c7f344b/README.md" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><h2 id="codevision-nz-intelligent-building-code-retrieval">CodeVision NZ: Intelligent Building Code Retrieval</h2>
+<h4 id="code">Code</h4>
+<p><a href="https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval/blob/787695d8e3bb2351d31bb34c71f425dc5c7f344b/CodeVision.py" target="_blank" rel="noopener noreferrer">Code_Link</a></p>
+<h2 id="overview">Overview</h2>
+<p><strong>CodeVision NZ</strong> is an AI-powered personal project designed to simplify information retrieval from the New Zealand Building Code documentation. Leveraging open-source technologies, it efficiently extracts, indexes, and retrieves textual and visual data from PDF documents.</p>
+<hr>
+<h2 id="screenshots-and-diagrams">Screenshots and Diagrams</h2>
+<h3 id="application-interface">Application Interface</h3>
+<p></p>
+<h3 id="workflow-diagram">Workflow Diagram</h3>
+<p></p>
+<h3 id="sample-extracted-images-and-tables">Sample Extracted Images and Tables</h3>
+<p></p>
+<hr>
+<h2 id="project-workflow">Project Workflow</h2>
+<h3 id="1-data-ingestion-and-indexing">1. Data Ingestion and Indexing</h3>
+<p>The workflow begins by processing PDF documents related to the New Zealand Building Code.</p>
+<ul>
+<li><strong>PDF Identification:</strong></li>
+<li>
+<p>Automatically detects PDFs based on filename prefixes/suffixes.</p>
+</li>
+<li>
+<p><strong>Content Extraction:</strong></p>
+</li>
+<li>Extracts text and images from identified PDFs.</li>
+</ul>
+<h3 id="2-image-and-text-processing">2. Image and Text Processing</h3>
+<p>The project splits into two concurrent processing streams:</p>
+<h4 id="vision-model-based-image-extraction">Vision Model-Based Image Extraction</h4>
+<ul>
+<li>Images are stored locally as paths and base64-encoded data.</li>
+<li>Extracted images pass through an <code>ImageMetadataExtractor</code>.</li>
+<li>Vision models analyze images to generate descriptive metadata.</li>
+<li>Metadata and descriptions are stored locally using Chroma vector storage.</li>
+</ul>
+<h4 id="text-extraction">Text Extraction</h4>
+<ul>
+<li>PDF text content is split into manageable chunks using a text splitter.</li>
+<li>Each text chunk is processed through a text embedding model to generate embeddings.</li>
+<li>Text embeddings and original texts are stored locally in the Chroma vector database.</li>
+</ul>
+<h3 id="3-retrieval-and-response">3. Retrieval and Response</h3>
+<p>The retrieval process is powered by AI agents:</p>
+<ul>
+<li><strong>User Interaction:</strong></li>
+<li>
+<p>Users submit queries via a simple chat interface.</p>
+</li>
+<li>
+<p><strong>AI Retrieval:</strong></p>
+</li>
+<li>Retrieves relevant text and image data based on query embeddings.</li>
+<li>
+<p>Combines both text and visual data for comprehensive results.</p>
+</li>
+<li>
+<p><strong>Answer Generation:</strong></p>
+</li>
+<li>Leveraging Language Models (LLMs), generates coherent and contextually accurate responses.</li>
+</ul>
+<hr>
+<h2 id="tools-and-methods">Tools and Methods</h2>
+<ul>
+<li><strong>Document Extraction:</strong> Unstructured</li>
+<li><strong>Vision Analysis:</strong> Open-source Vision Transformer models, HuggingFace libraries</li>
+<li><strong>Text Embedding:</strong> SentenceTransformers (open-source embedding models)</li>
+<li><strong>Vector Storage:</strong> Chroma Vector Database</li>
+<li><strong>Language Model:</strong> Open-source LLMs (e.g., Ollama models, GPT-Neo, LLaMA)</li>
+<li><strong>Deployment Interface:</strong> Streamlit (for local deployment)</li>
+</ul>
+<hr>
+<h2 id="key-features">Key Features</h2>
+<ul>
+<li>Locally deployable, secure, and privacy-focused</li>
+<li>Fully open-source stack</li>
+<li>Quick, context-sensitive retrieval</li>
+<li>Easy-to-use conversational interface</li>
+</ul>
+<hr></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

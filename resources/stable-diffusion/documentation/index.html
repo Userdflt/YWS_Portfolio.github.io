@@ -1,0 +1,188 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Sketch to Render · Documentation — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Sketch to Render · Documentation</h1><p>Project documentation from GitHub. Diagrams and demonstrations are available in the project resource library.</p><a href="https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/README.md" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><h2 id="stable-diffusion-xl-interactive-sketch-inpainting-tool">Stable Diffusion XL Interactive Sketch &amp; Inpainting Tool</h2>
+<p>This is a personal project designed to transform rough sketches into photorealistic outputs and facilitate inpainting edits. 
+Leveraging open-source Stable Diffusion XL pipelines, it integrates ControlNet for robust sketch-based guidance and offers an intuitive Tkinter interface for generating, refining, and saving high-quality imagery.</p>
+<p>NOTE: Everything can be run locally</p>
+<p><br></p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#features">Features</a></li>
+<li>Installation &amp; Setup</li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#demo-gifs">Demo GIFs</a></li>
+<li>Long Video Demonstration</li>
+<li>Project Structure</li>
+<li><a href="#technical-details">Technical Details</a></li>
+<li>Roadmap &amp; Future Improvements</li>
+<li>License</li>
+</ol>
+<hr>
+<h2 id="overview">Overview</h2>
+<p>This application leverages the <a href="https://github.com/huggingface/diffusers" target="_blank" rel="noopener noreferrer">Diffusers library</a> and multiple <strong>Stable Diffusion XL</strong> pipelines to offer an interactive interface for generating and editing images. By integrating <strong>ControlNet</strong>, the user’s sketch is respected as a guidance map, ensuring the final output aligns with the original drawing. In <strong>inpainting mode</strong>, users can paint a mask directly on the generated result to refine or alter specific details in the image.</p>
+<p>Example applications:
+- Quick concept art generation
+- Generating variations of a manually drawn design
+- Editing or refining existing AI-generated images</p>
+<p><strong>Key technologies</strong>:
+- <strong>Python 3.9+</strong>
+- <strong>Torch (CUDA-enabled)</strong>
+- <strong>Hugging Face Diffusers</strong>
+- <strong>Stable Diffusion XL</strong> (with ControlNet + Inpainting models)
+- <strong>Tkinter</strong> for GUI
+- <strong>Pillow (PIL)</strong> for image manipulation</p>
+<hr>
+<h2 id="features">Features</h2>
+<ol>
+<li><strong>Sketch to Image</strong>  </li>
+<li>Draw simple sketches or outlines on a white canvas.</li>
+<li>Real-time inference triggers to generate preview images using SDXL + ControlNet.  </li>
+<li>
+<p>Customizable prompts (subject, style, environment, etc.).</p>
+</li>
+<li>
+<p><strong>Inpainting Mode</strong>  </p>
+</li>
+<li>Switch to inpainting mode to refine or modify parts of the generated image.</li>
+<li>Paint a mask (in red) onto areas you want to replace.</li>
+<li>
+<p>Click "Apply Inpainting" to let the SDXL inpainting pipeline fill the masked areas.</p>
+</li>
+<li>
+<p><strong>Undo &amp; Eraser</strong>  </p>
+</li>
+<li>Undo your last stroke (in regular sketch mode).</li>
+<li>
+<p>Toggle eraser vs. brush for quick corrections.</p>
+</li>
+<li>
+<p><strong>Prompt-based</strong>  </p>
+</li>
+<li>Simple text input fields to craft unique prompts.</li>
+<li>
+<p>Negative prompts to avoid undesired content.</p>
+</li>
+<li>
+<p><strong>Saving Results</strong>  </p>
+</li>
+<li>Save your generated images in multiple formats (JPEG, PNG, etc.).</li>
+</ol>
+<hr>
+<h2 id="models-used">Models Used</h2>
+<p>The code leverages several pretrained models from Hugging Face:</p>
+<ol>
+<li>ControlNet Model: <a href="https://huggingface.co/xinsir/controlnet-scribble-sdxl-1.0" target="_blank" rel="noopener noreferrer">xinsir/controlnet-scribble-sdxl-1.0</a></li>
+<li>Stable Diffusion XL Base Model (with ControlNet): <a href="https://huggingface.co/SG161222/RealVisXL_V4.0_Lightning" target="_blank" rel="noopener noreferrer">SG161222/RealVisXL_V4.0_Lightning</a></li>
+<li>Inpainting Pipeline Model: <a href="https://huggingface.co/diffusers/stable-diffusion-xl-1.0-inpainting-0.1" target="_blank" rel="noopener noreferrer">diffusers/stable-diffusion-xl-1.0-inpainting-0.1</a></li>
+</ol>
+<p>Note: You can substitute these models with similar SDXL-compatible ControlNet or inpainting models if desired.</p>
+<hr>
+<h2 id="usage">Usage</h2>
+<ol>
+<li><strong>Sketch on the left canvas</strong> using the default black brush.  </li>
+<li>Adjust brush size with the slider.  </li>
+<li><strong>Undo</strong> (<code>Ctrl+Z</code>) to revert the last stroke.  </li>
+<li>
+<p><strong>Toggle Eraser</strong> to switch between drawing and erasing.</p>
+</li>
+<li>
+<p><strong>Enter prompts</strong> in the text fields:  </p>
+</li>
+<li><strong>Subject</strong> (e.g., <em>a futuristic car</em>)  </li>
+<li><strong>Design Features</strong> (e.g., <em>sleek lines, aerodynamic</em>)  </li>
+<li>
+<p><strong>Environment</strong> (e.g., <em>cyberpunk city at night</em>)</p>
+</li>
+<li>
+<p><strong>Click "Inference"</strong> to generate a preview image on the right panel.</p>
+</li>
+<li>
+<p><strong>(Optional) Inpainting</strong>:  </p>
+</li>
+<li>Once satisfied with a generated image, click "Enter Inpainting Mode."  </li>
+<li>Paint red <strong>mask</strong> strokes on the areas you want to modify.  </li>
+<li>Click "Apply Inpainting" to update those masked regions.  </li>
+<li>
+<p>Click "Exit Inpainting Mode" to return to normal sketching mode.</p>
+</li>
+<li>
+<p><strong>Save your image</strong> by clicking "Save Generated."</p>
+</li>
+</ol>
+<hr>
+<h2 id="demo-gifs">Demo GIFs</h2>
+<p>Below are placeholders for two short demo GIFs showcasing the main workflow:</p>
+<ol>
+<li><strong>Demo: Sketch to Image</strong>  </li>
+</ol>
+<p></p>
+<p></p>
+<hr>
+<h2 id="technical-details">Technical Details</h2>
+<ol>
+<li><strong>Stable Diffusion XL Pipeline</strong>  </li>
+<li>Used <a href="https://huggingface.co/docs/diffusers/api/pipelines/controlnet#diffusers.StableDiffusionXLControlNetPipeline" target="_blank" rel="noopener noreferrer"><code>StableDiffusionXLControlNetPipeline</code></a> to condition the generation on the user’s sketch.  </li>
+<li>
+<p>Employed <a href="https://huggingface.co/docs/diffusers/api/pipelines/auto#diffusers.AutoPipelineForInpainting" target="_blank" rel="noopener noreferrer"><code>AutoPipelineForInpainting</code></a> for targeted refinements in the inpainting workflow.</p>
+</li>
+<li>
+<p><strong>ControlNet</strong>  </p>
+</li>
+<li>
+<p><strong>ControlNet</strong> ensures the user’s sketch (converted to an <strong>inverted grayscale</strong> image) influences the generated result. We set <code>controlnet_conditioning_scale</code> to control how strongly the sketch shapes the output.</p>
+</li>
+<li>
+<p><strong>Inpainting Approach</strong>  </p>
+</li>
+<li>
+<p>A separate model or pipeline is used for inpainting. We produce a <strong>mask</strong> from the user’s red strokes and pass it alongside the base image to fill in the masked areas.</p>
+</li>
+<li>
+<p><strong>GUI with Tkinter</strong>  </p>
+</li>
+<li><strong>Canvas</strong> element to draw lines, handle mouse events, and store user strokes.  </li>
+<li>
+<p><strong>ImageDraw</strong> from the Pillow library keeps an internal representation of the user’s drawing for inference.</p>
+</li>
+<li>
+<p><strong>Performance Considerations</strong>  </p>
+</li>
+<li>Generating images with SDXL can be GPU-intensive.  </li>
+<li>The number of <strong>inference steps</strong> or the <strong>image resolution</strong> can be tuned to fit performance constraints.</li>
+</ol>
+<hr>
+<h2 id="roadmap-future-improvements">Roadmap &amp; Future Improvements</h2>
+<ol>
+<li><strong>Dynamic ControlNet Strength</strong>  </li>
+<li>
+<p>Expose a slider to let users dynamically adjust how strongly the ControlNet input influences the final image.</p>
+</li>
+<li>
+<p><strong>Better Inpainting Mask Overlay</strong>  </p>
+</li>
+<li>
+<p>Provide a semi-transparent overlay instead of painting in pure red for an improved user experience.</p>
+</li>
+<li>
+<p><strong>Prompt Templates</strong>  </p>
+</li>
+<li>
+<p>Include preset prompts for quick concept generation (e.g., <em>portrait, landscape, cartoonish</em>, etc.).</p>
+</li>
+<li>
+<p><strong>Auto-Resize Sketch</strong>  </p>
+</li>
+<li>
+<p>Optionally keep the user canvas size flexible, adjusting the model’s input resolution accordingly.</p>
+</li>
+<li>
+<p><strong>Additional Post-Processing</strong>  </p>
+</li>
+<li>
+<p>Integrate upscaling pipelines.</p>
+</li>
+<li>
+<p><strong>Generation with Related Image</strong></p>
+</li>
+<li>Provide function to use base images for related generation.</li>
+</ol>
+<hr></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

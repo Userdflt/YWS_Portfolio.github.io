@@ -1,0 +1,62 @@
+[
+  {
+    "project": "n8n-rag",
+    "repository": "https://github.com/Userdflt/n8n_RAG_Workflow",
+    "public": true,
+    "verified": "2026-09-16"
+  },
+  {
+    "project": "notion-mcp",
+    "repository": "https://github.com/Userdflt/Notion-MCP-Agent",
+    "public": true,
+    "verified": "2026-09-16"
+  },
+  {
+    "project": "stable-diffusion",
+    "repository": "https://github.com/Userdflt/InteractiveSketchToRender",
+    "public": true,
+    "verified": "2026-09-16"
+  },
+  {
+    "project": "vision-rag",
+    "repository": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval",
+    "public": true,
+    "verified": "2026-09-16"
+  },
+  {
+    "project": "llm-rag",
+    "repository": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-",
+    "public": true,
+    "verified": "2026-09-16"
+  },
+  {
+    "project": "cv-safety",
+    "repository": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model",
+    "public": true,
+    "verified": "2026-09-16"
+  },
+  {
+    "project": "youtube-analytics",
+    "repository": "https://github.com/Userdflt/YouTube_Analytics",
+    "public": true,
+    "verified": "2026-09-16"
+  },
+  {
+    "project": "nasa-outgassing",
+    "repository": "https://github.com/Userdflt/NASA-Outgassing-DB",
+    "public": true,
+    "verified": "2026-09-16"
+  },
+  {
+    "project": "ai-detection",
+    "repository": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News",
+    "public": true,
+    "verified": "2026-09-16"
+  },
+  {
+    "project": "wind-energy",
+    "repository": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction",
+    "public": true,
+    "verified": "2026-09-16"
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "name": "young-woo-song-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "update:dates": "node scripts/update-project-dates.mjs",
+    "dev": "node scripts/serve.mjs",
+    "test": "node --test tests/site.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:tablet": "node tests/tablet-browser.mjs",
+    "test:resources": "node tests/resources-browser.mjs"
+  },
+  "dependencies": {
+    "animejs": "4.5.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.11.1",
+    "esbuild": "0.28.2",
+    "playwright": "1.58.2"
+  }
+}

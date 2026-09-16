@@ -1,0 +1,443 @@
+[
+  {
+    "project": "n8n-rag",
+    "repository": "https://github.com/Userdflt/n8n_RAG_Workflow",
+    "branch": "main",
+    "commit": "322a134e5b653999b8380dae77c17a15e3b2e526",
+    "verified": "2026-09-16",
+    "files": [],
+    "publications": [],
+    "readmeSha": "d21e66a58bf2f8012d347be406e1d38a66fa7233"
+  },
+  {
+    "project": "notion-mcp",
+    "repository": "https://github.com/Userdflt/Notion-MCP-Agent",
+    "branch": "main",
+    "commit": "2d6f816be7500af20ec31acce30052fe16a4f5ff",
+    "verified": "2026-09-16",
+    "files": [
+      {
+        "path": "TTS.gif",
+        "sha": "9b43b5ba5a5697a3c574c5defa153f8f3bae77c5",
+        "size": 1264540
+      },
+      {
+        "path": "Table_Creation.gif",
+        "sha": "d830308a0590c1c4401857f0d0a146ea3aad805a",
+        "size": 1691135
+      },
+      {
+        "path": "page_with_notes.gif",
+        "sha": "729a8adad60115f16b18b7bcb72a4486fba6133b",
+        "size": 5546033
+      },
+      {
+        "path": "writing_structured_notes.gif",
+        "sha": "7e16a6f4641daa16452641997449afc39501056d",
+        "size": 5311178
+      }
+    ],
+    "publications": [],
+    "readmeSha": "7ad397d99c22b15a01761d28c4ee26922d34cd7f"
+  },
+  {
+    "project": "stable-diffusion",
+    "repository": "https://github.com/Userdflt/InteractiveSketchToRender",
+    "branch": "main",
+    "commit": "48c249368a6e6ea7158b185655b9a0002d470a63",
+    "verified": "2026-09-16",
+    "files": [
+      {
+        "path": "Sketch_to_render_testings.ipynb",
+        "sha": "719b98eb1c78d880a5054f2a520cbd5bd6e33d9c",
+        "size": 2190064
+      },
+      {
+        "path": "docs/1.jpeg",
+        "sha": "baa0b83ca99a1c2c495f5f35fffb510ed648c7ba",
+        "size": 52342
+      },
+      {
+        "path": "docs/2.jpeg",
+        "sha": "3e909af0656b93452ff0828e5d5b9ba21d071271",
+        "size": 39319
+      },
+      {
+        "path": "docs/3.jpeg",
+        "sha": "924d5f5936561d3551bc4da6ade795ffebc950dd",
+        "size": 37432
+      },
+      {
+        "path": "docs/4.jpeg",
+        "sha": "42fb2b72c298ab3e1549b7fee4cae0a8ff077de4",
+        "size": 51758
+      },
+      {
+        "path": "docs/5.jpeg",
+        "sha": "8d9c937935eea9498231f74a4c1590002433e324",
+        "size": 46540
+      },
+      {
+        "path": "docs/6.jpeg",
+        "sha": "6b49ffbf49158d0c4f031cdd0c0ad8d97eb90a3f",
+        "size": 42987
+      },
+      {
+        "path": "docs/demo.gif",
+        "sha": "827f2162f1453c0f966be1fa9a04358dcbc58049",
+        "size": 1524404
+      },
+      {
+        "path": "docs/demo2.gif",
+        "sha": "d3f5a12faa99758192ecc4ed3fc22c9249232e86",
+        "size": 2
+      },
+      {
+        "path": "docs/full_demo.mp4",
+        "sha": "d3f5a12faa99758192ecc4ed3fc22c9249232e86",
+        "size": 2
+      },
+      {
+        "path": "docs/image2.png",
+        "sha": "d3f5a12faa99758192ecc4ed3fc22c9249232e86",
+        "size": 2
+      },
+      {
+        "path": "docs/image5.png",
+        "sha": "d3f5a12faa99758192ecc4ed3fc22c9249232e86",
+        "size": 2
+      }
+    ],
+    "publications": [],
+    "readmeSha": "2f50572b98ea047fda6727318411d51a38e64cac"
+  },
+  {
+    "project": "vision-rag",
+    "repository": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval",
+    "branch": "main",
+    "commit": "787695d8e3bb2351d31bb34c71f425dc5c7f344b",
+    "verified": "2026-09-16",
+    "files": [
+      {
+        "path": "Local_Deployment_Example.png",
+        "sha": "1f816d8aa37e7c7dd5622e1c15b198eaf64e10fa",
+        "size": 66304
+      },
+      {
+        "path": "Sample_extracted.png",
+        "sha": "587762beee276b8a96ea256f1a9c329d5b22e417",
+        "size": 615389
+      },
+      {
+        "path": "Workflow_Diagram.jpeg",
+        "sha": "a0f8b3682bfa4d1b5001bd93f93b2b1a11f98f10",
+        "size": 603183
+      }
+    ],
+    "publications": [],
+    "readmeSha": "bc3305453c92943405bb3ae7ab14c093dc3ed224"
+  },
+  {
+    "project": "llm-rag",
+    "repository": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-",
+    "branch": "main",
+    "commit": "0f1d8155a075407860de69ed297def7e95e2bef0",
+    "verified": "2026-09-16",
+    "files": [
+      {
+        "path": "Local_RAG_LLM.ipynb",
+        "sha": "b7e03b106635b160b9a279fcccdbb8039e0b13d0",
+        "size": 44320
+      },
+      {
+        "path": "flow_chart.jpeg",
+        "sha": "61c0c2ecd96cede9fab7b73ac2c5927e1e9dc6f3",
+        "size": 132449
+      }
+    ],
+    "publications": [],
+    "readmeSha": "dff2b399c3d9eba5601f51b1cbd79ed9afa75601"
+  },
+  {
+    "project": "cv-safety",
+    "repository": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model",
+    "branch": "main",
+    "commit": "83f3d3a69af9ecee9b32221fc910bda690e7077b",
+    "verified": "2026-09-16",
+    "files": [
+      {
+        "path": "CSS_Image_detection_Inspection.ipynb",
+        "sha": "9b0c6dcfc623790c04a5d0a45728ba747374866e",
+        "size": 4975661
+      },
+      {
+        "path": "Final_YOLO_Model_50_epochs_ovs_norm.ipynb",
+        "sha": "e711499852b76c37b2f367f65a11282f739f8293",
+        "size": 4291924
+      },
+      {
+        "path": "Final_YOLO_Model_70_epochs_norm.ipynb",
+        "sha": "e8bb6da47511bfbeccc1c978d05957d6d7d39c4a",
+        "size": 3836397
+      },
+      {
+        "path": "Tested_Images/construction_workers.gif",
+        "sha": "1493df4f7e32b92512445977d170d510a8532acc",
+        "size": 2441468
+      },
+      {
+        "path": "Tested_Images/output.png",
+        "sha": "9d967188a6722c8c8bee5c56fb276137b713dbbf",
+        "size": 851511
+      },
+      {
+        "path": "Tested_Images/output10.png",
+        "sha": "95ca814ffe0d00aa856dc6d157418460870161a6",
+        "size": 1006871
+      },
+      {
+        "path": "Tested_Images/output2.png",
+        "sha": "7b4e28fee9846b297aafcd93498499be94d5a652",
+        "size": 1125067
+      },
+      {
+        "path": "Tested_Images/output3.png",
+        "sha": "050bba0171538ba266c9990acd270a2597612236",
+        "size": 452631
+      },
+      {
+        "path": "Tested_Images/output4.png",
+        "sha": "90bc5ea896716625015f94d2bad3ee1a43ab0c42",
+        "size": 821531
+      },
+      {
+        "path": "Tested_Images/output5.png",
+        "sha": "3808b3b2ce79cd60bfa03cf73caa8af5e83ad04a",
+        "size": 855082
+      },
+      {
+        "path": "Tested_Images/output6.png",
+        "sha": "f8e52351084d0685940217839b8ba2aef3ee7890",
+        "size": 943912
+      },
+      {
+        "path": "Tested_Images/output7.png",
+        "sha": "1759598d07d2f54c22fa311f4ea23bd75e61033d",
+        "size": 1028907
+      },
+      {
+        "path": "Tested_Images/output8.png",
+        "sha": "08acb21cd7e2e8da7d61f4f9d92491867ee489bb",
+        "size": 1034445
+      },
+      {
+        "path": "Tested_Images/output9.png",
+        "sha": "a7821c2ea06a1bdad42edfa27fe102d8baf29381",
+        "size": 935908
+      },
+      {
+        "path": "Tested_Video/Webcam_Inference.mp4",
+        "sha": "ede4ee24a78a08d57b9a8ddcf7b158e0a8a40cec",
+        "size": 5210101
+      },
+      {
+        "path": "Tested_Video/construction_workers_vid.mp4",
+        "sha": "1f6063aa27f7f555e3305538c7ef3133c6001f19",
+        "size": 11766255
+      },
+      {
+        "path": "YOLO_50_epochs_w_Oversampling_Results/Confusion-Matrix.png",
+        "sha": "3a9a22b17625721c6318ebd1131da410e4f20e45",
+        "size": 85997
+      },
+      {
+        "path": "YOLO_50_epochs_w_Oversampling_Results/F1.png",
+        "sha": "5fd1522e135b0e48a135835014dd61175fd556eb",
+        "size": 163053
+      },
+      {
+        "path": "YOLO_50_epochs_w_Oversampling_Results/Labels-Correlogram.png",
+        "sha": "2d058d56e0649d1eb01dee52095857cfcc35775f",
+        "size": 248850
+      },
+      {
+        "path": "YOLO_50_epochs_w_Oversampling_Results/Labels.png",
+        "sha": "f398d72824bb6288dfc0faf1529b166404052410",
+        "size": 293704
+      },
+      {
+        "path": "YOLO_50_epochs_w_Oversampling_Results/Loss.png",
+        "sha": "2fc1ca53dd3c240cd9efecbb128d4b42b770dd15",
+        "size": 95719
+      },
+      {
+        "path": "YOLO_50_epochs_w_Oversampling_Results/Precision-Confidence.png",
+        "sha": "d82535aed2ce5e0ec546f7d34e95614a2b409834",
+        "size": 125067
+      },
+      {
+        "path": "YOLO_50_epochs_w_Oversampling_Results/Precision-Recall.png",
+        "sha": "30166b6efdf9c53797af399573f391627338b201",
+        "size": 130745
+      },
+      {
+        "path": "YOLO_50_epochs_w_Oversampling_Results/Recall-Confidence.png",
+        "sha": "ee9afe9c82d264529b02bc86c489c7414e36dbea",
+        "size": 145442
+      },
+      {
+        "path": "YOLO_50_epochs_w_Oversampling_Results/Results.png",
+        "sha": "4bae71b55f79bd63739b26b04a4ad835b9a7a9e8",
+        "size": 196257
+      },
+      {
+        "path": "YOLO_70_epochs_w_normalisation_Results/Confusion-Matrix.png",
+        "sha": "76e04c63fe40648cb4b3384a4be82d45290b6ee6",
+        "size": 57689
+      },
+      {
+        "path": "YOLO_70_epochs_w_normalisation_Results/F1.png",
+        "sha": "47fcde3ecafa2db46930e09dff1d2107b62d1200",
+        "size": 115782
+      },
+      {
+        "path": "YOLO_70_epochs_w_normalisation_Results/Labels.png",
+        "sha": "885f7c12249888944decc63a6cc79d09e7028154",
+        "size": 304259
+      },
+      {
+        "path": "YOLO_70_epochs_w_normalisation_Results/Labels_correlogram.png",
+        "sha": "afe7b9cff718c781b67c640cf64663ae2ff312b2",
+        "size": 243749
+      },
+      {
+        "path": "YOLO_70_epochs_w_normalisation_Results/Loss.png",
+        "sha": "f512521b4590d1deb0016e7898b7ca983bbd1412",
+        "size": 106491
+      },
+      {
+        "path": "YOLO_70_epochs_w_normalisation_Results/Precision-Recall.png",
+        "sha": "3d4189c31d7f64ef92de7d6b7a1393125d0483a8",
+        "size": 85110
+      },
+      {
+        "path": "YOLO_70_epochs_w_normalisation_Results/Recall-Confidence.png",
+        "sha": "7ab25078601fc6c605a726245a2611c08784d077",
+        "size": 102574
+      },
+      {
+        "path": "YOLO_70_epochs_w_normalisation_Results/Results.png",
+        "sha": "5031bd17dcaa9297aba45c9adca5303e98c09c2a",
+        "size": 115432
+      },
+      {
+        "path": "YOLO_70_epochs_w_normalisation_Results/precision-Confidence.png",
+        "sha": "3aa9e60575a2b44831c777d1b193be404c5429df",
+        "size": 83019
+      }
+    ],
+    "publications": [
+      "https://docs.google.com/document/d/e/2PACX-1vTrURLXikE6d2WMttfvWha5lRz4AbbcjGErVmp2-7c2o6KevnptmiShxyBagpeYQg/pub",
+      "https://docs.google.com/presentation/d/1dqKrkC93hJaZuHbiYrfXxdaZGDl-4SeXTTZ4rKVp44w/pub?start=false&loop=false&delayms=3000"
+    ],
+    "readmeSha": "f6d5e252ae06e0017df7a0aa10b7c8d4ead401cb"
+  },
+  {
+    "project": "youtube-analytics",
+    "repository": "https://github.com/Userdflt/YouTube_Analytics",
+    "branch": "main",
+    "commit": "37afa0af947929fd7e617af9c73d5871f935618e",
+    "verified": "2026-09-16",
+    "files": [
+      {
+        "path": "YouTube_Statistics_Analysis.ipynb",
+        "sha": "0a014755308cf3d35f9242ce20ab73879bd02074",
+        "size": 2032868
+      }
+    ],
+    "publications": [],
+    "readmeSha": "b207eb7efa6011b48e85885edb45b4bb6f81b7c0"
+  },
+  {
+    "project": "nasa-outgassing",
+    "repository": "https://github.com/Userdflt/NASA-Outgassing-DB",
+    "branch": "main",
+    "commit": "7e84996e82441c5763006a75865551784c28e870",
+    "verified": "2026-09-16",
+    "files": [
+      {
+        "path": "NASA_Outgassing_Materials_Data_Processing.ipynb",
+        "sha": "b15bbb8dd7b596e29293ebe7a17c30056307e0a6",
+        "size": 286875
+      },
+      {
+        "path": "NASA_Outgassing_Materials_EDA.ipynb",
+        "sha": "f38f5249f137d06364bf370035e4220230807eee",
+        "size": 2909950
+      },
+      {
+        "path": "NASA_Outgassing_Materials_ML_Modelling.ipynb",
+        "sha": "4944a06522619d00c1b042f2c48552e989a83e81",
+        "size": 211475
+      },
+      {
+        "path": "NASA_Outgassing_Materials_ML_Pipeline.ipynb",
+        "sha": "45a5de093fb0c8fc77d19db4aa6463fd1f30a6d0",
+        "size": 5435
+      }
+    ],
+    "publications": [
+      "https://docs.google.com/presentation/d/1eLjKQL-qADiG0ghYJBFTMOlsHNPNDCkT0KmYe-5Rn-0/pub?start=false&loop=false&delayms=3000"
+    ],
+    "readmeSha": "f7c2b6157643a168a04d6b2ca3ec0a137b7c5994"
+  },
+  {
+    "project": "ai-detection",
+    "repository": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News",
+    "branch": "main",
+    "commit": "a32b362f84acceb7f17a726fb9903a42643c689e",
+    "verified": "2026-09-16",
+    "files": [
+      {
+        "path": "FakeNews_Classification_Model.ipynb",
+        "sha": "8c6679cfa50ee05878fb0ed3918381a373bd9b34",
+        "size": 476064
+      },
+      {
+        "path": "FakeNews_Data_Pre-Processing.ipynb",
+        "sha": "6f46dfaa1de6220171d15dccb95f04d3165ba6ba",
+        "size": 41017
+      },
+      {
+        "path": "FakeNews_EDA_Feature_Eng.ipynb",
+        "sha": "e045e88363f1f3a2ee3de1fad422f3ced4ee9094",
+        "size": 2187379
+      }
+    ],
+    "publications": [
+      "https://docs.google.com/presentation/d/12BAPUrPsUY9ibZcpy6O5I8Wa8WVLjakqYzQ6hijp0p0/pub?start=false&loop=false&delayms=3000"
+    ],
+    "readmeSha": "71a6f85ced56a1d3b857a8b2c40e41614bddd0da"
+  },
+  {
+    "project": "wind-energy",
+    "repository": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction",
+    "branch": "main",
+    "commit": "7f74c09952010680be4590c312d103659599e6cf",
+    "verified": "2026-09-16",
+    "files": [
+      {
+        "path": "Notebook.ipynb",
+        "sha": "fce5f5644bed3777be8798991303ce7b862e4e12",
+        "size": 6963597
+      },
+      {
+        "path": "landscape-with-windmills.jpg",
+        "sha": "6b98b7bda134a2002673ac5e7596eb7c8c5a528e",
+        "size": 11636316
+      }
+    ],
+    "publications": [],
+    "readmeSha": "31c5c6338eed5b78d03a5d2662e1d2007e85d6ac"
+  }
+]

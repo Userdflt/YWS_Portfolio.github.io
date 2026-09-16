@@ -1,0 +1,268 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>News classification models — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>News classification models</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Classification_Model.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="problem-definition"><strong>Problem Definition</strong></h2>
+<p><code>Problem:</code>
+The proliferation of fake news has significant implications, including misleading the public and undermining trust in legitimate news sources. Identifying and categorizing news articles as real or fake is essential for maintaining information integrity.</p>
+<p><code>Objective:</code>
+The goal is to build a predictive model to classify news articles as either "Fake" or "True" using Natural Language Processing (NLP) techniques.</p></section><details class="code-cell"><summary>Code cell 2</summary><pre><code>#import
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report, roc_auc_score, roc_curve, auc, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.svm import SVC
+
+from scipy.sparse import hstack
+</code></pre></details><details class="code-cell"><summary>Code cell 3</summary><pre><code>df_clean = pd.read_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\Clean_columns.csv&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 4</summary><pre><code>df_clean = df_clean.drop(columns=&#x27;Unnamed: 0&#x27;)
+df_clean = df_clean.copy()
+
+df_clean</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>title</th>
+      <th>text</th>
+      <th>subject</th>
+      <th>label</th>
+      <th>clean_title</th>
+      <th>clean_text</th>
+      <th>labelE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>As U.S. budget fight looms, Republicans flip t...</td>
+      <td>WASHINGTON (Reuters) - The head of a conservat...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>budget fight loom republican flip fiscal script</td>
+      <td>washington head conservative republican factio...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>U.S. military to accept transgender recruits o...</td>
+      <td>WASHINGTON (Reuters) - Transgender people will...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>military accept transgender recruit monday pen...</td>
+      <td>washington transgender people allowed first ti...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Senior U.S. Republican senator: 'Let Mr. Muell...</td>
+      <td>WASHINGTON (Reuters) - The special counsel inv...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>senior republican senator mueller job</td>
+      <td>washington special counsel investigation link ...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>FBI Russia probe helped by Australian diplomat...</td>
+      <td>WASHINGTON (Reuters) - Trump campaign adviser ...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>fbi russia probe helped australian diplomat nyt</td>
+      <td>washington trump campaign adviser george papad...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Trump wants Postal Service to charge 'much mor...</td>
+      <td>SEATTLE/WASHINGTON (Reuters) - President Donal...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>trump want postal service charge amazon shipment</td>
+      <td>president donald trump called postal service f...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>44052</th>
+      <td>McPain: John McCain Furious That Iran Treated ...</td>
+      <td>21st Century Wire says As 21WIRE reported earl...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>mcpain john mccain furious iran treated u sail...</td>
+      <td>century wire say reported earlier week unlikel...</td>
+      <td>AI</td>
+    </tr>
+    <tr>
+      <th>44053</th>
+      <td>JUSTICE? Yahoo Settles E-mail Privacy Class-ac...</td>
+      <td>21st Century Wire says It s a familiar theme. ...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>justice yahoo settle privacy lawyer user</td>
+      <td>century wire say familiar theme whenever dispu...</td>
+      <td>AI</td>
+    </tr>
+    <tr>
+      <th>44054</th>
+      <td>Sunnistan: US and Allied ‘Safe Zone’ Plan to T...</td>
+      <td>Patrick Henningsen  21st Century WireRemember ...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>sunnistan u allied safe zone plan take territo...</td>
+      <td>patrick henningsen century wireremember obama ...</td>
+      <td>AI</td>
+    </tr>
+    <tr>
+      <th>44055</th>
+      <td>How to Blow $700 Million: Al Jazeera America F...</td>
+      <td>21st Century Wire says Al Jazeera America will...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>blow million al jazeera america finally call q...</td>
+      <td>century wire say al jazeera america go history...</td>
+      <td>AI</td>
+    </tr>
+    <tr>
+      <th>44056</th>
+      <td>10 U.S. Navy Sailors Held by Iranian Military ...</td>
+      <td>21st Century Wire says As 21WIRE predicted in ...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>navy sailor held iranian military sign neocon ...</td>
+      <td>century wire say predicted new year look ahead...</td>
+      <td>AI</td>
+    </tr>
+  </tbody>
+</table>
+<p>44057 rows × 7 columns</p>
+</div><section class="notebook-note"><h2 id="feature-engineering"><strong>Feature Engineering</strong></h2></section><details class="code-cell"><summary>Code cell 6</summary><pre><code>df_clean[&#x27;clean_text&#x27;].isnull().sum()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0</pre></details><details class="code-cell"><summary>Code cell 7</summary><pre><code>tfidf_title = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
+tfidf_text = TfidfVectorizer(max_features=10000, ngram_range=(1, 2))
+
+X_title = tfidf_title.fit_transform(df_clean[&#x27;clean_title&#x27;])
+X_text = tfidf_text.fit_transform(df_clean[&#x27;clean_text&#x27;])
+
+y = df_clean[&#x27;label&#x27;]</code></pre></details><details class="code-cell"><summary>Code cell 8</summary><pre><code>X_train_title, X_test_title, y_train_title, y_test_title = train_test_split(X_title, y, test_size=0.2, random_state=1)
+X_train_text, X_test_text, y_train_text, y_test_text = train_test_split(X_text, y, test_size=0.2, random_state=1)</code></pre></details><details class="code-cell"><summary>Code cell 9</summary><pre><code>def plot_confusion_matrix(y_test, y_test_pred, model_name):
+    cm = confusion_matrix(y_test, y_test_pred)
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt=&#x27;d&#x27;, cmap=&#x27;Blues&#x27;)
+    plt.xlabel(&#x27;Predicted&#x27;)
+    plt.ylabel(&#x27;True&#x27;)
+    plt.title(f&#x27;Confusion Matrix - {model_name}&#x27;)
+    plt.show()</code></pre></details><details class="code-cell"><summary>Code cell 10</summary><pre><code>def plot_roc_curve(y_test, y_pred_proba, model_name):
+    fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
+    roc_auc = auc(fpr, tpr)
+    
+    plt.figure()
+    plt.plot(fpr, tpr, color=&#x27;darkorange&#x27;, lw=2, label=&#x27;ROC curve (area = %0.2f)&#x27; % roc_auc)
+    plt.plot([0, 1], [0, 1], color=&#x27;navy&#x27;, lw=2, linestyle=&#x27;--&#x27;)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel(&#x27;False Positive Rate&#x27;)
+    plt.ylabel(&#x27;True Positive Rate&#x27;)
+    plt.title(f&#x27;Receiver Operating Characteristic - {model_name}&#x27;)
+    plt.legend(loc=&quot;lower right&quot;)
+    plt.show()</code></pre></details><section class="notebook-note"><h2 id="defining-functions"><strong>Defining functions</strong></h2></section><details class="code-cell"><summary>Code cell 12</summary><pre><code>def evaluate_model(X_train, y_train, X_test, y_test, model):
+    model.fit(X_train, y_train)
+    y_train_pred = model.predict(X_train)
+    y_test_pred = model.predict(X_test)
+    
+    train_accuracy = accuracy_score(y_train, y_train_pred)
+    train_precision = precision_score(y_train, y_train_pred, average=&#x27;weighted&#x27;)
+    train_recall = recall_score(y_train, y_train_pred, average=&#x27;weighted&#x27;)
+    train_f1 = f1_score(y_train, y_train_pred, average=&#x27;weighted&#x27;)
+    
+    test_accuracy = accuracy_score(y_test, y_test_pred)
+    test_precision = precision_score(y_test, y_test_pred, average=&#x27;weighted&#x27;)
+    test_recall = recall_score(y_test, y_test_pred, average=&#x27;weighted&#x27;)
+    test_f1 = f1_score(y_test, y_test_pred, average=&#x27;weighted&#x27;)
+    
+    test_report = classification_report(y_test, y_test_pred)
+    test_auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
+    
+    return train_accuracy, train_precision, train_recall, train_f1, test_accuracy, test_precision, test_recall, test_f1, test_report, test_auc</code></pre></details><details class="code-cell"><summary>Code cell 13</summary><pre><code>models = {
+    &#x27;Logistic Regression&#x27;: LogisticRegression(max_iter=1000),
+    &#x27;SVM&#x27;: SVC(kernel= &#x27;linear&#x27;, probability= True),
+    &#x27;Random Forest Classifier&#x27;: RandomForestClassifier(n_estimators=100)
+}</code></pre></details><section class="notebook-note"><p>below was without ROC AUC score update to the function</p></section><details class="code-cell"><summary>Code cell 15</summary><pre><code># for model_name, model in models.items():
+#     model.fit(X_title_train, y_title_train)
+#     y_train_pred = model.predict(X_title_train)
+#     y_test_pred = model.predict(X_title_test)
+
+#     model_train_accuracy, model_train_prec, model_train_rec, model_train_f1, model_train_rep = title_evaluate_model(y_title_train, y_train_pred)
+#     model_test_accuracy, model_test_prec, model_test_rec, model_test_f1, model_test_rep = title_evaluate_model(y_title_test, y_test_pred)
+
+#     print(f&#x27;Model: {model_name}&#x27;)
+#     print(f&#x27;Data: Title&#x27;)
+#     print(&#x27;Model performance for Training set&#x27;)
+#     print(f&#x27;- Train Accuracy: {model_train_accuracy:.4f}&#x27;)
+#     print(f&#x27;- Train Precision: {model_train_prec:.4f}&#x27;)
+#     print(f&#x27;- Train Recall: {model_train_rec:.4f}&#x27;)
+#     print(f&#x27;- Train F1: {model_train_f1:.4f}&#x27;)
+#     print(f&#x27;- Train Report: \n{model_train_rep}&#x27;)
+
+#     print(&#x27;Model performance for Test set&#x27;)
+#     print(f&#x27;- Test Accuracy: {model_test_accuracy:.4f}&#x27;)
+#     print(f&#x27;- Test Precision: {model_test_prec:.4f}&#x27;)
+#     print(f&#x27;- Test Recall: {model_test_rec:.4f}&#x27;)
+#     print(f&#x27;- Test F1: {model_test_f1:.4f}&#x27;)
+#     print(f&#x27;- Test Report: \n{model_test_rep}&#x27;)
+#     print(&#x27;\n&#x27; + &#x27;-&#x27;*50 + &#x27;\n&#x27;)
+
+# # Create a DataFrame to compare the models
+# results = pd.DataFrame({
+#     &#x27;Model&#x27;: [&#x27;Logistic Regression&#x27;, &#x27;Random Forest&#x27;, &#x27;SVM&#x27;],
+#     &#x27;Accuracy&#x27;: [model_test_accuracy, model_test_prec, model_test_rec],
+#     &#x27;Precision&#x27;: [model_train_accuracy, model_train_prec, model_train_rec],
+#     &#x27;Recall&#x27;: [model_test_f1, model_test_rep, model_train_rep],
+#     &#x27;F1 Score&#x27;: [model_train_f1, model_train_rep, model_train_rep]
+# })</code></pre></details><section class="notebook-note"><p>Updated model evaluation loops for text and title.</p></section><details class="code-cell"><summary>Code cell 17</summary><pre><code>print(&quot;Evaluation for Title Features&quot;)
+for name, model in models.items():
+    train_acc, train_prec, train_rec, train_f1, test_acc, test_prec, test_rec, test_f1, test_rep, test_auc = evaluate_model(X_train_title, y_train_title, X_test_title, y_test_title, model)
+    print(f&quot;Model: {name}&quot;)
+    print(f&quot;Train Accuracy: {train_acc:.4f}&quot;)
+    print(f&quot;Train Precision: {train_prec:.4f}&quot;)
+    print(f&quot;Train Recall: {train_rec:.4f}&quot;)
+    print(f&quot;Train F1: {train_f1:.4f}&quot;)
+    print(f&quot;Test Accuracy: {test_acc:.4f}&quot;)
+    print(f&quot;Test Precision: {test_prec:.4f}&quot;)
+    print(f&quot;Test Recall: {test_rec:.4f}&quot;)
+    print(f&quot;Test F1: {test_f1:.4f}&quot;)
+    print(f&quot;Test Report:\n{test_rep}&quot;)
+    print(f&quot;Test AUC: {test_auc:.4f}&quot;)
+    plot_roc_curve(y_test_title, model.predict_proba(X_test_title)[:, 1], name)
+    plot_confusion_matrix(y_test_title, model.predict(X_test_title), name)
+    print(&quot;-&quot; * 50)
+
+
+print(&quot;Evaluation for Text Features&quot;)
+for name, model in models.items():
+    train_acc, train_prec, train_rec, train_f1, test_acc, test_prec, test_rec, test_f1, test_rep, test_auc = evaluate_model(X_train_text, y_train_text, X_test_text, y_test_text, model)
+    print(f&quot;Model: {name}&quot;)
+    print(f&quot;Train Accuracy: {train_acc:.4f}&quot;)
+    print(f&quot;Train Precision: {train_prec:.4f}&quot;)
+    print(f&quot;Train Recall: {train_rec:.4f}&quot;)
+    print(f&quot;Train F1: {train_f1:.4f}&quot;)
+    print(f&quot;Test Accuracy: {test_acc:.4f}&quot;)
+    print(f&quot;Test Precision: {test_prec:.4f}&quot;)
+    print(f&quot;Test Recall: {test_rec:.4f}&quot;)
+    print(f&quot;Test F1: {test_f1:.4f}&quot;)
+    print(f&quot;Test Report:\n{test_rep}&quot;)
+    print(f&quot;Test AUC: {test_auc:.4f}&quot;)
+    plot_roc_curve(y_test_text, model.predict_proba(X_test_text)[:, 1], name)
+    plot_confusion_matrix(y_test_text, model.predict(X_test_text), name)
+    print(&quot;-&quot; * 50)
+</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="News classification models — output chart 1, following code cell 17" width="578" height="455" loading="lazy"></a><figcaption>Output 1 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="News classification models — output chart 2, following code cell 17" width="658" height="547" loading="lazy"></a><figcaption>Output 2 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="News classification models — output chart 3, following code cell 17" width="578" height="455" loading="lazy"></a><figcaption>Output 3 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="News classification models — output chart 4, following code cell 17" width="658" height="547" loading="lazy"></a><figcaption>Output 4 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-05.webp" target="_blank" rel="noopener noreferrer"><img src="chart-05.webp" alt="News classification models — output chart 5, following code cell 17" width="578" height="455" loading="lazy"></a><figcaption>Output 5 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-06.webp" target="_blank" rel="noopener noreferrer"><img src="chart-06.webp" alt="News classification models — output chart 6, following code cell 17" width="658" height="547" loading="lazy"></a><figcaption>Output 6 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-07.webp" target="_blank" rel="noopener noreferrer"><img src="chart-07.webp" alt="News classification models — output chart 7, following code cell 17" width="578" height="455" loading="lazy"></a><figcaption>Output 7 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-08.webp" target="_blank" rel="noopener noreferrer"><img src="chart-08.webp" alt="News classification models — output chart 8, following code cell 17" width="658" height="547" loading="lazy"></a><figcaption>Output 8 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-09.webp" target="_blank" rel="noopener noreferrer"><img src="chart-09.webp" alt="News classification models — output chart 9, following code cell 17" width="578" height="455" loading="lazy"></a><figcaption>Output 9 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-10.webp" target="_blank" rel="noopener noreferrer"><img src="chart-10.webp" alt="News classification models — output chart 10, following code cell 17" width="658" height="547" loading="lazy"></a><figcaption>Output 10 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-11.webp" target="_blank" rel="noopener noreferrer"><img src="chart-11.webp" alt="News classification models — output chart 11, following code cell 17" width="578" height="455" loading="lazy"></a><figcaption>Output 11 · Code cell 17 · Open image to enlarge</figcaption></figure><figure><a href="chart-12.webp" target="_blank" rel="noopener noreferrer"><img src="chart-12.webp" alt="News classification models — output chart 12, following code cell 17" width="658" height="547" loading="lazy"></a><figcaption>Output 12 · Code cell 17 · Open image to enlarge</figcaption></figure></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

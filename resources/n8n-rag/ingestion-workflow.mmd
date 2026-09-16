@@ -1,0 +1,40 @@
+graph TD
+    START["📁 Google Drive Trigger<br/>Monitor Building Code folders<br/>Auto-detect new PDFs"] --> DOC["📄 Document Detection<br/>New file uploaded<br/>Trigger processing pipeline"]
+    
+    DOC --> OCR["🔍 Mistral OCR Engine<br/>mistral-ocr-latest<br/>Text extraction & image annotation<br/>Bounding box processing"]
+    
+    OCR --> EXTRACT["📝 Content Extraction<br/>Page-by-page processing<br/>Text & image separation<br/>Metadata preservation"]
+    
+    EXTRACT --> SPLIT["✂️ Text Chunking<br/>LangChain RecursiveCharacterTextSplitter<br/>Context-aware splitting<br/>Optimal chunk sizes"]
+    EXTRACT --> IMG["🖼️ Image Processing<br/>Supabase Storage upload<br/>Caption generation<br/>Metadata tagging"]
+    
+    SPLIT --> EMBED_TEXT["🔢 Text Embeddings<br/>OpenAI text-embedding-3-large<br/>High-dimensional semantic vectors<br/>1536 dimensions"]
+    IMG --> EMBED_IMG["📊 Image Embeddings<br/>Caption vectorization<br/>Visual content representation<br/>Searchable image metadata"]
+    
+    EMBED_TEXT --> STORE_B["📊 Code-B Vector Store<br/>Stability & Durability<br/>Supabase pgvector<br/>Structural requirements"]
+    EMBED_TEXT --> STORE_C["📊 Code-C Vector Store<br/>Protection from Fire<br/>Supabase pgvector<br/>Fire safety standards"]
+    EMBED_TEXT --> STORE_D["📊 Code-D Vector Store<br/>Access Routes<br/>Supabase pgvector<br/>Accessibility standards"]
+    EMBED_TEXT --> STORE_E["📊 Code-E Vector Store<br/>Moisture Management<br/>Supabase pgvector<br/>Water protection"]
+    EMBED_TEXT --> STORE_F["📊 Code-F Vector Store<br/>Safety of Users<br/>Supabase pgvector<br/>User safety requirements"]
+    EMBED_TEXT --> STORE_G["📊 Code-G Vector Store<br/>Services & Facilities<br/>Supabase pgvector<br/>Building services"]
+    EMBED_TEXT --> STORE_H["📊 Code-H Vector Store<br/>Energy Efficiency<br/>Supabase pgvector<br/>Energy performance"]
+    
+    EMBED_IMG --> STORE_B
+    EMBED_IMG --> STORE_C
+    EMBED_IMG --> STORE_D
+    EMBED_IMG --> STORE_E
+    EMBED_IMG --> STORE_F
+    EMBED_IMG --> STORE_G
+    EMBED_IMG --> STORE_H
+    
+    STORE_B --> READY["✅ Knowledge Base Ready<br/>Multi-modal RAG system<br/>Text + Image vectors<br/>Section-specific expertise"]
+    STORE_C --> READY
+    STORE_D --> READY
+    STORE_E --> READY
+    STORE_F --> READY
+    STORE_G --> READY
+    STORE_H --> READY
+    
+    READY --> SYNC["🔄 Real-time Sync<br/>Google Drive monitoring<br/>Automatic updates<br/>Version control"]
+    
+    SYNC --> RETRIEVAL["🔍 Ready for Queries<br/>Semantic search enabled<br/>Agent tool integration<br/>Building Code expertise"]

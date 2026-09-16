@@ -1,0 +1,190 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Notion MCP Agent · Documentation — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Notion MCP Agent · Documentation</h1><p>Project documentation from GitHub. Diagrams and demonstrations are available in the project resource library.</p><a href="https://github.com/Userdflt/Notion-MCP-Agent/blob/2d6f816be7500af20ec31acce30052fe16a4f5ff/README.md" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><h2 id="notionmcpagent">Notion‑MCP‑Agent</h2>
+<h4 id="code">Code</h4>
+<ul>
+<li><strong>Server:</strong> <a href="https://github.com/Userdflt/Notion-MCP-Agent/blob/2d6f816be7500af20ec31acce30052fe16a4f5ff/notion_mcp_server.py" target="_blank" rel="noopener noreferrer"><code>notion_mcp_server.py</code></a></li>
+<li><strong>LangChain agent + Tkinter GUI:</strong> <a href="https://github.com/Userdflt/Notion-MCP-Agent/blob/2d6f816be7500af20ec31acce30052fe16a4f5ff/notion_agent.py" target="_blank" rel="noopener noreferrer"><code>notion_agent.py</code></a></li>
+<li><strong>TTS Service:</strong> <a href="https://github.com/Userdflt/Notion-MCP-Agent/blob/2d6f816be7500af20ec31acce30052fe16a4f5ff/tts_service.py" target="_blank" rel="noopener noreferrer"><code>tts_service.py</code></a></li>
+<li><strong>Environment:</strong> <code>.env</code> (requires <code>NOTION_TOKEN</code>, optional <code>PAGE_ID</code> for testing)</li>
+</ul>
+<hr>
+<h2 id="overview">Overview</h2>
+<p><strong>Notion‑MCP‑Agent</strong> turns your Notion workspace into a live, AI‑driven knowledge hub — <em>now with one‑click text‑to‑speech</em>.
+A <strong>FastMCP</strong> server exposes a rich toolbox for manipulating Notion pages.Using <strong>LangChain</strong> Agentic Framework and <strong>GPT‑4o</strong> orchestrates conversations, read, write, summarise, build tables, manage metadata, and even generate MP3s of your notes — all in real time.</p>
+<hr>
+<h2 id="sample-demo">Sample Demo</h2>
+<p>
+
+
+</p>
+<hr>
+<h2 id="project-workflow">Project Workflow</h2>
+<h3 id="1-fastmcp-server">1 · FastMCP Server</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tool Registration</strong></td>
+<td>Registers <strong>content tools</strong> (<code>append_content</code>, <code>create_table</code>), <strong>page tools</strong> (<code>get_page_text</code>, <code>update_page_title</code>, <code>create_subpage</code>, etc.),<br><strong>user tools</strong> (<code>list_users</code>, <code>retrieve_user</code>, <code>get_me</code>), <strong>search tools</strong> (<code>search_notion</code>, <code>retrieve_page_property</code>), and <strong>media tools</strong> (<code>text_to_speech</code>).</td>
+</tr>
+<tr>
+<td><strong>Prompt Endpoints</strong></td>
+<td><code>default_prompt</code> for everyday tasks and <code>structured_notes_prompt</code> for 10‑section study guides (chain‑of‑thought).</td>
+</tr>
+<tr>
+<td><strong>Transport</strong></td>
+<td>Runs over <strong>SSE</strong> (<code>/sse</code>) for low‑latency, push‑style communication.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-langchain-agent">2 · LangChain Agent</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tool Loading</strong></td>
+<td>Discovers and injects every MCP tool into LangChain at runtime.</td>
+</tr>
+<tr>
+<td><strong>LLM</strong></td>
+<td>Defaults to <code>gpt‑4o</code> via <code>ChatOpenAI</code>; swap in any Ollama / OpenAI‑compatible model with one flag.</td>
+</tr>
+<tr>
+<td><strong>Helpers</strong></td>
+<td>Adds <code>summarize</code> (text) and <code>speak</code> (MP3) wrappers for large pages.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-tkinter-gui">3 · Tkinter GUI</h3>
+<ol>
+<li><strong>User types</strong> a question or command.</li>
+<li><strong>Agent plans</strong> which tools to invoke (chain‑of‑thought shown in dev mode).</li>
+<li><strong>FastMCP</strong> hits the Notion API and/or Coqui TTS.</li>
+<li><strong>Agent streams</strong> the answer (plus an MP3 link when TTS is used).</li>
+<li><strong>Result</strong> instantly appears in your Notion workspace and desktop chat window.</li>
+</ol>
+<hr>
+<h2 id="available-mcp-tools">Available MCP Tools</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Tool</th>
+<th>Purpose (Args → Returns)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content</td>
+<td><code>append_content</code></td>
+<td>Markdown‑like → blocks (append)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>create_table</code></td>
+<td>2‑D list → Notion table block</td>
+</tr>
+<tr>
+<td>Read</td>
+<td><code>get_page_text</code></td>
+<td>Deep text extraction (recursive)</td>
+</tr>
+<tr>
+<td>Properties</td>
+<td><code>retrieve_page_property</code></td>
+<td>Paginated property read</td>
+</tr>
+<tr>
+<td>Pages</td>
+<td><code>update_page_title</code></td>
+<td>Rename a page</td>
+</tr>
+<tr>
+<td></td>
+<td><code>create_subpage</code></td>
+<td>Create child page</td>
+</tr>
+<tr>
+<td></td>
+<td><code>retrieve_page</code>, <code>update_page</code></td>
+<td>CRUD helpers</td>
+</tr>
+<tr>
+<td>Users</td>
+<td><code>list_users</code>, <code>retrieve_user</code>, <code>get_me</code></td>
+<td>Workspace user management</td>
+</tr>
+<tr>
+<td>Search</td>
+<td><code>search_notion</code></td>
+<td>Full‑workspace search</td>
+</tr>
+<tr>
+<td>Media</td>
+<td><code>text_to_speech</code></td>
+<td>Plain text → MP3 via <strong>Coqui TTS</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🛈 <strong>Tip:</strong> All tools raise <code>McpError</code> with a helpful message on failure — perfect for debugging in the GUI console.</p>
+</blockquote>
+<hr>
+<h2 id="tools-libraries">Tools &amp; Libraries</h2>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Library / Tech</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protocol &amp; Server</td>
+<td><strong>FastMCP</strong>, <strong>MCP‑Python</strong></td>
+</tr>
+<tr>
+<td>Notion SDK</td>
+<td><code>notion_client</code></td>
+</tr>
+<tr>
+<td>LLM Orchestration</td>
+<td><strong>LangChain</strong>, <strong>LangGraph</strong></td>
+</tr>
+<tr>
+<td>Large Language Model</td>
+<td><code>gpt‑4o</code> (or any Ollama LLM)</td>
+</tr>
+<tr>
+<td>Text‑to‑Speech</td>
+<td><strong>Coqui TTS</strong></td>
+</tr>
+<tr>
+<td>GUI</td>
+<td><strong>Tkinter</strong></td>
+</tr>
+<tr>
+<td>Async / Transport</td>
+<td><code>asyncio</code> runtime / <strong>SSE</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="key-features">Key Features</h2>
+<ul>
+<li>🔧 <strong>End‑to‑End Workspace Control</strong> – append blocks, build tables, rename pages, manage users, and search — all from chat.</li>
+<li>🗣️ <strong>Text‑to‑Speech</strong> – highlight or request any content and receive a downloadable MP3.</li>
+<li>💡 <strong>Structured‑Notes Mode</strong> – generate pedagogical 10‑section guides with intros, code, visuals, and references.</li>
+<li>⚡ <strong>Real‑Time Interaction</strong> – SSE keeps server and agent perfectly in sync.</li>
+<li>🖥️ <strong>Local‑First Desktop App</strong> – works offline with local LLMs and Coqui TTS; zero cloud cost if you choose.</li>
+<li>🛠️ <strong>Extensible</strong> – add new MCP tools or swap frontend frameworks without touching core logic.</li>
+</ul></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

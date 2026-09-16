@@ -1,0 +1,1147 @@
+[
+  {
+    "source": "images/3.jpeg",
+    "src": "images/optimized/3.webp",
+    "owner": "stable-diffusion",
+    "group": "Project imagery",
+    "alt": "Architectural generation study",
+    "caption": "Architectural generation study"
+  },
+  {
+    "source": "images/357FF18C-D11F-4763-8269-5DF7E24BCFF6.png",
+    "src": "images/357FF18C-D11F-4763-8269-5DF7E24BCFF6.png",
+    "owner": "ai-visualizations",
+    "group": "Project imagery",
+    "alt": "Architectural concept study",
+    "caption": "Architectural concept study",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/6.jpeg",
+    "src": "images/optimized/6.webp",
+    "owner": "stable-diffusion",
+    "group": "Project imagery",
+    "alt": "Facade and material study",
+    "caption": "Facade and material study"
+  },
+  {
+    "source": "images/ai_detection.png",
+    "src": "images/optimized/ai_detection.webp",
+    "owner": "ai-detection",
+    "group": "Project imagery",
+    "alt": "Human and AI news classification",
+    "caption": "Human and AI news classification"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/17A886EA-A552-4357-AF06-4D71327E8A8C.png",
+    "src": "images/ai_visual_images/bg_add_render/17A886EA-A552-4357-AF06-4D71327E8A8C.png",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Architectural context study",
+    "caption": "Architectural context study"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/76DDAC7E-E7EE-4A31-9C26-9D614CF1BBEB.png",
+    "src": "images/ai_visual_images/bg_add_render/76DDAC7E-E7EE-4A31-9C26-9D614CF1BBEB.png",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Architectural context study",
+    "caption": "Architectural context study"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/797884DB-9BA8-4516-829F-27B3769AD778.png",
+    "src": "images/ai_visual_images/bg_add_render/797884DB-9BA8-4516-829F-27B3769AD778.png",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Architectural context study",
+    "caption": "Architectural context study"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/bg.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/bg.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Bg",
+    "caption": "Bg"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/concept_1.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/concept_1.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Concept 1",
+    "caption": "Concept 1"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/concept_2.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/concept_2.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Concept 2",
+    "caption": "Concept 2"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/concept_2_w_ppl.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/concept_2_w_ppl.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Concept 2 W Ppl",
+    "caption": "Concept 2 W Ppl"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/first_concept.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/first_concept.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "First Concept",
+    "caption": "First Concept"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/first_concept_modified.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/first_concept_modified.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "First Concept Modified",
+    "caption": "First Concept Modified"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/first_concept_w_ppl.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/first_concept_w_ppl.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "First Concept W Ppl",
+    "caption": "First Concept W Ppl"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_1.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 1",
+    "caption": "Interior Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_10.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_10.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 10",
+    "caption": "Interior Render 10"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_11.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_11.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 11",
+    "caption": "Interior Render 11"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_2.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 2",
+    "caption": "Interior Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_3.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_3.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 3",
+    "caption": "Interior Render 3"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_4.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_4.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 4",
+    "caption": "Interior Render 4"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_5.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_5.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 5",
+    "caption": "Interior Render 5"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_6.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_6.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 6",
+    "caption": "Interior Render 6"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_7.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_7.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 7",
+    "caption": "Interior Render 7"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_8.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_8.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 8",
+    "caption": "Interior Render 8"
+  },
+  {
+    "source": "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_9.png",
+    "src": "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_9.webp",
+    "owner": "ai-visualizations",
+    "group": "bg_add_render",
+    "alt": "Interior Render 9",
+    "caption": "Interior Render 9"
+  },
+  {
+    "source": "images/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.jpg",
+    "src": "images/optimized/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.webp",
+    "owner": "ai-visualizations",
+    "group": "ComfyUI_workflow",
+    "alt": "Cabin Render Highq",
+    "caption": "Cabin Render Highq"
+  },
+  {
+    "source": "images/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.png",
+    "src": "images/optimized/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.webp",
+    "owner": "ai-visualizations",
+    "group": "ComfyUI_workflow",
+    "alt": "Cabin Sample Model",
+    "caption": "Cabin Sample Model"
+  },
+  {
+    "source": "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.png",
+    "src": "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.webp",
+    "owner": "ai-visualizations",
+    "group": "ComfyUI_workflow",
+    "alt": "ComfyUI 00013 ",
+    "caption": "ComfyUI 00013 "
+  },
+  {
+    "source": "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.png",
+    "src": "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.webp",
+    "owner": "ai-visualizations",
+    "group": "ComfyUI_workflow",
+    "alt": "ComfyUI 00014 ",
+    "caption": "ComfyUI 00014 "
+  },
+  {
+    "source": "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.png",
+    "src": "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.webp",
+    "owner": "ai-visualizations",
+    "group": "ComfyUI_workflow",
+    "alt": "ComfyUI 00018 ",
+    "caption": "ComfyUI 00018 "
+  },
+  {
+    "source": "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.png",
+    "src": "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.webp",
+    "owner": "ai-visualizations",
+    "group": "ComfyUI_workflow",
+    "alt": "ComfyUI 00022 ",
+    "caption": "ComfyUI 00022 "
+  },
+  {
+    "source": "images/ai_visual_images/masterplan_render/masterplan_1.png",
+    "src": "images/optimized/ai_visual_images/masterplan_render/masterplan_1.webp",
+    "owner": "ai-visualizations",
+    "group": "masterplan_render",
+    "alt": "Masterplan 1",
+    "caption": "Masterplan 1"
+  },
+  {
+    "source": "images/ai_visual_images/masterplan_render/masterplan_1_render_1.png",
+    "src": "images/optimized/ai_visual_images/masterplan_render/masterplan_1_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "masterplan_render",
+    "alt": "Masterplan 1 Render 1",
+    "caption": "Masterplan 1 Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/masterplan_render/masterplan_1_render_2.png",
+    "src": "images/optimized/ai_visual_images/masterplan_render/masterplan_1_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "masterplan_render",
+    "alt": "Masterplan 1 Render 2",
+    "caption": "Masterplan 1 Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/masterplan_render/masterplan_1_render_4.png",
+    "src": "images/optimized/ai_visual_images/masterplan_render/masterplan_1_render_4.webp",
+    "owner": "ai-visualizations",
+    "group": "masterplan_render",
+    "alt": "Masterplan 1 Render 4",
+    "caption": "Masterplan 1 Render 4"
+  },
+  {
+    "source": "images/ai_visual_images/masterplan_render/materplan_1_render_3.png",
+    "src": "images/optimized/ai_visual_images/masterplan_render/materplan_1_render_3.webp",
+    "owner": "ai-visualizations",
+    "group": "masterplan_render",
+    "alt": "Materplan 1 Render 3",
+    "caption": "Materplan 1 Render 3"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/AI_interior_render_1.jpg",
+    "src": "images/optimized/ai_visual_images/model_to_render/AI_interior_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "AI Interior Render 1",
+    "caption": "AI Interior Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/AI_interior_render_2.jpg",
+    "src": "images/optimized/ai_visual_images/model_to_render/AI_interior_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "AI Interior Render 2",
+    "caption": "AI Interior Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/interior_render_1.png",
+    "src": "images/optimized/ai_visual_images/model_to_render/interior_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "Interior Render 1",
+    "caption": "Interior Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/interior_render_2.png",
+    "src": "images/optimized/ai_visual_images/model_to_render/interior_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "Interior Render 2",
+    "caption": "Interior Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/model_1.png",
+    "src": "images/optimized/ai_visual_images/model_to_render/model_1.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "Model 1",
+    "caption": "Model 1"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/model_1_render_1.png",
+    "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "Model 1 Render 1",
+    "caption": "Model 1 Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/model_1_render_1_night.png",
+    "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_1_night.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "Model 1 Render 1 Night",
+    "caption": "Model 1 Render 1 Night"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/model_1_render_2.png",
+    "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "Model 1 Render 2",
+    "caption": "Model 1 Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/model_1_render_2_night.png",
+    "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_2_night.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "Model 1 Render 2 Night",
+    "caption": "Model 1 Render 2 Night"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/model_1_render_3.png",
+    "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_3.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "Model 1 Render 3",
+    "caption": "Model 1 Render 3"
+  },
+  {
+    "source": "images/ai_visual_images/model_to_render/model_1_render_3_night.png",
+    "src": "images/optimized/ai_visual_images/model_to_render/model_1_render_3_night.webp",
+    "owner": "ai-visualizations",
+    "group": "model_to_render",
+    "alt": "Model 1 Render 3 Night",
+    "caption": "Model 1 Render 3 Night"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_1.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_1.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 1",
+    "caption": "Plan 1"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_1_render_1.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_1_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 1 Render 1",
+    "caption": "Plan 1 Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_1_render_2.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_1_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 1 Render 2",
+    "caption": "Plan 1 Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_2.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_2.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 2",
+    "caption": "Plan 2"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_2_render_1.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_2_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 2 Render 1",
+    "caption": "Plan 2 Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_2_render_2.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_2_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 2 Render 2",
+    "caption": "Plan 2 Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_3.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_3.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 3",
+    "caption": "Plan 3"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_3_render_1.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_3_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 3 Render 1",
+    "caption": "Plan 3 Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_3_render_2.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_3_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 3 Render 2",
+    "caption": "Plan 3 Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_4.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_4.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 4",
+    "caption": "Plan 4"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_4_render_1.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_4_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 4 Render 1",
+    "caption": "Plan 4 Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_1.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 1 Interior Render 1",
+    "caption": "Plan 1 Interior Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_2.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 1 Interior Render 2",
+    "caption": "Plan 1 Interior Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_3.png",
+    "src": "images/optimized/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_3.webp",
+    "owner": "ai-visualizations",
+    "group": "plan_to_render",
+    "alt": "Plan 1 Interior Render 3",
+    "caption": "Plan 1 Interior Render 3"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/nano-banana-image-22.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/nano-banana-image-22.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Nano-Banana-Image-22",
+    "caption": "Nano-Banana-Image-22"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1.jpg",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 1",
+    "caption": "Sketch 1"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 1 Render 1",
+    "caption": "Sketch 1 Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1b.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1b.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 1 Render 1b",
+    "caption": "Sketch 1 Render 1b"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_2.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 1 Render 2",
+    "caption": "Sketch 1 Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_3.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_3.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 1 Render 3",
+    "caption": "Sketch 1 Render 3"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_4.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_4.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 1 Render 4",
+    "caption": "Sketch 1 Render 4"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_5.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_5.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 1 Render 5",
+    "caption": "Sketch 1 Render 5"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_2.jpg",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_2.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 2",
+    "caption": "Sketch 2"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_1/sketch_2_render_1.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_2_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 2 Render 1",
+    "caption": "Sketch 2 Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-1 (3).png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-1 (3).webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Nano-Banana-Image-1 (3)",
+    "caption": "Nano-Banana-Image-1 (3)"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-22.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-22.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Nano-Banana-Image-22",
+    "caption": "Nano-Banana-Image-22"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_2/sketch_2.jpg",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_2/sketch_2.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 2",
+    "caption": "Sketch 2"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3.jpg",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 3",
+    "caption": "Sketch 3"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_1.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 3 Render 1",
+    "caption": "Sketch 3 Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_2.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 3 Render 2",
+    "caption": "Sketch 3 Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_3.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_3.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "Sketch 3 Render 3",
+    "caption": "Sketch 3 Render 3"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_4/20220705_175328.jpg",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_4/20220705_175328.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "20220705 175328",
+    "caption": "20220705 175328"
+  },
+  {
+    "source": "images/ai_visual_images/sketch_to_render/sketch_4/2025-11-09_10-23.png",
+    "src": "images/optimized/ai_visual_images/sketch_to_render/sketch_4/2025-11-09_10-23.webp",
+    "owner": "ai-visualizations",
+    "group": "sketch_to_render",
+    "alt": "2025-11-09 10-23",
+    "caption": "2025-11-09 10-23"
+  },
+  {
+    "source": "images/ai_visual_images/text_to_render/cafe_w_ppl.png",
+    "src": "images/optimized/ai_visual_images/text_to_render/cafe_w_ppl.webp",
+    "owner": "ai-visualizations",
+    "group": "text_to_render",
+    "alt": "Cafe W Ppl",
+    "caption": "Cafe W Ppl"
+  },
+  {
+    "source": "images/ai_visual_images/text_to_render/entry_w_ppl.png",
+    "src": "images/optimized/ai_visual_images/text_to_render/entry_w_ppl.webp",
+    "owner": "ai-visualizations",
+    "group": "text_to_render",
+    "alt": "Entry W Ppl",
+    "caption": "Entry W Ppl"
+  },
+  {
+    "source": "images/ai_visual_images/text_to_render/final_w_ppl.png",
+    "src": "images/optimized/ai_visual_images/text_to_render/final_w_ppl.webp",
+    "owner": "ai-visualizations",
+    "group": "text_to_render",
+    "alt": "Final W Ppl",
+    "caption": "Final W Ppl"
+  },
+  {
+    "source": "images/ai_visual_images/text_to_render/interior_render_1.png",
+    "src": "images/optimized/ai_visual_images/text_to_render/interior_render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "text_to_render",
+    "alt": "Interior Render 1",
+    "caption": "Interior Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/text_to_render/interior_render_2.png",
+    "src": "images/optimized/ai_visual_images/text_to_render/interior_render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "text_to_render",
+    "alt": "Interior Render 2",
+    "caption": "Interior Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/text_to_render/render_1.png",
+    "src": "images/optimized/ai_visual_images/text_to_render/render_1.webp",
+    "owner": "ai-visualizations",
+    "group": "text_to_render",
+    "alt": "Render 1",
+    "caption": "Render 1"
+  },
+  {
+    "source": "images/ai_visual_images/text_to_render/render_2.png",
+    "src": "images/optimized/ai_visual_images/text_to_render/render_2.webp",
+    "owner": "ai-visualizations",
+    "group": "text_to_render",
+    "alt": "Render 2",
+    "caption": "Render 2"
+  },
+  {
+    "source": "images/ai_visual_images/text_to_render/residentail_units_w_ppl.png",
+    "src": "images/optimized/ai_visual_images/text_to_render/residentail_units_w_ppl.webp",
+    "owner": "ai-visualizations",
+    "group": "text_to_render",
+    "alt": "Residentail Units W Ppl",
+    "caption": "Residentail Units W Ppl"
+  },
+  {
+    "source": "images/building_code.png",
+    "src": "images/optimized/building_code.webp",
+    "owner": "vision-rag",
+    "group": "Project imagery",
+    "alt": "Building Code document retrieval",
+    "caption": "Building Code document retrieval",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/codevision.png",
+    "src": "images/optimized/codevision.webp",
+    "owner": "vision-rag",
+    "group": "Project imagery",
+    "alt": "CodeVision NZ retrieval prototype",
+    "caption": "CodeVision NZ retrieval prototype"
+  },
+  {
+    "source": "images/codevision_app.png",
+    "src": "images/optimized/codevision_app.webp",
+    "owner": "vision-rag",
+    "group": "Project imagery",
+    "alt": "Building Code question and answer interface",
+    "caption": "Building Code question and answer interface"
+  },
+  {
+    "source": "images/code_vision.png",
+    "src": "images/optimized/code_vision.webp",
+    "owner": "codevision",
+    "group": "Project imagery",
+    "alt": "CodeVision web application",
+    "caption": "CodeVision web application"
+  },
+  {
+    "source": "images/comingsoon.png",
+    "src": "images/optimized/comingsoon.webp",
+    "owner": "codevision",
+    "group": "Project imagery",
+    "alt": "Early CodeVision teaser artwork",
+    "caption": "Early CodeVision teaser artwork",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/cv.png",
+    "src": "images/optimized/cv.webp",
+    "owner": "cv-safety",
+    "group": "Project imagery",
+    "alt": "Construction safety concept",
+    "caption": "Construction safety concept",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/cv2.png",
+    "src": "images/optimized/cv2.webp",
+    "owner": "cv-safety",
+    "group": "Project imagery",
+    "alt": "Detection technology and capabilities",
+    "caption": "Detection technology and capabilities",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/cv3.png",
+    "src": "images/optimized/cv3.webp",
+    "owner": "cv-safety",
+    "group": "Project imagery",
+    "alt": "Safety system overview",
+    "caption": "Safety system overview",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/fastmcp.png",
+    "src": "images/optimized/fastmcp.webp",
+    "owner": "notion-mcp",
+    "group": "Project imagery",
+    "alt": "FastMCP tool layer",
+    "caption": "FastMCP tool layer",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/image.3.png",
+    "src": "images/optimized/image.3.webp",
+    "owner": "ai-visualizations",
+    "group": "Project imagery",
+    "alt": "Atmospheric interior study",
+    "caption": "Atmospheric interior study",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/image5.png",
+    "src": "images/optimized/image5.webp",
+    "owner": "ai-visualizations",
+    "group": "Project imagery",
+    "alt": "Curved architectural facade study",
+    "caption": "Curved architectural facade study",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/ingest.png",
+    "src": "images/optimized/ingest.webp",
+    "owner": "n8n-rag",
+    "group": "Project imagery",
+    "alt": "Document ingestion workflow",
+    "caption": "Document ingestion workflow"
+  },
+  {
+    "source": "images/langchain.png",
+    "src": "images/optimized/langchain.webp",
+    "owner": "notion-mcp",
+    "group": "Project imagery",
+    "alt": "Agent orchestration",
+    "caption": "Agent orchestration",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/LLM.png",
+    "src": "images/optimized/LLM.webp",
+    "owner": "llm-rag",
+    "group": "Project imagery",
+    "alt": "Local language-model retrieval",
+    "caption": "Local language-model retrieval",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/llmflow.png",
+    "src": "images/optimized/llmflow.webp",
+    "owner": "llm-rag",
+    "group": "Project imagery",
+    "alt": "Retrieval system components",
+    "caption": "Retrieval system components",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/llm_flow_chart.jpeg",
+    "src": "images/optimized/llm_flow_chart.webp",
+    "owner": "llm-rag",
+    "group": "Project imagery",
+    "alt": "Retrieval workflow diagram",
+    "caption": "Retrieval workflow diagram"
+  },
+  {
+    "source": "images/llm_flow_chart_1.jpeg",
+    "src": "images/optimized/llm_flow_chart_1.webp",
+    "owner": "llm-rag",
+    "group": "Project imagery",
+    "alt": "Agent flow and decision points",
+    "caption": "Agent flow and decision points"
+  },
+  {
+    "source": "images/llm_flow_chart_2.jpeg",
+    "src": "images/optimized/llm_flow_chart_2.webp",
+    "owner": "llm-rag",
+    "group": "Project imagery",
+    "alt": "Self-correction workflow",
+    "caption": "Self-correction workflow"
+  },
+  {
+    "source": "images/Local_Deployment_Example.png",
+    "src": "images/optimized/Local_Deployment_Example.webp",
+    "owner": "vision-rag",
+    "group": "Project imagery",
+    "alt": "Local deployment",
+    "caption": "Local deployment"
+  },
+  {
+    "source": "images/mcp_logo.png",
+    "src": "images/optimized/mcp_logo.webp",
+    "owner": "notion-mcp",
+    "group": "Project imagery",
+    "alt": "Notion MCP concept",
+    "caption": "Notion MCP concept",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/me.png",
+    "src": "images/optimized/me.webp",
+    "owner": "about",
+    "group": "Project imagery",
+    "alt": "Personal avatar study",
+    "caption": "Personal avatar study",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/me_1.png",
+    "src": "images/optimized/me_1.webp",
+    "owner": "about",
+    "group": "Project imagery",
+    "alt": "Personal avatar colour study",
+    "caption": "Personal avatar colour study",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/me_22.png",
+    "src": "images/optimized/me_22.webp",
+    "owner": "about",
+    "group": "Project imagery",
+    "alt": "Personal avatar variation",
+    "caption": "Personal avatar variation",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/me_3.png",
+    "src": "images/optimized/me_3.webp",
+    "owner": "about",
+    "group": "Project imagery",
+    "alt": "Personal avatar refinement",
+    "caption": "Personal avatar refinement",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/me_light.png",
+    "src": "images/optimized/me_light.webp",
+    "owner": "about",
+    "group": "Project imagery",
+    "alt": "Personal illustration",
+    "caption": "Personal illustration",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/n8n.png",
+    "src": "images/optimized/n8n.webp",
+    "owner": "n8n-rag",
+    "group": "Project imagery",
+    "alt": "Building Code retrieval system",
+    "caption": "Building Code retrieval system",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/nasa_outgassing.png",
+    "src": "images/optimized/nasa_outgassing.webp",
+    "owner": "nasa-outgassing",
+    "group": "Project imagery",
+    "alt": "Materials research concept",
+    "caption": "Materials research concept",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/notion.png",
+    "src": "images/optimized/notion.webp",
+    "owner": "notion-mcp",
+    "group": "Project imagery",
+    "alt": "Notion and MCP integration",
+    "caption": "Notion and MCP integration",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/notion_mcp.png",
+    "src": "images/optimized/notion_mcp.webp",
+    "owner": "notion-mcp",
+    "group": "Project imagery",
+    "alt": "Notion agent in use",
+    "caption": "Notion agent in use"
+  },
+  {
+    "source": "images/notion_w_w.png",
+    "src": "images/optimized/notion_w_w.webp",
+    "owner": "notion-mcp",
+    "group": "Project imagery",
+    "alt": "Notion MCP project overview",
+    "caption": "Notion MCP project overview",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/orch.png",
+    "src": "images/optimized/orch.webp",
+    "owner": "n8n-rag",
+    "group": "Project imagery",
+    "alt": "Specialist agent orchestration",
+    "caption": "Specialist agent orchestration"
+  },
+  {
+    "source": "images/output1.png",
+    "src": "images/optimized/output1.webp",
+    "owner": "cv-safety",
+    "group": "Project imagery",
+    "alt": "Detection across sample images",
+    "caption": "Detection across sample images"
+  },
+  {
+    "source": "images/output2.png",
+    "src": "images/optimized/output2.webp",
+    "owner": "ai-visualizations",
+    "group": "Project imagery",
+    "alt": "Waterfront architectural study",
+    "caption": "Waterfront architectural study",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/output8.png",
+    "src": "images/optimized/output8.webp",
+    "owner": "cv-safety",
+    "group": "Project imagery",
+    "alt": "Object detection sample output",
+    "caption": "Object detection sample output"
+  },
+  {
+    "source": "images/portfolio_screenshot.png",
+    "src": "images/optimized/portfolio_screenshot.webp",
+    "owner": "about",
+    "group": "Project imagery",
+    "alt": "An earlier version of this portfolio",
+    "caption": "An earlier version of this portfolio",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/Sample_extracted.png",
+    "src": "images/optimized/Sample_extracted.webp",
+    "owner": "vision-rag",
+    "group": "Project imagery",
+    "alt": "Extracted images from source documents",
+    "caption": "Extracted images from source documents"
+  },
+  {
+    "source": "images/Screenshot 2025-06-04 093010.png",
+    "src": "images/optimized/Screenshot 2025-06-04 093010.webp",
+    "owner": "stable-diffusion",
+    "group": "Project imagery",
+    "alt": "Sketch-to-render desktop interface",
+    "caption": "Sketch-to-render desktop interface"
+  },
+  {
+    "source": "images/sd_feature.png",
+    "src": "images/optimized/sd_feature.webp",
+    "owner": "stable-diffusion",
+    "group": "Project imagery",
+    "alt": "Generation and editing capabilities",
+    "caption": "Generation and editing capabilities",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/sd_tech.png",
+    "src": "images/optimized/sd_tech.webp",
+    "owner": "stable-diffusion",
+    "group": "Project imagery",
+    "alt": "Stable Diffusion technology stack",
+    "caption": "Stable Diffusion technology stack",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/stable.jpeg",
+    "src": "images/optimized/stable.webp",
+    "owner": "stable-diffusion",
+    "group": "Project imagery",
+    "alt": "Generated architectural facade",
+    "caption": "Generated architectural facade"
+  },
+  {
+    "source": "images/stable_image.png",
+    "src": "images/optimized/stable_image.webp",
+    "owner": "stable-diffusion",
+    "group": "Project imagery",
+    "alt": "Sketch-to-image application concept",
+    "caption": "Sketch-to-image application concept",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/stable_sketch.png",
+    "src": "images/optimized/stable_sketch.webp",
+    "owner": "stable-diffusion",
+    "group": "Project imagery",
+    "alt": "Original sketch and generated architecture",
+    "caption": "Original sketch and generated architecture"
+  },
+  {
+    "source": "images/techstackn8n.png",
+    "src": "images/optimized/techstackn8n.webp",
+    "owner": "n8n-rag",
+    "group": "Project imagery",
+    "alt": "n8n technology stack",
+    "caption": "n8n technology stack",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/Vision Studio logo.png",
+    "src": "images/optimized/Vision Studio logo.webp",
+    "owner": "vision-studio",
+    "group": "Project imagery",
+    "alt": "Vision Studio identity",
+    "caption": "Vision Studio identity",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/Vision_Studio_Hero.png",
+    "src": "images/optimized/Vision_Studio_Hero.webp",
+    "owner": "vision-studio",
+    "group": "Project imagery",
+    "alt": "Vision Studio image-generation interface",
+    "caption": "Vision Studio image-generation interface",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/Vision_Studio_logo2.png",
+    "src": "images/optimized/Vision_Studio_logo2.webp",
+    "owner": "vision-studio",
+    "group": "Project imagery",
+    "alt": "Vision Studio wordmark",
+    "caption": "Vision Studio wordmark",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/vit.png",
+    "src": "images/optimized/vit.webp",
+    "owner": "vision-rag",
+    "group": "Project imagery",
+    "alt": "Vision and retrieval components",
+    "caption": "Vision and retrieval components",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/wind_energy.png",
+    "src": "images/optimized/wind_energy.webp",
+    "owner": "wind-energy",
+    "group": "Project imagery",
+    "alt": "Wind turbine power prediction",
+    "caption": "Wind turbine power prediction"
+  },
+  {
+    "source": "images/workflow.png",
+    "src": "images/optimized/workflow.webp",
+    "owner": "llm-rag",
+    "group": "Project imagery",
+    "alt": "Retrieval workflow detail",
+    "caption": "Retrieval workflow detail",
+    "galleryExcluded": true
+  },
+  {
+    "source": "images/Workflow_Diagram.jpeg",
+    "src": "images/optimized/Workflow_Diagram.webp",
+    "owner": "llm-rag",
+    "group": "Project imagery",
+    "alt": "System architecture diagram",
+    "caption": "System architecture diagram"
+  },
+  {
+    "source": "images/youtube_analytics.png",
+    "src": "images/optimized/youtube_analytics.webp",
+    "owner": "youtube-analytics",
+    "group": "Project imagery",
+    "alt": "YouTube analytics dashboard",
+    "caption": "YouTube analytics dashboard"
+  }
+]

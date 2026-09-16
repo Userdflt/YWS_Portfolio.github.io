@@ -1,0 +1,3506 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Sketch to Render experiments — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Sketch to Render experiments</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/Sketch_to_render_testings.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="interactive-sketch-to-render-setup-testing-and-drafts"><strong>Interactive Sketch to Render Setup Testing and Drafts</strong></h2></section><section class="notebook-note"><h2 id="test-inference-for-dependency-confirmation">Test inference for dependency confirmation</h2></section><details class="code-cell"><summary>Code cell 3</summary><pre><code>from diffusers import DiffusionPipeline
+
+pipe = DiffusionPipeline.from_pretrained(&quot;stabilityai/sdxl-turbo&quot;)
+pipe = pipe.to(&quot;cuda&quot;)
+prompt = &quot;Astronaut in a jungle, cold color palette, muted colors, detailed, 8k&quot;
+image = pipe(prompt).images[0]
+image</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="Sketch to Render experiments — output chart 1, following code cell 3" width="512" height="512" loading="lazy"></a><figcaption>Output 1 · Code cell 3 · Open image to enlarge</figcaption></figure><details class="code-cell"><summary>Code cell 4</summary><pre><code>from diffusers import DiffusionPipeline
+
+pipe = DiffusionPipeline.from_pretrained(&quot;stabilityai/sdxl-turbo&quot;)
+pipe = pipe.to(&quot;cuda&quot;)
+
+prompt = &quot;photorealistic Astronaut in a jungle, cold color palette, muted colors, detailed, 8k&quot;
+image = pipe(prompt).images[0]
+image</code></pre></details><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="Sketch to Render experiments — output chart 2, following code cell 4" width="512" height="512" loading="lazy"></a><figcaption>Output 2 · Code cell 4 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h2 id="controlnet-setup-draft">Controlnet setup draft</h2></section><section class="notebook-note"><h3 id="canny-image-creation-using-opencv">Canny image creation using openCV</h3></section><details class="code-cell"><summary>Code cell 7</summary><pre><code>import numpy as np
+from PIL import Image
+import cv2
+
+low_threshold = 100
+high_threshold = 200
+
+# image creation
+image = np.array(Image.open(&quot;sketch.jpeg&quot;))
+image = cv2.Canny(image, low_threshold, high_threshold)
+image = image[:, :, None]
+image = np.concatenate([image, image, image], axis=2)
+
+canny_image = Image.fromarray(image)
+canny_image</code></pre></details><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="Sketch to Render experiments — output chart 3, following code cell 7" width="512" height="512" loading="lazy"></a><figcaption>Output 3 · Code cell 7 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h3 id="using-pil-to-make-sketch-grayscale">Using PIL to make sketch grayscale</h3></section><details class="code-cell"><summary>Code cell 9</summary><pre><code>from PIL import Image, ImageFilter, ImageOps
+
+# Load the image
+image = Image.open(&quot;sketch.jpeg&quot;)
+
+# Convert the image to grayscale
+gray = image.convert(&quot;L&quot;)
+
+# Use the ImageOps.grayscale function to create a line art effect
+line_art = ImageOps.grayscale(gray)
+line_art = ImageOps.invert(line_art)
+
+line_art</code></pre></details><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="Sketch to Render experiments — output chart 4, following code cell 9" width="512" height="512" loading="lazy"></a><figcaption>Output 4 · Code cell 9 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h2 id="controlnet-pipeline-testing">Controlnet Pipeline Testing</h2></section><details class="code-cell"><summary>Code cell 11</summary><pre><code># initiate stable diffusion xl
+import numpy as np
+import torch
+from diffusers import StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL, DiffusionPipeline, UniPCMultistepScheduler, DDIMScheduler, LCMScheduler
+from PIL import Image, ImageFilter, ImageOps
+import cv2
+
+# CONFIG
+controlnet_model = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+# sdxl_model = &quot;SimianLuo/LCM_Dreamshaper_v7&quot;
+sdxl_model = &quot;stabilityai/sdxl-turbo&quot;
+# lcm_adapter = &quot;latent-consistency/lcm-lora-sdxl&quot;
+
+# Load ControlNet model for sketch conditioning.
+# controlnet_conditioning_scale = 0.7 # how strongly to adhere to the control_image
+# controlnet = ControlNetModel.from_pretrained(
+#     controlnet_model,
+#     torch_dtype=torch.float16,
+#     use_safetensors=True # model will use 16bit precision (which is half precision) for reduced mem usage and faster computations.
+# )
+
+# setup pipeline
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    sdxl_model,
+    # controlnet = controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True # model will use 16bit precision (which is half precision) for reduced mem usage and faster computations.
+)
+
+# # load LCM adapter
+# pipe.load_lora_weights(lcm_adapter)
+
+# pipeline control
+pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+pipe.enable_model_cpu_offload()
+
+# Load the image
+image = Image.open(&quot;sketch4.jpeg&quot;)
+
+# Convert the image to grayscale
+gray = image.convert(&quot;L&quot;)
+
+# Use the ImageOps.grayscale function to create a line art effect
+line_art = ImageOps.grayscale(gray)
+line_art = ImageOps.invert(line_art)
+
+width, height  = line_art.size
+ratio = np.sqrt(1024. * 1024. / (width * height))
+new_width, new_height = int(width * ratio), int(height * ratio)
+line_art = line_art.resize((new_width, new_height))
+
+# VAE
+# vae = AutoencoderKL.from_pretrained(&quot;madebyollin/sdxl-vae-fp16-fix&quot;, torch_dtype=torch.float16)
+
+# Prompt
+prompt = &quot;a photorealistic architectural render of a [intierior of a hotel], featuring [minimalist] design elements in a [interior] environment, realistic lighting, 8K resolution, cinematic atmosphere, masterpiece.&quot;
+neg_prompt = &quot;cartoon, anime, sketch, line art, stylized illustration, low resolution, disfigured, text, watermark, logo, poorly drawn, overly saturated colors&quot;
+
+# output
+images = pipe(
+    prompt,
+    negative_prompt=neg_prompt,
+    image=line_art,                                                 # input image
+    # control_image=line_art,                                         # controlnet image
+    # controlnet_conditioning_scale=controlnet_conditioning_scale,    # how strongly to adhere to the control_image
+    width=new_width,                                                # output width of the image
+    height=new_height,                                              # output height of the image
+    num_inference_steps=4,                                         # how many times to denoise latent - more = finer detail
+    guidance_scale=7,                                               # how strongly to adhere to the prompt
+    strength=0.5,                                                   # img2img - how much of the original image to keep
+    guess_mode=True,                                                # if True, tries to guss from minimal condition (rough sketches) 
+    eta=0.5,                                                        # adds additional noise to the image (high=more variability)
+    # vae=vae,                                                        # compresses images and decompresses - for faster inference 
+    # num_images_per_prompt=2,                                      # how many images to generate                                             
+    ).images[0]
+
+images
+</code></pre></details><section class="notebook-note"><h2 id="for-compatibility-check">For compatibility check</h2></section><details class="code-cell"><summary>Code cell 13</summary><pre><code>from diffusers import AutoPipelineForImage2Image, DiffusionPipeline, DPMSolverMultistepScheduler, StableDiffusionXLControlNetPipeline, ControlNetModel, StableDiffusionUpscalePipeline
+from diffusers.utils import load_image, make_image_grid
+
+from PIL import Image, ImageOps
+from io import BytesIO
+import torch
+
+# CONFIG
+controlnet_model = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+# sdxl_model = &quot;SimianLuo/LCM_Dreamshaper_v7&quot;
+# sdxl_model = &quot;SG161222/RealVisXL_V3.0_Turbo&quot;
+sdxl_model = &quot;SG161222/RealVisXL_V4.0_Lightning&quot;
+# sdxl_model = &quot;SG161222/RealVisXL_V5.0_Lightning&quot;
+# lcm_adapter = &quot;latent-consistency/lcm-lora-sdxl&quot;
+
+# Load ControlNet model for sketch conditioning.
+controlnet_conditioning_scale = 0.7                 # how strongly to adhere to the control_image
+controlnet = ControlNetModel.from_pretrained(
+    controlnet_model,
+    torch_dtype=torch.float16,                      # model will use 16bit precision (which is half precision) for reduced mem usage and faster computations.
+    use_safetensors=True,
+)
+
+# setup pipeline
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    sdxl_model,
+    controlnet = controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True,                             # model will use 16bit precision (which is half precision) for reduced mem usage and faster computations.
+    variant=&quot;fp16&quot;
+)
+
+pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+pipe.enable_model_cpu_offload()
+
+
+image = Image.open(&quot;sketch4.jpeg&quot;)
+
+# Convert the image to grayscale
+gray = image.convert(&quot;L&quot;)
+
+# Use the ImageOps.grayscale function to create a line art effect
+line_art = ImageOps.grayscale(gray)
+line_art = ImageOps.invert(line_art)
+
+input_image = load_image(&quot;sketch4.jpeg&quot;).resize((512, 512))
+
+
+prompt = &quot;a photorealistic architectural render of a [intierior of a hotel], featuring [minimalist] design elements in a [interior] environment, realistic lighting, 8K resolution, cinematic atmosphere, masterpiece.&quot;
+neg_prompt = &quot;cartoon, anime, sketch, line art, stylized illustration, low resolution, disfigured, text, watermark, logo, poorly drawn, overly saturated colors&quot;
+
+low_res_img = pipe(prompt,
+             negative_prompt=neg_prompt,
+             image=input_image,
+             control_image=line_art, 
+             num_inference_steps=10, 
+             strength=0.5, 
+             guidance_scale=5,
+             controlnet_conditioning_scale=controlnet_conditioning_scale,
+             guess_mode=True,
+             eta=0.5
+             ).images[0]
+
+# low_res_img = low_res_img.resize((512, 512))
+low_res_img
+
+# upscale_model = &quot;stabilityai/stable-diffusion-x4-upscaler&quot;
+# upscaler = StableDiffusionUpscalePipeline.from_pretrained(upscale_model, torch_dtype=torch.float16)
+# upscaler = upscaler.to(&quot;cuda&quot;)
+
+# low_res_img = low_res_img.resize((128, 128))
+
+# prompt = &quot;realistic lighting, 8K resolution, cinematic atmosphere, masterpiece.&quot;
+
+# upscaled_image = upscaler(prompt=prompt, image=low_res_img, num_inference_steps=30).images[0]
+# upscaled_image = upscaled_image.resize((512, 512))
+# low_res_img = low_res_img.resize((512, 512))
+
+# make_image_grid([low_res_img, upscaled_image], rows=1, cols=2)
+</code></pre></details><section class="notebook-note"><h2 id="upscaler-testing">Upscaler Testing</h2></section><details class="code-cell"><summary>Code cell 15</summary><pre><code>import requests
+from PIL import Image
+from io import BytesIO
+from diffusers import StableDiffusionUpscalePipeline
+import torch
+
+# load model and scheduler
+model_id = &quot;stabilityai/stable-diffusion-x4-upscaler&quot;
+pipeline = StableDiffusionUpscalePipeline.from_pretrained(model_id, torch_dtype=torch.float16)
+pipeline = pipeline.to(&quot;cuda&quot;)
+
+# let&#x27;s download an  image
+url = &quot;https://huggingface.co/datasets/hf-internal-testing/diffusers-images/resolve/main/sd2-upscale/low_res_cat.png&quot;
+response = requests.get(url)
+low_res_img = Image.open(BytesIO(response.content)).convert(&quot;RGB&quot;)
+low_res_img
+low_res_img = low_res_img.resize((128, 128))
+
+prompt = &quot;a white cat&quot;
+
+upscaled_image = pipeline(prompt=prompt, image=low_res_img).images[0]
+upscaled_image.save(&quot;upsampled_cat.png&quot;)
+</code></pre></details><section class="notebook-note"><h2 id="inpaint-testing">Inpaint testing</h2></section><details class="code-cell"><summary>Code cell 17</summary><pre><code>from diffusers import AutoPipelineForInpainting
+from diffusers.utils import load_image
+import torch
+
+pipe = AutoPipelineForInpainting.from_pretrained(&quot;diffusers/stable-diffusion-xl-1.0-inpainting-0.1&quot;, torch_dtype=torch.float16, variant=&quot;fp16&quot;).to(&quot;cuda&quot;)
+
+img_url = &quot;https://raw.githubusercontent.com/CompVis/latent-diffusion/main/data/inpainting_examples/overture-creations-5sI6fQgYIuo.png&quot;
+mask_url = &quot;https://raw.githubusercontent.com/CompVis/latent-diffusion/main/data/inpainting_examples/overture-creations-5sI6fQgYIuo_mask.png&quot;
+
+image = load_image(img_url).resize((1024, 1024))
+mask_image = load_image(mask_url).resize((1024, 1024))
+
+prompt = &quot;a tiger sitting on a park bench&quot;
+generator = torch.Generator(device=&quot;cuda&quot;).manual_seed(0)
+
+image = pipe(
+  prompt=prompt,
+  image=image,
+  mask_image=mask_image,
+  guidance_scale=8.0,
+  num_inference_steps=20,  # steps between 15 and 30 work well for us
+  strength=0.99,  # make sure to use `strength` below 1.0
+  generator=generator,
+).images[0]
+</code></pre></details><section class="notebook-note"><h2 id="sketch-app-general-code">Sketch App General Code</h2></section><details class="code-cell"><summary>Code cell 19</summary><pre><code>import os
+import tkinter as tk
+from PIL import Image, ImageDraw
+
+
+class SketchApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title(&quot;Sketch Stage&quot;)
+
+        # Canvas dimensions
+        self.canvas_width = 1024
+        self.canvas_height = 1024
+
+        # Create the tkinter Canvas for sketching
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg=&quot;white&quot;)
+        self.canvas.pack(padx=10, pady=10)
+
+        # Create a PIL image that will hold the sketch data (white background)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        
+        # create stack of stages for undo
+        self.undo_stack = []
+        
+        self.current_stroke_item_ids = []
+        
+
+        # Bind mouse events for drawing
+        self.canvas.bind(&quot;&lt;ButtonPress-1&gt;&quot;, self.on_button_press)
+        self.canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, self.on_mouse_drag)
+        self.canvas.bind(&quot;&lt;ButtonRelease-1&gt;&quot;, self.on_button_release)
+        
+        # ctrl - z 
+        self.root.bind(&quot;&lt;Control-z&gt;&quot;, self.on_ctrl_z)
+
+        # add a &quot;Clear&quot; button
+        self.clear_button = tk.Button(root, text=&quot;Clear Canvas&quot;, command=self.clear_canvas)
+        self.clear_button.pack(pady=5)
+
+        # add a &quot;Save&quot; button
+        self.save_button = tk.Button(root, text=&quot;Save Sketch&quot;, command=self.save_sketch)
+        self.save_button.pack(pady=5)
+        
+        self.last_x, self.last_y = None, None
+        
+
+    def on_button_press(self, event):
+        # Record the starting position for the line
+        self.last_x, self.last_y = event.x, event.y
+
+    def on_mouse_drag(self, event):
+        # Get current mouse coordinates
+        x, y = event.x, event.y
+
+        # Draw on the canvas (visible to the user)
+        line_id = self.canvas.create_line(self.last_x, self.last_y, x, y, fill=&quot;black&quot;, width=3)
+        self.current_stroke_item_ids.append(line_id)
+
+        # Draw on the PIL image (to be used later in your pipeline)
+        self.draw.line([self.last_x, self.last_y, x, y], fill=&quot;black&quot;, width=3)
+
+        # Update the last coordinates
+        self.last_x, self.last_y = x, y
+        
+    def on_button_release(self, event):
+        
+        if self.current_stroke_item_ids:
+            image_copy = self.sketch.copy()
+            self.undo_stack.append({&#x27;image&#x27;: image_copy,
+                                    &#x27;item_ids&#x27;: self.current_stroke_item_ids})
+        self.current_stroke_item_ids = []
+        self.last_x, self.last_y = None, None
+        
+    def on_ctrl_z(self, event):
+        print(&quot;Ctrl-Z pressed&quot;)
+        self.undo()
+
+    def undo(self):
+        if not self.undo_stack:
+            return # Nothing to undo
+        
+        last_state = self.undo_stack.pop()
+        # revert PIL image
+        self.sketch = last_state[&#x27;image&#x27;]
+        # Recreate the draw object
+        self.draw = ImageDraw.Draw(self.sketch)
+        
+        # Remove the stroke&#x27;s item IDs from the canvas
+        for item_id in last_state[&#x27;item_ids&#x27;]:
+            self.canvas.delete(item_id)
+
+    def clear_canvas(self):
+        # Clear the tkinter canvas
+        self.canvas.delete(&quot;all&quot;)
+        # Reset the PIL image to a blank white image
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        
+    def sketch_save(self, filename):
+        self.sketch.save(filename)
+        print(f&quot;Sketch saved as &#x27;{filename}&#x27;&quot;)
+    
+    def save_sketch(self):
+        i = 1
+        if os.path.exists(&quot;sketch.jpeg&quot;):
+            # If the file already exists, add a number to the filename
+            while os.path.exists(f&quot;sketch{i}.jpeg&quot;):
+                i += 1
+            filename = f&quot;sketch{i}.jpeg&quot;
+        else:
+            filename = &quot;sketch.jpeg&quot;
+            
+        # Save the PIL image to a file
+        self.sketch_save(filename)
+        print(f&quot;Sketch saved as &#x27;{filename}&#x27;&quot;)
+        
+        # Optionally, show a message box
+        tk.messagebox.showinfo(&quot;Sketch Saved&quot;, f&quot;Sketch saved as &#x27;{filename}&#x27;&quot;)
+
+# To test app
+if __name__ == &quot;__main__&quot;:
+    root = tk.Tk()
+    app = SketchApp(root)
+    root.mainloop()
+</code></pre></details><section class="notebook-note"><h2 id="inference-on-button-release">Inference on Button Release</h2></section><details class="code-cell"><summary>Code cell 21</summary><pre><code>import threading
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from PIL import Image, ImageDraw, ImageOps, ImageTk
+import numpy as np
+import torch
+
+# Diffusers imports
+from diffusers import (
+    AutoPipelineForImage2Image,
+    DiffusionPipeline,
+    DPMSolverMultistepScheduler,
+    StableDiffusionXLControlNetPipeline,
+    ControlNetModel,
+    StableDiffusionUpscalePipeline,
+)
+from diffusers.utils import load_image, make_image_grid
+
+##############################################
+# Global Pipeline Initialization and Configs
+##############################################
+
+# CONFIG
+controlnet_model = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+sdxl_model = &quot;SG161222/RealVisXL_V4.0_Lightning&quot;
+controlnet_conditioning_scale = 0.7  # How strongly to adhere to the control image
+
+# Load the ControlNet model (using FP16 precision)
+controlnet = ControlNetModel.from_pretrained(
+    controlnet_model,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+)
+
+# Load the main SDXL pipeline with ControlNet attached
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    sdxl_model,
+    controlnet=controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+    variant=&quot;fp16&quot;,
+)
+pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+pipe.enable_model_cpu_offload()
+
+# Load the upscaler pipeline once and move to CUDA
+upscale_model = &quot;stabilityai/stable-diffusion-x4-upscaler&quot;
+upscaler = StableDiffusionUpscalePipeline.from_pretrained(
+    upscale_model, torch_dtype=torch.float16
+)
+upscaler = upscaler.to(&quot;cuda&quot;)
+
+##############################################
+# Inference Helper Functions
+##############################################
+
+def generate_preview_image(sketch_image):
+    &quot;&quot;&quot;
+    Generate a preview (low-resolution) image from the sketch.
+    The sketch is used to create both:
+      - an input image (resized to 512x512)
+      - a control image (converted to grayscale and inverted)
+    &quot;&quot;&quot;
+    # Create the input image (resize to 512x512)
+    input_image = sketch_image.resize((512, 512))
+    # Create the control image (line art effect)
+    control_image = ImageOps.invert(ImageOps.grayscale(sketch_image))
+    
+    # Prompts
+    prompt = (&quot;a photorealistic architectural render of a [intierior of a hotel], featuring &quot;
+              &quot;[minimalist] design elements in a [interior] environment, realistic lighting, &quot;
+              &quot;8K resolution, cinematic atmosphere, masterpiece.&quot;)
+    neg_prompt = (&quot;cartoon, anime, sketch, line art, stylized illustration, low resolution, disfigured, &quot;
+                  &quot;text, watermark, logo, poorly drawn, overly saturated colors&quot;)
+    
+    # Run the ControlNet pipeline
+    low_res_img = pipe(
+        prompt,
+        negative_prompt=neg_prompt,
+        image=input_image,
+        control_image=control_image,
+        num_inference_steps=8,
+        strength=0.5,
+        guidance_scale=5,
+        controlnet_conditioning_scale=controlnet_conditioning_scale,
+        guess_mode=True,
+        eta=0.5
+    ).images[0]
+    
+    # Ensure output is 512x512 for preview
+    low_res_img = low_res_img.resize((512, 512))
+    return low_res_img
+
+def generate_high_res_image(sketch_image):
+    &quot;&quot;&quot;
+    Generate a high-resolution output by first generating a low-res image and then upscaling it.
+    The low-res image is resized to 128x128 before upscaling.
+    &quot;&quot;&quot;
+    # Generate the low-resolution image first
+    low_res_img = generate_preview_image(sketch_image)
+    
+    # Resize for upscaling (simulate lower resolution input to the upscaler)
+    low_res_small = low_res_img.resize((128, 128))
+    
+    upscale_prompt = &quot;realistic lighting, 8K resolution, cinematic atmosphere, masterpiece.&quot;
+    upscaled_image = upscaler(
+        prompt=upscale_prompt,
+        image=low_res_small,
+        num_inference_steps=30
+    ).images[0]
+    
+    # Resize upscaled output to standard 512x512 dimensions
+    upscaled_image = upscaled_image.resize((512, 512))
+    return upscaled_image
+
+##############################################
+# Sketch Application with Inference &amp; UI
+##############################################
+
+class SketchApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title(&quot;Sketch-to-Image Inference&quot;)
+        
+        # Set up the sketch canvas
+        self.canvas_width = 512
+        self.canvas_height = 512
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg=&quot;white&quot;)
+        self.canvas.grid(row=0, column=0, padx=10, pady=10, rowspan=6)
+        
+        # Bind mouse motion to update the eraser cursor preview
+        self.canvas.bind(&quot;&lt;Motion&gt;&quot;, self.update_cursor_circle)
+        self.eraser_cursor_id = None  # to store the id of the eraser preview circle
+        
+        # PIL image for drawing (the sketch)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack = []
+        self.current_stroke_item_ids = []
+        
+        # Default drawing settings
+        self.current_color = &quot;black&quot;  # &quot;black&quot; for drawing, &quot;white&quot; for erasing
+        self.brush_width = 3
+        
+        # Bind mouse events for drawing
+        self.canvas.bind(&quot;&lt;ButtonPress-1&gt;&quot;, self.on_button_press)
+        self.canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, self.on_mouse_drag)
+        self.canvas.bind(&quot;&lt;ButtonRelease-1&gt;&quot;, self.on_button_release)
+        self.root.bind(&quot;&lt;Control-z&gt;&quot;, self.on_ctrl_z)
+        
+        # Label for displaying the generated image preview
+        self.output_label = tk.Label(root)
+        self.output_label.grid(row=0, column=1, padx=10, pady=10, rowspan=4)
+        
+        # Buttons for additional functions
+        self.clear_button = tk.Button(root, text=&quot;Clear Canvas&quot;, command=self.clear_canvas)
+        self.clear_button.grid(row=4, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.eraser_button = tk.Button(root, text=&quot;Toggle Eraser&quot;, command=self.toggle_eraser)
+        self.eraser_button.grid(row=5, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.save_button = tk.Button(root, text=&quot;Save Generated&quot;, command=self.save_generated)
+        self.save_button.grid(row=6, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.high_res_button = tk.Button(root, text=&quot;High Res Render&quot;, command=self.trigger_high_res_inference)
+        self.high_res_button.grid(row=6, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.start_inference_button = tk.Button(root, text=&quot;Start Inference&quot;, command=self.start_inference_loop)
+        self.start_inference_button.grid(row=7, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.stop_inference_button = tk.Button(root, text=&quot;Stop Inference&quot;, command=self.stop_inference_loop)
+        self.stop_inference_button.grid(row=7, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # New Upscaling Toggle Button
+        self.upscaling_enabled = False
+        self.upscale_toggle_button = tk.Button(root, text=&quot;Upscaling: Off&quot;, command=self.toggle_upscaling)
+        self.upscale_toggle_button.grid(row=8, column=0, columnspan=2, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Brush size control slider
+        self.brush_size_scale = tk.Scale(root, from_=1, to=50, orient=tk.HORIZONTAL,
+                                         label=&quot;Brush/Eraser Size&quot;, command=self.update_brush_size)
+        self.brush_size_scale.set(self.brush_width)
+        self.brush_size_scale.grid(row=9, column=0, columnspan=2, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Set up consistent background preview inference (every 5 seconds)
+        self.update_interval_ms = 5000
+        self.is_inference_running = False
+        self.generated_image = None  # holds the last preview result
+        self.inference_active = True   # flag controlling whether inference is scheduled
+        self.inference_job_id = None   # will store the job ID for cancellation
+        self.schedule_inference()
+        
+        # Variables to hold drawing coordinates
+        self.last_x, self.last_y = None, None
+
+    def on_button_press(self, event):
+        self.last_x, self.last_y = event.x, event.y
+
+    def on_mouse_drag(self, event):
+        x, y = event.x, event.y
+        # Remove the eraser preview while drawing
+        if self.eraser_cursor_id is not None:
+            self.canvas.delete(self.eraser_cursor_id)
+            self.eraser_cursor_id = None
+        # Draw a line on the canvas for visual feedback
+        line_id = self.canvas.create_line(self.last_x, self.last_y, x, y, fill=self.current_color, width=self.brush_width)
+        self.current_stroke_item_ids.append(line_id)
+        # Draw on the underlying PIL sketch
+        self.draw.line([self.last_x, self.last_y, x, y], fill=self.current_color, width=self.brush_width)
+        self.last_x, self.last_y = x, y
+
+    def on_button_release(self, event):
+        # Save stroke for undo functionality
+        if self.current_stroke_item_ids:
+            image_copy = self.sketch.copy()
+            self.undo_stack.append({&#x27;image&#x27;: image_copy, &#x27;item_ids&#x27;: self.current_stroke_item_ids})
+        self.current_stroke_item_ids = []
+        self.last_x, self.last_y = None, None
+
+    def on_ctrl_z(self, event):
+        if self.undo_stack:
+            last_state = self.undo_stack.pop()
+            self.sketch = last_state[&#x27;image&#x27;]
+            self.draw = ImageDraw.Draw(self.sketch)
+            for item_id in last_state[&#x27;item_ids&#x27;]:
+                self.canvas.delete(item_id)
+
+    def update_cursor_circle(self, event):
+        &quot;&quot;&quot;Show a preview circle for the eraser radius when in eraser mode.&quot;&quot;&quot;
+        if self.current_color == &quot;white&quot;:
+            # Calculate circle coordinates
+            radius = self.brush_width // 2
+            x1 = event.x - radius
+            y1 = event.y - radius
+            x2 = event.x + radius
+            y2 = event.y + radius
+            # If already exists, update; otherwise, create a new circle with a dashed outline
+            if self.eraser_cursor_id is None:
+                self.eraser_cursor_id = self.canvas.create_oval(x1, y1, x2, y2, outline=&quot;red&quot;, dash=(2,2))
+            else:
+                self.canvas.coords(self.eraser_cursor_id, x1, y1, x2, y2)
+        else:
+            # Not in eraser mode: remove the cursor circle if present
+            if self.eraser_cursor_id is not None:
+                self.canvas.delete(self.eraser_cursor_id)
+                self.eraser_cursor_id = None
+
+    def update_brush_size(self, value):
+        &quot;&quot;&quot;Update the brush/eraser size based on slider value.&quot;&quot;&quot;
+        self.brush_width = int(value)
+        # Update eraser cursor circle if active
+        # (force update by simulating a motion event if needed)
+    
+    def schedule_inference(self):
+        &quot;&quot;&quot;Schedule the next preview inference run if inference is active.&quot;&quot;&quot;
+        if self.inference_active:
+            self.inference_job_id = self.root.after(self.update_interval_ms, self.start_inference_thread)
+
+    def start_inference_thread(self):
+        &quot;&quot;&quot;Launch preview inference in a background thread if not already running.&quot;&quot;&quot;
+        if not self.is_inference_running:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inference)
+            thread.start()
+        if self.inference_active:
+            self.schedule_inference()
+
+    def run_inference(self):
+        &quot;&quot;&quot;Run generation (low-res or high-res based on upscale toggle) and update the output.&quot;&quot;&quot;
+        try:
+            if self.upscaling_enabled:
+                result_img = generate_high_res_image(self.sketch)
+            else:
+                result_img = generate_preview_image(self.sketch)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during preview inference:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def trigger_high_res_inference(self):
+        &quot;&quot;&quot;Force a high-resolution generation in a background thread.&quot;&quot;&quot;
+        thread = threading.Thread(target=self.run_high_res_inference)
+        thread.start()
+
+    def run_high_res_inference(self):
+        &quot;&quot;&quot;Run high-res generation (low-res + upscaling) and update the output label.&quot;&quot;&quot;
+        try:
+            high_res_img = generate_high_res_image(self.sketch)
+            self.generated_image = high_res_img
+            self.root.after(0, self.update_output, high_res_img)
+        except Exception as e:
+            print(&quot;Error during high-res inference:&quot;, e)
+
+    def update_output(self, img):
+        &quot;&quot;&quot;Update the output label with the provided image.&quot;&quot;&quot;
+        self.generated_tk_img = ImageTk.PhotoImage(img)
+        self.output_label.config(image=self.generated_tk_img)
+
+    def clear_canvas(self):
+        &quot;&quot;&quot;Clear the sketch canvas and reset the underlying image.&quot;&quot;&quot;
+        self.canvas.delete(&quot;all&quot;)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack.clear()
+        self.output_label.config(image=&quot;&quot;)
+
+    def toggle_eraser(self):
+        &quot;&quot;&quot;Toggle between drawing and erasing.&quot;&quot;&quot;
+        if self.current_color == &quot;black&quot;:
+            self.current_color = &quot;white&quot;
+            self.eraser_button.config(text=&quot;Toggle Draw&quot;)
+        else:
+            self.current_color = &quot;black&quot;
+            self.eraser_button.config(text=&quot;Toggle Eraser&quot;)
+            # Remove the eraser preview if switching to draw mode
+            if self.eraser_cursor_id is not None:
+                self.canvas.delete(self.eraser_cursor_id)
+                self.eraser_cursor_id = None
+
+    def save_generated(self):
+        &quot;&quot;&quot;Save the currently generated image to disk.&quot;&quot;&quot;
+        if self.generated_image is None:
+            messagebox.showwarning(&quot;No Image&quot;, &quot;No generated image to save yet!&quot;)
+            return
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=&quot;.jpeg&quot;,
+            filetypes=[(&quot;JPEG files&quot;, &quot;*.jpeg&quot;), (&quot;PNG files&quot;, &quot;*.png&quot;), (&quot;All files&quot;, &quot;*.*&quot;)]
+        )
+        if file_path:
+            try:
+                self.generated_image.save(file_path)
+                messagebox.showinfo(&quot;Image Saved&quot;, f&quot;Generated image saved as:\n{file_path}&quot;)
+            except Exception as e:
+                messagebox.showerror(&quot;Save Error&quot;, f&quot;Failed to save image:\n{e}&quot;)
+
+    def start_inference_loop(self):
+        &quot;&quot;&quot;Start the scheduled preview inference loop.&quot;&quot;&quot;
+        self.inference_active = True
+        self.schedule_inference()
+
+    def stop_inference_loop(self):
+        &quot;&quot;&quot;Stop the scheduled preview inference loop.&quot;&quot;&quot;
+        self.inference_active = False
+        if self.inference_job_id is not None:
+            self.root.after_cancel(self.inference_job_id)
+            self.inference_job_id = None
+
+    def toggle_upscaling(self):
+        &quot;&quot;&quot;Toggle the upscaling mode on and off and update the button label.&quot;&quot;&quot;
+        self.upscaling_enabled = not self.upscaling_enabled
+        if self.upscaling_enabled:
+            self.upscale_toggle_button.config(text=&quot;Upscaling: On&quot;)
+        else:
+            self.upscale_toggle_button.config(text=&quot;Upscaling: Off&quot;)
+
+##############################################
+# Run the Application
+##############################################
+
+if __name__ == &quot;__main__&quot;:
+    root = tk.Tk()
+    app = SketchApp(root)
+    root.mainloop()
+</code></pre></details><section class="notebook-note"><h2 id="low-res-inference-with-upscaling-test-draft">Low Res Inference with Upscaling (Test Draft)</h2></section><details class="code-cell"><summary>Code cell 23</summary><pre><code>import threading
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from PIL import Image, ImageDraw, ImageOps, ImageTk
+import numpy as np
+import torch
+
+# Diffusers imports
+from diffusers import (
+    AutoPipelineForImage2Image,
+    DiffusionPipeline,
+    DPMSolverMultistepScheduler,
+    StableDiffusionXLControlNetPipeline,
+    ControlNetModel,
+    StableDiffusionUpscalePipeline,
+)
+from diffusers.utils import load_image, make_image_grid
+
+##############################################
+# Global Pipeline Initialization and Configs
+##############################################
+
+# CONFIG
+controlnet_model = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+sdxl_model = &quot;SG161222/RealVisXL_V4.0_Lightning&quot;
+controlnet_conditioning_scale = 0.7  # How strongly to adhere to the control image
+
+# Load the ControlNet model (using FP16 precision)
+controlnet = ControlNetModel.from_pretrained(
+    controlnet_model,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+)
+
+# Load the main SDXL pipeline with ControlNet attached
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    sdxl_model,
+    controlnet=controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+    variant=&quot;fp16&quot;,
+)
+pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+pipe.enable_model_cpu_offload()
+
+# Load the upscaler pipeline once and move to CUDA
+upscale_model = &quot;stabilityai/stable-diffusion-x4-upscaler&quot;
+upscaler = StableDiffusionUpscalePipeline.from_pretrained(
+    upscale_model, torch_dtype=torch.float16
+)
+upscaler = upscaler.to(&quot;cuda&quot;)
+
+##############################################
+# Inference Helper Functions
+##############################################
+
+def generate_preview_image(sketch_image):
+    &quot;&quot;&quot;
+    Generate a preview (low-resolution) image from the sketch.
+    The sketch is used to create both:
+      - an input image (resized to 512x512)
+      - a control image (converted to grayscale and inverted)
+    &quot;&quot;&quot;
+    # Create the input image (resize to 512x512)
+    input_image = sketch_image.resize((512, 512))
+    # Create the control image (line art effect)
+    control_image = ImageOps.invert(ImageOps.grayscale(sketch_image))
+    
+    # Prompts
+    prompt = (&quot;a photorealistic architectural render of a [interior of a hotel], featuring &quot;
+              &quot;[minimalist] design elements in a [interior] environment, realistic lighting, &quot;
+              &quot;8K resolution, cinematic atmosphere, masterpiece.&quot;)
+    neg_prompt = (&quot;cartoon, anime, sketch, line art, stylized illustration, low resolution, disfigured, &quot;
+                  &quot;text, watermark, logo, poorly drawn, overly saturated colors&quot;)
+    
+    # Run the ControlNet pipeline
+    low_res_img = pipe(
+        prompt,
+        negative_prompt=neg_prompt,
+        image=input_image,
+        control_image=control_image,
+        num_inference_steps=8,
+        strength=0.5,
+        guidance_scale=5,
+        controlnet_conditioning_scale=controlnet_conditioning_scale,
+        guess_mode=True,
+        eta=0.5
+    ).images[0]
+    
+    # Ensure output is 512x512 for preview
+    low_res_img = low_res_img.resize((512, 512))
+    return low_res_img
+
+def generate_high_res_image(sketch_image):
+    &quot;&quot;&quot;
+    Generate a high-resolution output by first generating a low-res image and then upscaling it.
+    The low-res image is resized to 128x128 before upscaling.
+    &quot;&quot;&quot;
+    # Generate the low-resolution image first
+    low_res_img = generate_preview_image(sketch_image)
+    
+    # Resize for upscaling (simulate lower resolution input to the upscaler)
+    low_res_small = low_res_img.resize((128, 128))
+    
+    upscale_prompt = &quot;realistic lighting, 8K resolution, cinematic atmosphere, masterpiece.&quot;
+    upscaled_image = upscaler(
+        prompt=upscale_prompt,
+        image=low_res_small,
+        num_inference_steps=30
+    ).images[0]
+    
+    # Resize upscaled output to standard 512x512 dimensions
+    upscaled_image = upscaled_image.resize((512, 512))
+    return upscaled_image
+
+##############################################
+# Sketch Application with Inference, Inpainting &amp; UI
+##############################################
+
+class SketchApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title(&quot;Sketch-to-Image Inference&quot;)
+        
+        # Set up the sketch canvas
+        self.canvas_width = 512
+        self.canvas_height = 512
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg=&quot;white&quot;)
+        self.canvas.grid(row=0, column=0, padx=10, pady=10, rowspan=6)
+        
+        # Bind mouse motion to update the eraser cursor preview
+        self.canvas.bind(&quot;&lt;Motion&gt;&quot;, self.update_cursor_circle)
+        self.eraser_cursor_id = None  # to store the id of the eraser preview circle
+        
+        # PIL image for drawing (the sketch)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack = []
+        self.current_stroke_item_ids = []
+        
+        # Inpainting mode attributes
+        self.inpainting_mode = False
+        self.inpaint_mask = None   # a &quot;L&quot; mode image: 0 means no mask, 255 means mask applied
+        self.base_for_inpainting = None  # base image for inpainting
+        
+        # Default drawing settings
+        self.current_color = &quot;black&quot;  # In normal mode: black draws, white erases.
+                                     # In inpainting mode: &quot;red&quot; adds mask, &quot;black&quot; erases mask.
+        self.brush_width = 3
+        
+        # Bind mouse events for drawing
+        self.canvas.bind(&quot;&lt;ButtonPress-1&gt;&quot;, self.on_button_press)
+        self.canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, self.on_mouse_drag)
+        self.canvas.bind(&quot;&lt;ButtonRelease-1&gt;&quot;, self.on_button_release)
+        self.root.bind(&quot;&lt;Control-z&gt;&quot;, self.on_ctrl_z)
+        
+        # Label for displaying the generated image preview
+        self.output_label = tk.Label(root)
+        self.output_label.grid(row=0, column=1, padx=10, pady=10, rowspan=4)
+        
+        # Buttons for additional functions
+        self.clear_button = tk.Button(root, text=&quot;Clear Canvas&quot;, command=self.clear_canvas)
+        self.clear_button.grid(row=4, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.eraser_button = tk.Button(root, text=&quot;Toggle Eraser&quot;, command=self.toggle_eraser)
+        self.eraser_button.grid(row=5, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # New button to toggle inpainting mode
+        self.toggle_inpaint_mode_button = tk.Button(root, text=&quot;Enter Inpainting Mode&quot;, command=self.toggle_inpainting_mode)
+        self.toggle_inpaint_mode_button.grid(row=6, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.save_button = tk.Button(root, text=&quot;Save Generated&quot;, command=self.save_generated)
+        self.save_button.grid(row=7, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.high_res_button = tk.Button(root, text=&quot;High Res Render&quot;, command=self.trigger_high_res_inference)
+        self.high_res_button.grid(row=7, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.start_inference_button = tk.Button(root, text=&quot;Start Inference&quot;, command=self.start_inference_loop)
+        self.start_inference_button.grid(row=8, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.stop_inference_button = tk.Button(root, text=&quot;Stop Inference&quot;, command=self.stop_inference_loop)
+        self.stop_inference_button.grid(row=8, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # New Upscaling Toggle Button
+        self.upscaling_enabled = False
+        self.upscale_toggle_button = tk.Button(root, text=&quot;Upscaling: Off&quot;, command=self.toggle_upscaling)
+        self.upscale_toggle_button.grid(row=9, column=0, columnspan=2, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Brush size control slider
+        self.brush_size_scale = tk.Scale(root, from_=1, to=50, orient=tk.HORIZONTAL,
+                                         label=&quot;Brush/Eraser Size&quot;, command=self.update_brush_size)
+        self.brush_size_scale.set(self.brush_width)
+        self.brush_size_scale.grid(row=10, column=0, columnspan=2, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Set up consistent background preview inference (every 5 seconds)
+        self.update_interval_ms = 5000
+        self.is_inference_running = False
+        self.generated_image = None  # holds the last preview result
+        self.inference_active = True   # flag controlling whether inference is scheduled
+        self.inference_job_id = None   # will store the job ID for cancellation
+        self.schedule_inference()
+        
+        # Variables to hold drawing coordinates
+        self.last_x, self.last_y = None, None
+
+    def on_button_press(self, event):
+        self.last_x, self.last_y = event.x, event.y
+
+        # In inpainting mode, if starting a new stroke, initialize the mask if needed.
+        if self.inpainting_mode and self.inpaint_mask is None:
+            self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+
+    def on_mouse_drag(self, event):
+        x, y = event.x, event.y
+        # Remove the eraser preview while drawing
+        if self.eraser_cursor_id is not None:
+            self.canvas.delete(self.eraser_cursor_id)
+            self.eraser_cursor_id = None
+
+        # If in inpainting mode, update the mask rather than the sketch.
+        if self.inpainting_mode:
+            # Draw a line on the canvas for visual feedback.
+            line_id = self.canvas.create_line(
+                self.last_x, self.last_y, x, y,
+                fill=self.current_color,
+                width=self.brush_width,
+                capstyle=tk.ROUND,
+                smooth=True,
+                splinesteps=36
+            )
+            self.current_stroke_item_ids.append(line_id)
+
+            # Map the current color to a mask value:
+            # &quot;red&quot; means add mask (255) and &quot;black&quot; means remove mask (0)
+            mask_val = 255 if self.current_color == &quot;red&quot; else 0
+            mask_draw = ImageDraw.Draw(self.inpaint_mask)
+            mask_draw.line([self.last_x, self.last_y, x, y],
+                           fill=mask_val,
+                           width=self.brush_width)
+            # Draw an ellipse for smoother edges
+            mask_draw.ellipse(
+                (x - self.brush_width//2, y - self.brush_width//2,
+                 x + self.brush_width//2, y + self.brush_width//2),
+                fill=mask_val
+            )
+        else:
+            # Normal drawing mode
+            line_id = self.canvas.create_line(
+                self.last_x, self.last_y, x, y,
+                fill=self.current_color,
+                width=self.brush_width
+            )
+            self.current_stroke_item_ids.append(line_id)
+            self.draw.line([self.last_x, self.last_y, x, y], fill=self.current_color, width=self.brush_width)
+        self.last_x, self.last_y = x, y
+
+    def on_button_release(self, event):
+        # Save stroke for undo functionality in normal mode.
+        if not self.inpainting_mode and self.current_stroke_item_ids:
+            image_copy = self.sketch.copy()
+            self.undo_stack.append({&#x27;image&#x27;: image_copy, &#x27;item_ids&#x27;: self.current_stroke_item_ids})
+        self.current_stroke_item_ids = []
+        self.last_x, self.last_y = None, None
+
+    def on_ctrl_z(self, event):
+        if not self.inpainting_mode and self.undo_stack:
+            last_state = self.undo_stack.pop()
+            self.sketch = last_state[&#x27;image&#x27;]
+            self.draw = ImageDraw.Draw(self.sketch)
+            for item_id in last_state[&#x27;item_ids&#x27;]:
+                self.canvas.delete(item_id)
+
+    def update_cursor_circle(self, event):
+        &quot;&quot;&quot;Show a preview circle for the brush size at the cursor.&quot;&quot;&quot;
+        radius = self.brush_width // 2
+        x1 = event.x - radius
+        y1 = event.y - radius
+        x2 = event.x + radius
+        y2 = event.y + radius
+        # In inpainting mode, use red for &quot;add mask&quot; and black for &quot;erase mask&quot;.
+        if self.inpainting_mode:
+            outline_color = &quot;red&quot; if self.current_color == &quot;red&quot; else &quot;black&quot;
+        else:
+            outline_color = &quot;red&quot; if self.current_color == &quot;white&quot; else &quot;gray&quot;
+        if self.eraser_cursor_id is None:
+            self.eraser_cursor_id = self.canvas.create_oval(x1, y1, x2, y2, outline=outline_color, dash=(2,2))
+        else:
+            self.canvas.coords(self.eraser_cursor_id, x1, y1, x2, y2)
+            self.canvas.itemconfig(self.eraser_cursor_id, outline=outline_color)
+
+    def update_brush_size(self, value):
+        self.brush_width = int(value)
+
+    def schedule_inference(self):
+        &quot;&quot;&quot;Schedule the next preview inference run if inference is active.&quot;&quot;&quot;
+        if self.inference_active:
+            self.inference_job_id = self.root.after(self.update_interval_ms, self.start_inference_thread)
+
+    def start_inference_thread(self):
+        &quot;&quot;&quot;Launch preview inference in a background thread if not already running.&quot;&quot;&quot;
+        if not self.is_inference_running:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inference)
+            thread.start()
+        if self.inference_active:
+            self.schedule_inference()
+
+    def run_inference(self):
+        &quot;&quot;&quot;Run generation (low-res or high-res based on upscale toggle) and update the output.&quot;&quot;&quot;
+        try:
+            if self.upscaling_enabled:
+                result_img = generate_high_res_image(self.sketch)
+            else:
+                result_img = generate_preview_image(self.sketch)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during preview inference:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def trigger_high_res_inference(self):
+        thread = threading.Thread(target=self.run_high_res_inference)
+        thread.start()
+
+    def run_high_res_inference(self):
+        try:
+            high_res_img = generate_high_res_image(self.sketch)
+            self.generated_image = high_res_img
+            self.root.after(0, self.update_output, high_res_img)
+        except Exception as e:
+            print(&quot;Error during high-res inference:&quot;, e)
+
+    def update_output(self, img):
+        self.generated_tk_img = ImageTk.PhotoImage(img)
+        self.output_label.config(image=self.generated_tk_img)
+
+    def clear_canvas(self):
+        self.canvas.delete(&quot;all&quot;)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack.clear()
+        self.output_label.config(image=&quot;&quot;)
+        # Also clear inpainting mask if in inpainting mode.
+        if self.inpainting_mode:
+            self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+
+    def toggle_eraser(self):
+        &quot;&quot;&quot;
+        Toggle between drawing and erasing.
+        In normal mode, eraser means drawing in white.
+        In inpainting mode, toggling eraser switches between adding mask (red) and erasing mask (black).
+        &quot;&quot;&quot;
+        if self.inpainting_mode:
+            if self.current_color == &quot;red&quot;:
+                self.current_color = &quot;black&quot;
+                self.eraser_button.config(text=&quot;Erase Mask&quot;)
+            else:
+                self.current_color = &quot;red&quot;
+                self.eraser_button.config(text=&quot;Add Mask&quot;)
+        else:
+            if self.current_color == &quot;black&quot;:
+                self.current_color = &quot;white&quot;
+                self.eraser_button.config(text=&quot;Toggle Draw&quot;)
+            else:
+                self.current_color = &quot;black&quot;
+                self.eraser_button.config(text=&quot;Toggle Eraser&quot;)
+                if self.eraser_cursor_id is not None:
+                    self.canvas.delete(self.eraser_cursor_id)
+                    self.eraser_cursor_id = None
+
+    def toggle_inpainting_mode(self):
+        &quot;&quot;&quot;
+        Toggle between normal sketch mode and inpainting mode.
+        When entering inpainting mode, use the current generated image as the base for inpainting
+        and initialize an empty mask. In inpainting mode, drawing will update the mask.
+        &quot;&quot;&quot;
+        if not self.inpainting_mode:
+            if self.generated_image is None:
+                messagebox.showwarning(&quot;No Base Image&quot;, &quot;No generated image available for inpainting!&quot;)
+                return
+            self.inpainting_mode = True
+            self.base_for_inpainting = self.generated_image.copy()
+            self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+            # Clear canvas and display the base image as the background
+            self.canvas.delete(&quot;all&quot;)
+            self.tk_base_img = ImageTk.PhotoImage(self.base_for_inpainting)
+            self.canvas.create_image(0, 0, anchor=&quot;nw&quot;, image=self.tk_base_img)
+            # Set default inpainting drawing color to red (to add mask)
+            self.current_color = &quot;red&quot;
+            self.toggle_inpaint_mode_button.config(text=&quot;Exit Inpainting Mode&quot;)
+            self.eraser_button.config(text=&quot;Add Mask&quot;)
+        else:
+            self.inpainting_mode = False
+            self.inpaint_mask = None
+            self.canvas.delete(&quot;all&quot;)
+            self.current_color = &quot;black&quot;
+            self.toggle_inpaint_mode_button.config(text=&quot;Enter Inpainting Mode&quot;)
+            self.eraser_button.config(text=&quot;Toggle Eraser&quot;)
+
+    def save_generated(self):
+        if self.generated_image is None:
+            messagebox.showwarning(&quot;No Image&quot;, &quot;No generated image to save yet!&quot;)
+            return
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=&quot;.jpeg&quot;,
+            filetypes=[(&quot;JPEG files&quot;, &quot;*.jpeg&quot;), (&quot;PNG files&quot;, &quot;*.png&quot;), (&quot;All files&quot;, &quot;*.*&quot;)]
+        )
+        if file_path:
+            try:
+                self.generated_image.save(file_path)
+                messagebox.showinfo(&quot;Image Saved&quot;, f&quot;Generated image saved as:\n{file_path}&quot;)
+            except Exception as e:
+                messagebox.showerror(&quot;Save Error&quot;, f&quot;Failed to save image:\n{e}&quot;)
+
+    def start_inference_loop(self):
+        self.inference_active = True
+        self.schedule_inference()
+
+    def stop_inference_loop(self):
+        self.inference_active = False
+        if self.inference_job_id is not None:
+            self.root.after_cancel(self.inference_job_id)
+            self.inference_job_id = None
+
+    def toggle_upscaling(self):
+        self.upscaling_enabled = not self.upscaling_enabled
+        if self.upscaling_enabled:
+            self.upscale_toggle_button.config(text=&quot;Upscaling: On&quot;)
+        else:
+            self.upscale_toggle_button.config(text=&quot;Upscaling: Off&quot;)
+
+##############################################
+# Run the Application
+##############################################
+
+if __name__ == &quot;__main__&quot;:
+    root = tk.Tk()
+    app = SketchApp(root)
+    root.mainloop()
+</code></pre></details><section class="notebook-note"><h2 id="consistant-inference-darft-testing">Consistant Inference (Darft Testing)</h2></section><details class="code-cell"><summary>Code cell 25</summary><pre><code>import threading
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from PIL import Image, ImageDraw, ImageOps, ImageTk
+import numpy as np
+import torch
+from diffusers import StableDiffusionXLControlNetPipeline, ControlNetModel, AutoencoderKL, DDIMScheduler
+
+# ----------------------------
+# Global Model Initialization
+# ----------------------------
+controlnet_model = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+# sdxl_model = &quot;SG161222/RealVisXL_V4.0_Lightning&quot;
+sdxl_model = &quot;SimianLuo/LCM_Dreamshaper_v7&quot;
+controlnet_conditioning_scale = 0.7
+
+# Load the ControlNet model using FP16 precision
+controlnet = ControlNetModel.from_pretrained(
+    controlnet_model,
+    torch_dtype=torch.float16,
+    use_safetensors=True
+)
+
+# Load the main SDXL pipeline with ControlNet attached
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    sdxl_model,
+    controlnet=controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True
+)
+pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+pipe.enable_model_cpu_offload()
+
+# Load the VAE for faster inference
+vae = AutoencoderKL.from_pretrained(&quot;madebyollin/sdxl-vae-fp16-fix&quot;, torch_dtype=torch.float16)
+
+# ----------------------------
+# Inference Functions with Dynamic Resolution Scaling
+# ----------------------------
+def generate_from_sketch(sketch_image, target_area=1024*1024):
+    &quot;&quot;&quot;
+    Preprocess the sketch (convert to grayscale, invert, and resize) using the provided target_area.
+    Then run the diffusion pipeline.
+    &quot;&quot;&quot;
+    # Convert to grayscale and invert (line-art effect)
+    gray = sketch_image.convert(&quot;L&quot;)
+    line_art = ImageOps.grayscale(gray)
+    line_art = ImageOps.invert(line_art)
+    
+    # Efficiently resize image:
+    width, height = line_art.size
+    # Compute a scaling ratio such that width*height*ratio^2 = target_area
+    ratio = np.sqrt(target_area / (width * height))
+    new_width, new_height = int(width * ratio), int(height * ratio)
+    line_art = line_art.resize((new_width, new_height))
+    
+    # Define text prompts
+    prompt = (&quot;a photorealistic architectural render of a hotel interior, featuring minimalist design elements, &quot;
+              &quot;realistic lighting, 8K resolution, cinematic atmosphere, masterpiece.&quot;)
+    neg_prompt = (&quot;cartoon, anime, sketch, line art, stylized illustration, low resolution, disfigured, text, watermark, &quot;
+                  &quot;logo, poorly drawn&quot;)
+    
+    # Run the diffusion pipeline (img2img with ControlNet conditioning)
+    result = pipe(
+        prompt,
+        negative_prompt=neg_prompt,
+        image=line_art,                # input image for img2img
+        control_image=line_art,        # control image for ControlNet conditioning
+        controlnet_conditioning_scale=controlnet_conditioning_scale,
+        width=new_width,
+        height=new_height,
+        num_inference_steps=20,
+        guidance_scale=3,
+        strength=0.5,
+        guess_mode=True,
+        eta=0.5,
+        vae=vae
+    ).images[0]
+    
+    return result
+
+def generate_from_sketch_preview(sketch_image):
+    # Preview target: lower resolution (e.g., 512x512 equivalent)
+    return generate_from_sketch(sketch_image, target_area=512*512)
+
+def generate_from_sketch_high_res(sketch_image):
+    # High resolution render (e.g., 1024x1024 equivalent)
+    return generate_from_sketch(sketch_image, target_area=1024*1024)
+
+# ----------------------------
+# Sketch Application with Consistent Background Inference
+# ----------------------------
+class SketchApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title(&quot;Sketch-to-Image Inference&quot;)
+        
+        # Canvas for drawing (sketch)
+        self.canvas_width = 512
+        self.canvas_height = 512
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg=&quot;white&quot;)
+        self.canvas.grid(row=0, column=0, padx=10, pady=10, rowspan=6)
+        
+        # PIL image for the sketch (used for inference)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack = []
+        self.current_stroke_item_ids = []
+        
+        # Default drawing settings
+        self.current_color = &quot;black&quot;  # &quot;black&quot; for drawing, &quot;white&quot; for erasing
+        self.brush_width = 3
+        
+        # Bind mouse events for drawing
+        self.canvas.bind(&quot;&lt;ButtonPress-1&gt;&quot;, self.on_button_press)
+        self.canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, self.on_mouse_drag)
+        self.canvas.bind(&quot;&lt;ButtonRelease-1&gt;&quot;, self.on_button_release)
+        self.root.bind(&quot;&lt;Control-z&gt;&quot;, self.on_ctrl_z)
+        
+        # Label for displaying the generated output image (preview)
+        self.output_label = tk.Label(root)
+        self.output_label.grid(row=0, column=1, padx=10, pady=10, rowspan=4)
+        
+        # Buttons for additional functionality
+        self.clear_button = tk.Button(root, text=&quot;Clear Canvas&quot;, command=self.clear_canvas)
+        self.clear_button.grid(row=4, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.eraser_button = tk.Button(root, text=&quot;Toggle Eraser&quot;, command=self.toggle_eraser)
+        self.eraser_button.grid(row=5, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.save_button = tk.Button(root, text=&quot;Save Generated&quot;, command=self.save_generated)
+        self.save_button.grid(row=6, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.high_res_button = tk.Button(root, text=&quot;High Res Render&quot;, command=self.trigger_high_res_inference)
+        self.high_res_button.grid(row=6, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Consistent background inference using a scheduled loop
+        self.update_interval_ms = 5000  # run preview inference every 5 seconds
+        self.is_inference_running = False
+        self.generated_image = None  # last preview result
+        self.schedule_inference()
+        
+        # Coordinates for drawing
+        self.last_x, self.last_y = None, None
+
+    def on_button_press(self, event):
+        self.last_x, self.last_y = event.x, event.y
+
+    def on_mouse_drag(self, event):
+        x, y = event.x, event.y
+        # Draw on the canvas for immediate feedback
+        line_id = self.canvas.create_line(self.last_x, self.last_y, x, y, fill=self.current_color, width=self.brush_width)
+        self.current_stroke_item_ids.append(line_id)
+        # Draw on the underlying PIL image
+        self.draw.line([self.last_x, self.last_y, x, y], fill=self.current_color, width=self.brush_width)
+        self.last_x, self.last_y = x, y
+
+    def on_button_release(self, event):
+        # Save the current stroke to allow undoing
+        if self.current_stroke_item_ids:
+            image_copy = self.sketch.copy()
+            self.undo_stack.append({&#x27;image&#x27;: image_copy, &#x27;item_ids&#x27;: self.current_stroke_item_ids})
+        self.current_stroke_item_ids = []
+        self.last_x, self.last_y = None, None
+        # (No immediate trigger here; inference is running on schedule)
+
+    def on_ctrl_z(self, event):
+        if self.undo_stack:
+            last_state = self.undo_stack.pop()
+            self.sketch = last_state[&#x27;image&#x27;]
+            self.draw = ImageDraw.Draw(self.sketch)
+            for item_id in last_state[&#x27;item_ids&#x27;]:
+                self.canvas.delete(item_id)
+        # (No immediate trigger here; scheduled inference will update preview)
+
+    def schedule_inference(self):
+        &quot;&quot;&quot;Schedule the next preview inference run.&quot;&quot;&quot;
+        self.root.after(self.update_interval_ms, self.start_inference_thread)
+
+    def start_inference_thread(self):
+        &quot;&quot;&quot;Start preview inference in a background thread if not already running.&quot;&quot;&quot;
+        if not self.is_inference_running:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inference)
+            thread.start()
+        # Schedule the next inference run
+        self.schedule_inference()
+
+    def run_inference(self):
+        &quot;&quot;&quot;Run preview generation (lower resolution) and update the output.&quot;&quot;&quot;
+        try:
+            result_img = generate_from_sketch_preview(self.sketch)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during preview inference:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def trigger_high_res_inference(self):
+        &quot;&quot;&quot;Run high resolution generation in a background thread.&quot;&quot;&quot;
+        thread = threading.Thread(target=self.run_high_res_inference)
+        thread.start()
+
+    def run_high_res_inference(self):
+        &quot;&quot;&quot;Run high resolution generation and update the output.&quot;&quot;&quot;
+        try:
+            high_res_img = generate_from_sketch_high_res(self.sketch)
+            self.generated_image = high_res_img
+            self.root.after(0, self.update_output, high_res_img)
+        except Exception as e:
+            print(&quot;Error during high-res inference:&quot;, e)
+
+    def update_output(self, img):
+        &quot;&quot;&quot;Display the generated image in the output label.&quot;&quot;&quot;
+        self.generated_tk_img = ImageTk.PhotoImage(img)
+        self.output_label.config(image=self.generated_tk_img)
+
+    def clear_canvas(self):
+        &quot;&quot;&quot;Clear the drawing canvas and reset the sketch.&quot;&quot;&quot;
+        self.canvas.delete(&quot;all&quot;)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack.clear()
+        self.output_label.config(image=&quot;&quot;)
+
+    def toggle_eraser(self):
+        &quot;&quot;&quot;Toggle between drawing and erasing.&quot;&quot;&quot;
+        if self.current_color == &quot;black&quot;:
+            self.current_color = &quot;white&quot;
+            self.eraser_button.config(text=&quot;Toggle Draw&quot;)
+        else:
+            self.current_color = &quot;black&quot;
+            self.eraser_button.config(text=&quot;Toggle Eraser&quot;)
+
+    def save_generated(self):
+        &quot;&quot;&quot;Save the currently generated image to disk.&quot;&quot;&quot;
+        if self.generated_image is None:
+            messagebox.showwarning(&quot;No Image&quot;, &quot;No generated image to save yet!&quot;)
+            return
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=&quot;.jpeg&quot;,
+            filetypes=[(&quot;JPEG files&quot;, &quot;*.jpeg&quot;), (&quot;PNG files&quot;, &quot;*.png&quot;), (&quot;All files&quot;, &quot;*.*&quot;)]
+        )
+        if file_path:
+            try:
+                self.generated_image.save(file_path)
+                messagebox.showinfo(&quot;Image Saved&quot;, f&quot;Generated image saved as:\n{file_path}&quot;)
+            except Exception as e:
+                messagebox.showerror(&quot;Save Error&quot;, f&quot;Failed to save image:\n{e}&quot;)
+
+# ----------------------------
+# Run the Application
+# ----------------------------
+if __name__ == &quot;__main__&quot;:
+    root = tk.Tk()
+    app = SketchApp(root)
+    root.mainloop()
+</code></pre></details><section class="notebook-note"><h2 id="faster-inference-using-lcm">Faster Inference - using LCM</h2></section><details class="code-cell"><summary>Code cell 27</summary><pre><code>import threading
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from PIL import Image, ImageDraw, ImageOps, ImageTk
+import numpy as np
+import torch
+
+# Diffusers imports
+from diffusers import (
+    AutoPipelineForImage2Image,
+    DiffusionPipeline,
+    DPMSolverMultistepScheduler,
+    StableDiffusionXLControlNetPipeline,
+    ControlNetModel,
+    AutoencoderKL,
+    DDIMScheduler
+)
+from diffusers.utils import load_image
+
+##############################################
+# Global Pipeline Initialization and Configs
+##############################################
+
+# CONFIG
+# MODEL CONFIG
+CONTROLNET_MODEL = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+SDXL_MODEL = &quot;SG161222/RealVisXL_V4.0_Lightning&quot;
+# SDXL_MODEL = &quot;SG161222/RealVisXL_V5.0_Lightning&quot;
+# VAE = &quot;madebyollin/sdxl-vae-fp16-fix&quot;
+# INFERENCE CONFIG
+CONTROLNET_CONDITIONING_SCALE = 0.7   
+NUM_INFER_STEPS = 5
+STRENGTH = 0.5
+GUIDANCE_SCALE = 2
+GUESS_MODE = True
+ETA = 0.5
+WIDTH = 512
+HEIGHT = 512
+
+# Load the ControlNet model (using FP16 precision)
+controlnet = ControlNetModel.from_pretrained(
+    CONTROLNET_MODEL,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+)
+
+# Load the main SDXL pipeline with ControlNet attached
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    SDXL_MODEL,
+    controlnet=controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+    # variant=&quot;fp16&quot;, ## enable when using RealVisXL 5.0 Lightning
+)
+pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+pipe.enable_model_cpu_offload()
+
+# VAE
+# vae = AutoencoderKL.from_pretrained(VAE, torch_dtype=torch.float16)
+
+##############################################
+# Inference Helper Function
+##############################################
+
+def generate_preview_image(sketch_image, prompt, neg_prompt):
+    &quot;&quot;&quot;
+    Generate a preview (low-resolution) image from the composite sketch.
+    The input is resized to 512x512 and a control image is created from a grayscale/inverted version.
+    &quot;&quot;&quot;
+    # Resize input to 512x512
+    input_image = sketch_image.resize((WIDTH, HEIGHT))
+    # Create control image (line art effect)
+    control_image = ImageOps.invert(ImageOps.grayscale(sketch_image))
+    
+    low_res_img = pipe(
+        prompt,
+        negative_prompt=neg_prompt,
+        image=input_image,
+        control_image=control_image,
+        width=WIDTH,
+        height=HEIGHT,
+        num_inference_steps=NUM_INFER_STEPS,
+        strength=STRENGTH,
+        guidance_scale=GUIDANCE_SCALE,
+        controlnet_conditioning_scale=CONTROLNET_CONDITIONING_SCALE,
+        guess_mode=GUESS_MODE,
+        eta=ETA,
+        # vae=vae
+    ).images[0]
+    
+    return low_res_img
+
+##############################################
+# Sketch Application with Inference &amp; UI
+##############################################
+
+class SketchApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title(&quot;Sketch Window&quot;)
+        
+        # Set up the sketch canvas (blank white background)
+        self.canvas_width = WIDTH
+        self.canvas_height = HEIGHT
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg=&quot;white&quot;)
+        self.canvas.grid(row=0, column=0, padx=10, pady=10)
+        
+        # Bind mouse motion for eraser preview
+        self.canvas.bind(&quot;&lt;Motion&gt;&quot;, self.update_cursor_circle)
+        self.eraser_cursor_id = None
+        
+        # PIL image for drawing (starts as blank white)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack = []
+        self.current_stroke_item_ids = []
+        
+        # Default drawing settings
+        self.current_color = &quot;black&quot;  # &quot;black&quot; for drawing; &quot;white&quot; for eraser
+        self.brush_width = 3
+        
+        # Bind mouse events for drawing
+        self.canvas.bind(&quot;&lt;ButtonPress-1&gt;&quot;, self.on_button_press)
+        self.canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, self.on_mouse_drag)
+        self.canvas.bind(&quot;&lt;ButtonRelease-1&gt;&quot;, self.on_button_release)
+        self.root.bind(&quot;&lt;Control-z&gt;&quot;, self.on_ctrl_z)
+        
+        # Generation preview area (right) - starts as a blank white image
+        blank_image = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.blank_preview = ImageTk.PhotoImage(blank_image)
+        self.output_label = tk.Label(root, image=self.blank_preview, bg=&quot;white&quot;)
+        self.output_label.grid(row=0, column=1, padx=10, pady=10)
+        
+        # Buttons for functions
+        self.clear_button = tk.Button(root, text=&quot;Clear Canvas&quot;, command=self.clear_canvas)
+        self.clear_button.grid(row=4, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.eraser_button = tk.Button(root, text=&quot;Toggle Eraser&quot;, command=self.toggle_eraser)
+        self.eraser_button.grid(row=5, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.save_button = tk.Button(root, text=&quot;Save Generated&quot;, command=self.save_generated)
+        self.save_button.grid(row=6, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.inference_button = tk.Button(root, text=&quot;Inference&quot;, command=self.trigger_inference)
+        self.inference_button.grid(row=6, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Brush size slider
+        self.brush_size_scale = tk.Scale(root, from_=1, to=50, orient=tk.HORIZONTAL,
+                                         label=&quot;Brush/Eraser Size&quot;, command=self.update_brush_size)
+        self.brush_size_scale.set(self.brush_width)
+        self.brush_size_scale.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # ---- New Prompt Customization Inputs ----
+        subject_label = tk.Label(root, text=&quot;Building:&quot;)
+        subject_label.grid(row=8, column=0, sticky=&quot;w&quot;, padx=10)
+        self.subject_entry = tk.Entry(root)
+        self.subject_entry.insert(0, &quot;&quot;)
+        self.subject_entry.grid(row=8, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        style_label = tk.Label(root, text=&quot;Design Features:&quot;)
+        style_label.grid(row=9, column=0, sticky=&quot;w&quot;, padx=10)
+        self.style_entry = tk.Entry(root)
+        self.style_entry.insert(0, &quot;&quot;)
+        self.style_entry.grid(row=9, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        environment_label = tk.Label(root, text=&quot;Environment:&quot;)
+        environment_label.grid(row=10, column=0, sticky=&quot;w&quot;, padx=10)
+        self.environment_entry = tk.Entry(root)
+        self.environment_entry.insert(0, &quot;&quot;)
+        self.environment_entry.grid(row=10, column=1, sticky=&quot;ew&quot;, padx=10)
+        # ---- End Prompt Customization Inputs ----
+        
+        # Inference is off by default; triggered only on canvas changes.
+        self.generated_image = None
+        self.is_inference_running = False
+        
+        # Variables to hold drawing coordinates
+        self.last_x, self.last_y = None, None
+
+    def on_button_press(self, event):
+        self.last_x, self.last_y = event.x, event.y
+
+    def on_mouse_drag(self, event):
+        x, y = event.x, event.y
+        if self.eraser_cursor_id is not None:
+            self.canvas.delete(self.eraser_cursor_id)
+            self.eraser_cursor_id = None
+        line_id = self.canvas.create_line(self.last_x, self.last_y, x, y,
+                                           fill=self.current_color, width=self.brush_width)
+        self.current_stroke_item_ids.append(line_id)
+        self.draw.line([self.last_x, self.last_y, x, y],
+                       fill=self.current_color, width=self.brush_width)
+        self.last_x, self.last_y = x, y
+
+    def on_button_release(self, event):
+        if self.current_stroke_item_ids:
+            image_copy = self.sketch.copy()
+            self.undo_stack.append({&#x27;image&#x27;: image_copy, &#x27;item_ids&#x27;: self.current_stroke_item_ids})
+        self.current_stroke_item_ids = []
+        self.last_x, self.last_y = None, None
+        self.trigger_inference()
+
+    def on_ctrl_z(self, event):
+        if self.undo_stack:
+            last_state = self.undo_stack.pop()
+            self.sketch = last_state[&#x27;image&#x27;]
+            self.draw = ImageDraw.Draw(self.sketch)
+            for item_id in last_state[&#x27;item_ids&#x27;]:
+                self.canvas.delete(item_id)
+            self.trigger_inference()
+
+    def update_cursor_circle(self, event):
+        if self.current_color == &quot;white&quot;:
+            radius = self.brush_width // 2
+            x1 = event.x - radius
+            y1 = event.y - radius
+            x2 = event.x + radius
+            y2 = event.y + radius
+            if self.eraser_cursor_id is None:
+                self.eraser_cursor_id = self.canvas.create_oval(x1, y1, x2, y2, outline=&quot;red&quot;, dash=(2,2))
+            else:
+                self.canvas.coords(self.eraser_cursor_id, x1, y1, x2, y2)
+        else:
+            if self.eraser_cursor_id is not None:
+                self.canvas.delete(self.eraser_cursor_id)
+                self.eraser_cursor_id = None
+
+    def update_brush_size(self, value):
+        self.brush_width = int(value)
+
+    def get_custom_prompt(self):
+        Building = self.subject_entry.get().strip()
+        Design_Features = self.style_entry.get().strip()
+        Environment = self.environment_entry.get().strip()
+        prompt = (f&quot;&quot;&quot;a photorealistic architectural render of a [{Building}], featuring
+                  [{Design_Features}] design elements in a [{Environment}] environment, realistic lighting,
+                  &quot;8K resolution, cinematic atmosphere, masterpiece.&quot;&quot;&quot;)
+        return prompt
+
+    def trigger_inference(self):
+        if not self.is_inference_running:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inference)
+            thread.start()
+
+    def run_inference(self):
+        try:
+            custom_prompt = self.get_custom_prompt()
+            neg_prompt = (&quot;&quot;&quot;(octane render, render, drawing, anime, bad photo, bad photography:1.3), 
+                          (worst quality, low quality, blurry:1.2), (bad teeth, deformed teeth, deformed lips), 
+                          (bad anatomy, bad proportions:1.1), (deformed iris, deformed pupils), 
+                          (deformed eyes, bad eyes), (deformed face, ugly face, bad face), 
+                          (deformed hands, bad hands, fused fingers), morbid, mutilated, mutation, disfigured&quot;&quot;&quot;
+                          )
+            
+            result_img = generate_preview_image(self.sketch, custom_prompt, neg_prompt)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during inference:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def update_output(self, img):
+        self.generated_tk_img = ImageTk.PhotoImage(img)
+        self.output_label.config(image=self.generated_tk_img)
+
+    def clear_canvas(self):
+        self.canvas.delete(&quot;all&quot;)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack.clear()
+        self.output_label.config(image=&quot;&quot;)
+
+    def toggle_eraser(self):
+        if self.current_color == &quot;black&quot;:
+            self.current_color = &quot;white&quot;
+            self.eraser_button.config(text=&quot;Toggle Draw&quot;)
+        else:
+            self.current_color = &quot;black&quot;
+            self.eraser_button.config(text=&quot;Toggle Eraser&quot;)
+            if self.eraser_cursor_id is not None:
+                self.canvas.delete(self.eraser_cursor_id)
+                self.eraser_cursor_id = None
+
+    def save_generated(self):
+        if self.generated_image is None:
+            messagebox.showwarning(&quot;No Image&quot;, &quot;No generated image to save yet!&quot;)
+            return
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=&quot;.jpeg&quot;,
+            filetypes=[(&quot;JPEG files&quot;, &quot;*.jpeg&quot;), (&quot;PNG files&quot;, &quot;*.png&quot;), (&quot;All files&quot;, &quot;*.*&quot;)]
+        )
+        if file_path:
+            try:
+                self.generated_image.save(file_path)
+                messagebox.showinfo(&quot;Image Saved&quot;, f&quot;Generated image saved as:\n{file_path}&quot;)
+            except Exception as e:
+                messagebox.showerror(&quot;Save Error&quot;, f&quot;Failed to save image:\n{e}&quot;)
+
+##############################################
+# Run the Application
+##############################################
+
+if __name__ == &quot;__main__&quot;:
+    root = tk.Tk()
+    app = SketchApp(root)
+    root.mainloop()
+</code></pre></details><section class="notebook-note"><h2 id="inpaint-with-different-model-draft-testings">Inpaint with different model (Draft Testings)</h2></section><details class="code-cell"><summary>Code cell 29</summary><pre><code>import threading
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from PIL import Image, ImageDraw, ImageOps, ImageTk
+import numpy as np
+import torch
+# Diffusers imports
+
+from diffusers import (
+    AutoPipelineForImage2Image,
+    DiffusionPipeline,
+    DPMSolverMultistepScheduler,
+    StableDiffusionXLControlNetPipeline,
+    ControlNetModel,
+    AutoencoderKL,
+    DDIMScheduler,
+    UniPCMultistepScheduler
+)
+from diffusers.utils import load_image
+
+##############################################
+# Global Pipeline Initialization and Configs
+##############################################
+
+# CONFIG
+# MODEL CONFIG
+CONTROLNET_MODEL = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+SDXL_MODEL = &quot;SG161222/RealVisXL_V4.0_Lightning&quot;
+# SDXL_MODEL = &quot;SG161222/RealVisXL_V5.0_Lightning&quot;
+# VAE = &quot;madebyollin/sdxl-vae-fp16-fix&quot;
+# INFERENCE CONFIG
+CONTROLNET_CONDITIONING_SCALE = 0.7  
+NUM_INFER_STEPS = 4
+GUIDANCE_SCALE = 2
+GUESS_MODE = True
+ETA = 0.4
+WIDTH = 512
+HEIGHT = 512
+
+# Load the ControlNet model (using FP16 precision)
+controlnet = ControlNetModel.from_pretrained(
+    CONTROLNET_MODEL,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+)
+
+# Load the main SDXL pipeline with ControlNet attached
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    SDXL_MODEL,
+    controlnet=controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+    # variant=&quot;fp16&quot;, ## enable when using RealVisXL 5.0 Lightning
+)
+pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+pipe.enable_model_cpu_offload()
+
+# VAE
+# vae = AutoencoderKL.from_pretrained(VAE, torch_dtype=torch.float16)
+
+##############################################
+# Inference Helper Functions
+##############################################
+
+def generate_preview_image(sketch_image, prompt, neg_prompt):
+    &quot;&quot;&quot;
+    Generate a preview (low-resolution) image from the composite sketch.
+    The input is resized to 512x512 and a control image is created from a grayscale/inverted version.
+    &quot;&quot;&quot;
+    # Resize input to 512x512
+    input_image = sketch_image.resize((WIDTH, HEIGHT))
+    # Create control image (line art effect)
+    control_image = ImageOps.invert(ImageOps.grayscale(sketch_image))
+    
+    low_res_img = pipe(
+        prompt,
+        negative_prompt=neg_prompt,
+        image=input_image,
+        control_image=control_image,
+        width=WIDTH,
+        height=HEIGHT,
+        num_inference_steps=NUM_INFER_STEPS,
+        guidance_scale=GUIDANCE_SCALE,
+        controlnet_conditioning_scale=CONTROLNET_CONDITIONING_SCALE,
+        guess_mode=GUESS_MODE,
+        eta=ETA,
+        dynamic_threshold=True
+        # vae=vae
+    ).images[0]
+    
+    return low_res_img
+
+def generate_inpaint_image(base_image, mask_image, prompt, neg_prompt):
+    &quot;&quot;&quot;
+    Generate an inpainted image by replacing the masked areas in the base_image with generated content.
+    The mask_image should be in mode &quot;L&quot; where white (value &gt;128) indicates areas to inpaint.
+    &quot;&quot;&quot;
+    # Create an inpainting input by replacing masked areas with white
+    base_np = np.array(base_image)
+    mask_np = np.array(mask_image.convert(&quot;L&quot;))
+    threshold = 128
+    inpaint_np = np.where(mask_np[:, :, None] &gt; threshold, 255, base_np)
+    inpaint_input = Image.fromarray(inpaint_np.astype(np.uint8))
+    
+    result_img = pipe(
+        prompt,
+        negative_prompt=neg_prompt,
+        image=inpaint_input,
+        control_image=inpaint_input,  # using the inpaint input as control; adjust as needed
+        width=WIDTH,
+        height=HEIGHT,
+        num_inference_steps=NUM_INFER_STEPS,
+        guidance_scale=GUIDANCE_SCALE,
+        controlnet_conditioning_scale=CONTROLNET_CONDITIONING_SCALE,
+        guess_mode=GUESS_MODE,
+        eta=ETA,
+    ).images[0]
+    
+    # Composite the generated result with the original base image using the mask
+    mask_binary = mask_image.convert(&quot;L&quot;).point(lambda p: 255 if p &gt; threshold else 0)
+    final_image = Image.composite(result_img, base_image, mask_binary)
+    return final_image
+
+##############################################
+# Sketch Application with Inference, Inpainting &amp; UI
+##############################################
+
+class SketchApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title(&quot;Sketch &amp; Inpaint Window&quot;)
+        
+        # Set up two canvases in a single row (drawing canvas left, generated output right)
+        self.canvas_width = WIDTH
+        self.canvas_height = HEIGHT
+        
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg=&quot;white&quot;)
+        self.canvas.grid(row=0, column=0, padx=10, pady=10)
+        
+        blank_image = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.blank_preview = ImageTk.PhotoImage(blank_image)
+        self.output_label = tk.Label(root, image=self.blank_preview, bg=&quot;white&quot;)
+        self.output_label.grid(row=0, column=1, padx=10, pady=10)
+        
+        # Bind mouse motion for eraser preview
+        self.canvas.bind(&quot;&lt;Motion&gt;&quot;, self.update_cursor_circle)
+        self.eraser_cursor_id = None
+        
+        # PIL image for drawing (starts as blank white)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack = []
+        self.current_stroke_item_ids = []
+        
+        # Default drawing settings
+        self.current_color = &quot;black&quot;  # &quot;black&quot; for drawing; &quot;white&quot; for eraser
+        self.brush_width = 3
+        
+        # Inpainting mode flag and mask (for inpainting strokes)
+        self.inpainting_mode = False
+        self.inpaint_mask = None
+        self.base_for_inpainting = None  # The base image to inpaint on
+        
+        # Bind mouse events for drawing
+        self.canvas.bind(&quot;&lt;ButtonPress-1&gt;&quot;, self.on_button_press)
+        self.canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, self.on_mouse_drag)
+        self.canvas.bind(&quot;&lt;ButtonRelease-1&gt;&quot;, self.on_button_release)
+        self.root.bind(&quot;&lt;Control-z&gt;&quot;, self.on_ctrl_z)
+        
+        # ---- Control Buttons Layout ----
+        # Row 1: Inference and Clear Canvas buttons
+        self.inference_button = tk.Button(root, text=&quot;Inference&quot;, command=self.trigger_inference)
+        self.inference_button.grid(row=1, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.clear_button = tk.Button(root, text=&quot;Clear Canvas&quot;, command=self.clear_canvas)
+        self.clear_button.grid(row=1, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Row 2: Toggle Eraser and Toggle Inpainting Mode buttons
+        self.eraser_button = tk.Button(root, text=&quot;Toggle Eraser&quot;, command=self.toggle_eraser)
+        self.eraser_button.grid(row=2, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.toggle_inpaint_mode_button = tk.Button(root, text=&quot;Enter Inpainting Mode&quot;, command=self.toggle_inpainting_mode)
+        self.toggle_inpaint_mode_button.grid(row=2, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Row 3: Inpaint and Save Generated buttons
+        self.inpaint_button = tk.Button(root, text=&quot;Apply Inpainting&quot;, command=self.trigger_inpaint_process)
+        self.inpaint_button.grid(row=3, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        self.inpaint_button.config(state=tk.DISABLED)
+        
+        self.save_button = tk.Button(root, text=&quot;Save Generated&quot;, command=self.save_generated)
+        self.save_button.grid(row=3, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Row 4: Brush size slider (spanning both columns)
+        self.brush_size_scale = tk.Scale(root, from_=1, to=50, orient=tk.HORIZONTAL,
+                                         label=&quot;Brush/Eraser Size&quot;, command=self.update_brush_size)
+        self.brush_size_scale.set(self.brush_width)
+        self.brush_size_scale.grid(row=4, column=0, columnspan=2, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # ---- Prompt Customization Inputs ----
+        # Row 5: Building prompt
+        subject_label = tk.Label(root, text=&quot;Building:&quot;)
+        subject_label.grid(row=5, column=0, sticky=&quot;w&quot;, padx=10)
+        self.subject_entry = tk.Entry(root)
+        self.subject_entry.insert(0, &quot;&quot;)
+        self.subject_entry.grid(row=5, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Row 6: Design Features prompt
+        style_label = tk.Label(root, text=&quot;Design Features:&quot;)
+        style_label.grid(row=6, column=0, sticky=&quot;w&quot;, padx=10)
+        self.style_entry = tk.Entry(root)
+        self.style_entry.insert(0, &quot;&quot;)
+        self.style_entry.grid(row=6, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Row 7: Environment prompt
+        environment_label = tk.Label(root, text=&quot;Environment:&quot;)
+        environment_label.grid(row=7, column=0, sticky=&quot;w&quot;, padx=10)
+        self.environment_entry = tk.Entry(root)
+        self.environment_entry.insert(0, &quot;&quot;)
+        self.environment_entry.grid(row=7, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Row 8: Separate Inpainting Prompt
+        inpaint_prompt_label = tk.Label(root, text=&quot;Inpainting Prompt:&quot;)
+        inpaint_prompt_label.grid(row=8, column=0, sticky=&quot;w&quot;, padx=10)
+        self.inpaint_prompt_entry = tk.Entry(root)
+        self.inpaint_prompt_entry.insert(0, &quot;&quot;)
+        self.inpaint_prompt_entry.grid(row=8, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Inference is off by default; triggered only on canvas changes.
+        self.generated_image = None
+        self.is_inference_running = False
+        
+        # Variables to hold drawing coordinates
+        self.last_x, self.last_y = None, None
+
+    def on_button_press(self, event):
+        self.last_x, self.last_y = event.x, event.y
+
+    def on_mouse_drag(self, event):
+        x, y = event.x, event.y
+        if self.eraser_cursor_id is not None:
+            self.canvas.delete(self.eraser_cursor_id)
+            self.eraser_cursor_id = None
+        line_id = self.canvas.create_line(self.last_x, self.last_y, x, y,
+                                           fill=self.current_color, width=self.brush_width)
+        self.current_stroke_item_ids.append(line_id)
+        
+        if self.inpainting_mode:
+            # In inpainting mode, record strokes on the mask (white)
+            if self.inpaint_mask is not None:
+                mask_draw = ImageDraw.Draw(self.inpaint_mask)
+                mask_draw.line([self.last_x, self.last_y, x, y], fill=&quot;white&quot;, width=self.brush_width)
+        else:
+            # Normal drawing on the sketch
+            self.draw.line([self.last_x, self.last_y, x, y],
+                           fill=self.current_color, width=self.brush_width)
+        self.last_x, self.last_y = x, y
+
+    def on_button_release(self, event):
+        if not self.inpainting_mode and self.current_stroke_item_ids:
+            image_copy = self.sketch.copy()
+            self.undo_stack.append({&#x27;image&#x27;: image_copy, &#x27;item_ids&#x27;: self.current_stroke_item_ids})
+        self.current_stroke_item_ids = []
+        self.last_x, self.last_y = None, None
+        if not self.inpainting_mode:
+            self.trigger_inference()
+
+    def on_ctrl_z(self, event):
+        if not self.inpainting_mode and self.undo_stack:
+            last_state = self.undo_stack.pop()
+            self.sketch = last_state[&#x27;image&#x27;]
+            self.draw = ImageDraw.Draw(self.sketch)
+            for item_id in last_state[&#x27;item_ids&#x27;]:
+                self.canvas.delete(item_id)
+            self.trigger_inference()
+
+    def update_cursor_circle(self, event):
+        if self.current_color == &quot;white&quot;:
+            radius = self.brush_width // 2
+            x1 = event.x - radius
+            y1 = event.y - radius
+            x2 = event.x + radius
+            y2 = event.y + radius
+            if self.eraser_cursor_id is None:
+                self.eraser_cursor_id = self.canvas.create_oval(x1, y1, x2, y2, outline=&quot;red&quot;, dash=(2,2))
+            else:
+                self.canvas.coords(self.eraser_cursor_id, x1, y1, x2, y2)
+        else:
+            if self.eraser_cursor_id is not None:
+                self.canvas.delete(self.eraser_cursor_id)
+                self.eraser_cursor_id = None
+
+    def update_brush_size(self, value):
+        self.brush_width = int(value)
+
+    def get_custom_prompt(self):
+        Subject = self.subject_entry.get().strip()
+        Design_Features = self.style_entry.get().strip()
+        Environment = self.environment_entry.get().strip()
+        prompt = (f&quot;a photorealistic render of a [{Subject}], featuring &quot;
+                  f&quot;[{Design_Features}] design elements in a [{Environment}] environment, &quot;
+                  f&quot;realistic lighting, 8K resolution, cinematic atmosphere, masterpiece.&quot;)
+        return prompt
+
+    def get_inpaint_prompt(self):
+        return self.inpaint_prompt_entry.get().strip()
+
+    def trigger_inference(self):
+        if not self.is_inference_running and not self.inpainting_mode:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inference)
+            thread.start()
+
+    def run_inference(self):
+        try:
+            custom_prompt = self.get_custom_prompt()
+            neg_prompt = (&quot;(drawing, anime, bad photo, bad photography:1.3), &quot;
+                          &quot;(worst quality, low quality, blurry:1.2), (bad teeth, deformed teeth, deformed lips), &quot;
+                          &quot;(bad anatomy), (deformed iris, deformed pupils), &quot;
+                          &quot;(deformed eyes, bad eyes), (deformed face, ugly face, bad face), &quot;
+                          &quot;(deformed hands, bad hands, fused fingers), morbid, mutilated, mutation, disfigured&quot;)
+            
+            result_img = generate_preview_image(self.sketch, custom_prompt, neg_prompt)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during inference:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def trigger_inpaint_process(self):
+        if not self.is_inference_running and self.inpainting_mode:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inpainting)
+            thread.start()
+
+    def run_inpainting(self):
+        try:
+            custom_inpaint_prompt = self.get_inpaint_prompt()
+            neg_prompt = (&quot;(drawing, anime, bad photo, bad photography:1.3), &quot;
+                          &quot;(worst quality, low quality, blurry:1.2), (bad teeth, deformed teeth, deformed lips), &quot;
+                          &quot;(bad anatomy), (deformed iris, deformed pupils), &quot;
+                          &quot;(deformed eyes, bad eyes), (deformed face, ugly face, bad face), &quot;
+                          &quot;(deformed hands, bad hands, fused fingers), morbid, mutilated, mutation, disfigured&quot;)
+            result_img = generate_inpaint_image(self.base_for_inpainting, self.inpaint_mask, custom_inpaint_prompt, neg_prompt)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during inpainting:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def update_output(self, img):
+        self.generated_tk_img = ImageTk.PhotoImage(img)
+        self.output_label.config(image=self.generated_tk_img)
+
+    def clear_canvas(self):
+        self.canvas.delete(&quot;all&quot;)
+        if self.inpainting_mode:
+            # In inpainting mode, clear the mask and redraw the base image.
+            if self.base_for_inpainting:
+                self.tk_base_img = ImageTk.PhotoImage(self.base_for_inpainting)
+                self.canvas.create_image(0, 0, anchor=&quot;nw&quot;, image=self.tk_base_img)
+            if self.inpaint_mask:
+                self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+        else:
+            self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+            self.draw = ImageDraw.Draw(self.sketch)
+            self.undo_stack.clear()
+            self.output_label.config(image=&quot;&quot;)
+
+    def toggle_eraser(self):
+        if self.current_color == &quot;black&quot;:
+            self.current_color = &quot;white&quot;
+            self.eraser_button.config(text=&quot;Toggle Draw&quot;)
+        else:
+            self.current_color = &quot;black&quot;
+            self.eraser_button.config(text=&quot;Toggle Eraser&quot;)
+            if self.eraser_cursor_id is not None:
+                self.canvas.delete(self.eraser_cursor_id)
+                self.eraser_cursor_id = None
+
+    def toggle_inpainting_mode(self):
+        # Toggle between normal drawing mode and inpainting mode.
+        if not self.inpainting_mode:
+            # Enter inpainting mode
+            if self.generated_image is None:
+                messagebox.showwarning(&quot;No Base Image&quot;, &quot;No generated image available for inpainting!&quot;)
+                return
+            self.inpainting_mode = True
+            # Set the base image to the current generated image
+            self.base_for_inpainting = self.generated_image.copy()
+            # Initialize an empty mask (black background)
+            self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+            # Clear canvas and display the base image
+            self.canvas.delete(&quot;all&quot;)
+            self.tk_base_img = ImageTk.PhotoImage(self.base_for_inpainting)
+            self.canvas.create_image(0, 0, anchor=&quot;nw&quot;, image=self.tk_base_img)
+            # Change brush color to red for mask drawing
+            self.current_color = &quot;red&quot;
+            self.inpaint_button.config(state=tk.NORMAL)
+            self.toggle_inpaint_mode_button.config(text=&quot;Exit Inpainting Mode&quot;)
+        else:
+            # Exit inpainting mode: reset to normal drawing (sketch) mode
+            self.inpainting_mode = False
+            self.inpaint_mask = None
+            self.canvas.delete(&quot;all&quot;)
+            self.current_color = &quot;black&quot;
+            self.inpaint_button.config(state=tk.DISABLED)
+            self.toggle_inpaint_mode_button.config(text=&quot;Enter Inpainting Mode&quot;)
+
+    def save_generated(self):
+        if self.generated_image is None:
+            messagebox.showwarning(&quot;No Image&quot;, &quot;No generated image to save yet!&quot;)
+            return
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=&quot;.jpeg&quot;,
+            filetypes=[(&quot;JPEG files&quot;, &quot;*.jpeg&quot;), (&quot;PNG files&quot;, &quot;*.png&quot;), (&quot;All files&quot;, &quot;*.*&quot;)]
+        )
+        if file_path:
+            try:
+                self.generated_image.save(file_path)
+                messagebox.showinfo(&quot;Image Saved&quot;, f&quot;Generated image saved as:\n{file_path}&quot;)
+            except Exception as e:
+                messagebox.showerror(&quot;Save Error&quot;, f&quot;Failed to save image:\n{e}&quot;)
+
+##############################################
+# Run the Application
+##############################################
+
+if __name__ == &quot;__main__&quot;:
+    root = tk.Tk()
+    app = SketchApp(root)
+    root.mainloop()
+</code></pre></details><details class="code-cell"><summary>Code cell 30</summary><pre><code>import threading
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from PIL import Image, ImageDraw, ImageOps, ImageTk
+import numpy as np
+import torch
+
+# Diffusers imports
+from diffusers import (
+    StableDiffusionXLControlNetPipeline,
+    ControlNetModel,
+    StableDiffusionXLInpaintPipeline,
+    DDIMScheduler,
+    AutoPipelineForInpainting,
+    DiffusionPipeline,
+    
+)
+from diffusers.utils import load_image
+
+##############################################
+# Global Pipeline Initialization and Configs
+##############################################
+
+# MODEL CONFIGS
+CONTROLNET_MODEL = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+SDXL_MODEL = &quot;SG161222/RealVisXL_V4.0_Lightning&quot;
+INPAINT_MODEL = &quot;diffusers/stable-diffusion-xl-1.0-inpainting-0.1&quot;
+
+# Inference params
+CONTROLNET_CONDITIONING_SCALE = 0.7
+NUM_INFER_STEPS = 4
+GUIDANCE_SCALE = 2
+GUESS_MODE = True
+ETA = 0.4
+WIDTH = 512
+HEIGHT = 512
+
+# --------------------
+# 1) Load ControlNet
+# --------------------
+controlnet = ControlNetModel.from_pretrained(
+    CONTROLNET_MODEL,
+    torch_dtype=torch.float16,
+    use_safetensors=True
+)
+
+# Main SDXL pipeline with ControlNet
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    SDXL_MODEL,
+    controlnet=controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True
+)
+pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+pipe.enable_model_cpu_offload()
+
+# --------------------
+# 2) Load Inpaint Pipeline
+# --------------------
+inpaint_pipe = AutoPipelineForInpainting.from_pretrained(
+    INPAINT_MODEL,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+    variant=&quot;fp16&quot;
+)
+inpaint_pipe.enable_model_cpu_offload()
+
+##############################################
+# Inference Helper Functions
+##############################################
+
+def generate_preview_image(sketch_image, prompt, neg_prompt):
+    &quot;&quot;&quot;
+    1) Resize the user-drawn scribble to 512x512.
+    2) Convert the scribble to an &#x27;inverted grayscale&#x27; control image.
+    3) Run the ControlNet pipeline to generate the base image.
+    &quot;&quot;&quot;
+    # Resize input to 512x512
+    input_image = sketch_image.resize((WIDTH, HEIGHT))
+    # Create control image (line art effect)
+    control_image = ImageOps.invert(ImageOps.grayscale(sketch_image))
+    
+    result_img = pipe(
+        prompt=prompt,
+        negative_prompt=neg_prompt,
+        image=input_image,
+        control_image=control_image,
+        width=WIDTH,
+        height=HEIGHT,
+        num_inference_steps=NUM_INFER_STEPS,
+        guidance_scale=GUIDANCE_SCALE,
+        controlnet_conditioning_scale=CONTROLNET_CONDITIONING_SCALE,
+        guess_mode=GUESS_MODE,
+        eta=ETA
+    ).images[0]
+    
+    return result_img
+
+def generate_inpaint_image(base_image, mask_image, prompt, neg_prompt):
+    &quot;&quot;&quot;
+    Use the SDXL Inpainting pipeline to replace the white areas of mask_image.
+    The rest of the image is preserved and used as context automatically.
+    &quot;&quot;&quot;
+    # Convert mask to &#x27;L&#x27; mode, threshold white vs black
+    thresholded_mask = mask_image.convert(&quot;L&quot;).point(lambda p: 255 if p &gt; 128 else 0)
+    
+    # Inpaint with the dedicated inpaint pipeline
+    result_img = inpaint_pipe(
+        prompt=prompt,
+        negative_prompt=neg_prompt,
+        image=base_image,         # The entire base image
+        mask_image=thresholded_mask,  # White areas to be inpainted
+        width=WIDTH,
+        height=HEIGHT,
+        num_inference_steps=NUM_INFER_STEPS,
+        guidance_scale=GUIDANCE_SCALE
+    ).images[0]
+    
+    return result_img
+
+##############################################
+# Sketch Application with Inference &amp; UI
+##############################################
+
+class SketchApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title(&quot;Sketch &amp; Inpaint Window&quot;)
+
+        # Layout: one row, two columns for canvases
+        self.canvas_width = WIDTH
+        self.canvas_height = HEIGHT
+
+        # Left: user drawing canvas
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg=&quot;white&quot;)
+        self.canvas.grid(row=0, column=0, padx=10, pady=10)
+
+        # Right: generated image preview
+        blank_image = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.blank_preview = ImageTk.PhotoImage(blank_image)
+        self.output_label = tk.Label(root, image=self.blank_preview, bg=&quot;white&quot;)
+        self.output_label.grid(row=0, column=1, padx=10, pady=10)
+
+        # Basic drawing state
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack = []
+        self.current_stroke_item_ids = []
+        self.current_color = &quot;black&quot;  # &quot;white&quot; for eraser
+        self.brush_width = 5
+
+        # Inpainting state
+        self.inpainting_mode = False
+        self.inpaint_mask = None
+        self.base_for_inpainting = None
+        self.generated_image = None
+        self.is_inference_running = False
+
+        # Track mouse movement for drawing
+        self.last_x, self.last_y = None, None
+
+        # Bind mouse events
+        self.canvas.bind(&quot;&lt;ButtonPress-1&gt;&quot;, self.on_button_press)
+        self.canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, self.on_mouse_drag)
+        self.canvas.bind(&quot;&lt;ButtonRelease-1&gt;&quot;, self.on_button_release)
+        self.canvas.bind(&quot;&lt;Motion&gt;&quot;, self.update_cursor_circle)
+        self.root.bind(&quot;&lt;Control-z&gt;&quot;, self.on_ctrl_z)
+
+        # Controls (below)
+        # Row 1: Inference &amp; Clear
+        self.inference_button = tk.Button(root, text=&quot;Inference&quot;, command=self.trigger_inference)
+        self.inference_button.grid(row=1, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+
+        self.clear_button = tk.Button(root, text=&quot;Clear Canvas&quot;, command=self.clear_canvas)
+        self.clear_button.grid(row=1, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+
+        # Row 2: Eraser &amp; Inpaint Mode
+        self.eraser_button = tk.Button(root, text=&quot;Toggle Eraser&quot;, command=self.toggle_eraser)
+        self.eraser_button.grid(row=2, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+
+        self.toggle_inpaint_mode_button = tk.Button(root, text=&quot;Enter Inpainting Mode&quot;, command=self.toggle_inpainting_mode)
+        self.toggle_inpaint_mode_button.grid(row=2, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+
+        # Row 3: Apply Inpaint &amp; Save
+        self.inpaint_button = tk.Button(root, text=&quot;Apply Inpainting&quot;, command=self.trigger_inpaint_process)
+        self.inpaint_button.grid(row=3, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        self.inpaint_button.config(state=tk.DISABLED)
+
+        self.save_button = tk.Button(root, text=&quot;Save Generated&quot;, command=self.save_generated)
+        self.save_button.grid(row=3, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+
+        # Row 4: Brush size slider
+        self.brush_size_scale = tk.Scale(root, from_=1, to=50, orient=tk.HORIZONTAL,
+                                         label=&quot;Brush/Eraser Size&quot;, command=self.update_brush_size)
+        self.brush_size_scale.set(self.brush_width)
+        self.brush_size_scale.grid(row=4, column=0, columnspan=2, padx=10, pady=5, sticky=&quot;ew&quot;)
+
+        # Row 5: Building
+        subject_label = tk.Label(root, text=&quot;Building:&quot;)
+        subject_label.grid(row=5, column=0, sticky=&quot;w&quot;, padx=10)
+        self.subject_entry = tk.Entry(root)
+        self.subject_entry.grid(row=5, column=1, sticky=&quot;ew&quot;, padx=10)
+
+        # Row 6: Design
+        style_label = tk.Label(root, text=&quot;Design Features:&quot;)
+        style_label.grid(row=6, column=0, sticky=&quot;w&quot;, padx=10)
+        self.style_entry = tk.Entry(root)
+        self.style_entry.grid(row=6, column=1, sticky=&quot;ew&quot;, padx=10)
+
+        # Row 7: Environment
+        environment_label = tk.Label(root, text=&quot;Environment:&quot;)
+        environment_label.grid(row=7, column=0, sticky=&quot;w&quot;, padx=10)
+        self.environment_entry = tk.Entry(root)
+        self.environment_entry.grid(row=7, column=1, sticky=&quot;ew&quot;, padx=10)
+
+        # Row 8: Inpainting prompt
+        inpaint_prompt_label = tk.Label(root, text=&quot;Inpainting Prompt:&quot;)
+        inpaint_prompt_label.grid(row=8, column=0, sticky=&quot;w&quot;, padx=10)
+        self.inpaint_prompt_entry = tk.Entry(root)
+        self.inpaint_prompt_entry.grid(row=8, column=1, sticky=&quot;ew&quot;, padx=10)
+
+    # ---------------------
+    # Drawing &amp; Undo
+    # ---------------------
+    def on_button_press(self, event):
+        self.last_x, self.last_y = event.x, event.y
+
+    def on_mouse_drag(self, event):
+        x, y = event.x, event.y
+        # Visual stroke on canvas
+        line_id = self.canvas.create_line(self.last_x, self.last_y, x, y,
+                                          fill=self.current_color, width=self.brush_width)
+        self.current_stroke_item_ids.append(line_id)
+
+        # Actual pixel changes
+        if self.inpainting_mode:
+            # In inpainting mode, draw white on the mask
+            if self.inpaint_mask is not None:
+                mask_draw = ImageDraw.Draw(self.inpaint_mask)
+                mask_draw.line([self.last_x, self.last_y, x, y], fill=&quot;white&quot;, width=self.brush_width)
+        else:
+            # Normal scribble
+            self.draw.line([self.last_x, self.last_y, x, y], fill=self.current_color, width=self.brush_width)
+
+        self.last_x, self.last_y = x, y
+
+    def on_button_release(self, event):
+        if not self.inpainting_mode and self.current_stroke_item_ids:
+            # Push state to undo stack
+            image_copy = self.sketch.copy()
+            self.undo_stack.append({&#x27;image&#x27;: image_copy, &#x27;item_ids&#x27;: self.current_stroke_item_ids})
+        self.current_stroke_item_ids = []
+        self.last_x, self.last_y = None, None
+
+        # Trigger normal inference if not in inpainting mode
+        if not self.inpainting_mode:
+            self.trigger_inference()
+
+    def on_ctrl_z(self, event):
+        if not self.inpainting_mode and self.undo_stack:
+            last_state = self.undo_stack.pop()
+            self.sketch = last_state[&#x27;image&#x27;]
+            self.draw = ImageDraw.Draw(self.sketch)
+            for item_id in last_state[&#x27;item_ids&#x27;]:
+                self.canvas.delete(item_id)
+            self.trigger_inference()
+
+    def update_cursor_circle(self, event):
+        # Optional: show a red circle if the user wants an “eraser cursor” or so.
+        pass
+
+    def update_brush_size(self, value):
+        self.brush_width = int(value)
+
+    # ---------------------
+    # Prompts
+    # ---------------------
+    def get_custom_prompt(self):
+        Subject = self.subject_entry.get().strip()
+        Features = self.style_entry.get().strip()
+        Enivronment = self.environment_entry.get().strip()
+        prompt = (f&quot;a photorealistic render of a [{Subject}], featuring &quot;
+                  f&quot;[{Features}] design elements in a [{Enivronment}] environment, &quot;
+                  &quot;realistic lighting, 8K resolution, cinematic atmosphere, masterpiece.&quot;)
+        return prompt
+
+    def get_inpaint_prompt(self):
+        return self.inpaint_prompt_entry.get().strip()
+
+    # ---------------------
+    # Generation
+    # ---------------------
+    def trigger_inference(self):
+        if not self.is_inference_running and not self.inpainting_mode:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inference)
+            thread.start()
+
+    def run_inference(self):
+        try:
+            custom_prompt = self.get_custom_prompt()
+            neg_prompt = (&quot;(octane render, render, drawing, anime, bad photo, bad photography:1.3), &quot;
+                          &quot;(worst quality, low quality, blurry:1.2), (bad teeth, deformed teeth, deformed lips), &quot;
+                          &quot;(bad anatomy, bad proportions:1.1), (deformed iris, deformed pupils), &quot;
+                          &quot;(deformed eyes, bad eyes), (deformed face, ugly face, bad face), &quot;
+                          &quot;(deformed hands, bad hands, fused fingers), morbid, mutilated, mutation, disfigured&quot;)
+
+            # Generate base image from scribble
+            result_img = generate_preview_image(self.sketch, custom_prompt, neg_prompt)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+
+        except Exception as e:
+            print(&quot;Error during inference:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def trigger_inpaint_process(self):
+        if not self.is_inference_running and self.inpainting_mode:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inpainting)
+            thread.start()
+
+    def run_inpainting(self):
+        try:
+            inpaint_prompt = self.get_inpaint_prompt()
+            neg_prompt = (&quot;(octane render, render, drawing, anime, bad photo, bad photography:1.3), &quot;
+                          &quot;(worst quality, low quality, blurry:1.2), (bad teeth, deformed teeth, deformed lips), &quot;
+                          &quot;(bad anatomy, bad proportions:1.1), (deformed iris, deformed pupils), &quot;
+                          &quot;(deformed eyes, bad eyes), (deformed face, ugly face, bad face), &quot;
+                          &quot;(deformed hands, bad hands, fused fingers), morbid, mutilated, mutation, disfigured&quot;)
+
+            # Use the dedicated inpaint pipeline
+            result_img = generate_inpaint_image(self.base_for_inpainting, self.inpaint_mask,
+                                                inpaint_prompt, neg_prompt)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+
+        except Exception as e:
+            print(&quot;Error during inpainting:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    # ---------------------
+    # UI Helpers
+    # ---------------------
+    def update_output(self, img):
+        self.generated_tk_img = ImageTk.PhotoImage(img)
+        self.output_label.config(image=self.generated_tk_img)
+
+    def clear_canvas(self):
+        self.canvas.delete(&quot;all&quot;)
+        if self.inpainting_mode:
+            # Clear the mask, re-show base image
+            if self.base_for_inpainting:
+                self.tk_base_img = ImageTk.PhotoImage(self.base_for_inpainting)
+                self.canvas.create_image(0, 0, anchor=&quot;nw&quot;, image=self.tk_base_img)
+            if self.inpaint_mask:
+                self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+        else:
+            # Normal scribble reset
+            self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+            self.draw = ImageDraw.Draw(self.sketch)
+            self.undo_stack.clear()
+            self.output_label.config(image=&quot;&quot;)
+
+    def toggle_eraser(self):
+        if self.current_color == &quot;black&quot;:
+            self.current_color = &quot;white&quot;
+            self.eraser_button.config(text=&quot;Toggle Draw&quot;)
+        else:
+            self.current_color = &quot;black&quot;
+            self.eraser_button.config(text=&quot;Toggle Eraser&quot;)
+
+    def toggle_inpainting_mode(self):
+        if not self.inpainting_mode:
+            # Enter inpainting mode
+            if self.generated_image is None:
+                messagebox.showwarning(&quot;No Base Image&quot;, &quot;No generated image available for inpainting!&quot;)
+                return
+            self.inpainting_mode = True
+            # Set the base image for inpainting
+            self.base_for_inpainting = self.generated_image.copy()
+            # Create a fresh blank mask
+            self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+            # Clear the canvas and show the base image
+            self.canvas.delete(&quot;all&quot;)
+            self.tk_base_img = ImageTk.PhotoImage(self.base_for_inpainting)
+            self.canvas.create_image(0, 0, anchor=&quot;nw&quot;, image=self.tk_base_img)
+            # Use red brush for the mask
+            self.current_color = &quot;red&quot;
+            self.inpaint_button.config(state=tk.NORMAL)
+            self.toggle_inpaint_mode_button.config(text=&quot;Exit Inpainting Mode&quot;)
+        else:
+            # Exit inpainting mode
+            self.inpainting_mode = False
+            self.inpaint_mask = None
+            self.canvas.delete(&quot;all&quot;)
+            self.current_color = &quot;black&quot;
+            self.inpaint_button.config(state=tk.DISABLED)
+            self.toggle_inpaint_mode_button.config(text=&quot;Enter Inpainting Mode&quot;)
+
+    def save_generated(self):
+        if self.generated_image is None:
+            messagebox.showwarning(&quot;No Image&quot;, &quot;No generated image to save yet!&quot;)
+            return
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=&quot;.png&quot;,
+            filetypes=[(&quot;PNG files&quot;, &quot;*.png&quot;), (&quot;JPEG files&quot;, &quot;*.jpeg&quot;), (&quot;All files&quot;, &quot;*.*&quot;)]
+        )
+        if file_path:
+            try:
+                self.generated_image.save(file_path)
+                messagebox.showinfo(&quot;Image Saved&quot;, f&quot;Generated image saved:\n{file_path}&quot;)
+            except Exception as e:
+                messagebox.showerror(&quot;Save Error&quot;, f&quot;Failed to save image:\n{e}&quot;)
+
+##############################################
+# Run the Application
+##############################################
+
+if __name__ == &quot;__main__&quot;:
+    root = tk.Tk()
+    app = SketchApp(root)
+    root.mainloop()
+</code></pre></details><section class="notebook-note"><h2 id="finalized-sketch-app-architectural-prompt">Finalized Sketch App (architectural prompt)</h2></section><details class="code-cell"><summary>Code cell 32</summary><pre><code>import threading
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from PIL import Image, ImageDraw, ImageOps, ImageTk
+import numpy as np
+import torch
+
+# Diffusers imports
+from diffusers import (
+    AutoPipelineForImage2Image,
+    AutoPipelineForInpainting,
+    DiffusionPipeline,
+    DPMSolverMultistepScheduler,
+    StableDiffusionXLControlNetPipeline,
+    StableDiffusionXLInpaintPipeline,
+    ControlNetModel,
+    AutoencoderKL,
+    DDIMScheduler,
+    UniPCMultistepScheduler
+)
+from diffusers.utils import load_image
+
+##############################################
+# Global Pipeline Initialization and Configs
+##############################################
+
+# CONFIG
+# MODEL CONFIG
+CONTROLNET_MODEL = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+SDXL_MODEL = &quot;SG161222/RealVisXL_V4.0_Lightning&quot;
+# INFERENCE CONFIG
+CONTROLNET_CONDITIONING_SCALE = 0.7  
+NUM_INFER_STEPS = 15
+INPAINT_NUM_INFER_STEPS = 20
+INPAINT_STRENGTH = 0.99
+GUIDANCE_SCALE = 3
+INPAINT_GUIDANCE_SCALE = 8
+GUESS_MODE = True
+ETA = 0.5
+WIDTH = 512
+HEIGHT = 512
+
+# Load the ControlNet model (using FP16 precision)
+controlnet = ControlNetModel.from_pretrained(
+    CONTROLNET_MODEL,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+)
+
+# Load the main SDXL pipeline with ControlNet attached
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    SDXL_MODEL,
+    controlnet=controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+    # variant=&quot;fp16&quot;, ## enable when using RealVisXL 5.0 Lightning
+)
+pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+pipe.to(&quot;cuda&quot;)
+
+inpaint_pipe = AutoPipelineForInpainting.from_pretrained(
+    &quot;diffusers/stable-diffusion-xl-1.0-inpainting-0.1&quot;,
+    torch_dtype=torch.float16,
+    variant=&quot;fp16&quot;,
+    use_safetensors=True
+)
+inpaint_pipe.enable_model_cpu_offload()
+
+##############################################
+# Inference Helper Functions
+##############################################
+
+def generate_preview_image(sketch_image, prompt, neg_prompt):
+    &quot;&quot;&quot;
+    Generate a preview (low-resolution) image from the composite sketch.
+    The input is resized to 512x512 and a control image is created from a grayscale/inverted version.
+    &quot;&quot;&quot;
+    # Resize input to 512x512
+    input_image = sketch_image.resize((WIDTH, HEIGHT))
+    # Create control image (line art effect)
+    control_image = ImageOps.invert(ImageOps.grayscale(sketch_image))
+    
+    low_res_img = pipe(
+        prompt,
+        negative_prompt=neg_prompt,
+        image=input_image,
+        control_image=control_image,
+        width=WIDTH,
+        height=HEIGHT,
+        num_inference_steps=NUM_INFER_STEPS,
+        guidance_scale=GUIDANCE_SCALE,
+        controlnet_conditioning_scale=CONTROLNET_CONDITIONING_SCALE,
+        guess_mode=GUESS_MODE,
+        eta=ETA,
+        dynamic_threshold=True
+        # vae=vae
+    ).images[0]
+    
+    return low_res_img
+
+def generate_inpaint_image(base_image, mask_image, prompt, neg_prompt):
+    &quot;&quot;&quot;
+    Generate an inpainted image by replacing the masked areas in the base_image with generated content.
+    The mask_image should be in mode &quot;L&quot; where white (value &gt;128) indicates areas to inpaint.
+    &quot;&quot;&quot;
+    # Create an inpainting input by replacing masked areas with white
+    base_np = np.array(base_image)
+    mask_np = np.array(mask_image.convert(&quot;L&quot;))
+    threshold = 128
+    inpaint_np = np.where(mask_np[:, :, None] &gt; threshold, 255, base_np)
+    inpaint_input = Image.fromarray(inpaint_np.astype(np.uint8))
+    
+    result_img = inpaint_pipe(
+        prompt,
+        # negative_prompt=neg_prompt,
+        image=base_image,
+        mask_image=inpaint_input,  # using the inpaint input as control; adjust as needed
+        width=WIDTH,
+        height=HEIGHT,
+        strength=INPAINT_STRENGTH,
+        num_inference_steps=INPAINT_NUM_INFER_STEPS,
+        guidance_scale=INPAINT_GUIDANCE_SCALE,
+    ).images[0]
+    
+    # Composite the generated result with the original base image using the mask
+    mask_binary = mask_image.convert(&quot;L&quot;).point(lambda p: 255 if p &gt; threshold else 0)
+    final_image = Image.composite(result_img, base_image, mask_binary)
+    return final_image
+
+##############################################
+# Sketch Application with Inference, Inpainting &amp; UI
+##############################################
+
+class SketchApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title(&quot;Sketch &amp; Inpaint Window&quot;)
+        
+        # Set up two canvases in a single row (drawing canvas left, generated output right)
+        self.canvas_width = WIDTH
+        self.canvas_height = HEIGHT
+        
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg=&quot;white&quot;)
+        self.canvas.grid(row=0, column=0, padx=10, pady=10)
+        
+        blank_image = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.blank_preview = ImageTk.PhotoImage(blank_image)
+        self.output_label = tk.Label(root, image=self.blank_preview, bg=&quot;white&quot;)
+        self.output_label.grid(row=0, column=1, padx=10, pady=10)
+        
+        # Bind mouse motion to update the brush preview circle
+        self.canvas.bind(&quot;&lt;Motion&gt;&quot;, self.update_cursor_circle)
+        self.eraser_cursor_id = None
+        
+        # PIL image for drawing (starts as blank white)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack = []
+        self.current_stroke_item_ids = []
+        
+        # Default drawing settings
+        self.current_color = &quot;black&quot;  # &quot;black&quot; for drawing; &quot;white&quot; for eraser
+        self.brush_width = 3
+        
+        # Inpainting mode flag and mask (for inpainting strokes)
+        self.inpainting_mode = False
+        self.inpaint_mask = None
+        self.base_for_inpainting = None  # The base image to inpaint on
+        
+        # Bind mouse events for drawing
+        self.canvas.bind(&quot;&lt;ButtonPress-1&gt;&quot;, self.on_button_press)
+        self.canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, self.on_mouse_drag)
+        self.canvas.bind(&quot;&lt;ButtonRelease-1&gt;&quot;, self.on_button_release)
+        self.root.bind(&quot;&lt;Control-z&gt;&quot;, self.on_ctrl_z)
+        
+        # ---- Control Buttons Layout ----
+        # Row 1: Inference and Clear Canvas buttons
+        self.inference_button = tk.Button(root, text=&quot;Inference&quot;, command=self.trigger_inference)
+        self.inference_button.grid(row=1, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.clear_button = tk.Button(root, text=&quot;Clear Canvas&quot;, command=self.clear_canvas)
+        self.clear_button.grid(row=1, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Row 2: Toggle Eraser and Toggle Inpainting Mode buttons
+        self.eraser_button = tk.Button(root, text=&quot;Toggle Eraser&quot;, command=self.toggle_eraser)
+        self.eraser_button.grid(row=2, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.toggle_inpaint_mode_button = tk.Button(root, text=&quot;Enter Inpainting Mode&quot;, command=self.toggle_inpainting_mode)
+        self.toggle_inpaint_mode_button.grid(row=2, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Row 3: Inpaint and Save Generated buttons
+        self.inpaint_button = tk.Button(root, text=&quot;Apply Inpainting&quot;, command=self.trigger_inpaint_process)
+        self.inpaint_button.grid(row=3, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        self.inpaint_button.config(state=tk.DISABLED)
+        
+        self.save_button = tk.Button(root, text=&quot;Save Generated&quot;, command=self.save_generated)
+        self.save_button.grid(row=3, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Row 4: Brush size slider (spanning both columns)
+        self.brush_size_scale = tk.Scale(root, from_=1, to=50, orient=tk.HORIZONTAL,
+                                         label=&quot;Brush/Eraser Size&quot;, command=self.update_brush_size)
+        self.brush_size_scale.set(self.brush_width)
+        self.brush_size_scale.grid(row=4, column=0, columnspan=2, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # ---- Prompt Customization Inputs ----
+        # Row 5: Building prompt
+        subject_label = tk.Label(root, text=&quot;Subject:&quot;)
+        subject_label.grid(row=5, column=0, sticky=&quot;w&quot;, padx=10)
+        self.subject_entry = tk.Entry(root)
+        self.subject_entry.insert(0, &quot;&quot;)
+        self.subject_entry.grid(row=5, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Row 6: Design Features prompt
+        style_label = tk.Label(root, text=&quot;Design Features:&quot;)
+        style_label.grid(row=6, column=0, sticky=&quot;w&quot;, padx=10)
+        self.style_entry = tk.Entry(root)
+        self.style_entry.insert(0, &quot;&quot;)
+        self.style_entry.grid(row=6, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Row 7: Environment prompt
+        environment_label = tk.Label(root, text=&quot;Environment:&quot;)
+        environment_label.grid(row=7, column=0, sticky=&quot;w&quot;, padx=10)
+        self.environment_entry = tk.Entry(root)
+        self.environment_entry.insert(0, &quot;&quot;)
+        self.environment_entry.grid(row=7, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Row 8: Separate Inpainting Prompt
+        inpaint_prompt_label = tk.Label(root, text=&quot;Inpainting Prompt:&quot;)
+        inpaint_prompt_label.grid(row=8, column=0, sticky=&quot;w&quot;, padx=10)
+        self.inpaint_prompt_entry = tk.Entry(root)
+        self.inpaint_prompt_entry.insert(0, &quot;&quot;)
+        self.inpaint_prompt_entry.grid(row=8, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Inference is off by default; triggered only on canvas changes.
+        self.generated_image = None
+        self.is_inference_running = False
+        
+        # Variables to hold drawing coordinates
+        self.last_x, self.last_y = None, None
+
+    def on_button_press(self, event):
+        self.last_x, self.last_y = event.x, event.y
+
+    def on_mouse_drag(self, event):
+        x, y = event.x, event.y
+        if self.eraser_cursor_id is not None:
+            # The cursor circle is updated via update_cursor_circle, so no need to delete here
+            pass
+        # Draw a smooth line on the canvas
+        line_id = self.canvas.create_line(
+            self.last_x, self.last_y, x, y,
+            fill=self.current_color,
+            width=self.brush_width,
+            capstyle=tk.ROUND,
+            smooth=True,
+            splinesteps=36
+        )
+        self.current_stroke_item_ids.append(line_id)
+        
+        # Also update the PIL drawing
+        if self.inpainting_mode:
+            if self.inpaint_mask is not None:
+                mask_draw = ImageDraw.Draw(self.inpaint_mask)
+                mask_draw.line([self.last_x, self.last_y, x, y], fill=&quot;white&quot;, width=self.brush_width)
+                mask_draw.ellipse(
+                    (x - self.brush_width//2, y - self.brush_width//2,
+                     x + self.brush_width//2, y + self.brush_width//2),
+                    fill=&quot;white&quot;
+                )
+        else:
+            self.draw.line([self.last_x, self.last_y, x, y],
+                           fill=self.current_color, width=self.brush_width)
+            # Draw an ellipse at the current point to smooth the stroke
+            self.draw.ellipse(
+                (x - self.brush_width//2, y - self.brush_width//2,
+                 x + self.brush_width//2, y + self.brush_width//2),
+                fill=self.current_color
+            )
+        self.last_x, self.last_y = x, y
+
+    def on_button_release(self, event):
+        if not self.inpainting_mode and self.current_stroke_item_ids:
+            image_copy = self.sketch.copy()
+            self.undo_stack.append({&#x27;image&#x27;: image_copy, &#x27;item_ids&#x27;: self.current_stroke_item_ids})
+        self.current_stroke_item_ids = []
+        self.last_x, self.last_y = None, None
+        if not self.inpainting_mode:
+            self.trigger_inference()
+
+    def on_ctrl_z(self, event):
+        if not self.inpainting_mode and self.undo_stack:
+            last_state = self.undo_stack.pop()
+            self.sketch = last_state[&#x27;image&#x27;]
+            self.draw = ImageDraw.Draw(self.sketch)
+            for item_id in last_state[&#x27;item_ids&#x27;]:
+                self.canvas.delete(item_id)
+            self.trigger_inference()
+
+    def update_cursor_circle(self, event):
+        # Always display a preview of the brush size at the cursor
+        radius = self.brush_width // 2
+        x1 = event.x - radius
+        y1 = event.y - radius
+        x2 = event.x + radius
+        y2 = event.y + radius
+        # Use red for eraser, gray for normal drawing
+        outline_color = &quot;red&quot; if self.current_color == &quot;white&quot; else &quot;gray&quot;
+        if self.eraser_cursor_id is None:
+            self.eraser_cursor_id = self.canvas.create_oval(x1, y1, x2, y2, outline=outline_color, dash=(2,2))
+        else:
+            self.canvas.coords(self.eraser_cursor_id, x1, y1, x2, y2)
+            self.canvas.itemconfig(self.eraser_cursor_id, outline=outline_color)
+
+    def update_brush_size(self, value):
+        self.brush_width = int(value)
+
+    def get_custom_prompt(self):
+        Subject = self.subject_entry.get().strip()
+        Design_Features = self.style_entry.get().strip()
+        Environment = self.environment_entry.get().strip()
+        prompt = (f&quot;a photorealistic render of a [{Subject}], featuring &quot;
+                  f&quot;[{Design_Features}] design elements in a [{Environment}] environment, &quot;
+                  f&quot;realistic lighting, 8K resolution, cinematic atmosphere, masterpiece.&quot;)
+        return prompt
+
+    def get_inpaint_prompt(self):
+        return self.inpaint_prompt_entry.get().strip()
+
+    def trigger_inference(self):
+        if not self.is_inference_running and not self.inpainting_mode:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inference)
+            thread.start()
+
+    def run_inference(self):
+        try:
+            custom_prompt = self.get_custom_prompt()
+            neg_prompt = (&quot;(drawing, anime, bad photo, bad photography:1.3), &quot;
+                          &quot;(worst quality, low quality, blurry:1.2), (bad teeth, deformed teeth, deformed lips), &quot;
+                          &quot;(bad anatomy), (deformed iris, deformed pupils), &quot;
+                          &quot;(deformed eyes, bad eyes), (deformed face, ugly face, bad face), &quot;
+                          &quot;(deformed hands, bad hands, fused fingers), morbid, mutilated, mutation, disfigured&quot;)
+            
+            result_img = generate_preview_image(self.sketch, custom_prompt, neg_prompt)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during inference:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def trigger_inpaint_process(self):
+        if not self.is_inference_running and self.inpainting_mode:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inpainting)
+            thread.start()
+
+    def run_inpainting(self):
+        try:
+            custom_inpaint_prompt = self.get_inpaint_prompt()
+            neg_prompt = (&quot;(drawing, anime, bad photo, bad photography:1.3), &quot;
+                          &quot;(worst quality, low quality, blurry:1.2), (bad teeth, deformed teeth, deformed lips), &quot;
+                          &quot;(bad anatomy), (deformed iris, deformed pupils), &quot;
+                          &quot;(deformed eyes, bad eyes), (deformed face, ugly face, bad face), &quot;
+                          &quot;(deformed hands, bad hands, fused fingers), morbid, mutilated, mutation, disfigured&quot;)
+            result_img = generate_inpaint_image(self.base_for_inpainting, self.inpaint_mask, custom_inpaint_prompt, neg_prompt)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during inpainting:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def update_output(self, img):
+        self.generated_tk_img = ImageTk.PhotoImage(img)
+        self.output_label.config(image=self.generated_tk_img)
+
+    def clear_canvas(self):
+        self.canvas.delete(&quot;all&quot;)
+        if self.inpainting_mode:
+            # In inpainting mode, clear the mask and redraw the base image.
+            if self.base_for_inpainting:
+                self.tk_base_img = ImageTk.PhotoImage(self.base_for_inpainting)
+                self.canvas.create_image(0, 0, anchor=&quot;nw&quot;, image=self.tk_base_img)
+            if self.inpaint_mask:
+                self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+        else:
+            self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+            self.draw = ImageDraw.Draw(self.sketch)
+            self.undo_stack.clear()
+            self.output_label.config(image=&quot;&quot;)
+
+    def toggle_eraser(self):
+        if self.current_color == &quot;black&quot;:
+            self.current_color = &quot;white&quot;
+            self.eraser_button.config(text=&quot;Toggle Draw&quot;)
+        else:
+            self.current_color = &quot;black&quot;
+            self.eraser_button.config(text=&quot;Toggle Eraser&quot;)
+            if self.eraser_cursor_id is not None:
+                self.canvas.delete(self.eraser_cursor_id)
+                self.eraser_cursor_id = None
+
+    def toggle_inpainting_mode(self):
+        # Toggle between normal drawing mode and inpainting mode.
+        if not self.inpainting_mode:
+            # Enter inpainting mode
+            if self.generated_image is None:
+                messagebox.showwarning(&quot;No Base Image&quot;, &quot;No generated image available for inpainting!&quot;)
+                return
+            self.inpainting_mode = True
+            # Set the base image to the current generated image
+            self.base_for_inpainting = self.generated_image.copy()
+            # Initialize an empty mask (black background)
+            self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+            # Clear canvas and display the base image
+            self.canvas.delete(&quot;all&quot;)
+            self.tk_base_img = ImageTk.PhotoImage(self.base_for_inpainting)
+            self.canvas.create_image(0, 0, anchor=&quot;nw&quot;, image=self.tk_base_img)
+            # Change brush color to red for mask drawing
+            self.current_color = &quot;red&quot;
+            self.inpaint_button.config(state=tk.NORMAL)
+            self.toggle_inpaint_mode_button.config(text=&quot;Exit Inpainting Mode&quot;)
+        else:
+            # Exit inpainting mode: reset to normal drawing (sketch) mode
+            self.inpainting_mode = False
+            self.inpaint_mask = None
+            self.canvas.delete(&quot;all&quot;)
+            self.current_color = &quot;black&quot;
+            self.inpaint_button.config(state=tk.DISABLED)
+            self.toggle_inpaint_mode_button.config(text=&quot;Enter Inpainting Mode&quot;)
+
+    def save_generated(self):
+        if self.generated_image is None:
+            messagebox.showwarning(&quot;No Image&quot;, &quot;No generated image to save yet!&quot;)
+            return
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=&quot;.jpeg&quot;,
+            filetypes=[(&quot;JPEG files&quot;, &quot;*.jpeg&quot;), (&quot;PNG files&quot;, &quot;*.png&quot;), (&quot;All files&quot;, &quot;*.*&quot;)]
+        )
+        if file_path:
+            try:
+                self.generated_image.save(file_path)
+                messagebox.showinfo(&quot;Image Saved&quot;, f&quot;Generated image saved as:\n{file_path}&quot;)
+            except Exception as e:
+                messagebox.showerror(&quot;Save Error&quot;, f&quot;Failed to save image:\n{e}&quot;)
+
+##############################################
+# Run the Application
+##############################################
+
+if __name__ == &quot;__main__&quot;:
+    root = tk.Tk()
+    app = SketchApp(root)
+    root.mainloop()
+</code></pre></details><section class="notebook-note"><h2 id="ghibli-style-prompt-adjusted">Ghibli Style (Prompt Adjusted)</h2></section><details class="code-cell"><summary>Code cell 34</summary><pre><code>import threading
+import tkinter as tk
+from tkinter import messagebox, filedialog
+from PIL import Image, ImageDraw, ImageOps, ImageTk
+import numpy as np
+import torch
+
+# Diffusers imports
+from diffusers import (
+    AutoPipelineForImage2Image,
+    AutoPipelineForInpainting,
+    DiffusionPipeline,
+    DPMSolverMultistepScheduler,
+    StableDiffusionXLControlNetPipeline,
+    StableDiffusionXLInpaintPipeline,
+    ControlNetModel,
+    AutoencoderKL,
+    DDIMScheduler,
+    UniPCMultistepScheduler
+)
+from diffusers.utils import load_image
+
+##############################################
+# Global Pipeline Initialization and Configs
+##############################################
+
+# CONFIG
+# MODEL CONFIG
+CONTROLNET_MODEL = &quot;xinsir/controlnet-scribble-sdxl-1.0&quot;
+SDXL_MODEL = &quot;SG161222/RealVisXL_V4.0_Lightning&quot;
+# INFERENCE CONFIG
+CONTROLNET_CONDITIONING_SCALE = 0.7  
+NUM_INFER_STEPS = 15
+INPAINT_NUM_INFER_STEPS = 20
+INPAINT_STRENGTH = 0.99
+GUIDANCE_SCALE = 3
+INPAINT_GUIDANCE_SCALE = 8
+GUESS_MODE = True
+ETA = 0.5
+WIDTH = 512
+HEIGHT = 512
+
+# Load the ControlNet model (using FP16 precision)
+controlnet = ControlNetModel.from_pretrained(
+    CONTROLNET_MODEL,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+)
+
+# Load the main SDXL pipeline with ControlNet attached
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    SDXL_MODEL,
+    controlnet=controlnet,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+    # variant=&quot;fp16&quot;, ## enable when using RealVisXL 5.0 Lightning
+)
+pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+pipe.to(&quot;cuda&quot;)
+
+inpaint_pipe = AutoPipelineForInpainting.from_pretrained(
+    &quot;diffusers/stable-diffusion-xl-1.0-inpainting-0.1&quot;,
+    torch_dtype=torch.float16,
+    variant=&quot;fp16&quot;,
+    use_safetensors=True
+)
+inpaint_pipe.enable_model_cpu_offload()
+
+##############################################
+# Inference Helper Functions
+##############################################
+
+def generate_preview_image(sketch_image, prompt, neg_prompt):
+    &quot;&quot;&quot;
+    Generate a preview (low-resolution) image from the composite sketch.
+    The input is resized to 512x512 and a control image is created from a grayscale/inverted version.
+    &quot;&quot;&quot;
+    # Resize input to 512x512
+    input_image = sketch_image.resize((WIDTH, HEIGHT))
+    # Create control image (line art effect)
+    control_image = ImageOps.invert(ImageOps.grayscale(sketch_image))
+    
+    low_res_img = pipe(
+        prompt,
+        negative_prompt=neg_prompt,
+        image=input_image,
+        control_image=control_image,
+        width=WIDTH,
+        height=HEIGHT,
+        num_inference_steps=NUM_INFER_STEPS,
+        guidance_scale=GUIDANCE_SCALE,
+        controlnet_conditioning_scale=CONTROLNET_CONDITIONING_SCALE,
+        guess_mode=GUESS_MODE,
+        eta=ETA,
+        dynamic_threshold=True
+        # vae=vae
+    ).images[0]
+    
+    return low_res_img
+
+def generate_inpaint_image(base_image, mask_image, prompt, neg_prompt):
+    &quot;&quot;&quot;
+    Generate an inpainted image by replacing the masked areas in the base_image with generated content.
+    The mask_image should be in mode &quot;L&quot; where white (value &gt;128) indicates areas to inpaint.
+    &quot;&quot;&quot;
+    # Create an inpainting input by replacing masked areas with white
+    base_np = np.array(base_image)
+    mask_np = np.array(mask_image.convert(&quot;L&quot;))
+    threshold = 128
+    inpaint_np = np.where(mask_np[:, :, None] &gt; threshold, 255, base_np)
+    inpaint_input = Image.fromarray(inpaint_np.astype(np.uint8))
+    
+    result_img = inpaint_pipe(
+        prompt,
+        # negative_prompt=neg_prompt,
+        image=base_image,
+        mask_image=inpaint_input,  # using the inpaint input as control; adjust as needed
+        width=WIDTH,
+        height=HEIGHT,
+        strength=INPAINT_STRENGTH,
+        num_inference_steps=INPAINT_NUM_INFER_STEPS,
+        guidance_scale=INPAINT_GUIDANCE_SCALE,
+    ).images[0]
+    
+    # Composite the generated result with the original base image using the mask
+    mask_binary = mask_image.convert(&quot;L&quot;).point(lambda p: 255 if p &gt; threshold else 0)
+    final_image = Image.composite(result_img, base_image, mask_binary)
+    return final_image
+
+##############################################
+# Sketch Application with Inference, Inpainting &amp; UI
+##############################################
+
+class SketchApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title(&quot;Sketch &amp; Inpaint Window&quot;)
+        
+        # Set up two canvases in a single row (drawing canvas left, generated output right)
+        self.canvas_width = WIDTH
+        self.canvas_height = HEIGHT
+        
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg=&quot;white&quot;)
+        self.canvas.grid(row=0, column=0, padx=10, pady=10)
+        
+        blank_image = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.blank_preview = ImageTk.PhotoImage(blank_image)
+        self.output_label = tk.Label(root, image=self.blank_preview, bg=&quot;white&quot;)
+        self.output_label.grid(row=0, column=1, padx=10, pady=10)
+        
+        # Bind mouse motion to update the brush preview circle
+        self.canvas.bind(&quot;&lt;Motion&gt;&quot;, self.update_cursor_circle)
+        self.eraser_cursor_id = None
+        
+        # PIL image for drawing (starts as blank white)
+        self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+        self.draw = ImageDraw.Draw(self.sketch)
+        self.undo_stack = []
+        self.current_stroke_item_ids = []
+        
+        # Default drawing settings
+        self.current_color = &quot;black&quot;  # &quot;black&quot; for drawing; &quot;white&quot; for eraser
+        self.brush_width = 3
+        
+        # Inpainting mode flag and mask (for inpainting strokes)
+        self.inpainting_mode = False
+        self.inpaint_mask = None
+        self.base_for_inpainting = None  # The base image to inpaint on
+        
+        # Bind mouse events for drawing
+        self.canvas.bind(&quot;&lt;ButtonPress-1&gt;&quot;, self.on_button_press)
+        self.canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, self.on_mouse_drag)
+        self.canvas.bind(&quot;&lt;ButtonRelease-1&gt;&quot;, self.on_button_release)
+        self.root.bind(&quot;&lt;Control-z&gt;&quot;, self.on_ctrl_z)
+        
+        # ---- Control Buttons Layout ----
+        # Row 1: Inference and Clear Canvas buttons
+        self.inference_button = tk.Button(root, text=&quot;Inference&quot;, command=self.trigger_inference)
+        self.inference_button.grid(row=1, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.clear_button = tk.Button(root, text=&quot;Clear Canvas&quot;, command=self.clear_canvas)
+        self.clear_button.grid(row=1, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Row 2: Toggle Eraser and Toggle Inpainting Mode buttons
+        self.eraser_button = tk.Button(root, text=&quot;Toggle Eraser&quot;, command=self.toggle_eraser)
+        self.eraser_button.grid(row=2, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        self.toggle_inpaint_mode_button = tk.Button(root, text=&quot;Enter Inpainting Mode&quot;, command=self.toggle_inpainting_mode)
+        self.toggle_inpaint_mode_button.grid(row=2, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Row 3: Inpaint and Save Generated buttons
+        self.inpaint_button = tk.Button(root, text=&quot;Apply Inpainting&quot;, command=self.trigger_inpaint_process)
+        self.inpaint_button.grid(row=3, column=0, padx=10, pady=5, sticky=&quot;ew&quot;)
+        self.inpaint_button.config(state=tk.DISABLED)
+        
+        self.save_button = tk.Button(root, text=&quot;Save Generated&quot;, command=self.save_generated)
+        self.save_button.grid(row=3, column=1, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # Row 4: Brush size slider (spanning both columns)
+        self.brush_size_scale = tk.Scale(root, from_=1, to=50, orient=tk.HORIZONTAL,
+                                         label=&quot;Brush/Eraser Size&quot;, command=self.update_brush_size)
+        self.brush_size_scale.set(self.brush_width)
+        self.brush_size_scale.grid(row=4, column=0, columnspan=2, padx=10, pady=5, sticky=&quot;ew&quot;)
+        
+        # ---- Prompt Customization Inputs ----
+        # Row 5: Building prompt
+        subject_label = tk.Label(root, text=&quot;Subject:&quot;)
+        subject_label.grid(row=5, column=0, sticky=&quot;w&quot;, padx=10)
+        self.subject_entry = tk.Entry(root)
+        self.subject_entry.insert(0, &quot;&quot;)
+        self.subject_entry.grid(row=5, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Row 6: Design Features prompt
+        style_label = tk.Label(root, text=&quot;Features:&quot;)
+        style_label.grid(row=6, column=0, sticky=&quot;w&quot;, padx=10)
+        self.style_entry = tk.Entry(root)
+        self.style_entry.insert(0, &quot;&quot;)
+        self.style_entry.grid(row=6, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Row 7: Environment prompt
+        environment_label = tk.Label(root, text=&quot;Environment:&quot;)
+        environment_label.grid(row=7, column=0, sticky=&quot;w&quot;, padx=10)
+        self.environment_entry = tk.Entry(root)
+        self.environment_entry.insert(0, &quot;&quot;)
+        self.environment_entry.grid(row=7, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Row 8: Separate Inpainting Prompt
+        inpaint_prompt_label = tk.Label(root, text=&quot;Inpainting Prompt:&quot;)
+        inpaint_prompt_label.grid(row=8, column=0, sticky=&quot;w&quot;, padx=10)
+        self.inpaint_prompt_entry = tk.Entry(root)
+        self.inpaint_prompt_entry.insert(0, &quot;&quot;)
+        self.inpaint_prompt_entry.grid(row=8, column=1, sticky=&quot;ew&quot;, padx=10)
+        
+        # Inference is off by default; triggered only on canvas changes.
+        self.generated_image = None
+        self.is_inference_running = False
+        
+        # Variables to hold drawing coordinates
+        self.last_x, self.last_y = None, None
+
+    def on_button_press(self, event):
+        self.last_x, self.last_y = event.x, event.y
+
+    def on_mouse_drag(self, event):
+        x, y = event.x, event.y
+        if self.eraser_cursor_id is not None:
+            # The cursor circle is updated via update_cursor_circle, so no need to delete here
+            pass
+        # Draw a smooth line on the canvas
+        line_id = self.canvas.create_line(
+            self.last_x, self.last_y, x, y,
+            fill=self.current_color,
+            width=self.brush_width,
+            capstyle=tk.ROUND,
+            smooth=True,
+            splinesteps=36
+        )
+        self.current_stroke_item_ids.append(line_id)
+        
+        # Also update the PIL drawing
+        if self.inpainting_mode:
+            if self.inpaint_mask is not None:
+                mask_draw = ImageDraw.Draw(self.inpaint_mask)
+                mask_draw.line([self.last_x, self.last_y, x, y], fill=&quot;white&quot;, width=self.brush_width)
+                mask_draw.ellipse(
+                    (x - self.brush_width//2, y - self.brush_width//2,
+                     x + self.brush_width//2, y + self.brush_width//2),
+                    fill=&quot;white&quot;
+                )
+        else:
+            self.draw.line([self.last_x, self.last_y, x, y],
+                           fill=self.current_color, width=self.brush_width)
+            # Draw an ellipse at the current point to smooth the stroke
+            self.draw.ellipse(
+                (x - self.brush_width//2, y - self.brush_width//2,
+                 x + self.brush_width//2, y + self.brush_width//2),
+                fill=self.current_color
+            )
+        self.last_x, self.last_y = x, y
+
+    def on_button_release(self, event):
+        if not self.inpainting_mode and self.current_stroke_item_ids:
+            image_copy = self.sketch.copy()
+            self.undo_stack.append({&#x27;image&#x27;: image_copy, &#x27;item_ids&#x27;: self.current_stroke_item_ids})
+        self.current_stroke_item_ids = []
+        self.last_x, self.last_y = None, None
+        if not self.inpainting_mode:
+            self.trigger_inference()
+
+    def on_ctrl_z(self, event):
+        if not self.inpainting_mode and self.undo_stack:
+            last_state = self.undo_stack.pop()
+            self.sketch = last_state[&#x27;image&#x27;]
+            self.draw = ImageDraw.Draw(self.sketch)
+            for item_id in last_state[&#x27;item_ids&#x27;]:
+                self.canvas.delete(item_id)
+            self.trigger_inference()
+
+    def update_cursor_circle(self, event):
+        # Always display a preview of the brush size at the cursor
+        radius = self.brush_width // 2
+        x1 = event.x - radius
+        y1 = event.y - radius
+        x2 = event.x + radius
+        y2 = event.y + radius
+        # Use red for eraser, gray for normal drawing
+        outline_color = &quot;red&quot; if self.current_color == &quot;white&quot; else &quot;gray&quot;
+        if self.eraser_cursor_id is None:
+            self.eraser_cursor_id = self.canvas.create_oval(x1, y1, x2, y2, outline=outline_color, dash=(2,2))
+        else:
+            self.canvas.coords(self.eraser_cursor_id, x1, y1, x2, y2)
+            self.canvas.itemconfig(self.eraser_cursor_id, outline=outline_color)
+
+    def update_brush_size(self, value):
+        self.brush_width = int(value)
+
+    def get_custom_prompt(self):
+        Subject = self.subject_entry.get().strip()
+        Features = self.style_entry.get().strip()
+        Environment = self.environment_entry.get().strip()
+        prompt = (f&quot;a Studio Ghibli style render of a [{Subject}], featuring &quot;
+                  f&quot;[{Features}] elements in a [{Environment}] environment, &quot;
+                  f&quot;8K resolution, cinematic atmosphere, masterpiece.&quot;)
+        return prompt
+
+    def get_inpaint_prompt(self):
+        return self.inpaint_prompt_entry.get().strip()
+
+    def trigger_inference(self):
+        if not self.is_inference_running and not self.inpainting_mode:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inference)
+            thread.start()
+
+    def run_inference(self):
+        try:
+            custom_prompt = self.get_custom_prompt()
+            neg_prompt = (&quot;(drawing, anime, bad photo, bad photography:1.3), &quot;
+                          &quot;(worst quality, low quality, blurry:1.2), (bad teeth, deformed teeth, deformed lips), &quot;
+                          &quot;(bad anatomy), (deformed iris, deformed pupils), &quot;
+                          &quot;(deformed eyes, bad eyes), (deformed face, ugly face, bad face), &quot;
+                          &quot;(deformed hands, bad hands, fused fingers), morbid, mutilated, mutation, disfigured&quot;)
+            
+            result_img = generate_preview_image(self.sketch, custom_prompt, neg_prompt)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during inference:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def trigger_inpaint_process(self):
+        if not self.is_inference_running and self.inpainting_mode:
+            self.is_inference_running = True
+            thread = threading.Thread(target=self.run_inpainting)
+            thread.start()
+
+    def run_inpainting(self):
+        try:
+            custom_inpaint_prompt = self.get_inpaint_prompt()
+            neg_prompt = (&quot;(drawing, anime, bad photo, bad photography:1.3), &quot;
+                          &quot;(worst quality, low quality, blurry:1.2), (bad teeth, deformed teeth, deformed lips), &quot;
+                          &quot;(bad anatomy), (deformed iris, deformed pupils), &quot;
+                          &quot;(deformed eyes, bad eyes), (deformed face, ugly face, bad face), &quot;
+                          &quot;(deformed hands, bad hands, fused fingers), morbid, mutilated, mutation, disfigured&quot;)
+            result_img = generate_inpaint_image(self.base_for_inpainting, self.inpaint_mask, custom_inpaint_prompt, neg_prompt)
+            self.generated_image = result_img
+            self.root.after(0, self.update_output, result_img)
+        except Exception as e:
+            print(&quot;Error during inpainting:&quot;, e)
+        finally:
+            self.is_inference_running = False
+
+    def update_output(self, img):
+        self.generated_tk_img = ImageTk.PhotoImage(img)
+        self.output_label.config(image=self.generated_tk_img)
+
+    def clear_canvas(self):
+        self.canvas.delete(&quot;all&quot;)
+        if self.inpainting_mode:
+            # In inpainting mode, clear the mask and redraw the base image.
+            if self.base_for_inpainting:
+                self.tk_base_img = ImageTk.PhotoImage(self.base_for_inpainting)
+                self.canvas.create_image(0, 0, anchor=&quot;nw&quot;, image=self.tk_base_img)
+            if self.inpaint_mask:
+                self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+        else:
+            self.sketch = Image.new(&quot;RGB&quot;, (self.canvas_width, self.canvas_height), &quot;white&quot;)
+            self.draw = ImageDraw.Draw(self.sketch)
+            self.undo_stack.clear()
+            self.output_label.config(image=&quot;&quot;)
+
+    def toggle_eraser(self):
+        if self.current_color == &quot;black&quot;:
+            self.current_color = &quot;white&quot;
+            self.eraser_button.config(text=&quot;Toggle Draw&quot;)
+        else:
+            self.current_color = &quot;black&quot;
+            self.eraser_button.config(text=&quot;Toggle Eraser&quot;)
+            if self.eraser_cursor_id is not None:
+                self.canvas.delete(self.eraser_cursor_id)
+                self.eraser_cursor_id = None
+
+    def toggle_inpainting_mode(self):
+        # Toggle between normal drawing mode and inpainting mode.
+        if not self.inpainting_mode:
+            # Enter inpainting mode
+            if self.generated_image is None:
+                messagebox.showwarning(&quot;No Base Image&quot;, &quot;No generated image available for inpainting!&quot;)
+                return
+            self.inpainting_mode = True
+            # Set the base image to the current generated image
+            self.base_for_inpainting = self.generated_image.copy()
+            # Initialize an empty mask (black background)
+            self.inpaint_mask = Image.new(&quot;L&quot;, (self.canvas_width, self.canvas_height), 0)
+            # Clear canvas and display the base image
+            self.canvas.delete(&quot;all&quot;)
+            self.tk_base_img = ImageTk.PhotoImage(self.base_for_inpainting)
+            self.canvas.create_image(0, 0, anchor=&quot;nw&quot;, image=self.tk_base_img)
+            # Change brush color to red for mask drawing
+            self.current_color = &quot;red&quot;
+            self.inpaint_button.config(state=tk.NORMAL)
+            self.toggle_inpaint_mode_button.config(text=&quot;Exit Inpainting Mode&quot;)
+        else:
+            # Exit inpainting mode: reset to normal drawing (sketch) mode
+            self.inpainting_mode = False
+            self.inpaint_mask = None
+            self.canvas.delete(&quot;all&quot;)
+            self.current_color = &quot;black&quot;
+            self.inpaint_button.config(state=tk.DISABLED)
+            self.toggle_inpaint_mode_button.config(text=&quot;Enter Inpainting Mode&quot;)
+
+    def save_generated(self):
+        if self.generated_image is None:
+            messagebox.showwarning(&quot;No Image&quot;, &quot;No generated image to save yet!&quot;)
+            return
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=&quot;.jpeg&quot;,
+            filetypes=[(&quot;JPEG files&quot;, &quot;*.jpeg&quot;), (&quot;PNG files&quot;, &quot;*.png&quot;), (&quot;All files&quot;, &quot;*.*&quot;)]
+        )
+        if file_path:
+            try:
+                self.generated_image.save(file_path)
+                messagebox.showinfo(&quot;Image Saved&quot;, f&quot;Generated image saved as:\n{file_path}&quot;)
+            except Exception as e:
+                messagebox.showerror(&quot;Save Error&quot;, f&quot;Failed to save image:\n{e}&quot;)
+
+##############################################
+# Run the Application
+##############################################
+
+if __name__ == &quot;__main__&quot;:
+    root = tk.Tk()
+    app = SketchApp(root)
+    root.mainloop()
+</code></pre></details><section class="notebook-note"><h2 id="pip-freeze-for-requirementstxt">pip freeze - for requirements.txt</h2></section><details class="code-cell"><summary>Code cell 36</summary><pre><code>!pip freeze</code></pre></details></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

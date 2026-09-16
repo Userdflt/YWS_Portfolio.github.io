@@ -1,0 +1,167 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>NASA Outgassing · Documentation — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>NASA Outgassing · Documentation</h1><p>Project documentation from GitHub. Diagrams and demonstrations are available in the project resource library.</p><a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/README.md" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><h2 id="evaluating-material-performance-for-space-applications"><strong>Evaluating Material Performance for Space Applications</strong></h2>
+<h2 id="a-data-science-approach-using-nasas-outgassing-data"><strong>A Data Science Approach Using NASA’s Outgassing Data</strong></h2>
+<h2 id="click-for-presentation"><a href="https://docs.google.com/presentation/d/1eLjKQL-qADiG0ghYJBFTMOlsHNPNDCkT0KmYe-5Rn-0/pub?start=false&amp;loop=false&amp;delayms=3000" target="_blank" rel="noopener noreferrer">Click for Presentation</a></h2>
+<h2 id="nasa-outgassing-materials-data-processing"><strong>NASA Outgassing Materials Data Processing</strong></h2>
+<h2 id="contents">Contents</h2>
+<ol>
+<li><strong>Data Preprocessing</strong><ul>
+<li>Cleaning and feature extraction code</li>
+<li><a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_Data_Processing.ipynb" target="_blank" rel="noopener noreferrer">View detailed notebook</a></li>
+</ul>
+</li>
+</ol>
+<h2 id="1-data-preprocessing"><strong>1. Data Preprocessing</strong></h2>
+<h3 id="data-import-and-initial-exploration">Data Import and Initial Exploration</h3>
+<ul>
+<li>
+<p><strong>Importing Dataset:</strong></p>
+<ul>
+<li>The dataset is imported from a CSV file for initial exploration and analysis.</li>
+</ul>
+</li>
+<li>
+<p><strong>Initial Data Exploration:</strong></p>
+<ul>
+<li>Checking the structure and basic statistics of the dataset.</li>
+<li>Setting the 'ID' column as the index for better data management.</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-cleaning">Data Cleaning</h3>
+<ul>
+<li>
+<p><strong>Handling Outliers:</strong></p>
+<ul>
+<li>Initial analysis shows high variance in key metrics such as TML, CVCM, WVR, and Space Code.</li>
+<li>Filtering outliers using quantile-based methods.</li>
+<li>Visualizing the distribution of filtered data using histograms and box plots.</li>
+</ul>
+</li>
+<li>
+<p><strong>Further Outlier Removal:</strong></p>
+<ul>
+<li>Using the Interquartile Range (IQR) method to further clean the data by removing extreme outliers.</li>
+<li>Rechecking the distribution and presence of outliers through updated histograms and box plots.</li>
+</ul>
+</li>
+</ul>
+<h3 id="handling-missing-values">Handling Missing Values</h3>
+<ul>
+<li>
+<p><strong>Identifying Missing Values:</strong></p>
+<ul>
+<li>Analyzing the dataset for missing values.</li>
+<li>Dropping columns and rows with significant missing data, particularly in 'Cure', 'Material Usage', and 'Space Code'.</li>
+</ul>
+</li>
+<li>
+<p><strong>Final Data Cleaning:</strong></p>
+<ul>
+<li>Checking and removing any duplicate records.</li>
+<li>Ensuring the final dataset is clean and ready for exploratory data analysis (EDA).</li>
+</ul>
+</li>
+</ul>
+<h3 id="final-dataset-preparation">Final Dataset Preparation</h3>
+<ul>
+<li><strong>Saving Cleaned Data:</strong><ul>
+<li>The final cleaned dataset is saved as a CSV file for further analysis in the next stages.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="nasa-outgassing-materials-exploratory-data-analysis-eda"><strong>NASA Outgassing Materials Exploratory Data Analysis (EDA)</strong></h2>
+<h2 id="contents_1">Contents</h2>
+<ul>
+<li>Detailed analysis and visualization of the cleaned dataset.</li>
+<li>Identification of trends and insights from the data.</li>
+<li><a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_EDA.ipynb" target="_blank" rel="noopener noreferrer">View detailed notebook</a></li>
+</ul>
+<hr>
+<h2 id="nasa-outgassing-materials-ml-modelling"><strong>NASA Outgassing Materials ML Modelling</strong></h2>
+<h2 id="contents_2">Contents</h2>
+<ol>
+<li><strong>Define Goals</strong></li>
+<li><strong>Feature Engineering</strong><ul>
+<li>Performance Score Calculation</li>
+</ul>
+</li>
+<li><strong>Initial Model Selection and Implementation</strong><ul>
+<li>Regression Models</li>
+<li>Classification Models</li>
+</ul>
+</li>
+<li><strong>Best Model Selection</strong></li>
+<li><strong>Conclusion</strong></li>
+<li><strong>Model Pipeline</strong><ul>
+<li><a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_ML_Modelling.ipynb" target="_blank" rel="noopener noreferrer">View detailed notebook</a></li>
+<li><a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_ML_Pipeline.ipynb" target="_blank" rel="noopener noreferrer">View ML pipeline notebook</a></li>
+</ul>
+</li>
+</ol>
+<h2 id="1-define-goals"><strong>1. Define Goals</strong></h2>
+<h3 id="objective">Objective</h3>
+<ol>
+<li>Develop a <code>linear regression model</code> to evaluate and predict material performance based on material quality metrics (TML, CVCM, WVR).</li>
+<li>Use <code>classification machine learning</code> to assess material reliability by predicting values for procurement and quality control.</li>
+</ol>
+<h3 id="understanding-features">Understanding Features</h3>
+<ul>
+<li><strong>CVCM:</strong> Measures the percentage of volatile material that can condense on a cold surface during the outgassing test. Lower CVCM values are preferable for high-vacuum environments.</li>
+<li><strong>WVR:</strong> Measures the amount of water vapor a material absorbs back after being subjected to tests. Lower WVR values are preferable to avoid issues like corrosion or degradation.</li>
+<li><strong>TML:</strong> Measures the percentage of a material's mass lost during a test. Lower TML indicates better performance in vacuum environments.</li>
+</ul>
+<h2 id="2-feature-engineering"><strong>2. Feature Engineering</strong></h2>
+<ul>
+<li><strong>Supplier Performance Evaluation:</strong><ul>
+<li>Calculating performance scores based on TML, CVCM, and WVR.</li>
+<li>Adding noise to the dataset to simulate realistic scenarios.</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-initial-model-selection-and-implementation"><strong>3. Initial Model Selection and Implementation</strong></h2>
+<h3 id="regression-models">Regression Models</h3>
+<ul>
+<li><strong>Linear Regression:</strong> Predicting the supplier performance score.</li>
+<li><strong>Random Forest Regressor:</strong> An alternative regression model for predicting performance.</li>
+</ul>
+<h3 id="classification-models">Classification Models</h3>
+<ul>
+<li><strong>Logistic Regression:</strong> Classifying suppliers into performance categories.</li>
+<li><strong>Random Forest Classifier:</strong> A model for classifying performance.</li>
+<li><strong>Support Vector Machine (SVM):</strong> Another classification model considered.</li>
+</ul>
+<h2 id="4-best-model-selection"><strong>4. Best Model Selection</strong></h2>
+<ul>
+<li><strong>Regression Model:</strong> Linear Regression is selected based on evaluation scores.</li>
+<li><strong>Classification Model:</strong> Logistic Regression is chosen for classification tasks.</li>
+</ul>
+<h2 id="5-conclusion"><strong>5. Conclusion</strong></h2>
+<ul>
+<li>
+<p><strong>Further Research Recommendations:</strong></p>
+<ul>
+<li>Expand the dataset to improve model performance.</li>
+<li>Experiment with additional classification models.</li>
+<li>Incorporate categorical features for deeper analysis.</li>
+</ul>
+</li>
+<li>
+<p><strong>Potential Application of the Model:</strong></p>
+<ul>
+<li>Optimized material selection for specific space applications.</li>
+<li>Proactive quality control to prevent mission failures.</li>
+<li>Driving R&amp;D efforts to improve material performance.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><em>This project involves processing and modeling NASA Outgassing Materials data to evaluate and predict material performance. The steps include data preprocessing, feature engineering, model selection, and implementation, concluding with recommendations for future research and potential applications.</em></p>
+<hr>
+<h2 id="end">END</h2>
+<p><em>For further details, please refer to the following notebooks:</em>
+- <a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_Data_Processing.ipynb" target="_blank" rel="noopener noreferrer">NASA Outgassing Materials Data Processing</a>
+- <a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_EDA.ipynb" target="_blank" rel="noopener noreferrer">NASA Outgassing Materials Exploratory Data Analysis (EDA)</a>
+- <a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_ML_Modelling.ipynb" target="_blank" rel="noopener noreferrer">NASA Outgassing Materials ML Modelling</a>
+- <a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_ML_Pipeline.ipynb" target="_blank" rel="noopener noreferrer">NASA Outgassing Materials ML Pipeline</a></p>
+<hr></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

@@ -1,0 +1,132 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>AI Content Detection · Documentation — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>AI Content Detection · Documentation</h1><p>Project documentation from GitHub. Diagrams and demonstrations are available in the project resource library.</p><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/README.md" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><h2 id="distinguishing-human-vs-ai-generated-news"><strong>Distinguishing Human vs AI-Generated News</strong></h2>
+<h2 id="click-for-presentation"><a href="https://docs.google.com/presentation/d/12BAPUrPsUY9ibZcpy6O5I8Wa8WVLjakqYzQ6hijp0p0/pub?start=false&amp;loop=false&amp;delayms=3000" target="_blank" rel="noopener noreferrer">Click for Presentation</a></h2>
+<h2 id="contents">Contents</h2>
+<ol>
+<li>
+<p><strong>Data Preprocessing</strong></p>
+<ul>
+<li>Loading and combining datasets</li>
+<li>Text data preprocessing steps</li>
+<li><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Data_Pre-Processing.ipynb" target="_blank" rel="noopener noreferrer">View detailed notebook</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Data Analysis</strong></p>
+<ul>
+<li>Cleaning the text and title</li>
+<li>Extracting features from text and titles</li>
+<li><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_EDA_Feature_Eng.ipynb" target="_blank" rel="noopener noreferrer">View detailed notebook</a></li>
+</ul>
+</li>
+<li>
+<p><strong>ML Modelling</strong></p>
+<ul>
+<li>Problem Definition</li>
+<li>Feature Engineering</li>
+<li>Model Selection and Implementation</li>
+<li>Evaluation and Results</li>
+<li><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Classification_Model.ipynb" target="_blank" rel="noopener noreferrer">View detailed notebook</a></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="fakenews-data-pre-processing"><strong>FakeNews Data Pre-Processing</strong></h2>
+<h3 id="datasets">Datasets:</h3>
+<ul>
+<li><strong>True.csv:</strong> Contains true news articles.</li>
+<li><strong>Fake.csv:</strong> Contains fake news articles.</li>
+</ul>
+<h3 id="preprocessing-steps">Preprocessing Steps:</h3>
+<ul>
+<li><strong>Loading Data:</strong> Combine <code>True.csv</code> and <code>Fake.csv</code> into a single DataFrame with a target variable indicating whether the news is true or fake.</li>
+<li><strong>Tokenization:</strong> Splitting text into individual words or tokens.</li>
+<li><strong>Removing Stop Words:</strong> Removing common words that do not contribute to the meaning (e.g., "and", "the").</li>
+<li>
+<p><strong>Stemming/Lemmatization:</strong> Reducing words to their base or root form.</p>
+</li>
+<li>
+<p><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Data_Pre-Processing.ipynb" target="_blank" rel="noopener noreferrer">View detailed notebook</a></p>
+</li>
+</ul>
+<hr>
+<h2 id="fakenews-eda-and-feature-engineering"><strong>FakeNews EDA and Feature Engineering</strong></h2>
+<h3 id="data-cleaning">Data Cleaning:</h3>
+<ul>
+<li><strong>Text and Title Cleaning:</strong><ul>
+<li>Apply text preprocessing steps like tokenization, stop word removal, and lemmatization to clean the text and title.</li>
+</ul>
+</li>
+</ul>
+<h3 id="feature-extraction">Feature Extraction:</h3>
+<ul>
+<li><strong>Feature Engineering:</strong><ul>
+<li>Extract various features such as word count, character count, word density, etc., from the cleaned text and title.</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-analysis">Data Analysis:</h3>
+<ul>
+<li><strong>EDA (Exploratory Data Analysis):</strong><ul>
+<li>Distribution analysis of text and title features.</li>
+<li>Sentiment analysis of the text and titles using TextBlob and VADER.</li>
+</ul>
+</li>
+</ul>
+<h3 id="statistical-testing">Statistical Testing:</h3>
+<ul>
+<li><strong>Normality Tests:</strong><ul>
+<li>Apply Shapiro-Wilk test to check for normality.</li>
+</ul>
+</li>
+<li>
+<p><strong>Mann-Whitney U Test:</strong></p>
+<ul>
+<li>Conduct hypothesis testing to compare the sentiment distributions between AI-generated and human-written articles.</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_EDA_Feature_Eng.ipynb" target="_blank" rel="noopener noreferrer">View detailed notebook</a></p>
+</li>
+</ul>
+<hr>
+<h2 id="fakenews-classification-model"><strong>FakeNews Classification Model</strong></h2>
+<h3 id="problem-definition">Problem Definition:</h3>
+<ul>
+<li><strong>Objective:</strong><ul>
+<li>Build a predictive model to classify news articles as either "Fake" or "True" using Natural Language Processing (NLP) techniques.</li>
+</ul>
+</li>
+</ul>
+<h3 id="feature-engineering">Feature Engineering:</h3>
+<ul>
+<li><strong>TF-IDF Vectorization:</strong><ul>
+<li>Convert text and title into numerical features using TF-IDF vectorization.</li>
+</ul>
+</li>
+</ul>
+<h3 id="model-selection">Model Selection:</h3>
+<ul>
+<li><strong>Models Implemented:</strong><ul>
+<li>Logistic Regression, SVM, and Random Forest classifiers.</li>
+<li>Evaluate the models on accuracy, precision, recall, F1 score, and ROC AUC.</li>
+</ul>
+</li>
+</ul>
+<h3 id="evaluation-and-results">Evaluation and Results:</h3>
+<ul>
+<li>
+<p><strong>Model Evaluation:</strong></p>
+<ul>
+<li>Detailed evaluation of models using confusion matrices, ROC curves, and classification reports.</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Classification_Model.ipynb" target="_blank" rel="noopener noreferrer">View detailed notebook</a></p>
+</li>
+</ul>
+<hr>
+<p><em>For further details, please refer to the following notebooks:</em>
+- <a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Data_Pre-Processing.ipynb" target="_blank" rel="noopener noreferrer">FakeNews Data Pre-Processing</a>
+- <a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_EDA_Feature_Eng.ipynb" target="_blank" rel="noopener noreferrer">FakeNews EDA and Feature Engineering</a>
+- <a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Classification_Model.ipynb" target="_blank" rel="noopener noreferrer">FakeNews Classification Model</a></p>
+<hr></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>
