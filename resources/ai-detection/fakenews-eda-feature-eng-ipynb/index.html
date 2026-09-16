@@ -1,0 +1,1619 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>News analysis and feature engineering — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>News analysis and feature engineering</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_EDA_Feature_Eng.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="data-analysis-statistical-testing"><strong>Data analysis / Statistical Testing</strong></h2></section><details class="code-cell"><summary>Code cell 2</summary><pre><code>#IMPORTS
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+
+import numpy as np
+import pandas as pd
+
+import string
+import spacy
+
+from collections import Counter
+
+from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import LinearSVC
+
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
+
+import spacy
+from collections import Counter
+import re
+from spacy.lang.en.stop_words import STOP_WORDS
+
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+from textblob import TextBlob
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+import nltk
+
+# Download the VADER lexicon
+nltk.download(&#x27;vader_lexicon&#x27;)
+</code></pre></details><details class="text-output"><summary>Text output</summary><pre>True</pre></details><section class="notebook-note"><h2 id="initialization-cleaning"><strong>Initialization / Cleaning</strong></h2></section><details class="code-cell"><summary>Code cell 4</summary><pre><code>df_clean = pd.read_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\Clean.csv&#x27;)
+text_features = pd.read_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\text_features.csv&#x27;)
+title_features = pd.read_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\title_features.csv&#x27;)
+</code></pre></details><details class="code-cell"><summary>Code cell 5</summary><pre><code>df_clean.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>title</th>
+      <th>text</th>
+      <th>subject</th>
+      <th>date</th>
+      <th>label</th>
+      <th>clean_title</th>
+      <th>clean_text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>As U.S. budget fight looms, Republicans flip t...</td>
+      <td>WASHINGTON (Reuters) - The head of a conservat...</td>
+      <td>politicsNews</td>
+      <td>December 31, 2017</td>
+      <td>1</td>
+      <td>budget fight loom republican flip fiscal script</td>
+      <td>washington head conservative republican factio...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>U.S. military to accept transgender recruits o...</td>
+      <td>WASHINGTON (Reuters) - Transgender people will...</td>
+      <td>politicsNews</td>
+      <td>December 29, 2017</td>
+      <td>1</td>
+      <td>military accept transgender recruit monday pen...</td>
+      <td>washington transgender people allowed first ti...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>Senior U.S. Republican senator: 'Let Mr. Muell...</td>
+      <td>WASHINGTON (Reuters) - The special counsel inv...</td>
+      <td>politicsNews</td>
+      <td>December 31, 2017</td>
+      <td>1</td>
+      <td>senior republican senator mueller job</td>
+      <td>washington special counsel investigation link ...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>FBI Russia probe helped by Australian diplomat...</td>
+      <td>WASHINGTON (Reuters) - Trump campaign adviser ...</td>
+      <td>politicsNews</td>
+      <td>December 30, 2017</td>
+      <td>1</td>
+      <td>fbi russia probe helped australian diplomat nyt</td>
+      <td>washington trump campaign adviser george papad...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>Trump wants Postal Service to charge 'much mor...</td>
+      <td>SEATTLE/WASHINGTON (Reuters) - President Donal...</td>
+      <td>politicsNews</td>
+      <td>December 29, 2017</td>
+      <td>1</td>
+      <td>trump want postal service charge amazon shipment</td>
+      <td>president donald trump called postal service f...</td>
+    </tr>
+  </tbody>
+</table>
+</div><details class="code-cell"><summary>Code cell 6</summary><pre><code>text_features.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>char_count</th>
+      <th>word_count</th>
+      <th>word_density</th>
+      <th>adj_count</th>
+      <th>adv_count</th>
+      <th>noun_count</th>
+      <th>pron_count</th>
+      <th>propn_count</th>
+      <th>verb_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>3185.0</td>
+      <td>426.0</td>
+      <td>7.476526</td>
+      <td>53.0</td>
+      <td>17.0</td>
+      <td>162.0</td>
+      <td>0.0</td>
+      <td>99.0</td>
+      <td>82.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>2829.0</td>
+      <td>353.0</td>
+      <td>8.014164</td>
+      <td>35.0</td>
+      <td>7.0</td>
+      <td>132.0</td>
+      <td>1.0</td>
+      <td>71.0</td>
+      <td>92.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>1898.0</td>
+      <td>255.0</td>
+      <td>7.443137</td>
+      <td>27.0</td>
+      <td>3.0</td>
+      <td>97.0</td>
+      <td>3.0</td>
+      <td>62.0</td>
+      <td>50.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>1687.0</td>
+      <td>218.0</td>
+      <td>7.738532</td>
+      <td>25.0</td>
+      <td>8.0</td>
+      <td>71.0</td>
+      <td>0.0</td>
+      <td>63.0</td>
+      <td>43.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>3451.0</td>
+      <td>471.0</td>
+      <td>7.326964</td>
+      <td>72.0</td>
+      <td>16.0</td>
+      <td>218.0</td>
+      <td>0.0</td>
+      <td>69.0</td>
+      <td>75.0</td>
+    </tr>
+  </tbody>
+</table>
+</div><details class="code-cell"><summary>Code cell 7</summary><pre><code>title_features.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>char_count</th>
+      <th>word_count</th>
+      <th>word_density</th>
+      <th>adj_count</th>
+      <th>adv_count</th>
+      <th>noun_count</th>
+      <th>pron_count</th>
+      <th>propn_count</th>
+      <th>verb_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>47.0</td>
+      <td>7.0</td>
+      <td>6.714286</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>4.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>51.0</td>
+      <td>6.0</td>
+      <td>8.500000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>37.0</td>
+      <td>5.0</td>
+      <td>7.400000</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>47.0</td>
+      <td>7.0</td>
+      <td>6.714286</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>48.0</td>
+      <td>7.0</td>
+      <td>6.857143</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>5.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div><details class="code-cell"><summary>Code cell 8</summary><pre><code>text_features = pd.concat([text_features, df_clean[&#x27;label&#x27;]], axis=1)
+title_features = pd.concat([title_features, df_clean[&#x27;label&#x27;]], axis=1)</code></pre></details><details class="code-cell"><summary>Code cell 9</summary><pre><code>text_features</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>char_count</th>
+      <th>word_count</th>
+      <th>word_density</th>
+      <th>adj_count</th>
+      <th>adv_count</th>
+      <th>noun_count</th>
+      <th>pron_count</th>
+      <th>propn_count</th>
+      <th>verb_count</th>
+      <th>label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>3185.0</td>
+      <td>426.0</td>
+      <td>7.476526</td>
+      <td>53.0</td>
+      <td>17.0</td>
+      <td>162.0</td>
+      <td>0.0</td>
+      <td>99.0</td>
+      <td>82.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>2829.0</td>
+      <td>353.0</td>
+      <td>8.014164</td>
+      <td>35.0</td>
+      <td>7.0</td>
+      <td>132.0</td>
+      <td>1.0</td>
+      <td>71.0</td>
+      <td>92.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>1898.0</td>
+      <td>255.0</td>
+      <td>7.443137</td>
+      <td>27.0</td>
+      <td>3.0</td>
+      <td>97.0</td>
+      <td>3.0</td>
+      <td>62.0</td>
+      <td>50.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>1687.0</td>
+      <td>218.0</td>
+      <td>7.738532</td>
+      <td>25.0</td>
+      <td>8.0</td>
+      <td>71.0</td>
+      <td>0.0</td>
+      <td>63.0</td>
+      <td>43.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>3451.0</td>
+      <td>471.0</td>
+      <td>7.326964</td>
+      <td>72.0</td>
+      <td>16.0</td>
+      <td>218.0</td>
+      <td>0.0</td>
+      <td>69.0</td>
+      <td>75.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>44684</th>
+      <td>44893</td>
+      <td>2091.0</td>
+      <td>288.0</td>
+      <td>7.260417</td>
+      <td>53.0</td>
+      <td>13.0</td>
+      <td>98.0</td>
+      <td>1.0</td>
+      <td>67.0</td>
+      <td>44.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44685</th>
+      <td>44894</td>
+      <td>1010.0</td>
+      <td>149.0</td>
+      <td>6.778523</td>
+      <td>12.0</td>
+      <td>4.0</td>
+      <td>66.0</td>
+      <td>1.0</td>
+      <td>25.0</td>
+      <td>34.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44686</th>
+      <td>44895</td>
+      <td>15685.0</td>
+      <td>2194.0</td>
+      <td>7.149043</td>
+      <td>357.0</td>
+      <td>119.0</td>
+      <td>698.0</td>
+      <td>17.0</td>
+      <td>515.0</td>
+      <td>364.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44687</th>
+      <td>44896</td>
+      <td>1642.0</td>
+      <td>247.0</td>
+      <td>6.647773</td>
+      <td>34.0</td>
+      <td>6.0</td>
+      <td>78.0</td>
+      <td>7.0</td>
+      <td>59.0</td>
+      <td>48.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44688</th>
+      <td>44897</td>
+      <td>3369.0</td>
+      <td>478.0</td>
+      <td>7.048117</td>
+      <td>65.0</td>
+      <td>15.0</td>
+      <td>150.0</td>
+      <td>0.0</td>
+      <td>131.0</td>
+      <td>97.0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>44689 rows × 11 columns</p>
+</div><details class="code-cell"><summary>Code cell 10</summary><pre><code>title_features</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>char_count</th>
+      <th>word_count</th>
+      <th>word_density</th>
+      <th>adj_count</th>
+      <th>adv_count</th>
+      <th>noun_count</th>
+      <th>pron_count</th>
+      <th>propn_count</th>
+      <th>verb_count</th>
+      <th>label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>47.0</td>
+      <td>7.0</td>
+      <td>6.714286</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>4.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>51.0</td>
+      <td>6.0</td>
+      <td>8.500000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>37.0</td>
+      <td>5.0</td>
+      <td>7.400000</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>47.0</td>
+      <td>7.0</td>
+      <td>6.714286</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>48.0</td>
+      <td>7.0</td>
+      <td>6.857143</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>5.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>44684</th>
+      <td>44893</td>
+      <td>53.0</td>
+      <td>9.0</td>
+      <td>5.888889</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>6.0</td>
+      <td>1.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44685</th>
+      <td>44894</td>
+      <td>40.0</td>
+      <td>6.0</td>
+      <td>6.666667</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44686</th>
+      <td>44895</td>
+      <td>71.0</td>
+      <td>11.0</td>
+      <td>6.454545</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44687</th>
+      <td>44896</td>
+      <td>50.0</td>
+      <td>8.0</td>
+      <td>6.250000</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>2.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>44688</th>
+      <td>44897</td>
+      <td>61.0</td>
+      <td>9.0</td>
+      <td>6.777778</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>44689 rows × 11 columns</p>
+</div><details class="code-cell"><summary>Code cell 11</summary><pre><code>text_features = text_features.drop(columns=[&#x27;Unnamed: 0&#x27;])
+title_features = title_features.drop(columns=[&#x27;Unnamed: 0&#x27;])
+df_clean = df_clean.drop(columns=[&#x27;Unnamed: 0&#x27;])</code></pre></details><details class="code-cell"><summary>Code cell 12</summary><pre><code>text_features[&#x27;labelE&#x27;] = text_features[&#x27;label&#x27;].map({1: &#x27;Human&#x27;, 0: &#x27;AI&#x27;})
+title_features[&#x27;labelE&#x27;] = title_features[&#x27;label&#x27;].map({1: &#x27;Human&#x27;, 0: &#x27;AI&#x27;})
+df_clean[&#x27;labelE&#x27;] = df_clean[&#x27;label&#x27;].map({1: &#x27;Human&#x27;, 0: &#x27;AI&#x27;})</code></pre></details><details class="code-cell"><summary>Code cell 13</summary><pre><code>print(text_features.dtypes)
+</code></pre></details><section class="notebook-note"><p><strong>Text Features Dist</strong></p></section><details class="code-cell"><summary>Code cell 15</summary><pre><code>df_clean[&#x27;labelE&#x27;]</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0        Human
+1        Human
+2        Human
+3        Human
+4        Human
+         ...  
+44684       AI
+44685       AI
+44686       AI
+44687       AI
+44688       AI
+Name: labelE, Length: 44689, dtype: object</pre></details><section class="notebook-note"><p>too many errors in the date column - decided to drop as this is not significant when text classification.</p></section><details class="code-cell"><summary>Code cell 17</summary><pre><code>
+# df_clean[&#x27;date&#x27;] = df_clean[&#x27;date&#x27;].astype(str)
+
+# # Extract the month and year from the &#x27;date&#x27; column using a more robust regex to handle abbreviations
+# df_clean[&#x27;month_year&#x27;] = df_clean[&#x27;date&#x27;].str.extract(r&#x27;([A-Za-z]{3,9}\s\d{1,2},\s\d{4})&#x27;)
+
+# # Print a sample of the DataFrame to check the &#x27;month_year&#x27; extraction
+# print(df_clean[[&#x27;date&#x27;, &#x27;month_year&#x27;]].head(20))
+
+# # Convert the extracted month and year to datetime
+# df_clean[&#x27;month_year&#x27;] = pd.to_datetime(df_clean[&#x27;month_year&#x27;], format=&#x27;%B %d, %Y&#x27;, errors=&#x27;coerce&#x27;)
+
+# df_clean[&#x27;month_year&#x27;].isnull().sum()</code></pre></details><details class="code-cell"><summary>Code cell 19</summary><pre><code>df_clean = df_clean.drop(columns=[&#x27;date&#x27;])
+df_clean = df_clean.dropna(subset=[&#x27;clean_text&#x27;])
+df_clean = df_clean.copy()</code></pre></details><details class="code-cell"><summary>Code cell 20</summary><pre><code>df_clean.to_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_3\data\raw\Clean_columns.csv&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 21</summary><pre><code>df_clean</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>title</th>
+      <th>text</th>
+      <th>subject</th>
+      <th>label</th>
+      <th>clean_title</th>
+      <th>clean_text</th>
+      <th>labelE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>As U.S. budget fight looms, Republicans flip t...</td>
+      <td>WASHINGTON (Reuters) - The head of a conservat...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>budget fight loom republican flip fiscal script</td>
+      <td>washington head conservative republican factio...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>U.S. military to accept transgender recruits o...</td>
+      <td>WASHINGTON (Reuters) - Transgender people will...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>military accept transgender recruit monday pen...</td>
+      <td>washington transgender people allowed first ti...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Senior U.S. Republican senator: 'Let Mr. Muell...</td>
+      <td>WASHINGTON (Reuters) - The special counsel inv...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>senior republican senator mueller job</td>
+      <td>washington special counsel investigation link ...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>FBI Russia probe helped by Australian diplomat...</td>
+      <td>WASHINGTON (Reuters) - Trump campaign adviser ...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>fbi russia probe helped australian diplomat nyt</td>
+      <td>washington trump campaign adviser george papad...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Trump wants Postal Service to charge 'much mor...</td>
+      <td>SEATTLE/WASHINGTON (Reuters) - President Donal...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>trump want postal service charge amazon shipment</td>
+      <td>president donald trump called postal service f...</td>
+      <td>Human</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>44684</th>
+      <td>McPain: John McCain Furious That Iran Treated ...</td>
+      <td>21st Century Wire says As 21WIRE reported earl...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>mcpain john mccain furious iran treated u sail...</td>
+      <td>century wire say reported earlier week unlikel...</td>
+      <td>AI</td>
+    </tr>
+    <tr>
+      <th>44685</th>
+      <td>JUSTICE? Yahoo Settles E-mail Privacy Class-ac...</td>
+      <td>21st Century Wire says It s a familiar theme. ...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>justice yahoo settle privacy lawyer user</td>
+      <td>century wire say familiar theme whenever dispu...</td>
+      <td>AI</td>
+    </tr>
+    <tr>
+      <th>44686</th>
+      <td>Sunnistan: US and Allied ‘Safe Zone’ Plan to T...</td>
+      <td>Patrick Henningsen  21st Century WireRemember ...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>sunnistan u allied safe zone plan take territo...</td>
+      <td>patrick henningsen century wireremember obama ...</td>
+      <td>AI</td>
+    </tr>
+    <tr>
+      <th>44687</th>
+      <td>How to Blow $700 Million: Al Jazeera America F...</td>
+      <td>21st Century Wire says Al Jazeera America will...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>blow million al jazeera america finally call q...</td>
+      <td>century wire say al jazeera america go history...</td>
+      <td>AI</td>
+    </tr>
+    <tr>
+      <th>44688</th>
+      <td>10 U.S. Navy Sailors Held by Iranian Military ...</td>
+      <td>21st Century Wire says As 21WIRE predicted in ...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>navy sailor held iranian military sign neocon ...</td>
+      <td>century wire say predicted new year look ahead...</td>
+      <td>AI</td>
+    </tr>
+  </tbody>
+</table>
+<p>44057 rows × 7 columns</p>
+</div><section class="notebook-note"><h2 id="eda"><strong>EDA</strong></h2></section><details class="code-cell"><summary>Code cell 23</summary><pre><code>plt.figure(figsize=(12, 8))
+
+ax = sns.countplot(data=df_clean, x=&#x27;labelE&#x27;)
+plt.title(&#x27;Distribution of Labels&#x27;)
+plt.xlabel(&#x27;Label&#x27;)
+plt.ylabel(&#x27;Count&#x27;)
+
+for p in ax.patches:
+    ax.annotate(f&#x27;{int(p.get_height())}&#x27;, (p.get_x() + p.get_width() / 2., p.get_height()),
+                ha=&#x27;center&#x27;, va=&#x27;baseline&#x27;, fontsize=12, color=&#x27;black&#x27;, xytext=(0, 5),
+                textcoords=&#x27;offset points&#x27;)
+
+plt.show()</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="News analysis and feature engineering — output chart 1, following code cell 23" width="1023" height="701" loading="lazy"></a><figcaption>Output 1 · Code cell 23 · Open image to enlarge</figcaption></figure><details class="code-cell"><summary>Code cell 24</summary><pre><code># Plot distribution of text features
+fig, axes = plt.subplots(3, 2, figsize=(14, 12))
+
+sns.histplot(ax=axes[0, 0], data=text_features, x=&#x27;char_count&#x27;, hue=&#x27;labelE&#x27;, bins=20)
+axes[0, 0].set_title(&#x27;Character Count Distribution&#x27;)
+axes[0, 0].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[0, 1], data=text_features, x=&#x27;word_count&#x27;, hue=&#x27;labelE&#x27;, bins=20)
+axes[0, 1].set_title(&#x27;Word Count Distribution&#x27;)
+axes[0, 1].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[1, 0], data=text_features, x=&#x27;word_density&#x27;, hue=&#x27;labelE&#x27;, bins=20)
+axes[1, 0].set_title(&#x27;Word Density Distribution&#x27;)
+axes[1, 0].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[1, 1], data=text_features, x=&#x27;noun_count&#x27;, hue=&#x27;labelE&#x27;, bins=20)
+axes[1, 1].set_title(&#x27;Noun Count Distribution&#x27;)
+axes[1, 1].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[2, 0], data=text_features, x=&#x27;verb_count&#x27;, hue=&#x27;labelE&#x27;, bins=20)
+axes[2, 0].set_title(&#x27;Verb Count Distribution&#x27;)
+axes[2, 0].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[2, 1], data=text_features, x=&#x27;adj_count&#x27;, hue=&#x27;labelE&#x27;, bins=20)
+axes[2, 1].set_title(&#x27;Adjective Count Distribution&#x27;)
+axes[2, 1].set_ylabel(&#x27;Number of Instances&#x27;)
+
+fig.suptitle(&#x27;Distribution of Text Features by Label&#x27;, fontsize=16, fontweight=&#x27;bold&#x27;)
+plt.tight_layout(rect=[0, 0, 1, 0.96])
+plt.show()
+</code></pre></details><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="News analysis and feature engineering — output chart 2, following code cell 24" width="1389" height="1180" loading="lazy"></a><figcaption>Output 2 · Code cell 24 · Open image to enlarge</figcaption></figure><details class="code-cell"><summary>Code cell 25</summary><pre><code>fig, axes = plt.subplots(3, 2, figsize=(14, 12))
+
+sns.histplot(ax=axes[0, 0], data=title_features, x=&#x27;char_count&#x27;, hue=&#x27;labelE&#x27;, bins=20)
+axes[0, 0].set_title(&#x27;Character Count Distribution&#x27;)
+axes[0, 0].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[0, 1], data=title_features, x=&#x27;word_count&#x27;, hue=&#x27;labelE&#x27;, bins=20)
+axes[0, 1].set_title(&#x27;Word Count Distribution&#x27;)
+axes[0, 1].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[1, 0], data=title_features, x=&#x27;word_density&#x27;, hue=&#x27;labelE&#x27;, bins=20)
+axes[1, 0].set_title(&#x27;Word Density Distribution&#x27;)
+axes[1, 0].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[1, 1], data=title_features, x=&#x27;noun_count&#x27;, hue=&#x27;labelE&#x27;, bins=8)
+axes[1, 1].set_title(&#x27;Noun Count Distribution&#x27;)
+axes[1, 1].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[2, 0], data=title_features, x=&#x27;verb_count&#x27;, hue=&#x27;labelE&#x27;, bins=8)
+axes[2, 0].set_title(&#x27;Verb Count Distribution&#x27;)
+axes[2, 0].set_ylabel(&#x27;Number of Instances&#x27;)
+
+sns.histplot(ax=axes[2, 1], data=title_features, x=&#x27;adj_count&#x27;, hue=&#x27;labelE&#x27;, bins=8)
+axes[2, 1].set_title(&#x27;Adjective Count Distribution&#x27;)
+axes[2, 1].set_ylabel(&#x27;Number of Instances&#x27;)
+
+fig.suptitle(&#x27;Distribution of Title Features by Label&#x27;, fontsize=16, fontweight=&#x27;bold&#x27;)
+
+plt.tight_layout(rect=[0, 0, 1, 0.96])
+plt.show()
+</code></pre></details><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="News analysis and feature engineering — output chart 3, following code cell 25" width="1389" height="1180" loading="lazy"></a><figcaption>Output 3 · Code cell 25 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p><code>Noun Count Distribution</code>
+Interpretation: Human-generated text may use more specific and varied nouns, contributing to the richness of the content.</p>
+<p><code>Verb Count Distribution</code>
+Interpretation: Human text might be more action-oriented and descriptive, using verbs to convey more dynamic content.</p>
+<p><code>Adjective Count Distribution</code>
+Interpretation: The use of adjectives in human text suggests a tendency to provide more descriptive and nuanced information.</p>
+<p><code>Character Count Distribution</code>
+Interpretation: human-generated text is generally longer and more detailed than AI-generated text.</p>
+<p><code>Word Count Distribution</code>
+Interpretation: Human text may be using more words per sentence, possibly indicating more complex sentence structures.</p></section><details class="code-cell"><summary>Code cell 27</summary><pre><code>df_clean[&#x27;clean_text&#x27;] = df_clean[&#x27;clean_text&#x27;].astype(str)
+df_clean[&#x27;clean_title&#x27;] = df_clean[&#x27;clean_title&#x27;].astype(str)</code></pre></details><details class="code-cell"><summary>Code cell 28</summary><pre><code>true_text_words = &#x27; &#x27;.join(df_clean[df_clean[&#x27;label&#x27;] == 1][&#x27;clean_text&#x27;])
+fake_text_words = &#x27; &#x27;.join(df_clean[df_clean[&#x27;label&#x27;] == 0][&#x27;clean_text&#x27;])
+
+true_title_words = &#x27; &#x27;.join(df_clean[df_clean[&#x27;label&#x27;] == 1][&#x27;clean_title&#x27;])
+fake_title_words = &#x27; &#x27;.join(df_clean[df_clean[&#x27;label&#x27;] == 0][&#x27;clean_title&#x27;])</code></pre></details><details class="code-cell"><summary>Code cell 29</summary><pre><code>true_text_wordcloud = WordCloud(width=800, height=400, background_color=&#x27;white&#x27;).generate(true_text_words)
+fake_text_wordcloud = WordCloud(width=800, height=400, background_color=&#x27;white&#x27;).generate(fake_text_words)
+
+true_title_wordcloud = WordCloud(width=800, height=400, background_color=&#x27;white&#x27;).generate(true_title_words)
+fake_title_wordcloud = WordCloud(width=800, height=400, background_color=&#x27;white&#x27;).generate(fake_title_words)
+
+
+plt.figure(figsize=(10, 5))
+plt.imshow(true_text_wordcloud, interpolation=&#x27;bilinear&#x27;)
+plt.title(&#x27;Word Cloud for Human News Text&#x27;, fontweight=&#x27;bold&#x27;)
+plt.axis(&#x27;off&#x27;)
+plt.show()
+
+plt.figure(figsize=(10, 5))
+plt.imshow(fake_text_wordcloud, interpolation=&#x27;bilinear&#x27;)
+plt.title(&#x27;Word Cloud for AI News Text&#x27;, fontweight=&#x27;bold&#x27;)
+plt.axis(&#x27;off&#x27;)
+plt.show()
+
+plt.figure(figsize=(10, 5))
+plt.imshow(true_title_wordcloud, interpolation=&#x27;bilinear&#x27;)
+plt.title(&#x27;Word Cloud for Human News Title&#x27;, fontweight=&#x27;bold&#x27;)
+plt.axis(&#x27;off&#x27;)
+plt.show()
+
+plt.figure(figsize=(10, 5))
+plt.imshow(fake_title_wordcloud, interpolation=&#x27;bilinear&#x27;)
+plt.title(&#x27;Word Cloud for AI News Title&#x27;, fontweight=&#x27;bold&#x27;)
+plt.axis(&#x27;off&#x27;)
+plt.show()
+
+</code></pre></details><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="News analysis and feature engineering — output chart 4, following code cell 29" width="790" height="427" loading="lazy"></a><figcaption>Output 4 · Code cell 29 · Open image to enlarge</figcaption></figure><figure><a href="chart-05.webp" target="_blank" rel="noopener noreferrer"><img src="chart-05.webp" alt="News analysis and feature engineering — output chart 5, following code cell 29" width="790" height="427" loading="lazy"></a><figcaption>Output 5 · Code cell 29 · Open image to enlarge</figcaption></figure><figure><a href="chart-06.webp" target="_blank" rel="noopener noreferrer"><img src="chart-06.webp" alt="News analysis and feature engineering — output chart 6, following code cell 29" width="790" height="427" loading="lazy"></a><figcaption>Output 6 · Code cell 29 · Open image to enlarge</figcaption></figure><figure><a href="chart-07.webp" target="_blank" rel="noopener noreferrer"><img src="chart-07.webp" alt="News analysis and feature engineering — output chart 7, following code cell 29" width="790" height="427" loading="lazy"></a><figcaption>Output 7 · Code cell 29 · Open image to enlarge</figcaption></figure><details class="code-cell"><summary>Code cell 30</summary><pre><code>from collections import Counter
+
+human_text_list = true_text_words.split() 
+ai_text_list = fake_text_words.split()
+
+human_title_list = true_title_words.split()
+ai_title_list = fake_title_words.split()
+
+human_text_words = Counter(human_text_list)
+ai_text_words = Counter(ai_text_list)
+
+human_title_words = Counter(human_title_list)
+ai_title_words = Counter(ai_title_list)
+
+top_human_text_words = human_text_words.most_common(10)
+top_ai_text_words = ai_text_words.most_common(10)
+
+top_human_title_words = human_title_words.most_common(10)
+top_ai_title_words = ai_title_words.most_common(10)
+
+print(f&#x27;Top Human Text Words: {top_human_text_words}&#x27;)
+print(f&#x27;Top AI Text Words: {top_ai_text_words}&#x27;)
+
+print(f&#x27;Top Human Title Words: {top_human_title_words}&#x27;)	
+print(f&#x27;Top AI Title Words: {top_ai_title_words}&#x27;)
+
+</code></pre></details><details class="code-cell"><summary>Code cell 31</summary><pre><code>h_t_word, h_t_count = zip(*top_human_text_words)
+a_t_word, a_t_count = zip(*top_ai_text_words)
+
+h_tt_word, h_tt_count = zip(*top_human_title_words)
+a_tt_word, a_tt_count = zip(*top_ai_title_words)
+
+
+
+fig, axs = plt.subplots(2, 2, figsize=(18, 12))
+
+# Human Text Words
+sns.barplot(x=list(h_t_count), y=list(h_t_word), color=&#x27;skyblue&#x27;, ax=axs[0, 0])
+axs[0, 0].set_title(&#x27;Top Human Text Words&#x27;, fontweight=&#x27;bold&#x27;)
+axs[0, 0].set_xlabel(&#x27;Count&#x27;)
+axs[0, 0].set_ylabel(&#x27;Words&#x27;)
+
+# AI Text Words
+sns.barplot(x=list(a_t_count), y=list(a_t_word), color=&#x27;lightgreen&#x27;, ax=axs[0, 1])
+axs[0, 1].set_title(&#x27;Top AI Text Words&#x27;, fontweight=&#x27;bold&#x27;)
+axs[0, 1].set_xlabel(&#x27;Count&#x27;)
+axs[0, 1].set_ylabel(&#x27;Words&#x27;)
+
+# Human Title Words
+sns.barplot(x=list(h_tt_count), y=list(h_tt_word), color=&#x27;salmon&#x27;, ax=axs[1, 0])
+axs[1, 0].set_title(&#x27;Top Human Title Words&#x27;, fontweight=&#x27;bold&#x27;)
+axs[1, 0].set_xlabel(&#x27;Count&#x27;)
+axs[1, 0].set_ylabel(&#x27;Words&#x27;)
+
+# AI Title Words
+sns.barplot(x=list(a_tt_count), y=list(a_tt_word), color=&#x27;gold&#x27;, ax=axs[1, 1])
+axs[1, 1].set_title(&#x27;Top AI Title Words&#x27;, fontweight=&#x27;bold&#x27;)
+axs[1, 1].set_xlabel(&#x27;Count&#x27;)
+axs[1, 1].set_ylabel(&#x27;Words&#x27;)
+
+plt.tight_layout()
+plt.show()
+</code></pre></details><figure><a href="chart-08.webp" target="_blank" rel="noopener noreferrer"><img src="chart-08.webp" alt="News analysis and feature engineering — output chart 8, following code cell 31" width="1790" height="1189" loading="lazy"></a><figcaption>Output 8 · Code cell 31 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p><strong>Human Text Words</strong></p>
+<p><code>Top Words:</code> "said," "trump," "state," "would," "president," "republican," "government," "year," "house," "new"</p>
+<p><code>Observation:</code>The most frequent words in human-generated news text are related to political figures and institutions, with "said" being the most common word, indicating a focus on quoting sources and reporting statements.</p>
+<p><strong>AI Text Words</strong></p>
+<p><code>Top Words:</code> "trump," "said," "president," "people," "one," "would," "state," "clinton," "like," "obama"</p>
+<p><code>Observation:</code> AI-generated news text also frequently mentions political figures but includes more general terms like "people" and "one," suggesting a broader and more generalized approach to news content.</p>
+<p><strong>Human Title Words</strong></p>
+<p><code>Top Words</code>: "trump," "say," "house," "republican," "north," "russia," "korea," "new," "white," "state"</p>
+<p><code>Observation:</code> Human-generated titles prominently feature political entities and geographic locations, with a clear focus on high-profile topics and events.</p>
+<p><strong>AI Title Words</strong></p>
+<p><code>Top Words:</code> "trump," "video," "obama," "hillary," "watch," "clinton," "president," "get," "black," "new"</p>
+<p><code>Observation:</code> AI-generated titles emphasize popular and engaging content, with a notable presence of the word "video," indicating a preference for multimedia content to attract attention.</p></section><section class="notebook-note"><h2 id="simple-sentiment-analysis">Simple Sentiment Analysis</h2></section><details class="code-cell"><summary>Code cell 34</summary><pre><code>#using textblob lib
+def textblob_sentiment(text):
+    return TextBlob(text).sentiment.polarity
+
+df_clean[&#x27;text_sentiment&#x27;] = df_clean[&#x27;clean_text&#x27;].apply(textblob_sentiment)
+df_clean[&#x27;title_sentiment&#x27;] = df_clean[&#x27;clean_title&#x27;].apply(textblob_sentiment)
+
+df_clean[[&#x27;clean_text&#x27;, &#x27;text_sentiment&#x27;, &#x27;clean_title&#x27;, &#x27;title_sentiment&#x27;]].head()
+</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>clean_text</th>
+      <th>text_sentiment</th>
+      <th>clean_title</th>
+      <th>title_sentiment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>washington head conservative republican factio...</td>
+      <td>0.027671</td>
+      <td>budget fight loom republican flip fiscal script</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>washington transgender people allowed first ti...</td>
+      <td>0.097088</td>
+      <td>military accept transgender recruit monday pen...</td>
+      <td>-0.1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>washington special counsel investigation link ...</td>
+      <td>0.105132</td>
+      <td>senior republican senator mueller job</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>washington trump campaign adviser george papad...</td>
+      <td>0.031498</td>
+      <td>fbi russia probe helped australian diplomat nyt</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>president donald trump called postal service f...</td>
+      <td>0.032500</td>
+      <td>trump want postal service charge amazon shipment</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div><details class="code-cell"><summary>Code cell 35</summary><pre><code>def plot_sentiment(df, text_sentiment, title_sentiment):
+    fig, ax = plt.subplots(1, 2, figsize=(14, 6))
+    
+    ax[0].hist(df[text_sentiment], bins=30, color=&#x27;blue&#x27;, alpha=0.7)
+    ax[0].set_title(&#x27;Text Sentiment Distribution&#x27;, fontweight=&#x27;bold&#x27;)
+    ax[0].set_xlabel(&#x27;Sentiment Polarity&#x27;)
+    ax[0].set_ylabel(&#x27;Count&#x27;)
+    
+    ax[1].hist(df[title_sentiment], bins=30, color=&#x27;green&#x27;, alpha=0.7)
+    ax[1].set_title(&#x27;Title Sentiment Distribution&#x27;, fontweight=&#x27;bold&#x27;)
+    ax[1].set_xlabel(&#x27;Sentiment Polarity&#x27;)
+    ax[1].set_ylabel(&#x27;Count&#x27;)
+    
+    plt.tight_layout()
+    plt.show()
+
+plot_sentiment(df_clean, &#x27;text_sentiment&#x27;, &#x27;title_sentiment&#x27;)
+</code></pre></details><figure><a href="chart-09.webp" target="_blank" rel="noopener noreferrer"><img src="chart-09.webp" alt="News analysis and feature engineering — output chart 9, following code cell 35" width="1390" height="590" loading="lazy"></a><figcaption>Output 9 · Code cell 35 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p><code>Text Sentiment Distribution (Left Plot):</code></p>
+<p>This histogram displays the distribution of sentiment polarity scores for the clean_text column. 
+<strong>Most sentiment scores appear to be clustered around 0</strong>, </p>
+<p>indicating a generally neutral sentiment, with some spread towards positive and negative sentiments.</p>
+<p><code>Title Sentiment Distribution (Right Plot):</code></p>
+<p>This histogram shows the distribution of sentiment polarity scores for the clean_title column. 
+<strong>There is a strong spike at 0</strong>, 
+indicating that most titles have a neutral sentiment, with fewer instances of positive and negative sentiments.</p></section><section class="notebook-note"><h2 id="vader-sentiment-analysis">VADER Sentiment Analysis</h2></section><details class="code-cell"><summary>Code cell 38</summary><pre><code>sid = SentimentIntensityAnalyzer()
+
+def sentiment_scores(text):
+    scores = sid.polarity_scores(text)
+    return scores
+
+df_clean[&#x27;text_vader_scores&#x27;] = df_clean[&#x27;clean_text&#x27;].apply(sentiment_scores)
+df_clean[&#x27;title_vader_scores&#x27;] = df_clean[&#x27;clean_title&#x27;].apply(sentiment_scores)
+
+vader_df = pd.json_normalize(df_clean[[&#x27;text_vader_scores&#x27;, &#x27;title_vader_scores&#x27;]])
+comb_df = pd.concat([df_clean, vader_df], axis=1)</code></pre></details><details class="code-cell"><summary>Code cell 39</summary><pre><code>comb_df[[&#x27;text_neg&#x27;, &#x27;text_neu&#x27;, &#x27;text_pos&#x27;, &#x27;text_compound&#x27;]] = pd.DataFrame(comb_df[&#x27;text_vader_scores&#x27;].tolist(), index=comb_df.index)
+comb_df[[&#x27;title_neg&#x27;, &#x27;title_neu&#x27;, &#x27;title_pos&#x27;, &#x27;title_compound&#x27;]] = pd.DataFrame(comb_df[&#x27;title_vader_scores&#x27;].tolist(), index=comb_df.index)
+
+comb_df</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>title</th>
+      <th>text</th>
+      <th>subject</th>
+      <th>label</th>
+      <th>clean_title</th>
+      <th>clean_text</th>
+      <th>labelE</th>
+      <th>text_sentiment</th>
+      <th>title_sentiment</th>
+      <th>text_vader_scores</th>
+      <th>title_vader_scores</th>
+      <th>text_neg</th>
+      <th>text_neu</th>
+      <th>text_pos</th>
+      <th>text_compound</th>
+      <th>title_neg</th>
+      <th>title_neu</th>
+      <th>title_pos</th>
+      <th>title_compound</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>As U.S. budget fight looms, Republicans flip t...</td>
+      <td>WASHINGTON (Reuters) - The head of a conservat...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>budget fight loom republican flip fiscal script</td>
+      <td>washington head conservative republican factio...</td>
+      <td>Human</td>
+      <td>0.027671</td>
+      <td>0.00</td>
+      <td>{'neg': 0.068, 'neu': 0.781, 'pos': 0.151, 'co...</td>
+      <td>{'neg': 0.474, 'neu': 0.526, 'pos': 0.0, 'comp...</td>
+      <td>0.068</td>
+      <td>0.781</td>
+      <td>0.151</td>
+      <td>0.9880</td>
+      <td>0.474</td>
+      <td>0.526</td>
+      <td>0.000</td>
+      <td>-0.5423</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>U.S. military to accept transgender recruits o...</td>
+      <td>WASHINGTON (Reuters) - Transgender people will...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>military accept transgender recruit monday pen...</td>
+      <td>washington transgender people allowed first ti...</td>
+      <td>Human</td>
+      <td>0.097088</td>
+      <td>-0.10</td>
+      <td>{'neg': 0.097, 'neu': 0.743, 'pos': 0.161, 'co...</td>
+      <td>{'neg': 0.0, 'neu': 0.658, 'pos': 0.342, 'comp...</td>
+      <td>0.097</td>
+      <td>0.743</td>
+      <td>0.161</td>
+      <td>0.9509</td>
+      <td>0.000</td>
+      <td>0.658</td>
+      <td>0.342</td>
+      <td>0.3818</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Senior U.S. Republican senator: 'Let Mr. Muell...</td>
+      <td>WASHINGTON (Reuters) - The special counsel inv...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>senior republican senator mueller job</td>
+      <td>washington special counsel investigation link ...</td>
+      <td>Human</td>
+      <td>0.105132</td>
+      <td>0.00</td>
+      <td>{'neg': 0.078, 'neu': 0.832, 'pos': 0.09, 'com...</td>
+      <td>{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound...</td>
+      <td>0.078</td>
+      <td>0.832</td>
+      <td>0.090</td>
+      <td>0.0772</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>FBI Russia probe helped by Australian diplomat...</td>
+      <td>WASHINGTON (Reuters) - Trump campaign adviser ...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>fbi russia probe helped australian diplomat nyt</td>
+      <td>washington trump campaign adviser george papad...</td>
+      <td>Human</td>
+      <td>0.031498</td>
+      <td>0.00</td>
+      <td>{'neg': 0.103, 'neu': 0.797, 'pos': 0.1, 'comp...</td>
+      <td>{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound...</td>
+      <td>0.103</td>
+      <td>0.797</td>
+      <td>0.100</td>
+      <td>-0.1761</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Trump wants Postal Service to charge 'much mor...</td>
+      <td>SEATTLE/WASHINGTON (Reuters) - President Donal...</td>
+      <td>politicsNews</td>
+      <td>1</td>
+      <td>trump want postal service charge amazon shipment</td>
+      <td>president donald trump called postal service f...</td>
+      <td>Human</td>
+      <td>0.032500</td>
+      <td>0.00</td>
+      <td>{'neg': 0.084, 'neu': 0.777, 'pos': 0.139, 'co...</td>
+      <td>{'neg': 0.0, 'neu': 0.625, 'pos': 0.375, 'comp...</td>
+      <td>0.084</td>
+      <td>0.777</td>
+      <td>0.139</td>
+      <td>0.9698</td>
+      <td>0.000</td>
+      <td>0.625</td>
+      <td>0.375</td>
+      <td>0.2500</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>44684</th>
+      <td>McPain: John McCain Furious That Iran Treated ...</td>
+      <td>21st Century Wire says As 21WIRE reported earl...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>mcpain john mccain furious iran treated u sail...</td>
+      <td>century wire say reported earlier week unlikel...</td>
+      <td>AI</td>
+      <td>0.027706</td>
+      <td>0.00</td>
+      <td>{'neg': 0.169, 'neu': 0.649, 'pos': 0.181, 'co...</td>
+      <td>{'neg': 0.314, 'neu': 0.508, 'pos': 0.178, 'co...</td>
+      <td>0.169</td>
+      <td>0.649</td>
+      <td>0.181</td>
+      <td>0.6483</td>
+      <td>0.314</td>
+      <td>0.508</td>
+      <td>0.178</td>
+      <td>-0.3818</td>
+    </tr>
+    <tr>
+      <th>44685</th>
+      <td>JUSTICE? Yahoo Settles E-mail Privacy Class-ac...</td>
+      <td>21st Century Wire says It s a familiar theme. ...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>justice yahoo settle privacy lawyer user</td>
+      <td>century wire say familiar theme whenever dispu...</td>
+      <td>AI</td>
+      <td>0.113265</td>
+      <td>0.00</td>
+      <td>{'neg': 0.112, 'neu': 0.784, 'pos': 0.104, 'co...</td>
+      <td>{'neg': 0.0, 'neu': 0.595, 'pos': 0.405, 'comp...</td>
+      <td>0.112</td>
+      <td>0.784</td>
+      <td>0.104</td>
+      <td>-0.3182</td>
+      <td>0.000</td>
+      <td>0.595</td>
+      <td>0.405</td>
+      <td>0.5267</td>
+    </tr>
+    <tr>
+      <th>44686</th>
+      <td>Sunnistan: US and Allied ‘Safe Zone’ Plan to T...</td>
+      <td>Patrick Henningsen  21st Century WireRemember ...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>sunnistan u allied safe zone plan take territo...</td>
+      <td>patrick henningsen century wireremember obama ...</td>
+      <td>AI</td>
+      <td>0.059012</td>
+      <td>0.50</td>
+      <td>{'neg': 0.16, 'neu': 0.683, 'pos': 0.157, 'com...</td>
+      <td>{'neg': 0.0, 'neu': 0.756, 'pos': 0.244, 'comp...</td>
+      <td>0.160</td>
+      <td>0.683</td>
+      <td>0.157</td>
+      <td>-0.9938</td>
+      <td>0.000</td>
+      <td>0.756</td>
+      <td>0.244</td>
+      <td>0.4404</td>
+    </tr>
+    <tr>
+      <th>44687</th>
+      <td>How to Blow $700 Million: Al Jazeera America F...</td>
+      <td>21st Century Wire says Al Jazeera America will...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>blow million al jazeera america finally call q...</td>
+      <td>century wire say al jazeera america go history...</td>
+      <td>AI</td>
+      <td>0.104054</td>
+      <td>0.00</td>
+      <td>{'neg': 0.097, 'neu': 0.774, 'pos': 0.129, 'co...</td>
+      <td>{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound...</td>
+      <td>0.097</td>
+      <td>0.774</td>
+      <td>0.129</td>
+      <td>0.8442</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>44688</th>
+      <td>10 U.S. Navy Sailors Held by Iranian Military ...</td>
+      <td>21st Century Wire says As 21WIRE predicted in ...</td>
+      <td>Middle-east</td>
+      <td>0</td>
+      <td>navy sailor held iranian military sign neocon ...</td>
+      <td>century wire say predicted new year look ahead...</td>
+      <td>AI</td>
+      <td>0.018585</td>
+      <td>-0.05</td>
+      <td>{'neg': 0.187, 'neu': 0.736, 'pos': 0.077, 'co...</td>
+      <td>{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound...</td>
+      <td>0.187</td>
+      <td>0.736</td>
+      <td>0.077</td>
+      <td>-0.9963</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.0000</td>
+    </tr>
+  </tbody>
+</table>
+<p>44057 rows × 19 columns</p>
+</div><details class="code-cell"><summary>Code cell 40</summary><pre><code>comb_df = comb_df.drop(columns=&#x27;text_vader_scores&#x27;)
+comb_df = comb_df.drop(columns=&#x27;title_vader_scores&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 41</summary><pre><code>text_mean_vs = comb_df.groupby(&#x27;labelE&#x27;)[[&#x27;text_neg&#x27;, &#x27;text_neu&#x27;, &#x27;text_pos&#x27;, &#x27;text_compound&#x27;]].mean()
+# text_std_vs = comb_df.groupby(&#x27;labelE&#x27;)[[&#x27;text_neg&#x27;, &#x27;text_neu&#x27;, &#x27;text_pos&#x27;, &#x27;text_compound&#x27;]].std()
+
+title_mean_vs = comb_df.groupby(&#x27;labelE&#x27;)[[&#x27;title_neg&#x27;, &#x27;title_neu&#x27;, &#x27;title_pos&#x27;, &#x27;title_compound&#x27;]].mean()
+# title_std_vs = comb_df.groupby(&#x27;labelE&#x27;)[[&#x27;title_neg&#x27;, &#x27;title_neu&#x27;, &#x27;title_pos&#x27;, &#x27;title_compound&#x27;]].std()
+
+plt.figure(figsize=(12, 6))
+text_mean_vs.plot(kind=&#x27;bar&#x27;, ax=plt.gca(), color=[&#x27;orange&#x27;, &#x27;lightblue&#x27;, &#x27;red&#x27;, &#x27;green&#x27;])
+plt.title(&#x27;Mean of Text Sentiment Scores by Label&#x27;, fontweight=&#x27;bold&#x27;)
+plt.xlabel(&#x27;Label&#x27;)
+plt.ylabel(&#x27;Mean of Text Sentiment Scores&#x27;)
+plt.legend(loc=&#x27;upper left&#x27;, bbox_to_anchor=(1, 1))
+plt.xticks(rotation=0)
+plt.show()
+
+# plt.figure(figsize=(12, 6))
+# text_std_vs.plot(kind=&#x27;bar&#x27;, ax=plt.gca(), color=[&#x27;orange&#x27;, &#x27;lightblue&#x27;, &#x27;red&#x27;, &#x27;green&#x27;])
+# plt.title(&#x27;Standard Deviation of Text Sentiment Scores by Label&#x27;, fontweight=&#x27;bold&#x27;)
+# plt.xlabel(&#x27;Label&#x27;)
+# plt.ylabel(&#x27;Standard Deviation of Text Sentiment Scores&#x27;)
+# plt.legend(loc=&#x27;upper left&#x27;, bbox_to_anchor=(1, 1))
+# plt.xticks(rotation=0)
+# plt.show()
+
+# plt.figure(figsize=(12, 6))
+# title_std_vs.plot(kind=&#x27;bar&#x27;, ax=plt.gca(), color=[&#x27;orange&#x27;, &#x27;lightblue&#x27;, &#x27;red&#x27;, &#x27;green&#x27;])
+# plt.title(&#x27;Standard Deviation of Title Sentiment Scores by Label&#x27;, fontweight=&#x27;bold&#x27;)
+# plt.xlabel(&#x27;Label&#x27;)
+# plt.ylabel(&#x27;Standard Deviation of Title Sentiment Scores&#x27;)
+# plt.legend(loc=&#x27;upper left&#x27;, bbox_to_anchor=(1, 1))
+# plt.xticks(rotation=0)
+# plt.show()
+
+plt.figure(figsize=(12, 6))
+title_mean_vs.plot(kind=&#x27;bar&#x27;, ax=plt.gca(), color=[&#x27;orange&#x27;, &#x27;lightblue&#x27;, &#x27;red&#x27;, &#x27;green&#x27;])
+plt.title(&#x27;Mean of Title Sentiment Scores by Label&#x27;, fontweight=&#x27;bold&#x27;)
+plt.xlabel(&#x27;Label&#x27;)
+plt.ylabel(&#x27;Mean of Title Sentiment Scores&#x27;)
+plt.legend(loc=&#x27;upper left&#x27;, bbox_to_anchor=(1, 1))
+plt.xticks(rotation=0)
+plt.show()
+
+print(f&#x27;Mean Text Scores: \n{text_mean_vs}\n&#x27;)
+print(&#x27;=========================================================\n&#x27;)
+print(f&#x27;Mean Title Scores: \n{title_mean_vs}&#x27;)</code></pre></details><figure><a href="chart-10.webp" target="_blank" rel="noopener noreferrer"><img src="chart-10.webp" alt="News analysis and feature engineering — output chart 10, following code cell 41" width="1166" height="547" loading="lazy"></a><figcaption>Output 10 · Code cell 41 · Open image to enlarge</figcaption></figure><figure><a href="chart-11.webp" target="_blank" rel="noopener noreferrer"><img src="chart-11.webp" alt="News analysis and feature engineering — output chart 11, following code cell 41" width="1177" height="547" loading="lazy"></a><figcaption>Output 11 · Code cell 41 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h3 id="analysis-of-mean-sentiment-scores-by-label">Analysis of Mean Sentiment Scores by Label</h3>
+<h4 id="mean-of-text-sentiment-scores-by-label">Mean of Text Sentiment Scores by Label:</h4>
+<ol>
+<li><strong>text_neg</strong>:</li>
+<li>AI: Approximately 0.15</li>
+<li>Human: Approximately 0.10</li>
+<li>
+<p><strong>Observation</strong>: AI texts have a slightly higher mean negative sentiment score compared to Human texts.</p>
+</li>
+<li>
+<p><strong>text_neu</strong>:</p>
+</li>
+<li>AI: Approximately 0.70</li>
+<li>Human: Approximately 0.70</li>
+<li>
+<p><strong>Observation</strong>: Both AI and Human texts have very similar mean neutral sentiment scores, with neutral sentiment being the most dominant sentiment for both.</p>
+</li>
+<li>
+<p><strong>text_pos</strong>:</p>
+</li>
+<li>AI: Approximately 0.10</li>
+<li>Human: Approximately 0.12</li>
+<li>
+<p><strong>Observation</strong>: Human texts have a slightly higher mean positive sentiment score compared to AI texts.</p>
+</li>
+<li>
+<p><strong>text_compound</strong>:</p>
+</li>
+<li>AI: Slightly negative</li>
+<li>Human: Slightly positive</li>
+<li><strong>Observation</strong>: AI texts have a negative mean compound sentiment score, indicating overall negative sentiment, while Human texts have a positive mean compound sentiment score, indicating overall positive sentiment.</li>
+</ol>
+<h4 id="mean-of-title-sentiment-scores-by-label">Mean of Title Sentiment Scores by Label:</h4>
+<ol>
+<li><strong>title_neg</strong>:</li>
+<li>AI: Approximately 0.25</li>
+<li>Human: Approximately 0.15</li>
+<li>
+<p><strong>Observation</strong>: AI titles have a higher mean negative sentiment score compared to Human titles.</p>
+</li>
+<li>
+<p><strong>title_neu</strong>:</p>
+</li>
+<li>AI: Approximately 0.65</li>
+<li>Human: Approximately 0.65</li>
+<li>
+<p><strong>Observation</strong>: Both AI and Human titles have very similar mean neutral sentiment scores, with neutral sentiment being the most dominant sentiment for both.</p>
+</li>
+<li>
+<p><strong>title_pos</strong>:</p>
+</li>
+<li>AI: Approximately 0.10</li>
+<li>Human: Approximately 0.10</li>
+<li>
+<p><strong>Observation</strong>: Both AI and Human titles have similar mean positive sentiment scores.</p>
+</li>
+<li>
+<p><strong>title_compound</strong>:</p>
+</li>
+<li>AI: Slightly negative</li>
+<li>Human: Slightly positive</li>
+<li><strong>Observation</strong>: AI titles have a negative mean compound sentiment score, indicating overall negative sentiment, while Human titles have a positive mean compound sentiment score, indicating overall positive sentiment.</li>
+</ol>
+<h3 id="summary">Summary:</h3>
+<ul>
+<li><strong>Neutral Sentiment</strong>: Dominant in both text and title for both AI and Human labels.</li>
+<li><strong>Negative Sentiment</strong>: Slightly higher in AI texts and titles compared to Human.</li>
+<li><strong>Positive Sentiment</strong>: Slightly higher in Human texts compared to AI.</li>
+<li><strong>Compound Sentiment</strong>: </li>
+<li>AI: Overall negative for both text and title.</li>
+<li>Human: Overall positive for both text and title.</li>
+</ul></section><details class="code-cell"><summary>Code cell 43</summary><pre><code>from scipy.stats import shapiro
+import scipy.stats as stats
+
+def check_normality(data, column_name, group_column):
+    groups = data[group_column].unique()
+    
+    for group in groups:
+        group_data = data[data[group_column] == group]
+        stat, p = stats.shapiro(group_data[column_name])
+        print(f&#x27;Group: {group}, Statistics={stat}, p={p}&#x27;)
+        if p &gt; 0.05:
+            print(f&#x27;{column_name} for {group} looks Gaussian (fail to reject H0)\n&#x27;)
+        else:
+            print(f&#x27;{column_name} for {group} does not look Gaussian (reject H0)\n&#x27;)
+
+
+check_normality(comb_df, &#x27;text_pos&#x27;, &#x27;labelE&#x27;)
+check_normality(comb_df, &#x27;text_compound&#x27;, &#x27;labelE&#x27;)
+
+check_normality(comb_df, &#x27;title_pos&#x27;, &#x27;labelE&#x27;)
+check_normality(comb_df, &#x27;title_compound&#x27;, &#x27;labelE&#x27;)
+</code></pre></details><section class="notebook-note"><p>Only run below if you want to see the distribution
+they are not gaussian.</p></section><details class="code-cell"><summary>Code cell 45</summary><pre><code># plt.figure(figsize=(12, 6))
+# sns.histplot(comb_df[comb_df[&#x27;labelE&#x27;] == &#x27;Human&#x27;][&#x27;text_compound&#x27;], color=&#x27;blue&#x27;, label=&#x27;Real&#x27;, kde=True, alpha=0.4)
+# sns.histplot(comb_df[comb_df[&#x27;labelE&#x27;] == &#x27;AI&#x27;][&#x27;text_compound&#x27;], color=&#x27;red&#x27;, label=&#x27;Fake&#x27;, kde=True, alpha=0.4)
+# plt.title(&#x27;Distribution of Compound Sentiment Scores&#x27;)
+# plt.xlabel(&#x27;Compound Sentiment Score&#x27;)
+# plt.legend()
+# plt.show()
+
+# plt.figure(figsize=(12, 6))
+# sns.histplot(comb_df[comb_df[&#x27;labelE&#x27;] == &#x27;Human&#x27;][&#x27;title_compound&#x27;], color=&#x27;blue&#x27;, label=&#x27;Real&#x27;, kde=True, alpha=0.4)
+# sns.histplot(comb_df[comb_df[&#x27;labelE&#x27;] == &#x27;AI&#x27;][&#x27;title_compound&#x27;], color=&#x27;red&#x27;, label=&#x27;Fake&#x27;, kde=True, alpha=0.4)
+# plt.title(&#x27;Distribution of Compound Sentiment Scores&#x27;)
+# plt.xlabel(&#x27;Compound Sentiment Score&#x27;)
+# plt.legend()
+# plt.show()
+
+# plt.figure(figsize=(12, 6))
+# sns.histplot(comb_df[comb_df[&#x27;labelE&#x27;] == &#x27;Human&#x27;][&#x27;text_pos&#x27;], color=&#x27;blue&#x27;, label=&#x27;Real&#x27;, kde=True, alpha=0.4)
+# sns.histplot(comb_df[comb_df[&#x27;labelE&#x27;] == &#x27;AI&#x27;][&#x27;text_pos&#x27;], color=&#x27;red&#x27;, label=&#x27;Fake&#x27;, kde=True, alpha=0.4)
+# plt.title(&#x27;Distribution of Positive Sentiment Scores&#x27;)
+# plt.xlabel(&#x27;Positive Sentiment Score&#x27;)
+# plt.legend()
+# plt.show()
+
+# plt.figure(figsize=(12, 6))
+# sns.histplot(comb_df[comb_df[&#x27;labelE&#x27;] == &#x27;Human&#x27;][&#x27;title_pos&#x27;], color=&#x27;blue&#x27;, label=&#x27;Real&#x27;, kde=True, alpha=0.4)
+# sns.histplot(comb_df[comb_df[&#x27;labelE&#x27;] == &#x27;AI&#x27;][&#x27;title_pos&#x27;], color=&#x27;red&#x27;, label=&#x27;Fake&#x27;, kde=True, alpha=0.4)
+# plt.title(&#x27;Distribution of Positive Sentiment Scores&#x27;)
+# plt.xlabel(&#x27;Positive Sentiment Score&#x27;)
+# plt.legend()
+# plt.show()</code></pre></details><section class="notebook-note"><h2 id="mann-whitney-u-test">Mann-Whitney U Test</h2>
+<h2 id="hypothesis-statements">Hypothesis Statements</h2>
+<p><code>Null Hypothesis (H0):</code>There is no significant difference between AI generated articles and Human written articles.</p>
+<p><code>Alternative Hypothesis (H1):</code> There is a significant difference between AI generated articles and Human written articles.</p></section><details class="code-cell"><summary>Code cell 47</summary><pre><code>from scipy.stats import mannwhitneyu
+
+def mannwhitneyu_test(data, column_name, group_column):
+    group1 = data[data[group_column] == &#x27;AI&#x27;][column_name]
+    group2 = data[data[group_column] == &#x27;Human&#x27;][column_name]
+    
+    stat, p = mannwhitneyu(group1, group2)
+    print(f&#x27;Mann-Whitney U Test for {column_name}&#x27;)
+    print(f&#x27;Statistics={stat}, p={p}&#x27;)
+    
+    if p &gt; 0.05:
+        print(f&#x27;Fail to reject H0: Distributions of {column_name} are similar&#x27;)
+    else:
+        print(f&#x27;Reject H0: Distributions of {column_name} are different&#x27;)
+        
+    print(&#x27;------------------------------------------------------&#x27;)
+    print(&#x27;------------------------------------------------------&#x27;)
+    
+#performing test
+
+mannwhitneyu_test(comb_df, &#x27;text_compound&#x27;, &#x27;labelE&#x27;)
+mannwhitneyu_test(comb_df, &#x27;title_compound&#x27;, &#x27;labelE&#x27;)
+
+mannwhitneyu_test(comb_df, &#x27;text_pos&#x27;, &#x27;labelE&#x27;)
+mannwhitneyu_test(comb_df, &#x27;title_pos&#x27;, &#x27;labelE&#x27;)</code></pre></details><section class="notebook-note"><h3 id="simplified-explanation">Simplified Explanation</h3>
+<h3 id="mann-whitney-u-test-for-text_compound">Mann-Whitney U Test for <code>text_compound</code>:</h3>
+<ul>
+<li><strong>U Statistic</strong>: 217238152.5</li>
+<li>The U statistic represents the sum of the ranks for one of the groups (AI or Human). A high U value suggests that one group's ranks are generally higher than the other group's.</li>
+<li><strong>p-value</strong>: 1.0309591591333293e-78</li>
+<li>Extremely low, indicating a significant difference.</li>
+<li><strong>Conclusion</strong>: </li>
+<li>Reject H0.</li>
+<li>AI and Human distributions for <code>text_compound</code> are significantly different.</li>
+</ul>
+<h3 id="mann-whitney-u-test-for-title_compound">Mann-Whitney U Test for <code>title_compound</code>:</h3>
+<ul>
+<li><strong>U Statistic</strong>: 203474370.0</li>
+<li>A high U value indicates a substantial difference in the rank sums between the two groups.</li>
+<li><strong>p-value</strong>: 1.1421568000899355e-189</li>
+<li>Extremely low, indicating a significant difference.</li>
+<li><strong>Conclusion</strong>: </li>
+<li>Reject H0.</li>
+<li>AI and Human distributions for <code>title_compound</code> are significantly different.</li>
+</ul>
+<h3 id="mann-whitney-u-test-for-text_pos">Mann-Whitney U Test for <code>text_pos</code>:</h3>
+<ul>
+<li><strong>U Statistic</strong>: 280891757.5</li>
+<li>A high U value suggests a notable difference in the rank sums between the two groups.</li>
+<li><strong>p-value</strong>: 3.867038350587865e-184</li>
+<li>Extremely low, indicating a significant difference.</li>
+<li><strong>Conclusion</strong>: </li>
+<li>Reject H0.</li>
+<li>AI and Human distributions for <code>text_pos</code> are significantly different.</li>
+</ul>
+<h3 id="mann-whitney-u-test-for-title_pos">Mann-Whitney U Test for <code>title_pos</code>:</h3>
+<ul>
+<li><strong>U Statistic</strong>: 261765750.5</li>
+<li>A high U value shows a considerable difference in the rank sums between the two groups.</li>
+<li><strong>p-value</strong>: 4.33788269474753e-60</li>
+<li>Extremely low, indicating a significant difference.</li>
+<li><strong>Conclusion</strong>: </li>
+<li>Reject H0.</li>
+<li>AI and Human distributions for <code>title_pos</code> are significantly different.</li>
+</ul>
+<h3 id="summary-of-findings">Summary of Findings:</h3>
+<ul>
+<li><strong>Overall</strong>:</li>
+<li>For all sentiment scores (<code>text_compound</code>, <code>title_compound</code>, <code>text_pos</code>, <code>title_pos</code>), the p-values are extremely low.</li>
+<li>Reject H0 for all tests.</li>
+<li>Significant differences in sentiment distributions between AI and Human labels.</li>
+<li>High U statistics indicate substantial differences in the ranks between the two groups, showing that the sentiment scores for AI and Human texts are different.</li>
+</ul>
+<h3 id="key-points">Key Points:</h3>
+<ul>
+<li><strong>U Statistic</strong>: Measures the rank sums for one group.</li>
+<li><strong>High U Value</strong>: Indicates a significant difference in ranks between the two groups.</li>
+<li><strong>p-value</strong>: Low p-values confirm the differences are statistically significant.</li>
+<li><strong>Conclusion</strong>: There are significant differences in the sentiment scores between AI and Human texts.</li>
+</ul></section></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

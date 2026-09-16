@@ -1,0 +1,789 @@
+{
+  "codevision": {
+    "items": [],
+    "existingSources": {},
+    "excluded": []
+  },
+  "vision-studio": {
+    "items": [],
+    "existingSources": {},
+    "excluded": []
+  },
+  "n8n-rag": {
+    "items": [
+      {
+        "id": "agent-workflow",
+        "kind": "diagram",
+        "title": "Agent orchestration workflow",
+        "description": "How the orchestration agent routes questions to specialist Building Code agents and their vector stores.",
+        "src": "resources/n8n-rag/agent-workflow.svg",
+        "definition": "resources/n8n-rag/agent-workflow.mmd",
+        "source": "https://github.com/Userdflt/n8n_RAG_Workflow/blob/322a134e5b653999b8380dae77c17a15e3b2e526/README.md",
+        "workflow": "https://github.com/Userdflt/n8n_RAG_Workflow/blob/322a134e5b653999b8380dae77c17a15e3b2e526/n8n/Code_Orch_Agent.json",
+        "download": "n8n/Code_Orch_Agent_u.json"
+      },
+      {
+        "id": "ingestion-workflow",
+        "kind": "diagram",
+        "title": "Document ingestion workflow",
+        "description": "From document detection and OCR to text and image embeddings in section-specific knowledge stores.",
+        "src": "resources/n8n-rag/ingestion-workflow.svg",
+        "definition": "resources/n8n-rag/ingestion-workflow.mmd",
+        "source": "https://github.com/Userdflt/n8n_RAG_Workflow/blob/322a134e5b653999b8380dae77c17a15e3b2e526/README.md",
+        "workflow": "https://github.com/Userdflt/n8n_RAG_Workflow/blob/322a134e5b653999b8380dae77c17a15e3b2e526/n8n/RAG_Ingest.json",
+        "download": "n8n/RAG_Ingest.json"
+      },
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/n8n-rag/documentation/index.html",
+        "source": "https://github.com/Userdflt/n8n_RAG_Workflow/blob/322a134e5b653999b8380dae77c17a15e3b2e526/README.md",
+        "poster": "images/optimized/n8n.webp"
+      }
+    ],
+    "existingSources": {},
+    "excluded": [],
+    "repository": "https://github.com/Userdflt/n8n_RAG_Workflow",
+    "commit": "322a134e5b653999b8380dae77c17a15e3b2e526",
+    "verified": "2026-09-16"
+  },
+  "notion-mcp": {
+    "items": [
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/notion-mcp/documentation/index.html",
+        "source": "https://github.com/Userdflt/Notion-MCP-Agent/blob/2d6f816be7500af20ec31acce30052fe16a4f5ff/README.md",
+        "poster": "images/optimized/notion_w_w.webp"
+      }
+    ],
+    "existingSources": {
+      "gifs/TTS.gif": "https://github.com/Userdflt/Notion-MCP-Agent/blob/2d6f816be7500af20ec31acce30052fe16a4f5ff/TTS.gif",
+      "gifs/Table_Creation.gif": "https://github.com/Userdflt/Notion-MCP-Agent/blob/2d6f816be7500af20ec31acce30052fe16a4f5ff/Table_Creation.gif",
+      "gifs/page_with_notes.gif": "https://github.com/Userdflt/Notion-MCP-Agent/blob/2d6f816be7500af20ec31acce30052fe16a4f5ff/page_with_notes.gif",
+      "gifs/writing_structured_notes.gif": "https://github.com/Userdflt/Notion-MCP-Agent/blob/2d6f816be7500af20ec31acce30052fe16a4f5ff/writing_structured_notes.gif"
+    },
+    "excluded": [],
+    "repository": "https://github.com/Userdflt/Notion-MCP-Agent",
+    "commit": "2d6f816be7500af20ec31acce30052fe16a4f5ff",
+    "verified": "2026-09-16"
+  },
+  "stable-diffusion": {
+    "items": [
+      {
+        "id": "sketch-to-render-testings-ipynb",
+        "kind": "notebook",
+        "title": "Sketch to Render experiments",
+        "description": "36 cells · 4 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/stable-diffusion/sketch-to-render-testings-ipynb/index.html",
+        "source": "https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/Sketch_to_render_testings.ipynb",
+        "poster": "resources/stable-diffusion/sketch-to-render-testings-ipynb/chart-01.webp",
+        "cells": 36,
+        "charts": 4
+      },
+      {
+        "id": "docs-1-jpeg",
+        "kind": "image",
+        "title": "Sketch to Render example 1",
+        "description": "docs",
+        "src": "resources/stable-diffusion/docs-1-jpeg.webp",
+        "source": "https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/docs/1.jpeg",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "id": "docs-2-jpeg",
+        "kind": "image",
+        "title": "Sketch to Render example 2",
+        "description": "docs",
+        "src": "resources/stable-diffusion/docs-2-jpeg.webp",
+        "source": "https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/docs/2.jpeg",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "id": "docs-4-jpeg",
+        "kind": "image",
+        "title": "Sketch to Render example 4",
+        "description": "docs",
+        "src": "resources/stable-diffusion/docs-4-jpeg.webp",
+        "source": "https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/docs/4.jpeg",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "id": "docs-5-jpeg",
+        "kind": "image",
+        "title": "Sketch to Render example 5",
+        "description": "docs",
+        "src": "resources/stable-diffusion/docs-5-jpeg.webp",
+        "source": "https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/docs/5.jpeg",
+        "width": 512,
+        "height": 512
+      },
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/stable-diffusion/documentation/index.html",
+        "source": "https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/README.md",
+        "poster": "images/optimized/stable_sketch.webp"
+      }
+    ],
+    "existingSources": {
+      "images/3.jpeg": "https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/docs/3.jpeg",
+      "images/stable.jpeg": "https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/docs/6.jpeg",
+      "gifs/sd1.gif": "https://github.com/Userdflt/InteractiveSketchToRender/blob/48c249368a6e6ea7158b185655b9a0002d470a63/docs/demo.gif"
+    },
+    "excluded": [
+      {
+        "path": "docs/demo2.gif",
+        "reason": "Empty placeholder, not a valid media file",
+        "bytes": 2
+      },
+      {
+        "path": "docs/full_demo.mp4",
+        "reason": "Empty placeholder, not a valid media file",
+        "bytes": 2
+      },
+      {
+        "path": "docs/image2.png",
+        "reason": "Empty placeholder, not a valid media file",
+        "bytes": 2
+      },
+      {
+        "path": "docs/image5.png",
+        "reason": "Empty placeholder, not a valid media file",
+        "bytes": 2
+      }
+    ],
+    "repository": "https://github.com/Userdflt/InteractiveSketchToRender",
+    "commit": "48c249368a6e6ea7158b185655b9a0002d470a63",
+    "verified": "2026-09-16"
+  },
+  "vision-rag": {
+    "items": [
+      {
+        "id": "workflow-diagram-jpeg",
+        "kind": "diagram",
+        "title": "CodeVision retrieval workflow",
+        "description": "Original system diagram from the project repository.",
+        "src": "images/optimized/Workflow_Diagram.webp",
+        "source": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval/blob/787695d8e3bb2351d31bb34c71f425dc5c7f344b/Workflow_Diagram.jpeg"
+      },
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/vision-rag/documentation/index.html",
+        "source": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval/blob/787695d8e3bb2351d31bb34c71f425dc5c7f344b/README.md",
+        "poster": "images/optimized/codevision.webp"
+      }
+    ],
+    "existingSources": {
+      "images/Local_Deployment_Example.png": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval/blob/787695d8e3bb2351d31bb34c71f425dc5c7f344b/Local_Deployment_Example.png",
+      "images/Sample_extracted.png": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval/blob/787695d8e3bb2351d31bb34c71f425dc5c7f344b/Sample_extracted.png",
+      "images/Workflow_Diagram.jpeg": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval/blob/787695d8e3bb2351d31bb34c71f425dc5c7f344b/Workflow_Diagram.jpeg"
+    },
+    "excluded": [],
+    "repository": "https://github.com/Userdflt/CodeVision-NZ-Intelligent-Building-Code-Retrieval",
+    "commit": "787695d8e3bb2351d31bb34c71f425dc5c7f344b",
+    "verified": "2026-09-16"
+  },
+  "llm-rag": {
+    "items": [
+      {
+        "id": "local-rag-llm-ipynb",
+        "kind": "notebook",
+        "title": "Local LLM retrieval and self-correction",
+        "description": "36 cells · 0 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/llm-rag/local-rag-llm-ipynb/index.html",
+        "source": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-/blob/0f1d8155a075407860de69ed297def7e95e2bef0/Local_RAG_LLM.ipynb",
+        "poster": "images/optimized/LLM.webp",
+        "cells": 36,
+        "charts": 0
+      },
+      {
+        "id": "flow-chart-jpeg",
+        "kind": "diagram",
+        "title": "Self-correcting retrieval workflow",
+        "description": "Original system diagram from the project repository.",
+        "src": "images/optimized/llm_flow_chart.webp",
+        "source": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-/blob/0f1d8155a075407860de69ed297def7e95e2bef0/flow_chart.jpeg"
+      },
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/llm-rag/documentation/index.html",
+        "source": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-/blob/0f1d8155a075407860de69ed297def7e95e2bef0/README.md",
+        "poster": "images/optimized/LLM.webp"
+      }
+    ],
+    "existingSources": {
+      "images/llm_flow_chart.jpeg": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-/blob/0f1d8155a075407860de69ed297def7e95e2bef0/flow_chart.jpeg"
+    },
+    "excluded": [],
+    "repository": "https://github.com/Userdflt/Leveraging-Local-LLM-for-Self-Correcting-Retrieval-Augmented-Generation-RAG-",
+    "commit": "0f1d8155a075407860de69ed297def7e95e2bef0",
+    "verified": "2026-09-16"
+  },
+  "cv-safety": {
+    "items": [
+      {
+        "id": "report",
+        "kind": "report",
+        "title": "Construction Safety Vision · Project report",
+        "description": "Read the published project report and supporting research.",
+        "source": "https://docs.google.com/document/d/e/2PACX-1vTrURLXikE6d2WMttfvWha5lRz4AbbcjGErVmp2-7c2o6KevnptmiShxyBagpeYQg/pub",
+        "embed": "https://docs.google.com/document/d/e/2PACX-1vTrURLXikE6d2WMttfvWha5lRz4AbbcjGErVmp2-7c2o6KevnptmiShxyBagpeYQg/pub?embedded=true",
+        "discoveredIn": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/README.md",
+        "poster": "images/optimized/output8.webp"
+      },
+      {
+        "id": "presentation",
+        "kind": "presentation",
+        "title": "Construction Safety Vision · Presentation",
+        "description": "Browse the published slides, including the research approach and findings.",
+        "source": "https://docs.google.com/presentation/d/1dqKrkC93hJaZuHbiYrfXxdaZGDl-4SeXTTZ4rKVp44w/pub?start=false&loop=false&delayms=3000",
+        "embed": "https://docs.google.com/presentation/d/1dqKrkC93hJaZuHbiYrfXxdaZGDl-4SeXTTZ4rKVp44w/embed?start=false&loop=false&delayms=3000",
+        "discoveredIn": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/README.md",
+        "poster": "resources/cv-safety/presentation-cover.webp"
+      },
+      {
+        "id": "css-image-detection-inspection-ipynb",
+        "kind": "notebook",
+        "title": "Construction dataset inspection",
+        "description": "14 cells · 6 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/cv-safety/css-image-detection-inspection-ipynb/index.html",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/CSS_Image_detection_Inspection.ipynb",
+        "poster": "resources/cv-safety/css-image-detection-inspection-ipynb/chart-01.webp",
+        "cells": 14,
+        "charts": 6
+      },
+      {
+        "id": "final-yolo-model-50-epochs-ovs-norm-ipynb",
+        "kind": "notebook",
+        "title": "YOLO training · 50 epochs with oversampling",
+        "description": "58 cells · 13 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/cv-safety/final-yolo-model-50-epochs-ovs-norm-ipynb/index.html",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Final_YOLO_Model_50_epochs_ovs_norm.ipynb",
+        "poster": "resources/cv-safety/final-yolo-model-50-epochs-ovs-norm-ipynb/chart-01.webp",
+        "cells": 58,
+        "charts": 13
+      },
+      {
+        "id": "final-yolo-model-70-epochs-norm-ipynb",
+        "kind": "notebook",
+        "title": "YOLO training · 70 epochs with normalisation",
+        "description": "54 cells · 12 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/cv-safety/final-yolo-model-70-epochs-norm-ipynb/index.html",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Final_YOLO_Model_70_epochs_norm.ipynb",
+        "poster": "resources/cv-safety/final-yolo-model-70-epochs-norm-ipynb/chart-01.webp",
+        "cells": 54,
+        "charts": 12
+      },
+      {
+        "id": "tested-images-output-png",
+        "kind": "image",
+        "title": "Detection result 1",
+        "description": "Tested Images",
+        "src": "resources/cv-safety/tested-images-output-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output.png",
+        "width": 944,
+        "height": 966
+      },
+      {
+        "id": "tested-images-output10-png",
+        "kind": "image",
+        "title": "Detection result 10",
+        "description": "Tested Images",
+        "src": "resources/cv-safety/tested-images-output10-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output10.png",
+        "width": 944,
+        "height": 966
+      },
+      {
+        "id": "tested-images-output2-png",
+        "kind": "image",
+        "title": "Detection result 2",
+        "description": "Tested Images",
+        "src": "resources/cv-safety/tested-images-output2-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output2.png",
+        "width": 944,
+        "height": 966
+      },
+      {
+        "id": "tested-images-output3-png",
+        "kind": "image",
+        "title": "Detection result 3",
+        "description": "Tested Images",
+        "src": "resources/cv-safety/tested-images-output3-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output3.png",
+        "width": 944,
+        "height": 966
+      },
+      {
+        "id": "tested-images-output4-png",
+        "kind": "image",
+        "title": "Detection result 4",
+        "description": "Tested Images",
+        "src": "resources/cv-safety/tested-images-output4-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output4.png",
+        "width": 944,
+        "height": 966
+      },
+      {
+        "id": "tested-images-output5-png",
+        "kind": "image",
+        "title": "Detection result 5",
+        "description": "Tested Images",
+        "src": "resources/cv-safety/tested-images-output5-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output5.png",
+        "width": 944,
+        "height": 966
+      },
+      {
+        "id": "tested-images-output7-png",
+        "kind": "image",
+        "title": "Detection result 7",
+        "description": "Tested Images",
+        "src": "resources/cv-safety/tested-images-output7-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output7.png",
+        "width": 944,
+        "height": 966
+      },
+      {
+        "id": "tested-images-output9-png",
+        "kind": "image",
+        "title": "Detection result 9",
+        "description": "Tested Images",
+        "src": "resources/cv-safety/tested-images-output9-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output9.png",
+        "width": 944,
+        "height": 966
+      },
+      {
+        "id": "tested-video-webcam-inference-mp4",
+        "kind": "video",
+        "title": "Live webcam inference",
+        "description": "Original demonstration from the project repository.",
+        "src": "resources/cv-safety/tested-video-webcam-inference-mp4.mp4",
+        "poster": "resources/cv-safety/tested-video-webcam-inference-mp4.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Video/Webcam_Inference.mp4"
+      },
+      {
+        "id": "tested-video-construction-workers-vid-mp4",
+        "kind": "video",
+        "title": "Construction site video inference",
+        "description": "Original demonstration from the project repository.",
+        "src": "resources/cv-safety/tested-video-construction-workers-vid-mp4.mp4",
+        "poster": "resources/cv-safety/tested-video-construction-workers-vid-mp4.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Video/construction_workers_vid.mp4"
+      },
+      {
+        "id": "yolo-50-epochs-w-oversampling-results-confusion-matrix-png",
+        "kind": "image",
+        "title": "Confusion Matrix",
+        "description": "YOLO 50 epochs with oversampling Results",
+        "src": "resources/cv-safety/yolo-50-epochs-w-oversampling-results-confusion-matrix-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results/Confusion-Matrix.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-50-epochs-w-oversampling-results-f1-png",
+        "kind": "image",
+        "title": "F1",
+        "description": "YOLO 50 epochs with oversampling Results",
+        "src": "resources/cv-safety/yolo-50-epochs-w-oversampling-results-f1-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results/F1.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-50-epochs-w-oversampling-results-labels-correlogram-png",
+        "kind": "image",
+        "title": "Labels Correlogram",
+        "description": "YOLO 50 epochs with oversampling Results",
+        "src": "resources/cv-safety/yolo-50-epochs-w-oversampling-results-labels-correlogram-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results/Labels-Correlogram.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-50-epochs-w-oversampling-results-labels-png",
+        "kind": "image",
+        "title": "Labels",
+        "description": "YOLO 50 epochs with oversampling Results",
+        "src": "resources/cv-safety/yolo-50-epochs-w-oversampling-results-labels-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results/Labels.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-50-epochs-w-oversampling-results-loss-png",
+        "kind": "image",
+        "title": "Loss",
+        "description": "YOLO 50 epochs with oversampling Results",
+        "src": "resources/cv-safety/yolo-50-epochs-w-oversampling-results-loss-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results/Loss.png",
+        "width": 1489,
+        "height": 989
+      },
+      {
+        "id": "yolo-50-epochs-w-oversampling-results-precision-confidence-png",
+        "kind": "image",
+        "title": "Precision Confidence",
+        "description": "YOLO 50 epochs with oversampling Results",
+        "src": "resources/cv-safety/yolo-50-epochs-w-oversampling-results-precision-confidence-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results/Precision-Confidence.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-50-epochs-w-oversampling-results-precision-recall-png",
+        "kind": "image",
+        "title": "Precision Recall",
+        "description": "YOLO 50 epochs with oversampling Results",
+        "src": "resources/cv-safety/yolo-50-epochs-w-oversampling-results-precision-recall-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results/Precision-Recall.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-50-epochs-w-oversampling-results-recall-confidence-png",
+        "kind": "image",
+        "title": "Recall Confidence",
+        "description": "YOLO 50 epochs with oversampling Results",
+        "src": "resources/cv-safety/yolo-50-epochs-w-oversampling-results-recall-confidence-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results/Recall-Confidence.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-50-epochs-w-oversampling-results-results-png",
+        "kind": "image",
+        "title": "Results",
+        "description": "YOLO 50 epochs with oversampling Results",
+        "src": "resources/cv-safety/yolo-50-epochs-w-oversampling-results-results-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results/Results.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-70-epochs-w-normalisation-results-confusion-matrix-png",
+        "kind": "image",
+        "title": "Confusion Matrix",
+        "description": "YOLO 70 epochs with normalisation Results",
+        "src": "resources/cv-safety/yolo-70-epochs-w-normalisation-results-confusion-matrix-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results/Confusion-Matrix.png",
+        "width": 794,
+        "height": 601
+      },
+      {
+        "id": "yolo-70-epochs-w-normalisation-results-f1-png",
+        "kind": "image",
+        "title": "F1",
+        "description": "YOLO 70 epochs with normalisation Results",
+        "src": "resources/cv-safety/yolo-70-epochs-w-normalisation-results-f1-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results/F1.png",
+        "width": 794,
+        "height": 536
+      },
+      {
+        "id": "yolo-70-epochs-w-normalisation-results-labels-png",
+        "kind": "image",
+        "title": "Labels",
+        "description": "YOLO 70 epochs with normalisation Results",
+        "src": "resources/cv-safety/yolo-70-epochs-w-normalisation-results-labels-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results/Labels.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-70-epochs-w-normalisation-results-labels-correlogram-png",
+        "kind": "image",
+        "title": "Labels correlogram",
+        "description": "YOLO 70 epochs with normalisation Results",
+        "src": "resources/cv-safety/yolo-70-epochs-w-normalisation-results-labels-correlogram-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results/Labels_correlogram.png",
+        "width": 790,
+        "height": 790
+      },
+      {
+        "id": "yolo-70-epochs-w-normalisation-results-loss-png",
+        "kind": "image",
+        "title": "Loss",
+        "description": "YOLO 70 epochs with normalisation Results",
+        "src": "resources/cv-safety/yolo-70-epochs-w-normalisation-results-loss-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results/Loss.png",
+        "width": 1490,
+        "height": 989
+      },
+      {
+        "id": "yolo-70-epochs-w-normalisation-results-precision-recall-png",
+        "kind": "image",
+        "title": "Precision Recall",
+        "description": "YOLO 70 epochs with normalisation Results",
+        "src": "resources/cv-safety/yolo-70-epochs-w-normalisation-results-precision-recall-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results/Precision-Recall.png",
+        "width": 794,
+        "height": 536
+      },
+      {
+        "id": "yolo-70-epochs-w-normalisation-results-recall-confidence-png",
+        "kind": "image",
+        "title": "Recall Confidence",
+        "description": "YOLO 70 epochs with normalisation Results",
+        "src": "resources/cv-safety/yolo-70-epochs-w-normalisation-results-recall-confidence-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results/Recall-Confidence.png",
+        "width": 794,
+        "height": 536
+      },
+      {
+        "id": "yolo-70-epochs-w-normalisation-results-results-png",
+        "kind": "image",
+        "title": "Results",
+        "description": "YOLO 70 epochs with normalisation Results",
+        "src": "resources/cv-safety/yolo-70-epochs-w-normalisation-results-results-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results/Results.png",
+        "width": 794,
+        "height": 407
+      },
+      {
+        "id": "yolo-70-epochs-w-normalisation-results-precision-confidence-png",
+        "kind": "image",
+        "title": "precision Confidence",
+        "description": "YOLO 70 epochs with normalisation Results",
+        "src": "resources/cv-safety/yolo-70-epochs-w-normalisation-results-precision-confidence-png.webp",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results/precision-Confidence.png",
+        "width": 794,
+        "height": 536
+      },
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/cv-safety/documentation/index.html",
+        "source": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/README.md",
+        "poster": "images/optimized/output8.webp"
+      }
+    ],
+    "existingSources": {
+      "gifs/construction_workers.gif": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/construction_workers.gif",
+      "images/output1.png": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output6.png",
+      "images/output8.png": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images/output8.png"
+    },
+    "excluded": [],
+    "repository": "https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model",
+    "commit": "83f3d3a69af9ecee9b32221fc910bda690e7077b",
+    "verified": "2026-09-16"
+  },
+  "youtube-analytics": {
+    "items": [
+      {
+        "id": "youtube-statistics-analysis-ipynb",
+        "kind": "notebook",
+        "title": "YouTube statistics analysis",
+        "description": "161 cells · 19 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/youtube-analytics/youtube-statistics-analysis-ipynb/index.html",
+        "source": "https://github.com/Userdflt/YouTube_Analytics/blob/37afa0af947929fd7e617af9c73d5871f935618e/YouTube_Statistics_Analysis.ipynb",
+        "poster": "resources/youtube-analytics/youtube-statistics-analysis-ipynb/chart-01.webp",
+        "cells": 161,
+        "charts": 19
+      },
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/youtube-analytics/documentation/index.html",
+        "source": "https://github.com/Userdflt/YouTube_Analytics/blob/37afa0af947929fd7e617af9c73d5871f935618e/README.md",
+        "poster": "images/optimized/youtube_analytics.webp"
+      }
+    ],
+    "existingSources": {},
+    "excluded": [],
+    "repository": "https://github.com/Userdflt/YouTube_Analytics",
+    "commit": "37afa0af947929fd7e617af9c73d5871f935618e",
+    "verified": "2026-09-16"
+  },
+  "nasa-outgassing": {
+    "items": [
+      {
+        "id": "presentation",
+        "kind": "presentation",
+        "title": "NASA Outgassing · Presentation",
+        "description": "Browse the published slides, including the research approach and findings.",
+        "source": "https://docs.google.com/presentation/d/1eLjKQL-qADiG0ghYJBFTMOlsHNPNDCkT0KmYe-5Rn-0/pub?start=false&loop=false&delayms=3000",
+        "embed": "https://docs.google.com/presentation/d/1eLjKQL-qADiG0ghYJBFTMOlsHNPNDCkT0KmYe-5Rn-0/embed?start=false&loop=false&delayms=3000",
+        "discoveredIn": "https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/README.md",
+        "poster": "resources/nasa-outgassing/presentation-cover.webp"
+      },
+      {
+        "id": "nasa-outgassing-materials-data-processing-ipynb",
+        "kind": "notebook",
+        "title": "Materials data processing",
+        "description": "39 cells · 4 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/nasa-outgassing/nasa-outgassing-materials-data-processing-ipynb/index.html",
+        "source": "https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_Data_Processing.ipynb",
+        "poster": "resources/nasa-outgassing/nasa-outgassing-materials-data-processing-ipynb/chart-01.webp",
+        "cells": 39,
+        "charts": 4
+      },
+      {
+        "id": "nasa-outgassing-materials-eda-ipynb",
+        "kind": "notebook",
+        "title": "Materials exploratory analysis",
+        "description": "63 cells · 17 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/nasa-outgassing/nasa-outgassing-materials-eda-ipynb/index.html",
+        "source": "https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_EDA.ipynb",
+        "poster": "resources/nasa-outgassing/nasa-outgassing-materials-eda-ipynb/chart-01.webp",
+        "cells": 63,
+        "charts": 17
+      },
+      {
+        "id": "nasa-outgassing-materials-ml-modelling-ipynb",
+        "kind": "notebook",
+        "title": "Materials machine learning models",
+        "description": "50 cells · 4 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/nasa-outgassing/nasa-outgassing-materials-ml-modelling-ipynb/index.html",
+        "source": "https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_ML_Modelling.ipynb",
+        "poster": "resources/nasa-outgassing/nasa-outgassing-materials-ml-modelling-ipynb/chart-01.webp",
+        "cells": 50,
+        "charts": 4
+      },
+      {
+        "id": "nasa-outgassing-materials-ml-pipeline-ipynb",
+        "kind": "notebook",
+        "title": "Materials prediction pipeline",
+        "description": "6 cells · 0 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/nasa-outgassing/nasa-outgassing-materials-ml-pipeline-ipynb/index.html",
+        "source": "https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_ML_Pipeline.ipynb",
+        "poster": "images/optimized/nasa_outgassing.webp",
+        "cells": 6,
+        "charts": 0
+      },
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/nasa-outgassing/documentation/index.html",
+        "source": "https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/README.md",
+        "poster": "images/optimized/nasa_outgassing.webp"
+      }
+    ],
+    "existingSources": {},
+    "excluded": [],
+    "repository": "https://github.com/Userdflt/NASA-Outgassing-DB",
+    "commit": "7e84996e82441c5763006a75865551784c28e870",
+    "verified": "2026-09-16"
+  },
+  "ai-detection": {
+    "items": [
+      {
+        "id": "presentation",
+        "kind": "presentation",
+        "title": "AI Content Detection · Presentation",
+        "description": "Browse the published slides, including the research approach and findings.",
+        "source": "https://docs.google.com/presentation/d/12BAPUrPsUY9ibZcpy6O5I8Wa8WVLjakqYzQ6hijp0p0/pub?start=false&loop=false&delayms=3000",
+        "embed": "https://docs.google.com/presentation/d/12BAPUrPsUY9ibZcpy6O5I8Wa8WVLjakqYzQ6hijp0p0/embed?start=false&loop=false&delayms=3000",
+        "discoveredIn": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/README.md",
+        "poster": "resources/ai-detection/presentation-cover.webp"
+      },
+      {
+        "id": "fakenews-classification-model-ipynb",
+        "kind": "notebook",
+        "title": "News classification models",
+        "description": "17 cells · 12 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/ai-detection/fakenews-classification-model-ipynb/index.html",
+        "source": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Classification_Model.ipynb",
+        "poster": "resources/ai-detection/fakenews-classification-model-ipynb/chart-01.webp",
+        "cells": 17,
+        "charts": 12
+      },
+      {
+        "id": "fakenews-data-pre-processing-ipynb",
+        "kind": "notebook",
+        "title": "News dataset preprocessing",
+        "description": "23 cells · 0 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/ai-detection/fakenews-data-pre-processing-ipynb/index.html",
+        "source": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_Data_Pre-Processing.ipynb",
+        "poster": "images/optimized/ai_detection.webp",
+        "cells": 23,
+        "charts": 0
+      },
+      {
+        "id": "fakenews-eda-feature-eng-ipynb",
+        "kind": "notebook",
+        "title": "News analysis and feature engineering",
+        "description": "48 cells · 11 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/ai-detection/fakenews-eda-feature-eng-ipynb/index.html",
+        "source": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/FakeNews_EDA_Feature_Eng.ipynb",
+        "poster": "resources/ai-detection/fakenews-eda-feature-eng-ipynb/chart-01.webp",
+        "cells": 48,
+        "charts": 11
+      },
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/ai-detection/documentation/index.html",
+        "source": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News/blob/a32b362f84acceb7f17a726fb9903a42643c689e/README.md",
+        "poster": "images/optimized/ai_detection.webp"
+      }
+    ],
+    "existingSources": {},
+    "excluded": [],
+    "repository": "https://github.com/Userdflt/Distinguishing-Human-vs-AI-Generated-News",
+    "commit": "a32b362f84acceb7f17a726fb9903a42643c689e",
+    "verified": "2026-09-16"
+  },
+  "wind-energy": {
+    "items": [
+      {
+        "id": "notebook-ipynb",
+        "kind": "notebook",
+        "title": "Wind energy prediction notebook",
+        "description": "65 cells · 18 saved charts. Read the analysis, code, and recorded results.",
+        "src": "resources/wind-energy/notebook-ipynb/index.html",
+        "source": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction/blob/7f74c09952010680be4590c312d103659599e6cf/Notebook.ipynb",
+        "poster": "resources/wind-energy/notebook-ipynb/chart-01.webp",
+        "cells": 65,
+        "charts": 18
+      },
+      {
+        "id": "documentation",
+        "kind": "guide",
+        "title": "Project documentation",
+        "description": "Read the project overview, setup notes, and technical documentation.",
+        "src": "resources/wind-energy/documentation/index.html",
+        "source": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction/blob/7f74c09952010680be4590c312d103659599e6cf/README.md",
+        "poster": "images/optimized/wind_energy.webp"
+      }
+    ],
+    "existingSources": {
+      "images/wind_energy.png": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction/blob/7f74c09952010680be4590c312d103659599e6cf/landscape-with-windmills.jpg"
+    },
+    "excluded": [],
+    "repository": "https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction",
+    "commit": "7f74c09952010680be4590c312d103659599e6cf",
+    "verified": "2026-09-16"
+  },
+  "ai-visualizations": {
+    "items": [],
+    "existingSources": {},
+    "excluded": []
+  }
+}

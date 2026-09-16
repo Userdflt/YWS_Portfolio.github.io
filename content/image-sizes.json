@@ -1,0 +1,1310 @@
+{
+  "images/3.jpeg": [
+    512,
+    512
+  ],
+  "images/357FF18C-D11F-4763-8269-5DF7E24BCFF6.png": [
+    2052,
+    1164
+  ],
+  "images/6.jpeg": [
+    512,
+    512
+  ],
+  "images/ai_detection.png": [
+    700,
+    500
+  ],
+  "images/building_code.png": [
+    967,
+    371
+  ],
+  "images/codevision.png": [
+    1080,
+    1080
+  ],
+  "images/codevision_app.png": [
+    1364,
+    1483
+  ],
+  "images/code_vision.png": [
+    1026,
+    582
+  ],
+  "images/comingsoon.png": [
+    1024,
+    1024
+  ],
+  "images/cv.png": [
+    1024,
+    1536
+  ],
+  "images/cv2.png": [
+    1024,
+    1536
+  ],
+  "images/cv3.png": [
+    1024,
+    1536
+  ],
+  "images/fastmcp.png": [
+    1024,
+    1024
+  ],
+  "images/image.3.png": [
+    1029,
+    961
+  ],
+  "images/image5.png": [
+    1019,
+    961
+  ],
+  "images/ingest.png": [
+    1454,
+    796
+  ],
+  "images/langchain.png": [
+    1024,
+    1024
+  ],
+  "images/LLM.png": [
+    1536,
+    1024
+  ],
+  "images/llmflow.png": [
+    1024,
+    1536
+  ],
+  "images/llm_flow_chart.jpeg": [
+    2704,
+    2199
+  ],
+  "images/llm_flow_chart_1.jpeg": [
+    2704,
+    1484
+  ],
+  "images/llm_flow_chart_2.jpeg": [
+    2704,
+    855
+  ],
+  "images/Local_Deployment_Example.png": [
+    1358,
+    720
+  ],
+  "images/mcp_logo.png": [
+    1536,
+    1024
+  ],
+  "images/me.png": [
+    1024,
+    1024
+  ],
+  "images/me_1.png": [
+    1024,
+    1024
+  ],
+  "images/me_22.png": [
+    1024,
+    1024
+  ],
+  "images/me_3.png": [
+    1024,
+    1024
+  ],
+  "images/me_light.png": [
+    1024,
+    1024
+  ],
+  "images/n8n.png": [
+    1536,
+    1024
+  ],
+  "images/nasa_outgassing.png": [
+    1597,
+    1600
+  ],
+  "images/notion.png": [
+    1024,
+    453
+  ],
+  "images/notion_mcp.png": [
+    1025,
+    525
+  ],
+  "images/notion_w_w.png": [
+    1536,
+    1024
+  ],
+  "images/orch.png": [
+    2020,
+    851
+  ],
+  "images/output1.png": [
+    944,
+    966
+  ],
+  "images/output2.png": [
+    1176,
+    832
+  ],
+  "images/output8.png": [
+    944,
+    966
+  ],
+  "images/portfolio_screenshot.png": [
+    1893,
+    1222
+  ],
+  "images/Sample_extracted.png": [
+    1438,
+    1098
+  ],
+  "images/Screenshot 2025-06-04 093010.png": [
+    667,
+    328
+  ],
+  "images/sd_feature.png": [
+    1024,
+    1024
+  ],
+  "images/sd_tech.png": [
+    1024,
+    1536
+  ],
+  "images/stable.jpeg": [
+    512,
+    512
+  ],
+  "images/stable_image.png": [
+    1536,
+    1024
+  ],
+  "images/stable_sketch.png": [
+    2644,
+    1280
+  ],
+  "images/techstackn8n.png": [
+    1024,
+    1536
+  ],
+  "images/Vision Studio logo.png": [
+    544,
+    515
+  ],
+  "images/Vision_Studio_Hero.png": [
+    2388,
+    1542
+  ],
+  "images/Vision_Studio_logo2.png": [
+    544,
+    515
+  ],
+  "images/vit.png": [
+    1024,
+    1276
+  ],
+  "images/wind_energy.png": [
+    5184,
+    3456
+  ],
+  "images/workflow.png": [
+    1024,
+    1536
+  ],
+  "images/Workflow_Diagram.jpeg": [
+    5830,
+    3428
+  ],
+  "images/youtube_analytics.png": [
+    984,
+    690
+  ],
+  "images/brand/coastal-architecture.png": [
+    1536,
+    1024
+  ],
+  "images/brand/coastal-architecture.webp": [
+    1536,
+    1024
+  ],
+  "images/optimized/20220705_175328.webp": [
+    6581,
+    6293
+  ],
+  "images/optimized/2025-11-09_10-23.webp": [
+    1056,
+    992
+  ],
+  "images/optimized/3.webp": [
+    512,
+    512
+  ],
+  "images/optimized/6.webp": [
+    512,
+    512
+  ],
+  "images/optimized/ai_detection.webp": [
+    700,
+    500
+  ],
+  "images/optimized/building_code.webp": [
+    967,
+    371
+  ],
+  "images/optimized/Cabin_render_highq.webp": [
+    2048,
+    2048
+  ],
+  "images/optimized/Cabin_sample_model.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/codevision.webp": [
+    1080,
+    1080
+  ],
+  "images/optimized/codevision_app.webp": [
+    1364,
+    1483
+  ],
+  "images/optimized/code_vision.webp": [
+    1026,
+    582
+  ],
+  "images/optimized/ComfyUI_00013_.webp": [
+    1344,
+    768
+  ],
+  "images/optimized/ComfyUI_00014_.webp": [
+    1344,
+    768
+  ],
+  "images/optimized/ComfyUI_00018_.webp": [
+    1344,
+    768
+  ],
+  "images/optimized/ComfyUI_00022_.webp": [
+    1344,
+    768
+  ],
+  "images/optimized/comingsoon.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/cv.webp": [
+    1024,
+    1536
+  ],
+  "images/optimized/cv2.webp": [
+    1024,
+    1536
+  ],
+  "images/optimized/cv3.webp": [
+    1024,
+    1536
+  ],
+  "images/optimized/fastmcp.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/image.3.webp": [
+    1029,
+    961
+  ],
+  "images/optimized/image5.webp": [
+    1019,
+    961
+  ],
+  "images/optimized/ingest.webp": [
+    1454,
+    796
+  ],
+  "images/optimized/interior_render_1.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/interior_render_2.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/langchain.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/LLM.webp": [
+    1536,
+    1024
+  ],
+  "images/optimized/llmflow.webp": [
+    1024,
+    1536
+  ],
+  "images/optimized/llm_flow_chart.webp": [
+    2704,
+    2199
+  ],
+  "images/optimized/llm_flow_chart_1.webp": [
+    2704,
+    1484
+  ],
+  "images/optimized/llm_flow_chart_2.webp": [
+    2704,
+    855
+  ],
+  "images/optimized/Local_Deployment_Example.webp": [
+    1358,
+    720
+  ],
+  "images/optimized/masterplan_1.webp": [
+    1682,
+    1442
+  ],
+  "images/optimized/masterplan_1_render_1.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/masterplan_1_render_2.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/masterplan_1_render_4.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/materplan_1_render_3.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/mcp_logo.webp": [
+    1536,
+    1024
+  ],
+  "images/optimized/me.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/me_1.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/me_22.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/me_3.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/me_light.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/model_1_render_1.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/model_1_render_1_night.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/model_1_render_2.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/model_1_render_2_night.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/model_1_render_3_night.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/n8n.webp": [
+    1536,
+    1024
+  ],
+  "images/optimized/nano-banana-image-1 (3).webp": [
+    1088,
+    960
+  ],
+  "images/optimized/nano-banana-image-22.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/nasa_outgassing.webp": [
+    1597,
+    1600
+  ],
+  "images/optimized/notion.webp": [
+    1024,
+    453
+  ],
+  "images/optimized/notion_mcp.webp": [
+    1025,
+    525
+  ],
+  "images/optimized/notion_w_w.webp": [
+    1536,
+    1024
+  ],
+  "images/optimized/orch.webp": [
+    2020,
+    851
+  ],
+  "images/optimized/output1.webp": [
+    944,
+    966
+  ],
+  "images/optimized/output2.webp": [
+    1176,
+    832
+  ],
+  "images/optimized/output8.webp": [
+    944,
+    966
+  ],
+  "images/optimized/plan_3_render_2.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/plan_4_render_1.webp": [
+    992,
+    1056
+  ],
+  "images/optimized/portfolio_screenshot.webp": [
+    1893,
+    1222
+  ],
+  "images/optimized/Sample_extracted.webp": [
+    1438,
+    1098
+  ],
+  "images/optimized/Screenshot 2025-06-04 093010.webp": [
+    667,
+    328
+  ],
+  "images/optimized/sd_feature.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/sd_tech.webp": [
+    1024,
+    1536
+  ],
+  "images/optimized/sketch_2_render_1.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/stable.webp": [
+    512,
+    512
+  ],
+  "images/optimized/stable_image.webp": [
+    1536,
+    1024
+  ],
+  "images/optimized/stable_sketch.webp": [
+    2644,
+    1280
+  ],
+  "images/optimized/techstackn8n.webp": [
+    1024,
+    1536
+  ],
+  "images/optimized/Vision Studio logo.webp": [
+    544,
+    515
+  ],
+  "images/optimized/Vision_Studio_Hero.webp": [
+    2388,
+    1542
+  ],
+  "images/optimized/Vision_Studio_logo2.webp": [
+    544,
+    515
+  ],
+  "images/optimized/vit.webp": [
+    1024,
+    1276
+  ],
+  "images/optimized/wind_energy.webp": [
+    5184,
+    3456
+  ],
+  "images/optimized/workflow.webp": [
+    1024,
+    1536
+  ],
+  "images/optimized/Workflow_Diagram.webp": [
+    5830,
+    3428
+  ],
+  "images/optimized/youtube_analytics.webp": [
+    984,
+    690
+  ],
+  "images/video-posters/cabin_construction.webp": [
+    960,
+    960
+  ],
+  "images/video-posters/codeVision_test01.webp": [
+    960,
+    843
+  ],
+  "images/video-posters/cv-safety-0.webp": [
+    800,
+    450
+  ],
+  "images/video-posters/morning_architecture.webp": [
+    960,
+    960
+  ],
+  "images/video-posters/notion-mcp-0.webp": [
+    1000,
+    562
+  ],
+  "images/video-posters/notion-mcp-1.webp": [
+    1000,
+    562
+  ],
+  "images/video-posters/resi_village_v2.webp": [
+    960,
+    960
+  ],
+  "images/video-posters/shopping_mall.webp": [
+    960,
+    918
+  ],
+  "images/video-posters/stable-diffusion-0.webp": [
+    800,
+    450
+  ],
+  "images/video-posters/stable-diffusion-1.webp": [
+    800,
+    450
+  ],
+  "images/video-posters/YouCut_20250729_161540173.webp": [
+    960,
+    589
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/bg.webp": [
+    600,
+    381
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/concept_1.webp": [
+    1248,
+    794
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/concept_2.webp": [
+    1248,
+    792
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/concept_2_w_ppl.webp": [
+    1248,
+    800
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/first_concept.webp": [
+    1248,
+    793
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/first_concept_modified.webp": [
+    1248,
+    790
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/first_concept_w_ppl.webp": [
+    1248,
+    790
+  ],
+  "images/optimized/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.webp": [
+    2048,
+    2048
+  ],
+  "images/optimized/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.webp": [
+    1344,
+    768
+  ],
+  "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.webp": [
+    1344,
+    768
+  ],
+  "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.webp": [
+    1344,
+    768
+  ],
+  "images/optimized/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.webp": [
+    1344,
+    768
+  ],
+  "images/optimized/ai_visual_images/masterplan_render/masterplan_1.webp": [
+    1682,
+    1442
+  ],
+  "images/optimized/ai_visual_images/masterplan_render/masterplan_1_render_1.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/ai_visual_images/masterplan_render/masterplan_1_render_2.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/ai_visual_images/masterplan_render/masterplan_1_render_4.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/ai_visual_images/masterplan_render/materplan_1_render_3.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/ai_visual_images/model_to_render/AI_interior_render_1.webp": [
+    2048,
+    2048
+  ],
+  "images/optimized/ai_visual_images/model_to_render/AI_interior_render_2.webp": [
+    2048,
+    2048
+  ],
+  "images/optimized/ai_visual_images/model_to_render/interior_render_1.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/ai_visual_images/model_to_render/interior_render_2.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/ai_visual_images/model_to_render/model_1.webp": [
+    910,
+    512
+  ],
+  "images/optimized/ai_visual_images/model_to_render/model_1_render_1.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/ai_visual_images/model_to_render/model_1_render_1_night.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/ai_visual_images/model_to_render/model_1_render_2.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/ai_visual_images/model_to_render/model_1_render_2_night.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/ai_visual_images/model_to_render/model_1_render_3.webp": [
+    2048,
+    1170
+  ],
+  "images/optimized/ai_visual_images/model_to_render/model_1_render_3_night.webp": [
+    2688,
+    1536
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_1.webp": [
+    1564,
+    1230
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_1_render_1.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_1_render_2.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_2.webp": [
+    1564,
+    1198
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_2_render_1.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_2_render_2.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_3.webp": [
+    1530,
+    1190
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_3_render_1.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_3_render_2.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_4.webp": [
+    1967,
+    2048
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_4_render_1.webp": [
+    992,
+    1056
+  ],
+  "images/optimized/ai_visual_images/text_to_render/cafe_w_ppl.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/ai_visual_images/text_to_render/entry_w_ppl.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/ai_visual_images/text_to_render/final_w_ppl.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/ai_visual_images/text_to_render/interior_render_1.webp": [
+    1024,
+    933
+  ],
+  "images/optimized/ai_visual_images/text_to_render/interior_render_2.webp": [
+    1024,
+    940
+  ],
+  "images/optimized/ai_visual_images/text_to_render/render_1.webp": [
+    1024,
+    938
+  ],
+  "images/optimized/ai_visual_images/text_to_render/render_2.webp": [
+    1024,
+    878
+  ],
+  "images/optimized/ai_visual_images/text_to_render/residentail_units_w_ppl.webp": [
+    1024,
+    1024
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/nano-banana-image-22.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1.webp": [
+    599,
+    552
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1.webp": [
+    1056,
+    992
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1b.webp": [
+    1056,
+    992
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_2.webp": [
+    1056,
+    907
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_3.webp": [
+    1056,
+    904
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_4.webp": [
+    1056,
+    903
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_5.webp": [
+    1056,
+    904
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_2.webp": [
+    1868,
+    1698
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_1/sketch_2_render_1.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-1 (3).webp": [
+    1088,
+    960
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-22.webp": [
+    1088,
+    960
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_2/sketch_2.webp": [
+    1868,
+    1698
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3.webp": [
+    3476,
+    2082
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_1.webp": [
+    1280,
+    714
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_2.webp": [
+    1280,
+    716
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_3.webp": [
+    1280,
+    717
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_4/20220705_175328.webp": [
+    6581,
+    6293
+  ],
+  "images/optimized/ai_visual_images/sketch_to_render/sketch_4/2025-11-09_10-23.webp": [
+    1056,
+    992
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_1.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_2.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_3.webp": [
+    1152,
+    896
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_1.webp": [
+    1248,
+    796
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_10.webp": [
+    1248,
+    794
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_11.webp": [
+    1248,
+    793
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_2.webp": [
+    1248,
+    796
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_3.webp": [
+    1248,
+    794
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_4.webp": [
+    1248,
+    793
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_5.webp": [
+    1248,
+    791
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_6.webp": [
+    1248,
+    792
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_7.webp": [
+    1248,
+    793
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_8.webp": [
+    1248,
+    790
+  ],
+  "images/optimized/ai_visual_images/bg_add_render/related_interior_renders/interior_render_9.webp": [
+    1248,
+    793
+  ],
+  "images/ai_visual_images/bg_add_render/17A886EA-A552-4357-AF06-4D71327E8A8C.png": [
+    2496,
+    1600
+  ],
+  "images/ai_visual_images/bg_add_render/76DDAC7E-E7EE-4A31-9C26-9D614CF1BBEB.png": [
+    2496,
+    1600
+  ],
+  "images/ai_visual_images/bg_add_render/797884DB-9BA8-4516-829F-27B3769AD778.png": [
+    1612,
+    1024
+  ],
+  "images/ai_visual_images/bg_add_render/bg.png": [
+    600,
+    381
+  ],
+  "images/ai_visual_images/bg_add_render/concept_1.png": [
+    1248,
+    794
+  ],
+  "images/ai_visual_images/bg_add_render/concept_2.png": [
+    1248,
+    792
+  ],
+  "images/ai_visual_images/bg_add_render/concept_2_w_ppl.png": [
+    1248,
+    800
+  ],
+  "images/ai_visual_images/bg_add_render/first_concept.png": [
+    1248,
+    793
+  ],
+  "images/ai_visual_images/bg_add_render/first_concept_modified.png": [
+    1248,
+    790
+  ],
+  "images/ai_visual_images/bg_add_render/first_concept_w_ppl.png": [
+    1248,
+    790
+  ],
+  "images/ai_visual_images/ComfyUI_workflow/Cabin_render_highq.jpg": [
+    2048,
+    2048
+  ],
+  "images/ai_visual_images/ComfyUI_workflow/Cabin_sample_model.png": [
+    1024,
+    1024
+  ],
+  "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00013_.png": [
+    1344,
+    768
+  ],
+  "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00014_.png": [
+    1344,
+    768
+  ],
+  "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00018_.png": [
+    1344,
+    768
+  ],
+  "images/ai_visual_images/ComfyUI_workflow/ComfyUI_00022_.png": [
+    1344,
+    768
+  ],
+  "images/ai_visual_images/masterplan_render/masterplan_1.png": [
+    1682,
+    1442
+  ],
+  "images/ai_visual_images/masterplan_render/masterplan_1_render_1.png": [
+    1088,
+    960
+  ],
+  "images/ai_visual_images/masterplan_render/masterplan_1_render_2.png": [
+    1088,
+    960
+  ],
+  "images/ai_visual_images/masterplan_render/masterplan_1_render_4.png": [
+    1088,
+    960
+  ],
+  "images/ai_visual_images/masterplan_render/materplan_1_render_3.png": [
+    1088,
+    960
+  ],
+  "images/ai_visual_images/model_to_render/AI_interior_render_1.jpg": [
+    2048,
+    2048
+  ],
+  "images/ai_visual_images/model_to_render/AI_interior_render_2.jpg": [
+    2048,
+    2048
+  ],
+  "images/ai_visual_images/model_to_render/interior_render_1.png": [
+    1024,
+    1024
+  ],
+  "images/ai_visual_images/model_to_render/interior_render_2.png": [
+    1024,
+    1024
+  ],
+  "images/ai_visual_images/model_to_render/model_1.png": [
+    910,
+    512
+  ],
+  "images/ai_visual_images/model_to_render/model_1_render_1.png": [
+    2688,
+    1536
+  ],
+  "images/ai_visual_images/model_to_render/model_1_render_1_night.png": [
+    2688,
+    1536
+  ],
+  "images/ai_visual_images/model_to_render/model_1_render_2.png": [
+    2688,
+    1536
+  ],
+  "images/ai_visual_images/model_to_render/model_1_render_2_night.png": [
+    2688,
+    1536
+  ],
+  "images/ai_visual_images/model_to_render/model_1_render_3.png": [
+    2048,
+    1170
+  ],
+  "images/ai_visual_images/model_to_render/model_1_render_3_night.png": [
+    2688,
+    1536
+  ],
+  "images/ai_visual_images/plan_to_render/plan_1.png": [
+    1564,
+    1230
+  ],
+  "images/ai_visual_images/plan_to_render/plan_1_render_1.png": [
+    1152,
+    896
+  ],
+  "images/ai_visual_images/plan_to_render/plan_1_render_2.png": [
+    1152,
+    896
+  ],
+  "images/ai_visual_images/plan_to_render/plan_2.png": [
+    1564,
+    1198
+  ],
+  "images/ai_visual_images/plan_to_render/plan_2_render_1.png": [
+    1152,
+    896
+  ],
+  "images/ai_visual_images/plan_to_render/plan_2_render_2.png": [
+    1152,
+    896
+  ],
+  "images/ai_visual_images/plan_to_render/plan_3.png": [
+    1530,
+    1190
+  ],
+  "images/ai_visual_images/plan_to_render/plan_3_render_1.png": [
+    1152,
+    896
+  ],
+  "images/ai_visual_images/plan_to_render/plan_3_render_2.png": [
+    1152,
+    896
+  ],
+  "images/ai_visual_images/plan_to_render/plan_4.png": [
+    1967,
+    2048
+  ],
+  "images/ai_visual_images/plan_to_render/plan_4_render_1.png": [
+    992,
+    1056
+  ],
+  "images/ai_visual_images/text_to_render/cafe_w_ppl.png": [
+    1024,
+    1024
+  ],
+  "images/ai_visual_images/text_to_render/entry_w_ppl.png": [
+    1024,
+    1024
+  ],
+  "images/ai_visual_images/text_to_render/final_w_ppl.png": [
+    1024,
+    1024
+  ],
+  "images/ai_visual_images/text_to_render/interior_render_1.png": [
+    1024,
+    933
+  ],
+  "images/ai_visual_images/text_to_render/interior_render_2.png": [
+    1024,
+    940
+  ],
+  "images/ai_visual_images/text_to_render/render_1.png": [
+    1024,
+    938
+  ],
+  "images/ai_visual_images/text_to_render/render_2.png": [
+    1024,
+    878
+  ],
+  "images/ai_visual_images/text_to_render/residentail_units_w_ppl.png": [
+    1024,
+    1024
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/nano-banana-image-22.png": [
+    1088,
+    960
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1.jpg": [
+    599,
+    552
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1.png": [
+    1056,
+    992
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_1b.png": [
+    1056,
+    992
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_2.png": [
+    1056,
+    907
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_3.png": [
+    1056,
+    904
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_4.png": [
+    1056,
+    903
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/sketch_1_render_5.png": [
+    1056,
+    904
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/sketch_2.jpg": [
+    1868,
+    1698
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_1/sketch_2_render_1.png": [
+    1088,
+    960
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-1 (3).png": [
+    1088,
+    960
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_2/nano-banana-image-22.png": [
+    1088,
+    960
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_2/sketch_2.jpg": [
+    1868,
+    1698
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3.jpg": [
+    3476,
+    2082
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_1.png": [
+    1280,
+    714
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_2.png": [
+    1280,
+    716
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_3/sketch_3_render_3.png": [
+    1280,
+    717
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_4/20220705_175328.jpg": [
+    6581,
+    6293
+  ],
+  "images/ai_visual_images/sketch_to_render/sketch_4/2025-11-09_10-23.png": [
+    1056,
+    992
+  ],
+  "images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_1.png": [
+    1152,
+    896
+  ],
+  "images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_2.png": [
+    1152,
+    896
+  ],
+  "images/ai_visual_images/plan_to_render/plan_render_to_interior_render/plan_1_interior_render_3.png": [
+    1152,
+    896
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_1.png": [
+    1248,
+    796
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_10.png": [
+    1248,
+    794
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_11.png": [
+    1248,
+    793
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_2.png": [
+    1248,
+    796
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/Interior_render_3.png": [
+    1248,
+    794
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_4.png": [
+    1248,
+    793
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_5.png": [
+    1248,
+    791
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_6.png": [
+    1248,
+    792
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_7.png": [
+    1248,
+    793
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_8.png": [
+    1248,
+    790
+  ],
+  "images/ai_visual_images/bg_add_render/related_interior_renders/interior_render_9.png": [
+    1248,
+    793
+  ],
+  "gifs/construction_workers.gif": [
+    800,
+    450
+  ],
+  "gifs/page_with_notes.gif": [
+    1028,
+    578
+  ],
+  "gifs/sd1.gif": [
+    800,
+    450
+  ],
+  "gifs/sd2.gif": [
+    800,
+    450
+  ],
+  "gifs/Table_Creation.gif": [
+    1028,
+    578
+  ],
+  "gifs/TTS.gif": [
+    800,
+    450
+  ],
+  "gifs/writing_structured_notes.gif": [
+    1028,
+    578
+  ],
+  "images/brand/aec-connected-intelligence.png": [
+    1122,
+    1402
+  ],
+  "images/brand/aec-connected-intelligence.webp": [
+    1122,
+    1402
+  ],
+  "images/responsive/134fb0367508-480.webp": [
+    480,
+    600
+  ],
+  "images/responsive/134fb0367508-960.webp": [
+    960,
+    1200
+  ],
+  "images/brand/aec-generative-workflows.png": [
+    1122,
+    1402
+  ],
+  "images/brand/aec-generative-workflows.webp": [
+    1122,
+    1402
+  ],
+  "images/responsive/67945d38c9d3-480.webp": [
+    480,
+    600
+  ],
+  "images/responsive/67945d38c9d3-960.webp": [
+    960,
+    1200
+  ]
+}

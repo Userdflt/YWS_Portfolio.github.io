@@ -1,0 +1,1635 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>YouTube statistics analysis — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>YouTube statistics analysis</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/YouTube_Analytics/blob/37afa0af947929fd7e617af9c73d5871f935618e/YouTube_Statistics_Analysis.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="youtube-statistics-analysis"><strong>YouTube Statistics Analysis</strong></h2></section><section class="notebook-note"><h4 id="imports-always-run-before-starting">Imports (Always run before starting)</h4></section><details class="code-cell"><summary>Code cell 3</summary><pre><code>
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
+import googleapiclient.errors
+import pandas as pd
+import numpy as np
+import datetime as dt
+import json 
+import requests
+
+#for visualization
+import matplotlib.pyplot as plt
+import seaborn as sns
+import wordcloud # Still Learning to use wordcloud
+
+</code></pre></details><section class="notebook-note"><h2 id="contents">Contents</h2>
+<ol>
+<li><strong>Introduction</strong><ul>
+<li>Research question.</li>
+</ul>
+</li>
+<li><strong>Data Collection</strong><ul>
+<li>API setup and data retrieval code.</li>
+</ul>
+</li>
+<li><strong>Data Preprocessing</strong><ul>
+<li>Cleaning and feature extraction code.</li>
+</ul>
+</li>
+<li><strong>Exploratory Data Analysis (EDA)</strong><ul>
+<li>Visualizations and initial insights.</li>
+</ul>
+</li>
+<li><strong>Hypothesis Testing</strong><ul>
+<li>Statistical analysis and results.</li>
+</ul>
+</li>
+<li><strong>Conclusion</strong><ul>
+<li>Summary of findings and implications</li>
+</ul>
+</li>
+</ol></section><section class="notebook-note"><h2 id="1-introduction"><strong>1. Introduction</strong></h2>
+<ul>
+<li><strong>Primary Question:</strong> Has there been any changes in trend of data science and AI-related videos on YouTube?</li>
+</ul>
+<p>Note: This question can be further explored but I have just left it at this for the purposes of this project.</p></section><section class="notebook-note"><h2 id="2-data-collection"><strong>2. Data Collection</strong></h2></section><section class="notebook-note"><h3 id="api-key">API Key</h3></section><details class="code-cell"><summary>Code cell 8</summary><pre><code># api = ##############################</code></pre></details><section class="notebook-note"><h3 id="prerequisites-packages">Prerequisites Packages</h3></section><details class="code-cell"><summary>Code cell 10</summary><pre><code>#!pip install --upgrade google-api-python-client</code></pre></details><details class="code-cell"><summary>Code cell 11</summary><pre><code>#!pip install --upgrade google-auth-oauthlib google-auth-httplib2</code></pre></details><section class="notebook-note"><h3 id="first-api-call-youtube-search">First API call (Youtube Search)</h3></section><details class="code-cell"><summary>Code cell 13</summary><pre><code>api_service_name = &quot;youtube&quot;
+api_version = &quot;v3&quot;
+
+# Get credentials and create an API client
+youtube = googleapiclient.discovery.build(
+    api_service_name, api_version, developerKey=api)
+
+def get_youtube_search_results(youtube, query, max_results, total_results, published_after, published_before):
+    all_results = []
+    next_page_token = None
+# Created a while loop since max result for each search query is limited to 50
+    while len(all_results) &lt; total_results:
+        request = youtube.search().list(
+            part = &quot;snippet&quot;,
+            maxResults = max_results,
+            order = &quot;date&quot;,
+            publishedAfter = published_after,
+            publishedBefore = published_before,
+            q = query,
+            videoDuration = &quot;any&quot;,
+            pageToken = next_page_token
+        )
+        response = request.execute()
+        all_results.extend(response[&#x27;items&#x27;])
+        next_page_token = response.get(&#x27;nextPageToken&#x27;)
+        if not next_page_token:
+            break
+    
+    return all_results[:total_results]
+
+results = get_youtube_search_results(
+    youtube,
+    query=&quot;Data Science | Artificial Intelligence | AI | Machine Learning | Deep Learning&quot;,
+    max_results=50,
+    total_results=1000,
+    published_after=&quot;2013-01-01T00:00:00Z&quot;,
+    published_before=&quot;2025-01-01T00:00:00Z&quot;
+)
+print(type(results))
+print(results)
+</code></pre></details><section class="notebook-note"><h4 id="prep-cleaning-data-for-second-api-call">Prep / Cleaning Data for Second API call</h4></section><section class="notebook-note"><p>Checking the length of results</p></section><details class="code-cell"><summary>Code cell 16</summary><pre><code>#checking the length of results
+print(len(results))</code></pre></details><section class="notebook-note"><p>Checking the first video information</p></section><details class="code-cell"><summary>Code cell 18</summary><pre><code>#checking the first video information
+snippet_info = results[0]
+snippet_info</code></pre></details><details class="text-output"><summary>Text output</summary><pre>{&#x27;kind&#x27;: &#x27;youtube#searchResult&#x27;,
+ &#x27;etag&#x27;: &#x27;T1Umoo3nnDgD1FvEoYmyC4d_jqM&#x27;,
+ &#x27;id&#x27;: {&#x27;kind&#x27;: &#x27;youtube#video&#x27;, &#x27;videoId&#x27;: &#x27;nkvKQhwD53M&#x27;},
+ &#x27;snippet&#x27;: {&#x27;publishedAt&#x27;: &#x27;2024-06-19T04:49:40Z&#x27;,
+  &#x27;channelId&#x27;: &#x27;UCCRQKpGX1eaevi0BGIu9b_Q&#x27;,
+  &#x27;title&#x27;: &#x27;RAG Vs Self-RAG  #ai #naturallanguageprocessing #shorts #shortsfeed  #datascience #machinelearning&#x27;,
+  &#x27;description&#x27;: &#x27;RAG Vs Self-RAG #ai #naturallanguageprocessing #shorts #shortsfeed #datascience #machinelearning Full ...&#x27;,
+  &#x27;thumbnails&#x27;: {&#x27;default&#x27;: {&#x27;url&#x27;: &#x27;https://i.ytimg.com/vi/nkvKQhwD53M/default.jpg&#x27;,
+    &#x27;width&#x27;: 120,
+    &#x27;height&#x27;: 90},
+   &#x27;medium&#x27;: {&#x27;url&#x27;: &#x27;https://i.ytimg.com/vi/nkvKQhwD53M/mqdefault.jpg&#x27;,
+    &#x27;width&#x27;: 320,
+    &#x27;height&#x27;: 180},
+   &#x27;high&#x27;: {&#x27;url&#x27;: &#x27;https://i.ytimg.com/vi/nkvKQhwD53M/hqdefault.jpg&#x27;,
+    &#x27;width&#x27;: 480,
+    &#x27;height&#x27;: 360}},
+  &#x27;channelTitle&#x27;: &#x27;Datascience Monster&#x27;,
+  &#x27;liveBroadcastContent&#x27;: &#x27;none&#x27;,
+  &#x27;publishTime&#x27;: &#x27;2024-06-19T04:49:40Z&#x27;}}</pre></details><section class="notebook-note"><p>Extracting relevant fields to save as dataframe.</p></section><details class="code-cell"><summary>Code cell 20</summary><pre><code># Extracting relevant fields to save as dataframe.
+video_data = []
+
+for item in results:
+    video_id = item[&#x27;id&#x27;].get(&#x27;videoId&#x27;)
+    if video_id:  # Only appending if the video_id is not None
+        video_data.append({
+            &#x27;videoId&#x27;: video_id,
+            &#x27;publishedAt&#x27;: item[&#x27;snippet&#x27;][&#x27;publishedAt&#x27;],
+            &#x27;channelId&#x27;: item[&#x27;snippet&#x27;][&#x27;channelId&#x27;],
+            &#x27;title&#x27;: item[&#x27;snippet&#x27;][&#x27;title&#x27;],
+            &#x27;description&#x27;: item[&#x27;snippet&#x27;][&#x27;description&#x27;],
+            &#x27;channelTitle&#x27;: item[&#x27;snippet&#x27;][&#x27;channelTitle&#x27;]
+        })
+        </code></pre></details><section class="notebook-note"><h4 id="video-dataframe">Video dataframe</h4></section><section class="notebook-note"><p>Saving as dataframe</p></section><details class="code-cell"><summary>Code cell 23</summary><pre><code>video_df = pd.DataFrame(video_data)
+video_df</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>videoId</th>
+      <th>publishedAt</th>
+      <th>channelId</th>
+      <th>title</th>
+      <th>description</th>
+      <th>channelTitle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>nkvKQhwD53M</td>
+      <td>2024-06-19T04:49:40Z</td>
+      <td>UCCRQKpGX1eaevi0BGIu9b_Q</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>RAG Vs Self-RAG #ai #naturallanguageprocessing...</td>
+      <td>Datascience Monster</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>S_LwI91oxfw</td>
+      <td>2024-06-19T04:30:17Z</td>
+      <td>UCMrZEdOcwhofuLRscG4gafQ</td>
+      <td>Master Python&amp;#39;s NumPy for Data Science &amp;am...</td>
+      <td>Test your NumPy knowledge in this fun and fast...</td>
+      <td>Tech Parenthesis</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>sgeqRf28sec</td>
+      <td>2024-06-19T03:57:00Z</td>
+      <td>UCKDsG3Yo3K2wgw6qEj_MogQ</td>
+      <td>wait for end 😂😂 #cartoon #animation #funny #fu...</td>
+      <td>Shorts #ShortsTrend #ShortsChallenge #ShortsVi...</td>
+      <td>Deepu reactions</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4UmK7Te2a_o</td>
+      <td>2024-06-19T02:07:00Z</td>
+      <td>UCpTh-_R2_iyCKs_Wnd-vNhw</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Ashok Tapasi</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>jSAT_RuJ_Cg</td>
+      <td>2024-06-18T22:00:01Z</td>
+      <td>UCMLtBahI5DMrt0NPvDSoIRQ</td>
+      <td>50% on ARC Challenge?!</td>
+      <td>The ARC Challenge, created by Francois Chollet...</td>
+      <td>Machine Learning Street Talk</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>595</th>
+      <td>uBV0w8Qwhv4</td>
+      <td>2019-07-01T14:30:02Z</td>
+      <td>UCsvqVGtbbyHaMoevxPAq9Fg</td>
+      <td>How To Become An Artificial Intelligence Engin...</td>
+      <td>Professional Certificate Course In AI And Mach...</td>
+      <td>Simplilearn</td>
+    </tr>
+    <tr>
+      <th>596</th>
+      <td>ZJixNvx9BAc</td>
+      <td>2019-06-20T16:00:06Z</td>
+      <td>UCftwRNsjfRo08xYE31tkiyw</td>
+      <td>Machine Learning: Living in the Age of AI | A ...</td>
+      <td>Machine Learning: Living in the Age of AI,” ex...</td>
+      <td>WIRED</td>
+    </tr>
+    <tr>
+      <th>597</th>
+      <td>j6EB9HO6acE</td>
+      <td>2019-06-20T14:28:17Z</td>
+      <td>UCkw4JCwteGrDHIsyIIKo4tQ</td>
+      <td>Artificial Intelligence In Healthcare | Exampl...</td>
+      <td>Machine Learning Engineer Masters Program: htt...</td>
+      <td>edureka!</td>
+    </tr>
+    <tr>
+      <th>598</th>
+      <td>bfmFfD2RIcg</td>
+      <td>2019-06-19T14:30:00Z</td>
+      <td>UCsvqVGtbbyHaMoevxPAq9Fg</td>
+      <td>Neural Network In 5 Minutes | What Is A Neural...</td>
+      <td>Professional Certificate Course In AI And Mach...</td>
+      <td>Simplilearn</td>
+    </tr>
+    <tr>
+      <th>599</th>
+      <td>96-u9s6D16k</td>
+      <td>2019-06-14T09:27:51Z</td>
+      <td>UCJihyK0A38SZ6SdJirEdIOw</td>
+      <td>Genetic Algorithm in Artificial Intelligence i...</td>
+      <td>Subscribe to our new channel:https://www.youtu...</td>
+      <td>Gate Smashers</td>
+    </tr>
+  </tbody>
+</table>
+<p>600 rows × 6 columns</p>
+</div><section class="notebook-note"><p>Saving the dataframe to csv for further analysis</p></section><details class="code-cell"><summary>Code cell 25</summary><pre><code>#saving the dataframe to csv for further analysis
+video_df.to_csv(&#x27;video_data.csv&#x27;, index=False)</code></pre></details><section class="notebook-note"><h3 id="second-api-call-video-stats-by-video-id">Second API call (video stats by video id)</h3></section><details class="code-cell"><summary>Code cell 27</summary><pre><code># Extracting video_id field for second API call.
+# Extracting video id if exists
+video_ids = [item[&#x27;id&#x27;].get(&#x27;videoId&#x27;) for item in results if &#x27;videoId&#x27; in item[&#x27;id&#x27;]]
+print(len(video_ids)) # this is to check the number of values.
+</code></pre></details><details class="code-cell"><summary>Code cell 28</summary><pre><code># Set up the API client to query for video details for each video_id
+api_service_name = &quot;youtube&quot;
+api_version = &quot;v3&quot;
+
+# Initialize the API client
+youtube = googleapiclient.discovery.build(
+    api_service_name, api_version, developerKey=api)
+
+def get_video_details(youtube, video_ids):
+    all_responses = []
+    
+    for i in range(0, len(video_ids), 50): #step 50 per request
+        group = video_ids[i:i+50]  # Slice the video IDs into batches of 50
+        request = youtube.videos().list(
+            part=&quot;snippet,contentDetails,statistics&quot;,
+            id=&#x27;,&#x27;.join(group),  # Join the group into a comma-separated string
+            maxResults=50
+        )
+        response = request.execute()  # Execute the API request
+        all_responses.extend(response.get(&#x27;items&#x27;, []))  # Extend the all_responses list with the current group
+    
+    return all_responses
+
+# video_details for each video in groups
+video_details = get_video_details(youtube, video_ids)
+
+print(f&quot;Retrieved details for {len(video_details)} videos&quot;)
+</code></pre></details><section class="notebook-note"><h4 id="prep-cleaning-data-of-the-second-api-call">Prep / Cleaning Data of the second API call</h4></section><section class="notebook-note"><p>Checking if queried data is correct</p></section><details class="code-cell"><summary>Code cell 31</summary><pre><code>#checking if queried data is correct
+print(f&#x27;length of the list: {len(video_details)}&#x27;)
+video_details[6]</code></pre></details><details class="text-output"><summary>Text output</summary><pre>{&#x27;kind&#x27;: &#x27;youtube#video&#x27;,
+ &#x27;etag&#x27;: &#x27;4b0oyBfH89esrWZuKDnVa-6SMtU&#x27;,
+ &#x27;id&#x27;: &#x27;AGzxFHlh3pk&#x27;,
+ &#x27;snippet&#x27;: {&#x27;publishedAt&#x27;: &#x27;2024-06-18T22:00:05Z&#x27;,
+  &#x27;channelId&#x27;: &#x27;UCw_LFe2pS8x3NyipGNJgeEA&#x27;,
+  &#x27;title&#x27;: &#x27;Top 22 BEST Data Science &amp; Analytics Certifications&#x27;,
+  &#x27;description&#x27;: &quot;🚀 Get $1,000 Off Springboard Data Science/Analytics Bootcamp! Act fast! Limited spots.\nhttps://bit.ly/3vC7phX\n\n▬▬▬▬\n\nLooking for the best data science certifications? Check out our list of the top 22 certification programs in data science to advance your career. We&#x27;ll cover data engineering certifications, data analyst certifications, and general data science / machine learning certifications.\n\nTHIS VIDEO IS A COMPILATION OF MY OTHER 3 VIDEOS COVERING CERTIFICATIONS\n\nThe information on this YouTube Channel and the resources available are for educational and informational purposes only. As an affiliate, I may earn when you sign up to websites/ for services provided in the description. This allows me to run the channel and make videos for you. Any income or earnings representations are aspirational statements only of your earning potential. There are no guarantees that you’ll receive the same results or any results at all. I am not a financial or career advisor and nothing in this video should be considered legal, financial, or professional advice.&quot;,
+  &#x27;thumbnails&#x27;: {&#x27;default&#x27;: {&#x27;url&#x27;: &#x27;https://i.ytimg.com/vi/AGzxFHlh3pk/default.jpg&#x27;,
+    &#x27;width&#x27;: 120,
+    &#x27;height&#x27;: 90},
+   &#x27;medium&#x27;: {&#x27;url&#x27;: &#x27;https://i.ytimg.com/vi/AGzxFHlh3pk/mqdefault.jpg&#x27;,
+    &#x27;width&#x27;: 320,
+    &#x27;height&#x27;: 180},
+   &#x27;high&#x27;: {&#x27;url&#x27;: &#x27;https://i.ytimg.com/vi/AGzxFHlh3pk/hqdefault.jpg&#x27;,
+    &#x27;width&#x27;: 480,
+    &#x27;height&#x27;: 360},
+   &#x27;standard&#x27;: {&#x27;url&#x27;: &#x27;https://i.ytimg.com/vi/AGzxFHlh3pk/sddefault.jpg&#x27;,
+    &#x27;width&#x27;: 640,
+    &#x27;height&#x27;: 480},
+   &#x27;maxres&#x27;: {&#x27;url&#x27;: &#x27;https://i.ytimg.com/vi/AGzxFHlh3pk/maxresdefault.jpg&#x27;,
+    &#x27;width&#x27;: 1280,
+    &#x27;height&#x27;: 720}},
+  &#x27;channelTitle&#x27;: &#x27;Learn with Lukas&#x27;,
+  &#x27;tags&#x27;: [&#x27;how to become data analyst&#x27;,
+   &#x27;data science certifications&#x27;,
+   &#x27;Best Data Science Certifications&#x27;,
+   &#x27;Data Science Certification Programs&#x27;,
+   &#x27;Microsoft Certified: Azure Data Scientist Associate&#x27;,
+   &#x27;Data Science Professional Certification&#x27;,
+   &#x27;Data Analyst Professional Certification&#x27;,
+   &#x27;Online Data Science Certification&#x27;,
+   &#x27;Top Data Science Certifications&#x27;,
+   &#x27;Best Data Analyst Certifications&#x27;,
+   &#x27;Data Analyst Professional Certificate&#x27;,
+   &#x27;Google Data Analytics Certificate&#x27;,
+   &#x27;Top Data Science Certification Programs&#x27;],
+  &#x27;categoryId&#x27;: &#x27;28&#x27;,
+  &#x27;liveBroadcastContent&#x27;: &#x27;none&#x27;,
+  &#x27;defaultLanguage&#x27;: &#x27;en&#x27;,
+  &#x27;localized&#x27;: {&#x27;title&#x27;: &#x27;Top 22 BEST Data Science &amp; Analytics Certifications&#x27;,
+   &#x27;description&#x27;: &quot;🚀 Get $1,000 Off Springboard Data Science/Analytics Bootcamp! Act fast! Limited spots.\nhttps://bit.ly/3vC7phX\n\n▬▬▬▬\n\nLooking for the best data science certifications? Check out our list of the top 22 certification programs in data science to advance your career. We&#x27;ll cover data engineering certifications, data analyst certifications, and general data science / machine learning certifications.\n\nTHIS VIDEO IS A COMPILATION OF MY OTHER 3 VIDEOS COVERING CERTIFICATIONS\n\nThe information on this YouTube Channel and the resources available are for educational and informational purposes only. As an affiliate, I may earn when you sign up to websites/ for services provided in the description. This allows me to run the channel and make videos for you. Any income or earnings representations are aspirational statements only of your earning potential. There are no guarantees that you’ll receive the same results or any results at all. I am not a financial or career advisor and nothing in this video should be considered legal, financial, or professional advice.&quot;},
+  &#x27;defaultAudioLanguage&#x27;: &#x27;en&#x27;},
+ &#x27;contentDetails&#x27;: {&#x27;duration&#x27;: &#x27;PT38M19S&#x27;,
+  &#x27;dimension&#x27;: &#x27;2d&#x27;,
+  &#x27;definition&#x27;: &#x27;hd&#x27;,
+  &#x27;caption&#x27;: &#x27;false&#x27;,
+  &#x27;licensedContent&#x27;: True,
+  &#x27;contentRating&#x27;: {},
+  &#x27;projection&#x27;: &#x27;rectangular&#x27;},
+ &#x27;statistics&#x27;: {&#x27;viewCount&#x27;: &#x27;731&#x27;,
+  &#x27;likeCount&#x27;: &#x27;71&#x27;,
+  &#x27;favoriteCount&#x27;: &#x27;0&#x27;,
+  &#x27;commentCount&#x27;: &#x27;4&#x27;}}</pre></details><section class="notebook-note"><p>Extracting relevant fields to save as dataframe.</p></section><details class="code-cell"><summary>Code cell 33</summary><pre><code># Extracting relevant fields to save as dataframe.
+video_stats = []
+for item in video_details[:]:
+    video_stats.append({
+        &#x27;channelId&#x27;: item[&#x27;snippet&#x27;][&#x27;channelId&#x27;],
+        &#x27;title&#x27;: item[&#x27;snippet&#x27;][&#x27;title&#x27;],
+        &#x27;description&#x27;: item[&#x27;snippet&#x27;][&#x27;description&#x27;],
+        &#x27;channelTitle&#x27;: item[&#x27;snippet&#x27;][&#x27;channelTitle&#x27;],
+        &#x27;tags&#x27;: item[&#x27;snippet&#x27;].get(&#x27;tags&#x27;, None),
+        &#x27;categoryId&#x27;: item[&#x27;snippet&#x27;][&#x27;categoryId&#x27;],
+        &#x27;defaultLanguage&#x27;: item[&#x27;snippet&#x27;].get(&#x27;defaultLanguage&#x27;, None), #fill missing values with None
+        &#x27;viewCount&#x27;: item[&#x27;statistics&#x27;].get(&#x27;viewCount&#x27;, &#x27;0&#x27;),
+        &#x27;likeCount&#x27;: item[&#x27;statistics&#x27;].get(&#x27;likeCount&#x27;, &#x27;0&#x27;),
+        &#x27;favoriteCount&#x27;: item[&#x27;statistics&#x27;].get(&#x27;favoriteCount&#x27;, &#x27;0&#x27;),
+        &#x27;commentCount&#x27;: item[&#x27;statistics&#x27;].get(&#x27;commentCount&#x27;, &#x27;0&#x27;)
+        })
+
+</code></pre></details><section class="notebook-note"><h4 id="video_stats-dataframe">Video_Stats dataframe</h4></section><section class="notebook-note"><p>Converting to dataframe</p></section><details class="code-cell"><summary>Code cell 36</summary><pre><code>#converting to dataframe
+video_stats_df = pd.DataFrame(video_stats)</code></pre></details><details class="code-cell"><summary>Code cell 37</summary><pre><code>#checking the dataframe
+video_stats_df.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>channelId</th>
+      <th>title</th>
+      <th>description</th>
+      <th>channelTitle</th>
+      <th>tags</th>
+      <th>categoryId</th>
+      <th>defaultLanguage</th>
+      <th>viewCount</th>
+      <th>likeCount</th>
+      <th>favoriteCount</th>
+      <th>commentCount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>UCCRQKpGX1eaevi0BGIu9b_Q</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>Datascience Monster</td>
+      <td>None</td>
+      <td>22</td>
+      <td>None</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>UCMrZEdOcwhofuLRscG4gafQ</td>
+      <td>Master Python's NumPy for Data Science &amp; Machi...</td>
+      <td>Test your NumPy knowledge in this fun and fast...</td>
+      <td>Tech Parenthesis</td>
+      <td>[numpy, python, python numpy, pandas is built ...</td>
+      <td>27</td>
+      <td>None</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>UCKDsG3Yo3K2wgw6qEj_MogQ</td>
+      <td>wait for end 😂😂 #cartoon #animation #funny #fu...</td>
+      <td>#Shorts\n\n#ShortsTrend\n\n#ShortsChallenge\n\...</td>
+      <td>Deepu reactions</td>
+      <td>[viral, trending, shorts, popular, reaction, f...</td>
+      <td>24</td>
+      <td>hi</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>UCpTh-_R2_iyCKs_Wnd-vNhw</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Ashok Tapasi</td>
+      <td>[datascience, outliers, anomaly, anomalydetect...</td>
+      <td>27</td>
+      <td>None</td>
+      <td>5</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>UCMLtBahI5DMrt0NPvDSoIRQ</td>
+      <td>50% on ARC Challenge?!</td>
+      <td>The ARC Challenge, created by Francois Chollet...</td>
+      <td>Machine Learning Street Talk</td>
+      <td>None</td>
+      <td>28</td>
+      <td>None</td>
+      <td>9256</td>
+      <td>479</td>
+      <td>0</td>
+      <td>109</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><p>Saving it to csv for furture analysis</p></section><details class="code-cell"><summary>Code cell 39</summary><pre><code>#saving it to csv for furture analysis
+video_stats_df.to_csv(&#x27;video_stats.csv&#x27;, index=False)</code></pre></details><section class="notebook-note"><h2 id="3-data-processing"><strong>3. Data Processing</strong></h2></section><section class="notebook-note"><h3 id="read-csvs-clean">Read CSVs (Clean)</h3></section><details class="code-cell"><summary>Code cell 42</summary><pre><code>video_df = pd.read_csv(&#x27;video_data.csv&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 43</summary><pre><code>v_stat_df = pd.read_csv(&#x27;video_stats.csv&#x27;)</code></pre></details><section class="notebook-note"><p>Checking correctly imported</p></section><details class="code-cell"><summary>Code cell 45</summary><pre><code>#not going to be using this dataframe a lot
+video_df.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>videoId</th>
+      <th>publishedAt</th>
+      <th>channelId</th>
+      <th>title</th>
+      <th>description</th>
+      <th>channelTitle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>nkvKQhwD53M</td>
+      <td>2024-06-19T04:49:40Z</td>
+      <td>UCCRQKpGX1eaevi0BGIu9b_Q</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>RAG Vs Self-RAG #ai #naturallanguageprocessing...</td>
+      <td>Datascience Monster</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>S_LwI91oxfw</td>
+      <td>2024-06-19T04:30:17Z</td>
+      <td>UCMrZEdOcwhofuLRscG4gafQ</td>
+      <td>Master Python&amp;#39;s NumPy for Data Science &amp;am...</td>
+      <td>Test your NumPy knowledge in this fun and fast...</td>
+      <td>Tech Parenthesis</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>sgeqRf28sec</td>
+      <td>2024-06-19T03:57:00Z</td>
+      <td>UCKDsG3Yo3K2wgw6qEj_MogQ</td>
+      <td>wait for end 😂😂 #cartoon #animation #funny #fu...</td>
+      <td>Shorts #ShortsTrend #ShortsChallenge #ShortsVi...</td>
+      <td>Deepu reactions</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4UmK7Te2a_o</td>
+      <td>2024-06-19T02:07:00Z</td>
+      <td>UCpTh-_R2_iyCKs_Wnd-vNhw</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Ashok Tapasi</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>jSAT_RuJ_Cg</td>
+      <td>2024-06-18T22:00:01Z</td>
+      <td>UCMLtBahI5DMrt0NPvDSoIRQ</td>
+      <td>50% on ARC Challenge?!</td>
+      <td>The ARC Challenge, created by Francois Chollet...</td>
+      <td>Machine Learning Street Talk</td>
+    </tr>
+  </tbody>
+</table>
+</div><details class="code-cell"><summary>Code cell 46</summary><pre><code>v_stat_df.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>channelId</th>
+      <th>title</th>
+      <th>description</th>
+      <th>channelTitle</th>
+      <th>tags</th>
+      <th>categoryId</th>
+      <th>defaultLanguage</th>
+      <th>viewCount</th>
+      <th>likeCount</th>
+      <th>favoriteCount</th>
+      <th>commentCount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>UCCRQKpGX1eaevi0BGIu9b_Q</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>Datascience Monster</td>
+      <td>NaN</td>
+      <td>22</td>
+      <td>NaN</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>UCMrZEdOcwhofuLRscG4gafQ</td>
+      <td>Master Python's NumPy for Data Science &amp; Machi...</td>
+      <td>Test your NumPy knowledge in this fun and fast...</td>
+      <td>Tech Parenthesis</td>
+      <td>['numpy', 'python', 'python numpy', 'pandas is...</td>
+      <td>27</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>UCKDsG3Yo3K2wgw6qEj_MogQ</td>
+      <td>wait for end 😂😂 #cartoon #animation #funny #fu...</td>
+      <td>#Shorts\n\n#ShortsTrend\n\n#ShortsChallenge\n\...</td>
+      <td>Deepu reactions</td>
+      <td>['viral', 'trending', 'shorts', 'popular', 're...</td>
+      <td>24</td>
+      <td>hi</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>UCpTh-_R2_iyCKs_Wnd-vNhw</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Ashok Tapasi</td>
+      <td>['datascience', 'outliers', 'anomaly', 'anomal...</td>
+      <td>27</td>
+      <td>NaN</td>
+      <td>5</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>UCMLtBahI5DMrt0NPvDSoIRQ</td>
+      <td>50% on ARC Challenge?!</td>
+      <td>The ARC Challenge, created by Francois Chollet...</td>
+      <td>Machine Learning Street Talk</td>
+      <td>NaN</td>
+      <td>28</td>
+      <td>NaN</td>
+      <td>9256</td>
+      <td>479</td>
+      <td>0</td>
+      <td>109</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><h3 id="initial-exploration-of-data">Initial Exploration of Data</h3></section><section class="notebook-note"><p>Checking for overall df info</p></section><details class="code-cell"><summary>Code cell 49</summary><pre><code>v_stat_df.info()</code></pre></details><section class="notebook-note"><p>Checking for any null values</p></section><details class="code-cell"><summary>Code cell 51</summary><pre><code>v_stat_df.isnull().sum()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>channelId            0
+title                0
+description         10
+channelTitle         0
+tags               127
+categoryId           0
+defaultLanguage    452
+viewCount            0
+likeCount            0
+favoriteCount        0
+commentCount         0
+dtype: int64</pre></details><section class="notebook-note"><p>Dropping default language as there were too many (446 out of 557) null values and is not 
+highly relevant to the analysis.</p></section><details class="code-cell"><summary>Code cell 53</summary><pre><code>v_stat_df = v_stat_df.drop(columns=[&#x27;defaultLanguage&#x27;])
+v_stat_df[&#x27;tags&#x27;].fillna(&#x27;None&#x27;, inplace=True)</code></pre></details><section class="notebook-note"><p>Checking for any duplicated values and dropping them</p></section><details class="code-cell"><summary>Code cell 55</summary><pre><code>v_stat_df.duplicated().sum()
+v_stat_df.drop_duplicates(inplace=True)</code></pre></details><section class="notebook-note"><p>checking for unique values and counts for 'favoriteCount'</p></section><details class="code-cell"><summary>Code cell 57</summary><pre><code>v_stat_df[&#x27;favoriteCount&#x27;].value_counts()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>favoriteCount
+0    567
+Name: count, dtype: int64</pre></details><section class="notebook-note"><p>Dropping 'favoriteCount' column</p></section><details class="code-cell"><summary>Code cell 59</summary><pre><code>#since all values are 0, dropping the column
+v_stat_df = v_stat_df.drop(columns=[&#x27;favoriteCount&#x27;])</code></pre></details><section class="notebook-note"><p>Grabbing published dates from the video_df</p></section><details class="code-cell"><summary>Code cell 61</summary><pre><code>v_stat_df[&#x27;publishedAt&#x27;] = video_df[&#x27;publishedAt&#x27;]
+video_df[&#x27;publishedAt&#x27;]</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0      2024-06-19T04:49:40Z
+1      2024-06-19T04:30:17Z
+2      2024-06-19T03:57:00Z
+3      2024-06-19T02:07:00Z
+4      2024-06-18T22:00:01Z
+               ...         
+595    2019-07-01T14:30:02Z
+596    2019-06-20T16:00:06Z
+597    2019-06-20T14:28:17Z
+598    2019-06-19T14:30:00Z
+599    2019-06-14T09:27:51Z
+Name: publishedAt, Length: 567, dtype: object</pre></details><section class="notebook-note"><p>Checking info for any illogical dtypes</p></section><details class="code-cell"><summary>Code cell 63</summary><pre><code>v_stat_df.info()</code></pre></details><section class="notebook-note"><p>'publishedAt' seems to be an object, converting this to datetime</p></section><details class="code-cell"><summary>Code cell 65</summary><pre><code>#setting the &#x27;publishedAt&#x27; column to datetime format
+v_stat_df[&#x27;publishedAt&#x27;] = pd.to_datetime(v_stat_df[&#x27;publishedAt&#x27;])
+
+# Display the head of the dataframe
+v_stat_df[&#x27;publishedAt&#x27;].head()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0   2024-06-19 04:49:40+00:00
+1   2024-06-19 04:30:17+00:00
+2   2024-06-19 03:57:00+00:00
+3   2024-06-19 02:07:00+00:00
+4   2024-06-18 22:00:01+00:00
+Name: publishedAt, dtype: datetime64[ns, UTC]</pre></details><details class="code-cell"><summary>Code cell 66</summary><pre><code>#checking the datatime conversion
+v_stat_df.info()</code></pre></details><section class="notebook-note"><h3 id="updating-columns">Updating Columns</h3></section><section class="notebook-note"><p>Seperating year, month and day for detailed analysis</p></section><details class="code-cell"><summary>Code cell 69</summary><pre><code>#seperating year, month and day for detailed analysis
+v_stat_df[&#x27;year&#x27;] = v_stat_df[&#x27;publishedAt&#x27;].dt.year
+v_stat_df[&#x27;month&#x27;] = v_stat_df[&#x27;publishedAt&#x27;].dt.month
+v_stat_df[&#x27;day&#x27;] = v_stat_df[&#x27;publishedAt&#x27;].dt.day
+
+v_stat_df.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>channelId</th>
+      <th>title</th>
+      <th>description</th>
+      <th>channelTitle</th>
+      <th>tags</th>
+      <th>categoryId</th>
+      <th>viewCount</th>
+      <th>likeCount</th>
+      <th>commentCount</th>
+      <th>publishedAt</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>UCCRQKpGX1eaevi0BGIu9b_Q</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>Datascience Monster</td>
+      <td>None</td>
+      <td>22</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2024-06-19 04:49:40+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>UCMrZEdOcwhofuLRscG4gafQ</td>
+      <td>Master Python's NumPy for Data Science &amp; Machi...</td>
+      <td>Test your NumPy knowledge in this fun and fast...</td>
+      <td>Tech Parenthesis</td>
+      <td>['numpy', 'python', 'python numpy', 'pandas is...</td>
+      <td>27</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2024-06-19 04:30:17+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>UCKDsG3Yo3K2wgw6qEj_MogQ</td>
+      <td>wait for end 😂😂 #cartoon #animation #funny #fu...</td>
+      <td>#Shorts\n\n#ShortsTrend\n\n#ShortsChallenge\n\...</td>
+      <td>Deepu reactions</td>
+      <td>['viral', 'trending', 'shorts', 'popular', 're...</td>
+      <td>24</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2024-06-19 03:57:00+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>UCpTh-_R2_iyCKs_Wnd-vNhw</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Ashok Tapasi</td>
+      <td>['datascience', 'outliers', 'anomaly', 'anomal...</td>
+      <td>27</td>
+      <td>5</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2024-06-19 02:07:00+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>UCMLtBahI5DMrt0NPvDSoIRQ</td>
+      <td>50% on ARC Challenge?!</td>
+      <td>The ARC Challenge, created by Francois Chollet...</td>
+      <td>Machine Learning Street Talk</td>
+      <td>None</td>
+      <td>28</td>
+      <td>9256</td>
+      <td>479</td>
+      <td>109</td>
+      <td>2024-06-18 22:00:01+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>18</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><p>Counting length of title (new column)</p></section><details class="code-cell"><summary>Code cell 71</summary><pre><code>#new column for counting length of title.(code is counting number of spaces + 1)
+v_stat_df[&#x27;title_count&#x27;] = v_stat_df[&#x27;title&#x27;].str.count(&#x27; &#x27;) + 1
+v_stat_df.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>channelId</th>
+      <th>title</th>
+      <th>description</th>
+      <th>channelTitle</th>
+      <th>tags</th>
+      <th>categoryId</th>
+      <th>viewCount</th>
+      <th>likeCount</th>
+      <th>commentCount</th>
+      <th>publishedAt</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>title_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>UCCRQKpGX1eaevi0BGIu9b_Q</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>RAG Vs Self-RAG  #ai #naturallanguageprocessin...</td>
+      <td>Datascience Monster</td>
+      <td>None</td>
+      <td>22</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2024-06-19 04:49:40+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>19</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>UCMrZEdOcwhofuLRscG4gafQ</td>
+      <td>Master Python's NumPy for Data Science &amp; Machi...</td>
+      <td>Test your NumPy knowledge in this fun and fast...</td>
+      <td>Tech Parenthesis</td>
+      <td>['numpy', 'python', 'python numpy', 'pandas is...</td>
+      <td>27</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2024-06-19 04:30:17+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>19</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>UCKDsG3Yo3K2wgw6qEj_MogQ</td>
+      <td>wait for end 😂😂 #cartoon #animation #funny #fu...</td>
+      <td>#Shorts\n\n#ShortsTrend\n\n#ShortsChallenge\n\...</td>
+      <td>Deepu reactions</td>
+      <td>['viral', 'trending', 'shorts', 'popular', 're...</td>
+      <td>24</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2024-06-19 03:57:00+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>19</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>UCpTh-_R2_iyCKs_Wnd-vNhw</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Outlier Detection in Machine Learning: Your Ul...</td>
+      <td>Ashok Tapasi</td>
+      <td>['datascience', 'outliers', 'anomaly', 'anomal...</td>
+      <td>27</td>
+      <td>5</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2024-06-19 02:07:00+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>19</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>UCMLtBahI5DMrt0NPvDSoIRQ</td>
+      <td>50% on ARC Challenge?!</td>
+      <td>The ARC Challenge, created by Francois Chollet...</td>
+      <td>Machine Learning Street Talk</td>
+      <td>None</td>
+      <td>28</td>
+      <td>9256</td>
+      <td>479</td>
+      <td>109</td>
+      <td>2024-06-18 22:00:01+00:00</td>
+      <td>2024</td>
+      <td>6</td>
+      <td>18</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div><details class="code-cell"><summary>Code cell 72</summary><pre><code>#checking if there are any null values in the title word count
+v_stat_df[&#x27;title_count&#x27;].isnull().sum()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0</pre></details><details class="code-cell"><summary>Code cell 73</summary><pre><code>v_stat_df.to_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_1\Updated csv\Updated_video_stats.csv&#x27;, index=False)</code></pre></details><section class="notebook-note"><h2 id="4-exploratory-data-analysis-eda">4. <strong>Exploratory Data Analysis (EDA)</strong></h2></section><section class="notebook-note"><h3 id="read-csv-updated">Read CSV (Updated)</h3></section><details class="code-cell"><summary>Code cell 76</summary><pre><code>data = pd.read_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_1\Updated csv\Updated_video_stats.csv&#x27;)
+v_stat = pd.DataFrame(data)</code></pre></details><details class="code-cell"><summary>Code cell 77</summary><pre><code>v_stat.info()</code></pre></details><section class="notebook-note"><p>With datetime, when saved as csv and reading it back, it can turn it back into object</p></section><details class="code-cell"><summary>Code cell 79</summary><pre><code>#setting the &#x27;publishedAt&#x27; column to datetime format....again....
+v_stat[&#x27;publishedAt&#x27;] = pd.to_datetime(v_stat[&#x27;publishedAt&#x27;])
+
+# Display the info of the column to check
+v_stat[&#x27;publishedAt&#x27;].info()</code></pre></details><details class="code-cell"><summary>Code cell 80</summary><pre><code>#checking unique values of publishedAt
+v_stat[&#x27;publishedAt&#x27;].unique()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>&lt;DatetimeArray&gt;
+[&#x27;2024-06-19 04:49:40+00:00&#x27;, &#x27;2024-06-19 04:30:17+00:00&#x27;,
+ &#x27;2024-06-19 03:57:00+00:00&#x27;, &#x27;2024-06-19 02:07:00+00:00&#x27;,
+ &#x27;2024-06-18 22:00:01+00:00&#x27;, &#x27;2024-06-18 22:00:21+00:00&#x27;,
+ &#x27;2024-06-18 22:00:05+00:00&#x27;, &#x27;2024-06-18 20:51:33+00:00&#x27;,
+ &#x27;2024-06-18 18:00:33+00:00&#x27;, &#x27;2024-06-18 18:00:17+00:00&#x27;,
+ ...
+ &#x27;2019-08-06 15:19:25+00:00&#x27;, &#x27;2019-07-28 05:27:28+00:00&#x27;,
+ &#x27;2019-07-26 14:06:50+00:00&#x27;, &#x27;2019-07-21 08:33:22+00:00&#x27;,
+ &#x27;2019-07-04 19:36:13+00:00&#x27;, &#x27;2019-07-01 14:30:02+00:00&#x27;,
+ &#x27;2019-06-20 16:00:06+00:00&#x27;, &#x27;2019-06-20 14:28:17+00:00&#x27;,
+ &#x27;2019-06-19 14:30:00+00:00&#x27;, &#x27;2019-06-14 09:27:51+00:00&#x27;]
+Length: 566, dtype: datetime64[ns, UTC]</pre></details><section class="notebook-note"><h3 id="numerical-analysis">Numerical Analysis</h3></section><section class="notebook-note"><h4 id="summary-statistics">Summary Statistics</h4></section><details class="code-cell"><summary>Code cell 83</summary><pre><code>print(v_stat.describe())</code></pre></details><section class="notebook-note"><h4 id="overall-observations">Overall Observations</h4>
+<ul>
+<li>
+<p>[View_Count], [Like_Count], and [Comment_Count] all show signs of high variability with potential outliers, suggesting that a small number of videos have very high engagement metrics while most videos have relatively lower engagement.</p>
+</li>
+<li>
+<p>[Year], [Month], and [Day] distributions indicate a balanced dataset over time, allowing for meaningful trend analysis.</p>
+</li>
+<li>
+<p>[Title_Count] shows some variability in the number of words in video titles</p>
+</li>
+</ul></section><section class="notebook-note"><h4 id="detailed-observations">Detailed Observations</h4></section><section class="notebook-note"><ul>
+<li>
+<p>For 'categoryId' the minimum category ID is 1, and the maximum is 29 with a mean of 26.5. The majority of videos fall within a narrow range around 27.</p>
+</li>
+<li>
+<p>For 'viewCount the mean view count is 316,711, but the standard deviation is extremely high (1,452,242), which indicates many videos having a low view count and a few having very high view counts, suggesting the presence of outliers.</p>
+</li>
+<li>
+<p>For 'likeCount' the mean like count is 7,202, with a very high standard deviation of 32,899. (potential outliers)</p>
+</li>
+<li>
+<p>For 'commentCount' the mean comment count is 267, with a standard deviation of 1,287.Also number of comments ranges from 0 to over 20,000 (potential outliers)</p>
+</li>
+<li>
+<p>For 'year' the dataset covers the years from 2019 to 2024, with a mean year of around 2021.45, indicating a fairly balanced distribution over these years.</p>
+</li>
+<li>
+<p>For 'month' the mean month is 6.40, indicating a spread throughout the year with no significant concentration in any specific month.</p>
+</li>
+<li>
+<p>For 'day' the mean day is 16.14, indicating a fairly even distribution of video publication dates throughout the month.</p>
+</li>
+<li>
+<p>For 'title_count' the average title length is 12.19 words, with a standard deviation of 3.39 words, indicating some variability in title lengths.</p>
+</li>
+</ul></section><section class="notebook-note"><h3 id="distribution-of-numerical-features">Distribution of Numerical Features</h3></section><details class="code-cell"><summary>Code cell 88</summary><pre><code>#filtering the dataset to remove outliers for the purposed of distribution
+view_count_filtered = v_stat[&#x27;viewCount&#x27;].quantile(0.75)
+like_count_filtered = v_stat[&#x27;likeCount&#x27;].quantile(0.75)
+commnet_count_filtered = v_stat[&#x27;commentCount&#x27;].quantile(0.75)
+
+filtered_v_stat = v_stat[(v_stat[&#x27;viewCount&#x27;] &lt;= view_count_filtered) &amp; 
+                         (v_stat[&#x27;likeCount&#x27;] &lt;= like_count_filtered) &amp; 
+                         (v_stat[&#x27;commentCount&#x27;] &lt;= commnet_count_filtered)
+                         ]
+
+# setting up list for numerical columns
+numerical_columns = [&#x27;viewCount&#x27;, 
+                     &#x27;likeCount&#x27;, 
+                     &#x27;commentCount&#x27;, 
+                     &#x27;year&#x27;, 
+                     &#x27;month&#x27;, 
+                     &#x27;day&#x27;, 
+                     &#x27;title_count&#x27;
+                     ]
+
+#checking the distribution of numerical columns - difficulty in using FacetGrid so just went with for loop
+for column in numerical_columns:
+    sns.histplot(data=filtered_v_stat, x=column, bins=20, kde=True) # change v_stat to filtered_v_stat for outlier removal
+    plt.title(f&#x27;Distribution of {column}&#x27;)
+    plt.xlabel(column)
+    plt.ylabel(&#x27;Frequency&#x27;)
+    plt.show()
+</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="YouTube statistics analysis — output chart 1, following code cell 88" width="574" height="453" loading="lazy"></a><figcaption>Output 1 · Code cell 88 · Open image to enlarge</figcaption></figure><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="YouTube statistics analysis — output chart 2, following code cell 88" width="571" height="453" loading="lazy"></a><figcaption>Output 2 · Code cell 88 · Open image to enlarge</figcaption></figure><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="YouTube statistics analysis — output chart 3, following code cell 88" width="571" height="453" loading="lazy"></a><figcaption>Output 3 · Code cell 88 · Open image to enlarge</figcaption></figure><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="YouTube statistics analysis — output chart 4, following code cell 88" width="563" height="453" loading="lazy"></a><figcaption>Output 4 · Code cell 88 · Open image to enlarge</figcaption></figure><figure><a href="chart-05.webp" target="_blank" rel="noopener noreferrer"><img src="chart-05.webp" alt="YouTube statistics analysis — output chart 5, following code cell 88" width="571" height="453" loading="lazy"></a><figcaption>Output 5 · Code cell 88 · Open image to enlarge</figcaption></figure><figure><a href="chart-06.webp" target="_blank" rel="noopener noreferrer"><img src="chart-06.webp" alt="YouTube statistics analysis — output chart 6, following code cell 88" width="563" height="453" loading="lazy"></a><figcaption>Output 6 · Code cell 88 · Open image to enlarge</figcaption></figure><figure><a href="chart-07.webp" target="_blank" rel="noopener noreferrer"><img src="chart-07.webp" alt="YouTube statistics analysis — output chart 7, following code cell 88" width="563" height="453" loading="lazy"></a><figcaption>Output 7 · Code cell 88 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li><strong>View Count</strong>: Most videos have a low view count, with a few videos having extremely high view counts, indicating a highly skewed distribution.</li>
+<li>
+<p><strong>Like Count:</strong> Similar to view count, the like count is also highly skewed, with most videos having very few likes and a few having extremely high like counts.</p>
+</li>
+<li>
+<p><strong>Comment Count:</strong> The distribution of comment counts follows a similar pattern, with most videos having few comments and a small number having many comments.</p>
+</li>
+<li><strong>Year, Month, Day:</strong> These features show a more uniform distribution except for some peaks, particularly in the mid-year and around specific days.</li>
+<li><strong>Title Count:</strong> Follows a somewhat normal distribution but slightly skewed.</li>
+</ul></section><section class="notebook-note"><h3 id="categorical-analysis">Categorical Analysis</h3></section><section class="notebook-note"><h4 id="number-of-views-per-category">Number of Views Per Category</h4></section><details class="code-cell"><summary>Code cell 92</summary><pre><code>#checking category ids
+counts = v_stat[&#x27;categoryId&#x27;].value_counts()
+counts.sort_index()</code></pre></details><details class="text-output"><summary>Text output</summary><pre>categoryId
+1       2
+22     52
+24     14
+25      3
+26      2
+27    382
+28    111
+29      1
+Name: count, dtype: int64</pre></details><section class="notebook-note"><p>Defining Category Names</p></section><details class="code-cell"><summary>Code cell 94</summary><pre><code>#Define Category Names
+category_names = {
+    1: &#x27;Film &amp; Animation&#x27;,
+    22: &#x27;People &amp; Blogs&#x27;,
+    24: &#x27;Entertainment&#x27;,
+    25: &#x27;News &amp; Politics&#x27;,
+    26: &#x27;Howto &amp; Style&#x27;,
+    27: &#x27;Education&#x27;,
+    28: &#x27;Science &amp; Technology&#x27;,
+    29: &#x27;Nonprofits &amp; Activism&#x27;,
+    }
+
+#assigning category names
+v_stat[&#x27;CategoryName&#x27;] = v_stat[&#x27;categoryId&#x27;].map(category_names)</code></pre></details><details class="code-cell"><summary>Code cell 95</summary><pre><code>#total view count per category
+plt.figure(figsize=(12, 6))
+sns.barplot(x=&#x27;CategoryName&#x27;, y=&#x27;viewCount&#x27;, data=v_stat, estimator=sum, errorbar=None, 
+            order=filtered_v_stat.groupby(&#x27;CategoryName&#x27;)[&#x27;viewCount&#x27;].sum().sort_values(ascending=False).index)
+
+plt.title(&#x27;Total View Count per Category&#x27;)
+plt.xlabel(&#x27;Category&#x27;)
+plt.ylabel(&#x27;Total View Count&#x27;)
+plt.xticks(rotation=90)
+plt.show()
+</code></pre></details><figure><a href="chart-08.webp" target="_blank" rel="noopener noreferrer"><img src="chart-08.webp" alt="YouTube statistics analysis — output chart 8, following code cell 95" width="1001" height="682" loading="lazy"></a><figcaption>Output 8 · Code cell 95 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>
+<p>The graph clearly shows that <strong>Education</strong> is the most popular category by a large margin, with over <strong>100 million total views</strong>.</p>
+</li>
+<li>
+<p><strong>News &amp; Politics</strong> also attracts a significant number of views, followed by <strong>Science &amp; Technology</strong>.</p>
+</li>
+<li>
+<p>Categories like <strong>People &amp; Blogs</strong> and <strong>Entertainment</strong> have moderate viewer count.</p>
+</li>
+<li>
+<p><strong>Howto &amp; Style</strong> and <strong>Nonprofits &amp; Activism</strong> have the least viewer count.</p>
+</li>
+</ul></section><section class="notebook-note"><h4 id="yearly-number-of-views-per-category">Yearly Number of Views per Category</h4></section><details class="code-cell"><summary>Code cell 98</summary><pre><code>#setup groupby and number of videos
+views_per_year = v_stat.groupby([&#x27;year&#x27;, &#x27;CategoryName&#x27;])[&#x27;viewCount&#x27;].sum().reset_index(name=&#x27;Total_View_Count&#x27;)
+
+#set index to year and columns to category name and using pivot
+views_per_year_category = views_per_year.pivot(index=&#x27;year&#x27;, columns=&#x27;CategoryName&#x27;, values=&#x27;Total_View_Count&#x27;)
+
+#plot the bar chart
+views_per_year_category.plot(kind=&#x27;barh&#x27;, stacked=True, figsize=(10, 7), colormap=&#x27;tab10&#x27;)
+
+plt.title(&#x27;Yearly Total View Count per Category&#x27;)
+plt.xlabel(&#x27;Total View Count&#x27;)
+plt.ylabel(&#x27;Year&#x27;)
+plt.legend(title=&#x27;Category Name&#x27;, bbox_to_anchor=(1.05, 1), loc=&#x27;upper left&#x27;)
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-09.webp" target="_blank" rel="noopener noreferrer"><img src="chart-09.webp" alt="YouTube statistics analysis — output chart 9, following code cell 98" width="984" height="690" loading="lazy"></a><figcaption>Output 9 · Code cell 98 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>
+<p><strong>Education</strong> consistently has the highest total view count across all years, making it the most popular category.</p>
+</li>
+<li>
+<p>The total <strong>view count fluctuates over the years</strong>, with the highest in 2019 and a general increase from 2020 to 2022.</p>
+</li>
+<li>
+<p>Other categories like <strong>News &amp; Politics, Science &amp; Technology,</strong> and <strong>Entertainment</strong> also have contributions.</p>
+</li>
+<li>
+<p>The total view count in 2024 is notably low, likely due to incomplete data for the year.</p>
+</li>
+</ul></section><section class="notebook-note"><h3 id="relationship-analysis">Relationship Analysis</h3></section><section class="notebook-note"><h2 id="relationship-between-numerical-features">relationship between numerical features</h2></section><details class="code-cell"><summary>Code cell 102</summary><pre><code>#relationship between numerical features to view count
+sns.pairplot(v_stat.select_dtypes(&#x27;number&#x27;), diag_kind=&#x27;kde&#x27;, hue=&#x27;viewCount&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-10.webp" target="_blank" rel="noopener noreferrer"><img src="chart-10.webp" alt="YouTube statistics analysis — output chart 10, following code cell 102" width="1858" height="1721" loading="lazy"></a><figcaption>Output 10 · Code cell 102 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h4 id="correlation-between-numerical-features">Correlation between numerical features</h4></section><details class="code-cell"><summary>Code cell 104</summary><pre><code>#correlation between numerical features
+v_stat[numerical_columns].corr()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>viewCount</th>
+      <th>likeCount</th>
+      <th>commentCount</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>title_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>viewCount</th>
+      <td>1.000000</td>
+      <td>0.636386</td>
+      <td>0.886156</td>
+      <td>-0.139701</td>
+      <td>0.094600</td>
+      <td>-0.070259</td>
+      <td>-0.066117</td>
+    </tr>
+    <tr>
+      <th>likeCount</th>
+      <td>0.636386</td>
+      <td>1.000000</td>
+      <td>0.517025</td>
+      <td>-0.079077</td>
+      <td>0.104410</td>
+      <td>-0.074997</td>
+      <td>-0.100447</td>
+    </tr>
+    <tr>
+      <th>commentCount</th>
+      <td>0.886156</td>
+      <td>0.517025</td>
+      <td>1.000000</td>
+      <td>-0.135958</td>
+      <td>0.095895</td>
+      <td>-0.059295</td>
+      <td>-0.093168</td>
+    </tr>
+    <tr>
+      <th>year</th>
+      <td>-0.139701</td>
+      <td>-0.079077</td>
+      <td>-0.135958</td>
+      <td>1.000000</td>
+      <td>-0.226906</td>
+      <td>0.078575</td>
+      <td>-0.112879</td>
+    </tr>
+    <tr>
+      <th>month</th>
+      <td>0.094600</td>
+      <td>0.104410</td>
+      <td>0.095895</td>
+      <td>-0.226906</td>
+      <td>1.000000</td>
+      <td>0.019350</td>
+      <td>-0.006239</td>
+    </tr>
+    <tr>
+      <th>day</th>
+      <td>-0.070259</td>
+      <td>-0.074997</td>
+      <td>-0.059295</td>
+      <td>0.078575</td>
+      <td>0.019350</td>
+      <td>1.000000</td>
+      <td>-0.012612</td>
+    </tr>
+    <tr>
+      <th>title_count</th>
+      <td>-0.066117</td>
+      <td>-0.100447</td>
+      <td>-0.093168</td>
+      <td>-0.112879</td>
+      <td>-0.006239</td>
+      <td>-0.012612</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><p>Finding correlation values in decending order</p></section><details class="code-cell"><summary>Code cell 106</summary><pre><code>corr_matrix = v_stat[numerical_columns].corr()
+
+# Unstack the correlation matrix - each row of information into columns
+corr_unstacked = corr_matrix.unstack()
+
+# Convert the unstacked correlation series to a DataFrame
+corr_df = pd.DataFrame(corr_unstacked, columns=[&#x27;correlation&#x27;])
+
+# Reset the index to make it easier to filter
+corr_df.reset_index(inplace=True)
+
+# Remove self-correlations by filtering out rows where &#x27;level_0&#x27; == &#x27;level_1&#x27;
+corr_df = corr_df[corr_df[&#x27;level_0&#x27;] != corr_df[&#x27;level_1&#x27;]]
+
+# Sort the DataFrame by correlation in descending order
+corr_df_sorted = corr_df.sort_values(by=&#x27;correlation&#x27;, ascending=False)
+
+# Display the top highest correlation pairs
+print(f&#x27;{corr_df_sorted.head(10)}\n&#x27;)</code></pre></details><section class="notebook-note"><h4 id="specific-correlations">Specific Correlations</h4></section><section class="notebook-note"><p>uncomment for removal of outliers</p></section><details class="code-cell"><summary>Code cell 109</summary><pre><code>view_count_filtered = v_stat[&#x27;viewCount&#x27;].quantile(0.75)
+like_count_filtered = v_stat[&#x27;likeCount&#x27;].quantile(0.75)
+commnet_count_filtered = v_stat[&#x27;commentCount&#x27;].quantile(0.75)
+
+filtered_v_stat = v_stat[(v_stat[&#x27;viewCount&#x27;] &lt;= view_count_filtered) &amp; 
+                         (v_stat[&#x27;likeCount&#x27;] &lt;= like_count_filtered) &amp; 
+                         (v_stat[&#x27;commentCount&#x27;] &lt;= commnet_count_filtered)
+                         ]
+</code></pre></details><details class="code-cell"><summary>Code cell 110</summary><pre><code>plt.figure(figsize=(10, 6))
+sns.scatterplot(x=&#x27;viewCount&#x27;, y=&#x27;commentCount&#x27;, data=filtered_v_stat, color=&#x27;blue&#x27;, alpha=0.5)
+plt.title(&#x27;View Count vs Comment Count&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-11.webp" target="_blank" rel="noopener noreferrer"><img src="chart-11.webp" alt="YouTube statistics analysis — output chart 11, following code cell 110" width="850" height="545" loading="lazy"></a><figcaption>Output 11 · Code cell 110 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>
+<p>A positive correlation is observed here, where videos with more views tend to have more comments.</p>
+</li>
+<li>
+<p>Most data points are clustered at lower view and comment counts.</p>
+</li>
+<li>
+<p>A few videos have high view counts with varying comment counts, indicating different levels of viewer engagement.</p>
+</li>
+</ul></section><details class="code-cell"><summary>Code cell 112</summary><pre><code>plt.figure(figsize=(10, 6))
+sns.scatterplot(x=&#x27;viewCount&#x27;, y=&#x27;likeCount&#x27;, data=filtered_v_stat, color=&#x27;green&#x27;, alpha=0.5)
+plt.title(&#x27;View Count vs Like Count&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-12.webp" target="_blank" rel="noopener noreferrer"><img src="chart-12.webp" alt="YouTube statistics analysis — output chart 12, following code cell 112" width="859" height="545" loading="lazy"></a><figcaption>Output 12 · Code cell 112 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>
+<p>There is a positive correlation between view count and like count, indicating that videos with more views generally receive more likes.</p>
+</li>
+<li>
+<p>The data points are concentrated at lower values, with some outliers having significantly higher like counts.</p>
+</li>
+<li>
+<p>A few videos with high view counts but moderate like counts suggest variability in engagement.</p>
+</li>
+</ul></section><details class="code-cell"><summary>Code cell 114</summary><pre><code>plt.figure(figsize=(10, 6))
+sns.scatterplot(x=&#x27;commentCount&#x27;, y=&#x27;likeCount&#x27;, data=filtered_v_stat, color=&#x27;purple&#x27;, alpha=0.5)
+plt.title(&#x27;Comment Count vs Like Count&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-13.webp" target="_blank" rel="noopener noreferrer"><img src="chart-13.webp" alt="YouTube statistics analysis — output chart 13, following code cell 114" width="859" height="545" loading="lazy"></a><figcaption>Output 13 · Code cell 114 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>
+<p>There is a positive correlation between comment count and like count, suggesting that videos with more comments also receive more likes.</p>
+</li>
+<li>
+<p>The majority of data points are concentrated at lower values.</p>
+</li>
+<li>
+<p>The spread of data points indicates that while most videos have low comment and like counts, there are notable exceptions with high engagement.</p>
+</li>
+</ul></section><section class="notebook-note"><h3 id="trend-investigation">Trend Investigation</h3></section><section class="notebook-note"><p>Setting up groupby's</p></section><details class="code-cell"><summary>Code cell 118</summary><pre><code>views_per_year = v_stat.groupby(&#x27;year&#x27;)[&#x27;viewCount&#x27;].sum().reset_index(name=&#x27;y_view_count&#x27;)
+views_per_month = v_stat.groupby([&#x27;year&#x27;, &#x27;month&#x27;])[&#x27;viewCount&#x27;].sum().reset_index(name=&#x27;m_view_count&#x27;)
+
+#checking
+views_per_year</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>year</th>
+      <th>y_view_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2019</td>
+      <td>65250326</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2020</td>
+      <td>25859283</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2021</td>
+      <td>43190410</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2022</td>
+      <td>27252555</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2023</td>
+      <td>17484316</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2024</td>
+      <td>538605</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><h3 id="bar-graphs">Bar Graphs</h3></section><section class="notebook-note"><h4 id="yearly-view-count-trend-of-data-science-and-ai-related-videos">Yearly View Count Trend of Data Science and AI-related Videos</h4></section><details class="code-cell"><summary>Code cell 121</summary><pre><code>plt.figure(figsize=(10, 6))
+sns.barplot(x=&#x27;year&#x27;, y=&#x27;y_view_count&#x27;, data=views_per_year)
+plt.title(&#x27;Yearly View Count Trend of Data Science and AI-related Videos&#x27;)
+plt.xlabel(&#x27;Year&#x27;)
+plt.ylabel(&#x27;Number of Views&#x27;)
+plt.show()</code></pre></details><figure><a href="chart-14.webp" target="_blank" rel="noopener noreferrer"><img src="chart-14.webp" alt="YouTube statistics analysis — output chart 14, following code cell 121" width="833" height="545" loading="lazy"></a><figcaption>Output 14 · Code cell 121 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>
+<p><strong>Peak Year:</strong> 2019 was the peak year with the highest number of views for Data Science and AI-related videos.</p>
+</li>
+<li>
+<p><strong>Fluctuations:</strong> There is a noticeable fluctuation in the number of views over the years. After the peak in 2019, views dropped in 2020, rose again      in 2021, and then started to decline.</p>
+</li>
+<li>
+<p><strong>Recent Trend:</strong> The most recent year, 2024, shows a dramatic decrease in views compared to previous years.</p>
+<ul>
+<li><strong>Possible Analysis:</strong>
+    This could be due to various factors like changes in content popularity, shifts in viewer interest, external influences affecting viewership or
+    likely due to incomplete data for the year.</li>
+</ul>
+</li>
+</ul></section><section class="notebook-note"><h4 id="monthly-view-count-trend-of-data-science-and-ai-related-videos">Monthly View Count Trend of Data Science and AI-related Videos</h4></section><details class="code-cell"><summary>Code cell 124</summary><pre><code>plt.figure(figsize=(14, 7))
+# used this to group by and plot the data otherwise I had to create a new year_month column.
+views_per_month = v_stat.groupby([&#x27;year&#x27;, &#x27;month&#x27;])[&#x27;viewCount&#x27;].sum() 
+views_per_month.plot(kind=&#x27;bar&#x27;)
+plt.title(&#x27;Monthly View Count Trend of Data Science and AI-related Videos&#x27;)
+plt.xlabel(&#x27;Year-Month&#x27;)
+plt.ylabel(&#x27;Number of Views&#x27;)
+plt.show()
+# views_per_month  #for checking the output
+</code></pre></details><figure><a href="chart-15.webp" target="_blank" rel="noopener noreferrer"><img src="chart-15.webp" alt="YouTube statistics analysis — output chart 15, following code cell 124" width="1156" height="681" loading="lazy"></a><figcaption>Output 15 · Code cell 124 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>The chart shows the monthly view count trend for data science and AI-related videos from 2019 to 2024.</p>
+<ul>
+<li>
+<p><strong>High Peaks</strong>: Significant spikes in viewer count throughout the months especially in December 2019</p>
+</li>
+<li>
+<p><strong>General Fluctuations:</strong> Viewercount varies month-to-month with notable peaks in December 2019 and December 2021, indicating periodic increases in interest.</p>
+</li>
+<li>
+<p><strong>Low Activity:</strong> Several months show low view counts, especially towards the end of 2023 and into 2024.</p>
+</li>
+</ul></section><section class="notebook-note"><h3 id="time-series-graphs">Time Series Graphs</h3></section><section class="notebook-note"><h4 id="yearly-view-count-trend-of-data-science-and-ai-related-videos-2">Yearly View Count Trend of Data Science and AI-related Videos</h4></section><details class="code-cell"><summary>Code cell 128</summary><pre><code>plt.figure(figsize=(14, 7))
+sns.lineplot(x=&#x27;year&#x27;, y=&#x27;y_view_count&#x27;, data=views_per_year, marker=&#x27;o&#x27;, linewidth=2, markersize=12)
+plt.title(&#x27;Yearly View Count Trend of Data Science and AI-related Videos&#x27;)
+plt.xlabel(&#x27;Years&#x27;)
+plt.ylabel(&#x27;Number of Views&#x27;)
+plt.show()
+#views_per_year</code></pre></details><figure><a href="chart-16.webp" target="_blank" rel="noopener noreferrer"><img src="chart-16.webp" alt="YouTube statistics analysis — output chart 16, following code cell 128" width="1143" height="622" loading="lazy"></a><figcaption>Output 16 · Code cell 128 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li><strong>Initial High Peak</strong>: 2019 witnessed the highest view count, suggesting a peak interest in data science and AI-related content during that year.</li>
+<li><strong>Subsequent Decline:</strong> There was a significant drop in view counts in 2020, followed by a recovery in 2021, although not reaching the heights of 2019.</li>
+<li><strong>Steady Decline:</strong> From 2021 onwards, there is a consistent downward trend in the view counts, indicating a gradual decline in interest.</li>
+</ul>
+<p>The overall declining trend could be attributed to several factors, including market saturation, changes in viewer interests, or the emergence of new topics that overshadow data science AI.</p></section><section class="notebook-note"><h4 id="monthly-view-count-trend-of-data-science-and-ai-related-videos-2">Monthly View Count Trend of Data Science and AI-related Videos</h4></section><details class="code-cell"><summary>Code cell 131</summary><pre><code># Each year in a separate plot
+views_per_month = v_stat.groupby([&#x27;year&#x27;, &#x27;month&#x27;])[&#x27;viewCount&#x27;].sum().reset_index(name=&#x27;m_view_count&#x27;)
+
+g = sns.FacetGrid(views_per_month, col=&quot;year&quot;, col_wrap=2, height=3, aspect=1.5, palette=&#x27;tab10&#x27;) #setting up the grids
+g.map(sns.lineplot, &quot;month&quot;, &quot;m_view_count&quot;, marker=&quot;o&quot;)
+
+#setting up labels and titles
+g.set_titles(&quot;{col_name}&quot;)
+g.set_axis_labels(&quot;Months&quot;, &quot;Number of Views&quot;)
+g.fig.suptitle(&#x27;Monthly View Count Trend of Data Science and AI-related Videos&#x27;, y=1.10)# Title and location of title.
+plt.show()
+</code></pre></details><figure><a href="chart-17.webp" target="_blank" rel="noopener noreferrer"><img src="chart-17.webp" alt="YouTube statistics analysis — output chart 17, following code cell 131" width="889" height="995" loading="lazy"></a><figcaption>Output 17 · Code cell 131 · Open image to enlarge</figcaption></figure><section class="notebook-note"><ul>
+<li>The overall trend from 2019 to 2024 shows a decline in interest for data science and AI-related videos. The initial high in 2019 is not replicated in subsequent years.</li>
+<li>There are no consistent seasonal patterns except for the notable December spike in 2019. Other years show random fluctuations.</li>
+</ul></section><section class="notebook-note"><h4 id="yearly-trend-of-view-like-and-comment-counts-of-data-science-and-ai-related-videos-time-series">Yearly Trend of View, Like, and Comment Counts of Data Science and AI-related Videos (Time Series)</h4></section><details class="code-cell"><summary>Code cell 134</summary><pre><code>#importing funcformatter for changing unit of y axis for view count
+from matplotlib.ticker import FuncFormatter
+
+monthly_stats = v_stat.groupby([&#x27;year&#x27;, &#x27;month&#x27;]).agg({
+    &#x27;viewCount&#x27;: &#x27;sum&#x27;,
+    &#x27;likeCount&#x27;: &#x27;sum&#x27;,
+    &#x27;commentCount&#x27;: &#x27;sum&#x27;
+}).reset_index()
+
+#it takes argument and divides by 1000000 and returns an integer
+formatter = FuncFormatter(lambda y, _: int(y / 1000000))
+
+# Plot the trends
+plt.figure(figsize=(14, 10))
+
+# View Count
+plt.subplot(3, 1, 1)
+sns.lineplot(data=monthly_stats, x=&#x27;year&#x27;, y=&#x27;viewCount&#x27;, errorbar=None, marker=&#x27;o&#x27;)
+plt.gca().yaxis.set_major_formatter(formatter) # formatter applied to y axis
+plt.title(&#x27;Yearly View Count Trend&#x27;)
+plt.xlabel(&#x27;Year&#x27;)
+plt.ylabel(&#x27;View Count (in Millions)&#x27;)
+
+# Like Count
+plt.subplot(3, 1, 2)
+sns.lineplot(data=monthly_stats, x=&#x27;year&#x27;, y=&#x27;likeCount&#x27;, errorbar=None, marker=&#x27;o&#x27;)
+plt.title(&#x27;Yearly Like Count Trend&#x27;)
+plt.xlabel(&#x27;Year&#x27;)
+plt.ylabel(&#x27;Like Count&#x27;)
+
+# Comment Count
+plt.subplot(3, 1, 3)
+sns.lineplot(data=monthly_stats, x=&#x27;year&#x27;, y=&#x27;commentCount&#x27;, errorbar=None, marker=&#x27;o&#x27;)
+plt.title(&#x27;Yearly Comment Count Trend&#x27;)
+plt.xlabel(&#x27;Year&#x27;)
+plt.ylabel(&#x27;Comment Count&#x27;)
+
+plt.tight_layout()
+plt.show()</code></pre></details><figure><a href="chart-18.webp" target="_blank" rel="noopener noreferrer"><img src="chart-18.webp" alt="YouTube statistics analysis — output chart 18, following code cell 134" width="1389" height="989" loading="lazy"></a><figcaption>Output 18 · Code cell 134 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p><strong>Yearly View Count</strong>
+    - The view count starts at a high in 2019, drops significantly in 2020, and then shows a gradual recovery from 2021 to 2023 before declining again in 2024.
+    - Conclusion: The view counts suggest some fluctuations with no consistent increasing trend.</p>
+<p><strong>Yearly Like Count Trend</strong>
+    - The like count also starts high in 2019, drops in 2020, lower peaks in 2021 &amp; 2022, and then shows a declining trend through 2024.
+    - Conclusion: Similar to the view counts, the like counts suggest some fluctuations with no consistent increasing trend.</p>
+<p><strong>Yearly Comment Count Trend</strong>
+    - The comment count is highest in 2019, drops significantly in 2020, shows some recovery in the subsequent years, but overall remains lower than the 2019 peak.
+    - Conclusion: The trends in comment counts further support some fluctuations with no consistent increasing trend.</p></section><section class="notebook-note"><ul>
+<li>The stacked bar plot shows the yearly distribution of videos across categories.</li>
+<li>The "Education" category consistently has the highest number of videos each year, with variations in other categories.</li>
+</ul></section><section class="notebook-note"><h2 id="5-hypothesis-testing">5. <strong>Hypothesis Testing</strong></h2></section><section class="notebook-note"><p><strong>Null Hypothesis (H0):</strong> The mean view count/like count/comment count is the same across all years.</p>
+<p><strong>Alternative Hypothesis (H1):</strong> At least one year's mean view count/like count/comment count is different from the others.</p></section><section class="notebook-note"><h3 id="statistical-summary">Statistical Summary</h3></section><details class="code-cell"><summary>Code cell 140</summary><pre><code>v_stat.describe()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>categoryId</th>
+      <th>viewCount</th>
+      <th>likeCount</th>
+      <th>commentCount</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>title_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>567.000000</td>
+      <td>5.670000e+02</td>
+      <td>567.000000</td>
+      <td>567.000000</td>
+      <td>567.000000</td>
+      <td>567.000000</td>
+      <td>567.000000</td>
+      <td>567.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>26.560847</td>
+      <td>3.167116e+05</td>
+      <td>7202.723104</td>
+      <td>266.996473</td>
+      <td>2021.447972</td>
+      <td>6.403880</td>
+      <td>16.135802</td>
+      <td>12.186949</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>2.223251</td>
+      <td>1.452242e+06</td>
+      <td>32899.929048</td>
+      <td>1287.553619</td>
+      <td>1.506297</td>
+      <td>3.156269</td>
+      <td>8.068451</td>
+      <td>3.392515</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>1.000000</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2019.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>2.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>27.000000</td>
+      <td>4.548500e+03</td>
+      <td>79.000000</td>
+      <td>4.000000</td>
+      <td>2020.000000</td>
+      <td>5.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>27.000000</td>
+      <td>1.538300e+04</td>
+      <td>378.000000</td>
+      <td>25.000000</td>
+      <td>2021.000000</td>
+      <td>6.000000</td>
+      <td>17.000000</td>
+      <td>13.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>27.000000</td>
+      <td>1.033835e+05</td>
+      <td>2182.000000</td>
+      <td>109.500000</td>
+      <td>2022.000000</td>
+      <td>9.000000</td>
+      <td>22.000000</td>
+      <td>15.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>29.000000</td>
+      <td>2.509365e+07</td>
+      <td>606153.000000</td>
+      <td>20613.000000</td>
+      <td>2024.000000</td>
+      <td>12.000000</td>
+      <td>31.000000</td>
+      <td>22.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><h3 id="testing-skewness-and-kurtosis">Testing Skewness and Kurtosis</h3></section><section class="notebook-note"><ul>
+<li>
+<p><strong>Skewness</strong> - Skewness is a measure of the asymmetry of a distribution.</p>
+<ul>
+<li>Positive Skewness: The right tail (higher values) is longer or fatter than the left tail</li>
+<li>Negative Skewness: The left tail (lower values) is longer or fatter than the right tail.</li>
+</ul>
+</li>
+<li>
+<p><strong>Kurtosis</strong> - Kurtosis is a measure of the "tailedness" of a distribution.</p>
+<ul>
+<li>High Kurtosis: Tails are fatter and higher than those of a normal distribution, Indicates a higher likelihood of extreme values</li>
+<li>Low Kurtosis: Tails are thinner and lower than those of a normal distribution, Indicates fewer and less extreme outliers.</li>
+<li>Normal Kurtosis: Tails are similar to those of a normal distribution.</li>
+</ul>
+</li>
+</ul></section><details class="code-cell"><summary>Code cell 143</summary><pre><code># Compute skewness and kurtosis
+skewness = v_stat[[&#x27;viewCount&#x27;, &#x27;likeCount&#x27;, &#x27;commentCount&#x27;]].skew()
+kurtosis = v_stat[[&#x27;viewCount&#x27;, &#x27;likeCount&#x27;, &#x27;commentCount&#x27;]].kurtosis()
+
+# Combine skewness and kurtosis into one DataFrame
+shape_statistics = pd.DataFrame({&#x27;Skewness&#x27;: skewness, &#x27;Kurtosis&#x27;: kurtosis})
+shape_statistics</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Skewness</th>
+      <th>Kurtosis</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>viewCount</th>
+      <td>11.094235</td>
+      <td>162.125599</td>
+    </tr>
+    <tr>
+      <th>likeCount</th>
+      <td>12.315096</td>
+      <td>201.562361</td>
+    </tr>
+    <tr>
+      <th>commentCount</th>
+      <td>10.680592</td>
+      <td>137.645047</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"><p><strong>Generally</strong>
+- <strong>Kurtosis &gt; 3</strong>, indicating higher likelihood of extreme values (outliers).
+- <strong>Kurtosis around 3</strong>, indicating a normal distribution.</p>
+<ul>
+<li><strong>Positive Skewness:</strong> The right tail is longer or fatter, indicating that the bulk of the values lie to the left of the mean. This is also called right-skewed.</li>
+<li><strong>Negative Skewness:</strong> The left tail is longer or fatter, indicating that the bulk of the values lie to the right of the mean. This is also called left-skewed.</li>
+</ul></section><section class="notebook-note"><h3 id="anova-analysis-of-variance">ANOVA (Analysis of Variance)</h3></section><section class="notebook-note"><p>One-way ANOVA (Analysis of Variance) is a statistical method used to determine whether there are any statistically significant differences <strong>between the means of three or more independent (unrelated) groups. It essentially extends the t-test,</strong> which compares the means of two groups, to more than two groups.</p>
+<p>Knowing, </p>
+<p><strong>F</strong>= <strong>Within-group Variance / Between-group Variance</strong></p>
+<p><strong>p-value</strong> indicates the <strong>probability that the observed differences between group means occurred by chance</strong>.
+​</p></section><section class="notebook-note"><p>Also as discovered from the statistical summary and Skewness and Kurtosis tests there seems to be evidence of significant
+outliers within 'viewCount', 'likeCount' and 'commentCount'</p>
+<p>in order to reduce the outliers I have filtered the column data to <strong>75% quantile</strong> as the largest jump is observed between 75 and max.</p></section><details class="code-cell"><summary>Code cell 148</summary><pre><code>#filtering the dataset to remove outliers for the purposed of distribution
+
+view_count_filtered = v_stat[&#x27;viewCount&#x27;].quantile(0.75)
+like_count_filtered = v_stat[&#x27;likeCount&#x27;].quantile(0.75)
+commnet_count_filtered = v_stat[&#x27;commentCount&#x27;].quantile(0.75)
+
+filtered_v_stat = v_stat[(v_stat[&#x27;viewCount&#x27;] &lt;= view_count_filtered) &amp; 
+                         (v_stat[&#x27;likeCount&#x27;] &lt;= like_count_filtered) &amp; 
+                         (v_stat[&#x27;commentCount&#x27;] &lt;= commnet_count_filtered)
+                         ]</code></pre></details><section class="notebook-note"><p>ANOVA testing for 'viewCount'</p></section><details class="code-cell"><summary>Code cell 150</summary><pre><code>import scipy.stats as stats
+
+# Perform ANOVA to test the difference in mean view count between different years
+f_stat, p_val = stats.f_oneway(
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2019][&#x27;viewCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2020][&#x27;viewCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2021][&#x27;viewCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2022][&#x27;viewCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2023][&#x27;viewCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2024][&#x27;viewCount&#x27;]
+)
+
+print(f&#x27;F_Statistic: {f_stat}, P-Value: {p_val}&#x27;)
+
+if p_val &lt; 0.05:
+    print(&#x27;The difference in mean view count is statistically significant.&#x27;)
+else:
+    print(&#x27;The difference in mean view count is not statistically significant.&#x27;)
+</code></pre></details><section class="notebook-note"><ul>
+<li>
+<p>The F-statistic is 15.54, which is quite high, indicating a large ratio of between-group variance to within-group variance.</p>
+<ul>
+<li>a large difference between the mean view counts of the different years compared to the variation within each year.</li>
+</ul>
+</li>
+<li>
+<p>The p-value is extremely low (essentially zero), much less than the significance level of 0.05.</p>
+<ul>
+<li>meaning the differences in view counts between years are not due to chance.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Conclusion</strong>: The difference in mean view count between the years is statistically significant.</p></section><section class="notebook-note"><p>ANOVA testing for 'likeCount'</p></section><details class="code-cell"><summary>Code cell 153</summary><pre><code># Perform ANOVA to test the difference in mean like count between different years
+f_stat, p_val = stats.f_oneway(
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2019][&#x27;likeCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2020][&#x27;likeCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2021][&#x27;likeCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2022][&#x27;likeCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2023][&#x27;likeCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2024][&#x27;likeCount&#x27;]
+)
+
+print(f&#x27;F_Statistic: {f_stat}, P-Value: {p_val}&#x27;)
+
+if p_val &lt; 0.05:
+    print(&#x27;The difference in mean like count is statistically significant.&#x27;)
+else:
+    print(&#x27;The difference in mean like count is not statistically significant.&#x27;)</code></pre></details><section class="notebook-note"><ul>
+<li>The F-statistic is 12.51, which indicates a significant ratio of between-group variance to within-group variance.<ul>
+<li>a large difference between the mean like counts of the different years compared to the variation within each year.</li>
+</ul>
+</li>
+<li>The p-value is very low (essentially zero), much less than the significance level of 0.05.<ul>
+<li>meaning the differences in like counts between years are not due to chance.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Conclusion</strong>: The difference in mean like count between the years is statistically significant.</p></section><section class="notebook-note"><p>ANOVA testing for 'commentCount'</p></section><details class="code-cell"><summary>Code cell 156</summary><pre><code># Perform ANOVA to test the difference in mean comment count between different years
+f_stat, p_val = stats.f_oneway(
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2019][&#x27;commentCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2020][&#x27;commentCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2021][&#x27;commentCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2022][&#x27;commentCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2023][&#x27;commentCount&#x27;],
+    filtered_v_stat[filtered_v_stat[&#x27;year&#x27;] == 2024][&#x27;commentCount&#x27;]
+)
+
+print(f&#x27;F_Statistic: {f_stat}, P-Value: {p_val}&#x27;)
+
+if p_val &lt; 0.05:
+    print(&#x27;The difference in mean comment count is statistically significant.&#x27;)
+else:
+    print(&#x27;The difference in mean comment count is not statistically significant.&#x27;)</code></pre></details><section class="notebook-note"><ul>
+<li>
+<p>The F-statistic is 13.61, indicating a substantial ratio of between-group variance to within-group variance.</p>
+<ul>
+<li>a large difference between the mean comment counts of the different years compared to the variation within each year.</li>
+</ul>
+</li>
+<li>
+<p>The p-value is extremely low (essentially zero), much less than the significance level of 0.05.</p>
+<ul>
+<li>meaning the differences in comment counts between years are not due to chance.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Conclusion:</strong> The difference in mean comment count between the years is statistically significant.</p></section><section class="notebook-note"><h2 id="6-conclusion">6. <strong>Conclusion</strong></h2></section><section class="notebook-note"><p><strong>Conclusion:</strong></p>
+<p>Based on the results of the ANOVA tests, we can conclude that there have been statistically significant changes in the view counts, like counts, and comment counts of YouTube videos related to data science and AI over recent years. This indicates that the trend in data science and AI-related videos on YouTube has changed over the years.</p>
+<p><strong>Further investigation points:</strong></p>
+<p>There has been an overall decrease in trend.
+- The overall decrease in trend could be from many different factors
+- e.g In 2019, YouTube’s algorithm heavily promoted older content, which helped videos gain traction over time. This increased overall view counts as older, already popular videos continued to attract views​.
+- further investigations required to understand why there might be a decrease in trend overall.
+- more data from 2024 could provide more complete insight.</p></section><section class="notebook-note"><h2 id="to-end-with">To End with....</h2></section><details class="code-cell"><summary>Code cell 161</summary><pre><code># from wordcloud import WordCloud, STOPWORDS
+
+
+# # Sample DataFrame creation for context
+# # video_stats = pd.DataFrame({&#x27;title&#x27;: [&#x27;Google Launched 5 FREE Data Science Courses!&#x27;, &#x27;Machine Learning vs Data Science&#x27;, &#x27;10 ML algorithms in 45 minutes&#x27;, &#x27;Data Science Vs Machine Learning- Which is Better?&#x27;, &#x27;Books Recommendation system project&#x27;]})
+
+# # Define stopwords
+# stop_words = set(STOPWORDS)
+
+# # Remove stopwords from the titles
+# v_stat[&#x27;title_no_stopwords&#x27;] = v_stat[&#x27;title&#x27;].apply(lambda x: [item for item in str(x).split() if item.lower() not in stop_words])
+
+# # Combine all words into a single list
+# all_words = [word for title in v_stat[&#x27;title_no_stopwords&#x27;] for word in title]
+# all_words_str = &#x27; &#x27;.join(all_words)
+
+# # Function to plot word cloud
+# def plot_cloud(wordcloud):
+#     plt.figure(figsize=(20, 10))
+#     plt.imshow(wordcloud, interpolation=&#x27;bilinear&#x27;)
+#     plt.axis(&#x27;off&#x27;)
+
+# # Generate word cloud
+# wordcloud = WordCloud(width=2000, height=1000, random_state=1, background_color=&#x27;black&#x27;, colormap=&#x27;viridis&#x27;, collocations=False).generate(all_words_str)
+
+# # Plot the word cloud
+# plot_cloud(wordcloud)
+# plt.title(&#x27;Word Cloud for Video Titles&#x27;)
+# plt.show()</code></pre></details><figure><a href="chart-19.webp" target="_blank" rel="noopener noreferrer"><img src="chart-19.webp" alt="YouTube statistics analysis — output chart 19, following code cell 161" width="1560" height="810" loading="lazy"></a><figcaption>Output 19 · Code cell 161 · Open image to enlarge</figcaption></figure></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

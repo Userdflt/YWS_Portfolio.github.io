@@ -1,0 +1,567 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Materials machine learning models — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Materials machine learning models</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/NASA-Outgassing-DB/blob/7e84996e82441c5763006a75865551784c28e870/NASA_Outgassing_Materials_ML_Modelling.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="outgassing-materials-ml-modelling"><strong>Outgassing Materials ML Modelling</strong></h2></section><section class="notebook-note"><h2 id="contents">Contents</h2>
+<ol>
+<li>
+<p><strong>Define Goals</strong>    </p>
+</li>
+<li>
+<p><strong>Feature Engineering</strong></p>
+</li>
+<li>
+<p>Performance Score Calculation</p>
+</li>
+<li>
+<p><strong>Initial Model Selection and Implementation</strong></p>
+<ul>
+<li>Regression<ul>
+<li>Linear Regression</li>
+<li>Random Forest Regressor</li>
+</ul>
+</li>
+<li>
+<p>Regression Evaluation</p>
+<ul>
+<li>MSE / R Squared</li>
+<li>Ridge / Lasso</li>
+</ul>
+</li>
+<li>
+<p>Classification</p>
+<ul>
+<li>Logistic Regression</li>
+<li>SVM</li>
+</ul>
+</li>
+<li>Classification Evaluation<ul>
+<li>Accuracy</li>
+<li>Confusion Matrix</li>
+<li>Classification Report </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Best Model Selection</strong></p>
+</li>
+<li>
+<p><strong>Conclusion</strong></p>
+</li>
+</ol></section><section class="notebook-note"><h2 id="1-define-goals">1. <strong>Define Goals</strong></h2>
+<p><strong>Objective</strong>: 
+1. Develop a <code>linear regression model</code> to evaluate and predict material performance based on material quality metrics (TML, CVCM, WVR).</p>
+<ol>
+<li>Use <code>classification machine learning</code> to assess material reliability by predicting values for procurement and quality control.</li>
+</ol>
+<p><strong>Understanding Features</strong>: </p>
+<p><strong>CVCM</strong>: This parameter measures the percentage of volatile material that can condense on a cold surface during the outgassing test. <code>Materials with lower CVCM values are preferable</code> for high-vacuum environments, as they release fewer contaminants .</p>
+<p><strong>WVR</strong>: This measures the amount of water vapor a material absorbs back after being subjected to Total Mass Loss (TML) and Collected Volatile Condensable Materials (CVCM) tests. Materials with high WVR values tend to absorb more moisture, which can lead to issues like corrosion, degradation, or reduced structural integrity. <code>Materials with lower WVR values are preferable</code></p>
+<p><strong>TML</strong>: This measures the percentage of a material's mass lost during a test where the material is exposed to a high vacuum and temperature (125°C) for 24 hours. <code>A lower TML indicates better performance in vacuum environments.</code></p></section><section class="notebook-note"><p>Importing libraries</p></section><details class="code-cell"><summary>Code cell 5</summary><pre><code>import numpy as np
+import pandas as pd
+%matplotlib inline
+import matplotlib.pyplot as plt
+from sklearn import datasets
+import seaborn as sns
+from sklearn import svm
+from sklearn.datasets import make_blobs
+from scipy.stats import pearsonr
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import Ridge, Lasso
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import label_binarize
+from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import roc_curve, roc_auc_score, auc
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, classification_report</code></pre></details><section class="notebook-note"><p>reading CSV file</p></section><details class="code-cell"><summary>Code cell 7</summary><pre><code>data = pd.read_csv(r&#x27;C:\Users\GGPC\IoD_Mini_Projects\Mini_Project_2\project_NASA_Materials_Project\data\result\cleaned_Outgassing_Db_20240702.csv&#x27;)
+
+material_df = pd.DataFrame(data)</code></pre></details><details class="code-cell"><summary>Code cell 8</summary><pre><code>material_df.info()</code></pre></details><details class="code-cell"><summary>Code cell 9</summary><pre><code>material_df.head()</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>ID</th>
+      <th>Sample Material</th>
+      <th>MFR</th>
+      <th>TML</th>
+      <th>Category</th>
+      <th>CVCM</th>
+      <th>Space Code</th>
+      <th>WVR</th>
+      <th>Material Usage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>GSC33214</td>
+      <td>"V" MATERIAL IN CLICKBOND CB4023V, GLASS/PEI -...</td>
+      <td>CLB</td>
+      <td>0.37</td>
+      <td>12</td>
+      <td>0.00</td>
+      <td>1.0</td>
+      <td>0.35</td>
+      <td>CLICKBOND</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>GSC33217</td>
+      <td>"VC" MATERIAL IN CLICKBOND CB9257VC, CARBON FI...</td>
+      <td>CLB</td>
+      <td>0.52</td>
+      <td>12</td>
+      <td>0.00</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>CLICKBOND</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>GSC34174</td>
+      <td>0667 BLACK EPDM</td>
+      <td>PRS</td>
+      <td>0.65</td>
+      <td>15</td>
+      <td>0.13</td>
+      <td>1.0</td>
+      <td>0.07</td>
+      <td>ORING</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>GSC33829</td>
+      <td>1 INCH COPPER TAPE</td>
+      <td>MMM</td>
+      <td>0.24</td>
+      <td>16</td>
+      <td>0.08</td>
+      <td>1.0</td>
+      <td>0.01</td>
+      <td>TAPE</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>GSC33397</td>
+      <td>100 DUN-LAM, GE COATED BLACK KAPTON XC</td>
+      <td>DUN</td>
+      <td>0.89</td>
+      <td>6</td>
+      <td>0.01</td>
+      <td>1.0</td>
+      <td>0.67</td>
+      <td>COND BLANKET FILM</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="notebook-note"></section><section class="notebook-note"><h2 id="2-feature-engineering">2. <strong>Feature Engineering</strong></h2></section><section class="notebook-note"><p>Supplier performance evaluation
+- To calculate supplier performance, we will use the following metrics:
+    - <strong>TML</strong>: Total Material Loss 
+    - <strong>CVCM</strong>: Cumulative Variance in Cost of Materials
+    - <strong>WVR</strong>: Weighted Variance Ratio</p></section><details class="code-cell"><summary>Code cell 13</summary><pre><code>#performance score
+# #adding noise to make the dataset a bit more realistic scenario
+noise = np.random.normal(0.5, 0.15, size=material_df.shape[0])
+
+# Normalize the features to a common scale
+scaler = MinMaxScaler()
+material_df[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]] = scaler.fit_transform(material_df[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]])
+
+plt.hist(noise, bins=50)
+plt.title(&quot;Noise Distribution&quot;)
+plt.xlabel(&#x27;Noise Values&#x27;)
+plt.ylabel(&#x27;Number of Values&#x27;)
+plt.show()
+
+# Calculate the performance score
+material_df[&#x27;performance_score&#x27;] = (1 - material_df[&#x27;TML&#x27;]) + (1 - material_df[&#x27;CVCM&#x27;]) + (1 - material_df[&#x27;WVR&#x27;]) + noise
+
+#having a look at the distribution of the performance score
+material_df[&#x27;performance_score&#x27;].hist(bins=50, figsize=(10, 5))
+
+plt.xlabel(&#x27;Performance Score&#x27;)
+plt.ylabel(&#x27;Number of suppliers&#x27;)
+plt.show()
+</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="Materials machine learning models — output chart 1, following code cell 13" width="571" height="455" loading="lazy"></a><figcaption>Output 1 · Code cell 13 · Open image to enlarge</figcaption></figure><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="Materials machine learning models — output chart 2, following code cell 13" width="850" height="448" loading="lazy"></a><figcaption>Output 2 · Code cell 13 · Open image to enlarge</figcaption></figure><details class="code-cell"><summary>Code cell 14</summary><pre><code>#correlation matrix
+corr = material_df[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]].corr()
+
+sns.heatmap(corr, vmin=-1, vmax=1, center=0, cmap=&#x27;coolwarm&#x27;, annot=True)
+plt.show()</code></pre></details><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="Materials machine learning models — output chart 3, following code cell 14" width="535" height="418" loading="lazy"></a><figcaption>Output 3 · Code cell 14 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h2 id="3-initial-model-selection-and-implementation">3. <strong>Initial Model Selection and Implementation</strong></h2></section><section class="notebook-note"><h3 id="model-selection">Model Selection</h3>
+<ul>
+<li>
+<p><strong>Regression Models</strong>: To predict the supplier performance score</p>
+<ul>
+<li>Linear Regression</li>
+<li>Random Forest Regressor</li>
+</ul>
+</li>
+<li>
+<p><strong>Classification Models</strong>: To classify suppliers into performance categories (high, medium, low)</p>
+<ul>
+<li>Logistic Regression</li>
+<li>Random Forest Classifier</li>
+<li>Support Vector Machine (SVM)</li>
+</ul>
+</li>
+</ul></section><section class="notebook-note"><h3 id="linear-regression-model">Linear Regression Model</h3></section><details class="code-cell"><summary>Code cell 18</summary><pre><code>#feature and target
+X = material_df[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]]
+y = material_df[&#x27;performance_score&#x27;]</code></pre></details><details class="code-cell"><summary>Code cell 19</summary><pre><code>#splitting data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)</code></pre></details><details class="code-cell"><summary>Code cell 20</summary><pre><code>#scaling to maintain consistency with scaling
+scaler = MinMaxScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)</code></pre></details><details class="code-cell"><summary>Code cell 21</summary><pre><code># setting up model
+lr_model = LinearRegression()
+
+#fitting the training data to the model
+lr_model.fit(X_train_scaled, y_train)</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+<pre>LinearRegression()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b>
+
+
+&nbsp;&nbsp;LinearRegression<a href="https://scikit-learn.org/1.5/modules/generated/sklearn.linear_model.LinearRegression.html" target="_blank" rel="noopener noreferrer">?Documentation for LinearRegression</a>iFitted
+<pre>LinearRegression()</pre> </div><section class="notebook-note"><h4 id="predictions">Predictions</h4></section><details class="code-cell"><summary>Code cell 23</summary><pre><code># making predictions on test data
+y_pred = lr_model.predict(X_test_scaled)
+print(f&#x27;Mean Squared Error: {mean_squared_error(y_test, y_pred)}&#x27;)
+print(f&#x27;R_squared: {r2_score(y_test, y_pred)}&#x27;)</code></pre></details><section class="notebook-note"><h4 id="evaluation-for-linear-regression">Evaluation for linear regression</h4></section><section class="notebook-note"><h4 id="ridge-and-lasso-regularization">Ridge and Lasso Regularization</h4></section><details class="code-cell"><summary>Code cell 26</summary><pre><code>#model initialization
+ridge_model = Ridge(alpha=0.05)
+lasso_model = Lasso(alpha=0.05)
+
+#splitting for ridge and lasso models
+X_rnl = material_df[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]]
+y_rnl = material_df[&#x27;performance_score&#x27;]
+
+X_train_rnl, X_test_rnl, y_train_rnl, y_test_rnl = train_test_split(X_rnl, y_rnl, test_size=0.2, random_state=1)
+
+#to maintain consistency with scaling
+scaler = MinMaxScaler()
+X_train_rnl_scaled = scaler.fit_transform(X_train_rnl)
+X_test_rnl_scaled = scaler.transform(X_test_rnl)
+
+#model fitting
+ridge_model.fit(X_train_rnl_scaled, y_train_rnl)
+lasso_model.fit(X_train_rnl_scaled, y_train_rnl)
+#predictions
+ridge_predictions = ridge_model.predict(X_test_rnl_scaled)
+lasso_predictions = lasso_model.predict(X_test_rnl_scaled)
+#evaluating the mse
+ridge_mse = mean_squared_error(y_test_rnl, ridge_predictions)
+lasso_mse = mean_squared_error(y_test_rnl, lasso_predictions)
+#evaluating r_squared
+ridge_r2 = r2_score(y_test_rnl, ridge_predictions)
+lasso_r2 = r2_score(y_test_rnl, lasso_predictions)
+#printing the results
+print(f&#x27;Ridge MSE: {ridge_mse}&#x27;)
+print(f&#x27;Ridge R_squared: {ridge_r2}\n&#x27;)
+print(f&#x27;Lasso MSE: {lasso_mse}&#x27;)
+print(f&#x27;Lasso R_squared: {lasso_r2}&#x27;)
+
+</code></pre></details><section class="notebook-note"><p>Adjusting Regularization Parameters</p></section><details class="code-cell"><summary>Code cell 28</summary><pre><code>#looking for best parameters for ridge and lasso
+ridge_params = {&#x27;alpha&#x27;: [0.05, 0.1, 1, 10, 100]}
+ridge_model_gs = GridSearchCV(Ridge(), ridge_params, cv=10)
+ridge_model_gs.fit(X_train_rnl, y_train_rnl)
+#printing the results
+print(f&quot;Best Ridge alpha: {ridge_model_gs.best_params_[&#x27;alpha&#x27;]}&quot;)
+
+#testing the model with the best parameters
+ridge_predictions = ridge_model_gs.predict(X_test_rnl)
+ridge_mse = mean_squared_error(y_test_rnl, ridge_predictions)
+
+print(f&#x27;Ridge MSE: {ridge_mse}&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 29</summary><pre><code>lasso_params = {&#x27;alpha&#x27;: [0.05, 0.1, 1, 10, 100]}
+lasso_model = GridSearchCV(Lasso(), lasso_params, cv=10)
+lasso_model.fit(X_train, y_train)
+
+print(f&quot;Best Lasso alpha: {lasso_model.best_params_[&#x27;alpha&#x27;]}&quot;)
+
+lasso_predictions = lasso_model.predict(X_test)
+lasso_mse = mean_squared_error(y_test, lasso_predictions)
+lasso_r2 = r2_score(y_test, lasso_predictions)
+
+print(f&#x27;Lasso MSE: {lasso_mse}&#x27;)
+print(f&#x27;Lasso R_squared: {lasso_r2}&#x27;)</code></pre></details><section class="notebook-note"><p>Random Forest Regressor Model</p></section><details class="code-cell"><summary>Code cell 31</summary><pre><code>rf_model = RandomForestRegressor(n_estimators=10, random_state=1)
+rf_model.fit(X_train, y_train)</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+<pre>RandomForestRegressor(n_estimators=10, random_state=1)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b>
+
+
+&nbsp;&nbsp;RandomForestRegressor<a href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestRegressor.html" target="_blank" rel="noopener noreferrer">?Documentation for RandomForestRegressor</a>iFitted
+<pre>RandomForestRegressor(n_estimators=10, random_state=1)</pre> </div><details class="code-cell"><summary>Code cell 32</summary><pre><code>y_pred = rf_model.predict(X_test)
+print(f&#x27;Mean Squared Error: {mean_squared_error(y_test, y_pred)}&#x27;)
+print(f&#x27;R_squared: {r2_score(y_test, y_pred)}&#x27;)</code></pre></details><section class="notebook-note"><h4 id="thoughts">Thoughts</h4>
+<p>NOTE: lack of features and domain parameters / knowledge.</p></section><section class="notebook-note"><h2 id="classification-model">Classification Model</h2></section><section class="notebook-note"><p>Logistic Regression Model</p></section><details class="code-cell"><summary>Code cell 36</summary><pre><code># Performance Categories
+
+#Dividing the performance score into 3 categories: Low, Medium, High
+material_df[&#x27;performance_category&#x27;] = pd.qcut(material_df[&#x27;performance_score&#x27;], q=3, labels=[&#x27;Low&#x27;, &#x27;Medium&#x27;, &#x27;High&#x27;])
+material_df[&#x27;performance_category&#x27;]
+
+</code></pre></details><details class="text-output"><summary>Text output</summary><pre>0       Medium
+1       Medium
+2       Medium
+3       Medium
+4          Low
+         ...  
+7554       Low
+7555    Medium
+7556       Low
+7557       Low
+7558       Low
+Name: performance_category, Length: 7559, dtype: category
+Categories (3, object): [&#x27;Low&#x27; &lt; &#x27;Medium&#x27; &lt; &#x27;High&#x27;]</pre></details><details class="code-cell"><summary>Code cell 37</summary><pre><code># setting up feature and target
+X = material_df[[&#x27;TML&#x27;, &#x27;CVCM&#x27;, &#x27;WVR&#x27;]]
+y = material_df[&#x27;performance_category&#x27;]
+
+#encoding the target variable
+y = y.cat.codes
+
+#spliting data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+</code></pre></details><details class="code-cell"><summary>Code cell 38</summary><pre><code>#scaling to maintain consistency with scaling
+scaler = MinMaxScaler()
+X_train_Lr_scaled = scaler.fit_transform(X_train)
+X_test_Lr_scaled = scaler.transform(X_test)</code></pre></details><details class="code-cell"><summary>Code cell 39</summary><pre><code># Logistic Regression model
+logreg_model = LogisticRegression()
+logreg_model.fit(X_train_Lr_scaled, y_train)</code></pre></details><div class="table-output" tabindex="0" role="region" aria-label="Notebook table output">
+<pre>LogisticRegression()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b>
+
+
+&nbsp;&nbsp;LogisticRegression<a href="https://scikit-learn.org/1.5/modules/generated/sklearn.linear_model.LogisticRegression.html" target="_blank" rel="noopener noreferrer">?Documentation for LogisticRegression</a>iFitted
+<pre>LogisticRegression()</pre> </div><section class="notebook-note"><h4 id="predictions-2">Predictions</h4></section><details class="code-cell"><summary>Code cell 41</summary><pre><code>#predictions
+y_pred = logreg_model.predict(X_test_Lr_scaled)</code></pre></details><section class="notebook-note"><h4 id="evaluation">Evaluation</h4></section><details class="code-cell"><summary>Code cell 43</summary><pre><code># Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+class_report = classification_report(y_test, y_pred)
+
+print(f&quot;Accuracy: {accuracy}\n&quot;)
+print(f&quot;Confusion Matrix:\n{conf_matrix}\n&quot;)
+print(f&quot;Classification Report:\n{class_report}&quot;)</code></pre></details><section class="notebook-note"><p>Here's the updated markdown based on the results from the image:</p>
+<h3 id="model-evaluation">Model Evaluation</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Overall Accuracy</strong></td>
+<td>80.16%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="confusion-matrix">Confusion Matrix</h3>
+<h4 id="class-0">Class 0:</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Predicted: Class 0</th>
+<th>Predicted: Class 1</th>
+<th>Predicted: Class 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Actual: Class 0</strong></td>
+<td>TP: 444</td>
+<td>FN: 65</td>
+<td>FN: 0</td>
+</tr>
+<tr>
+<td><strong>Actual: Class 1</strong></td>
+<td>FP: 39</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Actual: Class 2</strong></td>
+<td>FP: 1</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="class-1">Class 1:</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Predicted: Class 0</th>
+<th>Predicted: Class 1</th>
+<th>Predicted: Class 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Actual: Class 0</strong></td>
+<td></td>
+<td>FP: 39</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Actual: Class 1</strong></td>
+<td>FN: 65</td>
+<td>TP: 358</td>
+<td>FN: 111</td>
+</tr>
+<tr>
+<td><strong>Actual: Class 2</strong></td>
+<td></td>
+<td>FP: 84</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="class-2">Class 2:</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Predicted: Class 0</th>
+<th>Predicted: Class 1</th>
+<th>Predicted: Class 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Actual: Class 0</strong></td>
+<td></td>
+<td></td>
+<td>FP: 1</td>
+</tr>
+<tr>
+<td><strong>Actual: Class 1</strong></td>
+<td></td>
+<td>FN: 111</td>
+<td>FP: 84</td>
+</tr>
+<tr>
+<td><strong>Actual: Class 2</strong></td>
+<td>FN: 0</td>
+<td>FN: 84</td>
+<td>TP: 410</td>
+</tr>
+</tbody>
+</table>
+<h3 id="explanation">Explanation</h3>
+<ul>
+<li>
+<p><strong>Accuracy</strong>: This means the model correctly predicted the class for <code>80.16%</code> of the samples.</p>
+</li>
+<li>
+<p><strong>Classification Report</strong>:</p>
+</li>
+<li><strong>Precision</strong>: The percentage of <code>correct positive predictions</code> for each class.</li>
+<li><strong>Recall</strong>: The percentage of <code>actual positives correctly identified</code>.</li>
+<li><strong>F1 Score</strong>: The <code>balance between precision and recall</code>.</li>
+<li><strong>Support</strong>: The <code>number of actual samples for each class</code>.</li>
+</ul>
+<h4 id="classification-report-breakdown">Classification Report Breakdown</h4>
+<h3 id="class-wise-breakdown">Class-wise Breakdown</h3>
+<h4 id="class-0_1">Class 0:</h4>
+<ul>
+<li><strong>Precision</strong>: 0.92 (92%)</li>
+<li>Out of all the predictions made for class 0, 92% were correct.</li>
+<li><strong>Recall</strong>: 0.87 (87%)</li>
+<li>Out of all the actual instances of class 0, 87% were correctly identified.</li>
+<li><strong>F1 Score</strong>: 0.89 (89%)</li>
+<li>This is a combined measure of precision and recall.</li>
+<li><strong>Support</strong>: 509</li>
+<li>There are 509 actual instances of class 0 in the dataset.</li>
+</ul>
+<h4 id="class-1_1">Class 1:</h4>
+<ul>
+<li><strong>Precision</strong>: 0.71 (71%)</li>
+<li>Out of all the predictions made for class 1, 71% were correct.</li>
+<li><strong>Recall</strong>: 0.70 (70%)</li>
+<li>Out of all the actual instances of class 1, 70% were correctly identified.</li>
+<li><strong>F1 Score</strong>: 0.71 (71%)</li>
+<li>This is a combined measure of precision and recall.</li>
+<li><strong>Support</strong>: 508</li>
+<li>There are 508 actual instances of class 1 in the dataset.</li>
+</ul>
+<h4 id="class-2_1">Class 2:</h4>
+<ul>
+<li><strong>Precision</strong>: 0.79 (79%)</li>
+<li>Out of all the predictions made for class 2, 79% were correct.</li>
+<li><strong>Recall</strong>: 0.83 (83%)</li>
+<li>Out of all the actual instances of class 2, 83% were correctly identified.</li>
+<li><strong>F1 Score</strong>: 0.81 (81%)</li>
+<li>This is a combined measure of precision and recall.</li>
+<li><strong>Support</strong>: 495</li>
+<li>There are 495 actual instances of class 2 in the dataset.</li>
+</ul>
+<h3 id="summary">Summary</h3>
+<ul>
+<li>Class 0 has the highest precision (92%) and F1 score (89%), indicating strong performance in predicting this class.</li>
+<li>Class 1 has the lowest precision (71%) and F1 score (71%), indicating that predictions for this class are less accurate.</li>
+<li>Class 2 shows balanced performance with good precision (79%) and recall (83%), making it a reliable predictor for this class.</li>
+</ul></section><details class="code-cell"><summary>Code cell 45</summary><pre><code># Binarize the output
+y_test_bin = label_binarize(y_test, classes=[0, 1, 2])
+y_pred_prob = logreg_model.predict_proba(X_test_Lr_scaled)
+
+# Compute ROC curve and ROC area for each class
+fpr = dict()
+tpr = dict()
+roc_auc = dict()
+
+# forloop to go through each class and get fpr and tpr
+for i in range(3):
+    fpr[i], tpr[i], _ = roc_curve(y_test_bin[:, i], y_pred_prob[:, i])
+    roc_auc[i] = auc(fpr[i], tpr[i])
+
+# forloop to Plot ROC curve for each class
+plt.figure()
+colors = [&#x27;blue&#x27;, &#x27;green&#x27;, &#x27;red&#x27;]
+for i, color in zip(range(3), colors):
+    plt.plot(fpr[i], tpr[i], color=color, lw=2, label=f&#x27;Class {i} (area = {roc_auc[i]:.2f})&#x27;)
+    
+
+plt.plot([0, 1], [0, 1], &#x27;k--&#x27;, lw=2)
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel(&#x27;False Positive Rate&#x27;)
+plt.ylabel(&#x27;True Positive Rate&#x27;)
+plt.title(&#x27;Receiver Operating Characteristic (ROC) Curve&#x27;)
+plt.legend(loc=&quot;lower right&quot;)
+plt.show()
+</code></pre></details><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="Materials machine learning models — output chart 4, following code cell 45" width="578" height="455" loading="lazy"></a><figcaption>Output 4 · Code cell 45 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>Class 0 = Low Performance</p>
+<p>Class 1 = Medium Performance</p>
+<p>Class 2 = High Performance</p></section><section class="notebook-note"><h2 id="4-model-selection">4. <strong>Model Selection</strong></h2></section><section class="notebook-note"><p><strong>Selected models by overall evaluation scores</strong></p>
+<ul>
+<li>
+<p><strong>Regression Model</strong>: Linear Regression.</p>
+</li>
+<li>
+<p><strong>Classification Model</strong>: Logistic Regression</p>
+</li>
+</ul></section><section class="notebook-note"><h2 id="5-conclusion">5. <strong>Conclusion</strong></h2>
+<ul>
+<li>
+<p><strong>Further Research Recommendations:</strong></p>
+<ul>
+<li>Expand Dataset: Include more materials and suppliers to improve the models performance and accuracy.</li>
+<li>Experiment with more Classification Models and improvement in evaluations of the models.</li>
+<li>Incorporate Categorical Features: Analyze the impact of different material categories on performance.</li>
+</ul>
+</li>
+<li>
+<p><strong>Potential application of the Model:</strong></p>
+<ul>
+<li>
+<p>Optimized Material Selection: Leverage predictive analytics to choose the best materials for specific space applications, reducing costs and improving reliability.</p>
+</li>
+<li>
+<p>Proactive Quality Control: Implement continuous monitoring systems to detect material performance issues early, preventing potential mission failures.</p>
+</li>
+<li>
+<p>R&amp;D Innovations: Apply model findings to drive research and development efforts, focusing on improving existing materials or developing new ones with superior performance characteristics.</p>
+</li>
+</ul>
+</li>
+</ul></section><section class="notebook-note"><hr>
+<hr>
+<h2 id="end">END</h2>
+<hr>
+<hr></section></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

@@ -1,0 +1,256 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Construction dataset inspection — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Construction dataset inspection</h1><p>Read the notebook, inspect the code, and explore saved chart outputs. This preview does not run code; credential-like strings are redacted.</p><a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/CSS_Image_detection_Inspection.ipynb" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><section class="notebook-note"><h2 id="data-inspection"><strong>DATA INSPECTION</strong></h2></section><section class="notebook-note"><h3 id="imports">Imports</h3></section><details class="code-cell"><summary>Code cell 3</summary><pre><code>import os
+import re
+import glob
+import random
+import yaml
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+import seaborn as sns
+
+import IPython.display as display
+from PIL import Image
+import cv2 # OpenCV lib</code></pre></details><details class="code-cell"><summary>Code cell 4</summary><pre><code># # this is processing all the images one by one.
+# def display_image(image_path, print_info=True, hide_axis=False):
+#     if isinstance(image_path, str):  # Check if it&#x27;s a file path
+#         img = Image.open(image_path)
+#         plt.imshow(img)
+#     elif isinstance(image_path, np.ndarray):  # Check if it&#x27;s a NumPy array
+#         image = image_path[..., ::-1]  # BGR to RGB
+#         img = Image.fromarray(image)
+#         plt.imshow(img)
+#     else:
+#         raise ValueError(&quot;Unsupported image format&quot;)
+
+#     if print_info:
+#         print(&#x27;Type:&#x27;, type(img), &#x27;\n&#x27;)
+#         print(&#x27;Shape:&#x27;, np.array(img).shape, &#x27;\n&#x27;)
+
+#     if hide_axis:
+#         plt.axis(&#x27;off&#x27;)
+
+#     plt.show()</code></pre></details><section class="notebook-note"><h2 id="image-quality-check">Image Quality check</h2></section><details class="code-cell"><summary>Code cell 6</summary><pre><code>def plot_num_img(folder_path, num_img=20):
+    # getting the files into list
+    image_files = [f for f in os.listdir(folder_path) if f.endswith(&#x27;.jpg&#x27;) or f.endswith(&#x27;.png&#x27;)]
+    
+    # Checking if we have enough images in the folder
+    if len(image_files) &lt; num_img:
+        raise ValueError(&#x27;Not enough images&#x27;)
+    
+    # Random Selection of the images
+    # selected_images = random.sample(image_files, num_img)
+    selected_images = image_files[:num_img]
+    
+    # Create a subplot grid
+    num_cols = 5
+    num_rows = (num_img + num_cols -1) // num_cols
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, 15))
+    
+    axes = axes.flatten()
+    
+    for i, file_name in enumerate(selected_images):
+        img = Image.open(os.path.join(folder_path, file_name))
+
+        axes[i].imshow(img)
+        axes[i].axis(&#x27;off&#x27;)
+        # axes[i].set_title(file_name)
+        
+    plt.tight_layout()
+    plt.show()
+    
+def process_images(image_folder_path, num_img=20):
+    if os.access(image_folder_path, os.R_OK):
+        print(f&#x27;Processing images in {image_folder_path}&#x27;)
+        plot_num_img(image_folder_path, num_img)
+    else:
+        print(f&#x27;Cannot access {image_folder_path}. Please check if the path exists and you have read permission.&#x27;)</code></pre></details><details class="code-cell"><summary>Code cell 7</summary><pre><code>train_image_path = r&#x27;C:\Users\GGPC\Capstone\project_Capstone_Project\data\images\train&#x27;
+
+process_images(train_image_path, num_img=20)</code></pre></details><figure><a href="chart-01.webp" target="_blank" rel="noopener noreferrer"><img src="chart-01.webp" alt="Construction dataset inspection — output chart 1, following code cell 7" width="1490" height="1377" loading="lazy"></a><figcaption>Output 1 · Code cell 7 · Open image to enlarge</figcaption></figure><details class="code-cell"><summary>Code cell 8</summary><pre><code>import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Define the class labels
+class_labels = [&#x27;Hardhat&#x27;, &#x27;Mask&#x27;, &#x27;NO-Hardhat&#x27;, &#x27;NO-Mask&#x27;, &#x27;NO-Safety Vest&#x27;, 
+                &#x27;Person&#x27;, &#x27;Safety Cone&#x27;, &#x27;Safety Vest&#x27;, &#x27;machinery&#x27;, &#x27;vehicle&#x27;]
+
+# List of directories containing label files
+label_dirs = [
+    r&#x27;C:\Users\GGPC\Capstone\project_Capstone_Project\data\annotations\test\Test Labels&#x27;,  # Replace with actual paths
+    r&#x27;C:\Users\GGPC\Capstone\project_Capstone_Project\data\annotations\train\Train Labels&#x27;,
+    r&#x27;C:\Users\GGPC\Capstone\project_Capstone_Project\data\annotations\valid\Valid Labels&#x27;
+]
+
+# Initialize a dictionary to count each class
+class_counts = {label: 0 for label in class_labels}
+
+# Iterate through each label directory
+for label_dir in label_dirs:
+    print(f&quot;Processing directory: {label_dir}&quot;)  # Debugging line
+    for label_file in os.listdir(label_dir):
+        if label_file.endswith(&#x27;.txt&#x27;):
+            with open(os.path.join(label_dir, label_file), &#x27;r&#x27;) as f:
+                for line in f:
+                    class_idx = int(line.split()[0])
+                    class_counts[class_labels[class_idx]] += 1
+
+# Plot the class distribution
+plt.figure(figsize=(10, 6))
+ax = sns.barplot(x=list(class_counts.keys()), y=list(class_counts.values()), palette=&#x27;viridis&#x27;)
+
+for i in range(len(class_counts)):
+    ax.text(i, list(class_counts.values())[i], str(list(class_counts.values())[i]), ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;)
+
+plt.title(&#x27;Overall Class Distribution&#x27;)
+plt.xlabel(&#x27;Class Labels&#x27;)
+plt.ylabel(&#x27;Number of Instances&#x27;)
+plt.xticks(rotation=45)
+plt.show()</code></pre></details><figure><a href="chart-02.webp" target="_blank" rel="noopener noreferrer"><img src="chart-02.webp" alt="Construction dataset inspection — output chart 2, following code cell 8" width="868" height="617" loading="lazy"></a><figcaption>Output 2 · Code cell 8 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h3 id="overall-class-labels-distribution-key-observations">Overall Class Labels Distribution - Key Observations:</h3>
+<ul>
+<li><strong>Dominant Class:</strong> </li>
+<li>
+<p>The ‘Person’ class is the most dominant, with a significantly higher number of instances than any other class.</p>
+</li>
+<li>
+<p><strong>Underrepresented Classes:</strong></p>
+</li>
+<li>
+<p>‘Mask’ and ‘Vehicle’ are the least represented classes in the dataset.</p>
+</li>
+<li>
+<p><strong>Safety Compliance Indicators:</strong></p>
+</li>
+<li>
+<p>Moderate representation of safety gear such as "Hardhat" (3,334 instances), "Safety Vest" (3,135 instances), and "Mask" (1,700 instances).</p>
+</li>
+<li>
+<p><strong>Non-Compliance Indicators:</strong></p>
+</li>
+<li>Varying representation of non-compliance indicators, with "NO-Safety Vest" having a notable count (4,158 instances).</li>
+</ul></section><details class="code-cell"><summary>Code cell 10</summary><pre><code>
+# Define the class labels
+class_labels = [&#x27;Hardhat&#x27;, &#x27;Mask&#x27;, &#x27;NO-Hardhat&#x27;, &#x27;NO-Mask&#x27;, &#x27;NO-Safety Vest&#x27;, 
+                &#x27;Person&#x27;, &#x27;Safety Cone&#x27;, &#x27;Safety Vest&#x27;, &#x27;machinery&#x27;, &#x27;vehicle&#x27;]
+
+# List of directories containing label files
+label_dirs = [
+    r&#x27;C:\Users\GGPC\Capstone\project_Capstone_Project\data\annotations\test\Test Labels&#x27;,  # Replace with actual paths
+    r&#x27;C:\Users\GGPC\Capstone\project_Capstone_Project\data\annotations\train\Train Labels&#x27;,
+    r&#x27;C:\Users\GGPC\Capstone\project_Capstone_Project\data\annotations\valid\Valid Labels&#x27;
+]
+
+# Iterate through each label directory and plot class distribution
+for label_dir in label_dirs:
+    # Initialize a dictionary to count each class
+    class_counts = {label: 0 for label in class_labels}
+
+    print(f&quot;Processing directory: {label_dir}&quot;)  # Debugging line
+    
+    for label_file in os.listdir(label_dir):
+        if label_file.endswith(&#x27;.txt&#x27;):
+            with open(os.path.join(label_dir, label_file), &#x27;r&#x27;) as f:
+                for line in f:
+                    class_idx = int(line.split()[0])
+                    class_counts[class_labels[class_idx]] += 1
+
+    # Plot the class distribution for this directory
+    plt.figure(figsize=(10, 6))
+    ax = sns.barplot(x=list(class_counts.keys()), y=list(class_counts.values()), palette=&#x27;viridis&#x27;)
+    
+    for i in range(len(class_counts)):
+        ax.text(i, list(class_counts.values())[i], str(list(class_counts.values())[i]), ha=&#x27;center&#x27;, va=&#x27;bottom&#x27;)
+    
+    plt.title(f&#x27;Class Distribution for {os.path.basename(label_dir)}&#x27;)
+    plt.xlabel(&#x27;Class Labels&#x27;)
+    plt.ylabel(&#x27;Number of Instances&#x27;)
+    plt.xticks(rotation=45)
+    plt.show()</code></pre></details><figure><a href="chart-03.webp" target="_blank" rel="noopener noreferrer"><img src="chart-03.webp" alt="Construction dataset inspection — output chart 3, following code cell 10" width="850" height="617" loading="lazy"></a><figcaption>Output 3 · Code cell 10 · Open image to enlarge</figcaption></figure><figure><a href="chart-04.webp" target="_blank" rel="noopener noreferrer"><img src="chart-04.webp" alt="Construction dataset inspection — output chart 4, following code cell 10" width="868" height="617" loading="lazy"></a><figcaption>Output 4 · Code cell 10 · Open image to enlarge</figcaption></figure><figure><a href="chart-05.webp" target="_blank" rel="noopener noreferrer"><img src="chart-05.webp" alt="Construction dataset inspection — output chart 5, following code cell 10" width="850" height="617" loading="lazy"></a><figcaption>Output 5 · Code cell 10 · Open image to enlarge</figcaption></figure><section class="notebook-note"><h3 id="test-labels-class-distribution-key-observations">Test Labels Class Distribution - Key Observations:</h3>
+<ul>
+<li><strong>Imbalance in Test Dataset:</strong></li>
+<li>The "Person" class has the highest representation (174 instances), followed by "Safety Cone" (92 instances) and "Hardhat" (110 instances).</li>
+<li>The "Mask" class is notably underrepresented with only 28 instances, and other classes like "Vehicle," "NO-Hardhat," and "Machinery" also have lower representation.</li>
+</ul>
+<h3 id="train-labels-class-distribution-key-observations">Train Labels Class Distribution - Key Observations:</h3>
+<ul>
+<li><strong>Dominant Class:</strong> </li>
+<li>
+<p>The "Person" class dominates with 9,532 instances, significantly outnumbering other classes.</p>
+</li>
+<li>
+<p><strong>Other Notable Classes:</strong></p>
+</li>
+<li>
+<p>"Machinery" (5,247 instances) and "NO-Safety Vest" (3,962 instances) have relatively high representation.</p>
+</li>
+<li>
+<p><strong>Underrepresented Classes:</strong></p>
+</li>
+<li>"Mask" (1,651 instances) and "Vehicle" (1,545 instances) are underrepresented, which may pose challenges during model training.</li>
+</ul>
+<h3 id="valid-labels-class-distribution-key-observations">Valid Labels Class Distribution - Key Observations:</h3>
+<ul>
+<li><strong>Dominant Class:</strong></li>
+<li>
+<p>The "Person" class remains the highest represented with 166 instances, similar to the trends in training and test datasets.</p>
+</li>
+<li>
+<p><strong>Underrepresented Class:</strong></p>
+</li>
+<li>The "Mask" class is significantly underrepresented with only 21 instances, making it one of the most underrepresented categories in the validation set.</li>
+</ul>
+<h3 id="label-distribution-conclusion">Label Distribution Conclusion:</h3>
+<ul>
+<li><strong>Consistent Imbalance:</strong></li>
+<li>
+<p>Across overall, training, test, and validation datasets, there is a consistent pattern of imbalance. The dataset images mostly associate people with the presence or absence of PPE gear, resulting in the ‘Person’ class overwhelmingly dominating all other datasets.</p>
+</li>
+<li>
+<p><strong>Critical Underrepresentation:</strong></p>
+</li>
+<li>Critical classes like ‘Mask’ and ‘Vehicle’ are underrepresented, which could affect the model's performance in detecting these essential safety features.</li>
+</ul></section><section class="notebook-note"><h2 id="image-to-label-observation">Image to Label Observation</h2></section><details class="code-cell"><summary>Code cell 13</summary><pre><code># Function to draw bounding boxes
+def draw_bounding_boxes(image_path, label_path, class_labels):
+    img = cv2.imread(image_path)
+    img_height, img_width, _ = img.shape
+    
+    with open(label_path, &#x27;r&#x27;) as f:
+        lines = f.readlines()
+    
+    for line in lines:
+        components = line.strip().split()
+        class_idx = int(components[0])
+        x_center, y_center, width, height = map(float, components[1:])
+        
+        # Convert normalized coordinates to absolute pixel values
+        x_center *= img_width
+        y_center *= img_height
+        width *= img_width
+        height *= img_height
+        
+        #Calculate the top-left corner of the bounding box
+        x1 = int(x_center - width / 2)
+        y1 = int(y_center - height / 2)
+        x2 = int(x_center + width / 2)
+        y2 = int(y_center + height / 2)
+        
+        #draw bounding box
+        color = (0, 0, 255)
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
+        cv2.putText(img, class_labels[class_idx], (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+    
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    
+    plt.figure(figsize=(10, 10))
+    plt.imshow(img_rgb)
+    plt.axis(&#x27;off&#x27;)
+    plt.show()
+    
+# Just one image
+
+image_path = r&#x27;C:\Users\GGPC\Capstone\project_Capstone_Project\data\images\train\01261_jpg.rf.ee044d42291843f1358960c4d8c1d466.jpg&#x27;
+label_path = r&#x27;C:\Users\GGPC\Capstone\project_Capstone_Project\data\annotations\train\Train Labels\01261_jpg.rf.ee044d42291843f1358960c4d8c1d466.txt&#x27;
+class_labels = [&#x27;Hardhat&#x27;, &#x27;Mask&#x27;, &#x27;NO-Hardhat&#x27;, &#x27;NO-Mask&#x27;, &#x27;NO-Safety Vest&#x27;, 
+                &#x27;Person&#x27;, &#x27;Safety Cone&#x27;, &#x27;Safety Vest&#x27;, &#x27;machinery&#x27;, &#x27;vehicle&#x27;]
+
+draw_bounding_boxes(image_path, label_path, class_labels)</code></pre></details><figure><a href="chart-06.webp" target="_blank" rel="noopener noreferrer"><img src="chart-06.webp" alt="Construction dataset inspection — output chart 6, following code cell 13" width="790" height="790" loading="lazy"></a><figcaption>Output 6 · Code cell 13 · Open image to enlarge</figcaption></figure><section class="notebook-note"><p>Visualisation shows correct locations of bounding boxes and its corresponding class labels.</p></section></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

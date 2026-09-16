@@ -1,0 +1,431 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Wind Energy Prediction · Documentation — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Wind Energy Prediction · Documentation</h1><p>Project documentation from GitHub. Diagrams and demonstrations are available in the project resource library.</p><a href="https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction/blob/7f74c09952010680be4590c312d103659599e6cf/README.md" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><h2 id="wind-turbine-power-output-prediction">Wind-Turbine-Power-Output-Prediction</h2>
+<p></p>
+<p><a href="https://github.com/Userdflt/Wind-Turbine-Power-Output-Prediction/blob/7f74c09952010680be4590c312d103659599e6cf/Notebook.ipynb" target="_blank" rel="noopener noreferrer">CLICK FOR NOTEBOOK - CODE</a></p>
+<h2 id="problem-statement">Problem Statement</h2>
+<p>The objective of this project is to forecast power output using historical environmental and temporal data over a three-year period. By employing regression techniques, we aim to predict continuous values of power based on features such as wind speed, temperature, pressure, and time-related variables. Accurate power forecasting is crucial for efficient energy management, cost reduction, and optimizing operations in the energy sector.</p>
+<h2 id="industrydomain-context">Industry/Domain Context</h2>
+<p>In the energy industry, particularly within renewable energy sectors like wind and solar power, the ability to accurately predict power output is essential. Variability in environmental conditions can lead to fluctuations in power generation. Energy companies and grid operators rely on precise forecasts to balance supply and demand, enhance grid reliability, and make informed decisions regarding energy distribution and storage.</p>
+<h2 id="business-question">Business Question</h2>
+<ul>
+<li><strong>How can we accurately predict power output using historical environmental and temporal data over a three-year period?</strong></li>
+</ul>
+<h2 id="data-question">Data Question</h2>
+<ul>
+<li><strong>Which features significantly influence power output, and how can we preprocess and model the data to achieve optimal predictive performance?</strong></li>
+</ul>
+<h2 id="data-overview">Data Overview</h2>
+<ul>
+<li><strong>Datasets Used:</strong><ul>
+<li><code>Train.csv</code>: Training dataset containing historical records.</li>
+<li><code>Test.csv</code>: Testing dataset for evaluating model performance.</li>
+<li><code>column_info.csv</code>: Descriptions of the variables in the datasets.</li>
+</ul>
+</li>
+<li><strong>Key Variables:</strong><ul>
+<li><strong>Temporal Features:</strong> <code>Time</code>, <code>Month</code>, <code>Year</code>, <code>TimeOfDay</code>.</li>
+<li><strong>Environmental Variables:</strong> <code>WS_10m</code>, <code>WS_100m</code> (wind speeds at 10m and 100m), <code>Temperature</code>, <code>Pressure</code>, among others.</li>
+<li><strong>Target Variable:</strong> <code>Power</code> (the power output to be predicted).</li>
+</ul>
+</li>
+</ul>
+<h2 id="process">Process</h2>
+<h2 id="data-preprocessing">Data Preprocessing</h2>
+<ol>
+<li><strong>Time Feature Transformation:</strong><ul>
+<li>Converted the <code>Time</code> column to datetime format.</li>
+<li>Extracted new features: <code>Month</code>, <code>Year</code>, and <code>TimeOfDay</code> (hour of the day).</li>
+<li>Dropped the original <code>Time</code> and <code>Unnamed: 0</code> columns as they were no longer needed.</li>
+</ul>
+</li>
+<li><strong>Handling Missing Values and Duplicates:</strong><ul>
+<li>Checked for null values and duplicates in both training and testing datasets.</li>
+<li>Found zero null values and zero duplicates, indicating good data quality.</li>
+</ul>
+</li>
+<li><strong>Feature Selection:</strong><ul>
+<li>Calculated the correlation matrix to identify highly correlated features.</li>
+<li>Dropped the <code>DP_2m</code> column due to its high correlation with other variables, reducing multicollinearity and improving model performance.</li>
+</ul>
+</li>
+<li><strong>Feature Scaling:</strong><ul>
+<li>Applied <code>MinMaxScaler</code> to normalize numerical features, ensuring that all features contribute equally to the model training process.</li>
+</ul>
+</li>
+</ol>
+<h2 id="exploratory-data-analysis">Exploratory Data Analysis</h2>
+<ol>
+<li><strong>Distribution Analysis:</strong><ul>
+<li>Plotted histograms for all features to understand their distributions.</li>
+<li>Observed that most features had a normal distribution, suitable for regression modeling.</li>
+</ul>
+</li>
+<li><strong>Pairwise Relationships:</strong><ul>
+<li>Created pair plots to visualize relationships between features and the target variable.</li>
+<li>Noted strong relationships between wind speed features and power output.</li>
+</ul>
+</li>
+<li><strong>Temporal Analysis:</strong><ul>
+<li>Analyzed how <code>Power</code> varies with <code>TimeOfDay</code>, <code>Month</code>, and <code>Year</code>.</li>
+<li>Found that power output had noticeable patterns based on the time of day and month, indicating temporal dependencies.</li>
+</ul>
+</li>
+<li><strong>Wind Speed Analysis:</strong><ul>
+<li>Investigated monthly average wind speeds at 10m and 100m above the surface.</li>
+<li>Identified that higher wind speeds generally correlated with higher power output.</li>
+</ul>
+</li>
+<li><strong>Correlation Analysis:</strong><ul>
+<li>Calculated the correlation coefficients between all features and <code>Power</code>.</li>
+<li>Features like <code>WS_10m</code>, <code>WS_100m</code>, and <code>TimeOfDay</code> showed strong positive correlations with power output.</li>
+</ul>
+</li>
+</ol>
+<h2 id="modeling">Modeling</h2>
+<h2 id="model-training-evaluation">Model Training &amp; Evaluation</h2>
+<ol>
+<li><strong>Data Splitting:</strong><ul>
+<li>Split the preprocessed data into training and testing sets with an 80-20 split.</li>
+<li>Ensured that the model is evaluated on unseen data to assess its generalization capabilities.</li>
+</ul>
+</li>
+<li><strong>Models Evaluated:</strong><ul>
+<li><strong>Linear Regression</strong></li>
+<li><strong>Lasso Regression</strong></li>
+<li><strong>Ridge Regression</strong></li>
+<li><strong>K-Nearest Neighbors (KNN) Regressor</strong></li>
+<li><strong>Decision Tree Regressor</strong></li>
+<li><strong>Random Forest Regressor</strong></li>
+<li><strong>AdaBoost Regressor</strong></li>
+</ul>
+</li>
+<li><strong>Model Evaluation Metrics:</strong><ul>
+<li><strong>Mean Absolute Error (MAE):</strong> Measures the average magnitude of errors in predictions.</li>
+<li><strong>R-squared (R²) Score:</strong> Indicates the proportion of variance in the dependent variable predictable from the independent variables.</li>
+</ul>
+</li>
+<li>
+<p><strong>Training and Evaluation Results:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Training MAE</th>
+<th>Training R² Score</th>
+<th>Test MAE</th>
+<th>Test R² Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear Regression</td>
+<td>0.1384</td>
+<td>0.505355</td>
+<td>0.1403</td>
+<td>0.492294</td>
+</tr>
+<tr>
+<td>Lasso Regression</td>
+<td>0.2125</td>
+<td>0.000000</td>
+<td>0.2122</td>
+<td>-0.000039</td>
+</tr>
+<tr>
+<td>Ridge Regression</td>
+<td>0.1384</td>
+<td>0.505339</td>
+<td>0.1403</td>
+<td>0.492322</td>
+</tr>
+<tr>
+<td><strong>K-Nearest Neighbors</strong></td>
+<td><strong>0.0538</strong></td>
+<td><strong>0.897932</strong></td>
+<td><strong>0.0731</strong></td>
+<td><strong>0.824192</strong></td>
+</tr>
+<tr>
+<td>Decision Tree Regressor</td>
+<td>0.0000</td>
+<td>1.000000</td>
+<td>0.1118</td>
+<td>0.561457</td>
+</tr>
+<tr>
+<td>Random Forest Regressor</td>
+<td>0.0318</td>
+<td>0.969111</td>
+<td>0.0858</td>
+<td>0.777471</td>
+</tr>
+<tr>
+<td>AdaBoost Regressor</td>
+<td>0.1494</td>
+<td>0.498542</td>
+<td>0.1500</td>
+<td>0.492723</td>
+</tr>
+<tr>
+<td>5. <strong>Predictions and Residual Analysis (K-Nearest Neighbors Regressor):</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- After identifying the KNN Regressor as the best-performing model, we analyzed its predictions in more detail.</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Index</th>
+<th>Actual Value</th>
+<th>Predicted Value</th>
+<th>Difference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>24950</td>
+<td>0.387496</td>
+<td>0.376016</td>
+<td>0.011480</td>
+</tr>
+<tr>
+<td>17553</td>
+<td>0.692396</td>
+<td>0.322356</td>
+<td>0.370040</td>
+</tr>
+<tr>
+<td>19265</td>
+<td>0.580596</td>
+<td>0.692156</td>
+<td>-0.111560</td>
+</tr>
+<tr>
+<td>32546</td>
+<td>0.169296</td>
+<td>0.166896</td>
+<td>0.002400</td>
+</tr>
+<tr>
+<td>67423</td>
+<td>0.001196</td>
+<td>0.006836</td>
+<td>-0.005640</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>26519</td>
+<td>0.641096</td>
+<td>0.817176</td>
+<td>-0.176080</td>
+</tr>
+<tr>
+<td>213</td>
+<td>0.909396</td>
+<td>0.911676</td>
+<td>-0.002280</td>
+</tr>
+<tr>
+<td>131967</td>
+<td>0.100796</td>
+<td>0.054536</td>
+<td>0.046260</td>
+</tr>
+<tr>
+<td>11856</td>
+<td>0.589596</td>
+<td>0.598836</td>
+<td>-0.009240</td>
+</tr>
+<tr>
+<td>94438</td>
+<td>0.225896</td>
+<td>0.292056</td>
+<td>-0.066160</td>
+</tr>
+<tr>
+<td>- <strong>Mean Difference:</strong> The average of the differences between the actual and predicted values is <strong>0.0012</strong>, indicating that the model's predictions are, on average, very close to the actual values.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>6. <strong>Residual Analysis:</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>Mean Difference Interpretation:</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- A mean difference of <strong>0.0012</strong> suggests that the KNN model is highly accurate, with minimal bias in its predictions.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- The small average error supports the high R² Score and low MAE obtained during evaluation.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>Variance in Differences:</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- While the mean difference is low, some individual predictions have larger residuals (e.g., differences of 0.370040 and -0.176080).</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- This indicates that while the model performs well overall, there may be specific instances where the prediction error is higher, possibly due to outliers or atypical observations.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<h2 id="comparisons-and-improvements">Comparisons and Improvements</h2>
+<ol>
+<li><strong>Model Performance Comparison:</strong><ul>
+<li><strong>K-Nearest Neighbors Regressor</strong> outperformed other models, achieving:<ul>
+<li><strong>Training MAE:</strong> 0.0538</li>
+<li><strong>Training R² Score:</strong> 0.897932</li>
+<li><strong>Test MAE:</strong> 0.0731</li>
+<li><strong>Test R² Score:</strong> 0.824192</li>
+</ul>
+</li>
+<li><strong>Linear Regression, Ridge, and AdaBoost Regressor</strong> showed moderate performance but were not as effective as KNN.</li>
+<li><strong>Lasso Regression</strong> underperformed, possibly due to the penalty term eliminating important features.</li>
+<li><strong>Decision Tree Regressor</strong> exhibited overfitting, with perfect training performance but significantly lower test performance.</li>
+<li><strong>Random Forest Regressor</strong> showed good performance but was slightly less accurate than KNN.</li>
+</ul>
+</li>
+<li><strong>Insights:</strong><ul>
+<li>The superior performance of the KNN Regressor suggests that local patterns and nearest neighbors in the feature space are significant for predicting power output.</li>
+<li>The minimal mean difference between actual and predicted values highlights the model's accuracy and reliability.</li>
+</ul>
+</li>
+<li><strong>Model Fine-Tuning:</strong><ul>
+<li><strong>KNN Regressor:</strong><ul>
+<li>Experimenting with different values of <code>n_neighbors</code> and weighting schemes could further enhance performance.</li>
+<li>Cross-validation can be used to find the optimal parameters.</li>
+</ul>
+</li>
+<li><strong>Random Forest Regressor:</strong><ul>
+<li>Tuning hyperparameters such as the number of trees, tree depth, and minimum samples per leaf might improve accuracy and reduce overfitting.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="outcomes">Outcomes</h2>
+<ol>
+<li><strong>Feature Importance:</strong><ul>
+<li>Wind speeds (<code>WS_10m</code>, <code>WS_100m</code>) and temporal features (<code>TimeOfDay</code>, <code>Month</code>) significantly influence power output.</li>
+<li>These features enable the model to capture both environmental conditions and temporal trends affecting power generation.</li>
+</ul>
+</li>
+<li><strong>Model Efficacy:</strong><ul>
+<li>The <strong>K-Nearest Neighbors Regressor</strong> achieved:<ul>
+<li><strong>Test R² Score:</strong> 82.42%</li>
+<li><strong>Test MAE:</strong> 0.0731</li>
+<li><strong>Mean Difference:</strong> 0.0012</li>
+</ul>
+</li>
+<li>These metrics indicate that the model explains a significant portion of the variance in power output and predicts with high accuracy.</li>
+</ul>
+</li>
+<li><strong>Business Implications:</strong><ul>
+<li>Accurate power forecasting allows for:<ul>
+<li>Optimized energy production schedules.</li>
+<li>Improved grid reliability.</li>
+<li>Informed decision-making for resource allocation.</li>
+</ul>
+</li>
+<li>This leads to cost savings and increased operational efficiency in the energy sector.</li>
+</ul>
+</li>
+</ol>
+<h2 id="data-answer">Data Answer</h2>
+<p>By preprocessing the data to extract relevant temporal features and normalizing numerical variables, we enhanced the model's ability to learn from the data. The <strong>K-Nearest Neighbors Regressor</strong> effectively utilized these features to predict power output with high accuracy, as evidenced by the low mean difference of <strong>0.0012</strong> between actual and predicted values. Key influencing factors were identified, and the model demonstrates strong generalization to unseen data.</p>
+<h2 id="business-answer">Business Answer</h2>
+<p>Implementing the <strong>K-Nearest Neighbors regression model</strong> allows for accurate forecasting of power output based on environmental and temporal data. The model's high accuracy and minimal prediction errors enable the business to optimize energy production schedules, improve grid reliability, and make informed decisions. This ultimately leads to cost savings and increased efficiency in operations, strengthening the organization's competitive advantage in the energy sector.</p>
+<h2 id="end-to-end-solution">End-to-End Solution</h2>
+<p>The project delivers a comprehensive solution encompassing:</p>
+<ul>
+<li><strong>Data Ingestion and Preprocessing:</strong> Cleaned and prepared the data for modeling by handling missing values, duplicates, and irrelevant features.</li>
+<li><strong>Feature Engineering:</strong> Extracted and selected features that significantly impact power output, such as wind speeds and temporal variables.</li>
+<li><strong>Exploratory Data Analysis:</strong> Gained insights into data distributions and relationships between variables, informing feature selection and model choice.</li>
+<li><strong>Model Training and Evaluation:</strong> Trained multiple regression models and selected the best-performing model based on evaluation metrics, including MAE and R² Score.</li>
+<li><strong>Residual Analysis:</strong> Analyzed the differences between actual and predicted values to assess the model's accuracy and identify areas for improvement.</li>
+<li><strong>Model Deployment Readiness:</strong> The <strong>KNN model</strong> is ready for deployment to predict power output in real-time, aiding operational decision-making.</li>
+<li><strong>Scalability:</strong> The approach can be scaled and adapted for larger datasets or integrated with streaming data for continuous forecasting.</li>
+</ul>
+<hr>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this project, we successfully developed a predictive model to forecast power output using historical environmental and temporal data over a three-year period. The primary objective was to enhance energy management efficiency by accurately predicting continuous power output values based on factors such as wind speed, temperature, pressure, and time-related variables.</p>
+<p><strong>Key Steps and Findings:</strong></p>
+<ol>
+<li><strong>Data Understanding and Preparation:</strong><ul>
+<li><strong>Data Quality Assurance:</strong> Ensured the datasets were clean, with no missing values or duplicates, which is crucial for reliable modeling.</li>
+<li><strong>Feature Engineering:</strong> Transformed the <code>Time</code> column into datetime format and extracted new features like <code>Month</code>, <code>Year</code>, and <code>TimeOfDay</code> to capture temporal patterns affecting power output.</li>
+<li><strong>Multicollinearity Reduction:</strong> Identified and removed the <code>DP_2m</code> feature due to its high correlation with other variables, enhancing model performance by reducing multicollinearity.</li>
+<li><strong>Data Scaling:</strong> Applied Min-Max scaling to normalize numerical features, ensuring all features contributed equally during model training.</li>
+</ul>
+</li>
+<li><strong>Exploratory Data Analysis (EDA):</strong><ul>
+<li><strong>Distribution Analysis:</strong> Visualized the distribution of features to confirm they were suitable for regression modeling.</li>
+<li><strong>Correlation Analysis:</strong> Determined that wind speeds (<code>WS_10m</code>, <code>WS_100m</code>) and temporal variables (<code>TimeOfDay</code>, <code>Month</code>) had strong positive correlations with power output.</li>
+<li><strong>Temporal Patterns:</strong> Observed that power output exhibited noticeable patterns based on the time of day and month, indicating significant temporal dependencies.</li>
+</ul>
+</li>
+<li><strong>Model Training and Evaluation:</strong><ul>
+<li><strong>Model Selection:</strong> Evaluated several regression models, including Linear Regression, Lasso, Ridge, Decision Tree, Random Forest, AdaBoost, and K-Nearest Neighbors (KNN) Regressors.</li>
+<li><strong>Best Model Identification:</strong> The K-Nearest Neighbors Regressor outperformed other models, achieving a high R² score of approximately 82.42% on the test set and a low Mean Absolute Error (MAE) of 0.0731.</li>
+<li><strong>Residual Analysis:</strong> The mean difference between actual and predicted values was minimal (approximately 0.0012), indicating high accuracy and minimal bias in the KNN model's predictions.</li>
+</ul>
+</li>
+<li><strong>Convolution Analysis:</strong><ul>
+<li><strong>Pattern Recognition:</strong> Performed convolution between each feature and the target variable <code>Power</code> to identify underlying patterns or lags not immediately apparent in the data.</li>
+<li><strong>Visualization:</strong> Plotted the convolution results to visualize the relationships, which could inform future feature engineering or model refinement efforts.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Implications and Business Impact:</strong></p>
+<ul>
+<li><strong>Operational Efficiency:</strong> The accurate forecasting model enables better scheduling of energy production, leading to optimized operations and reduced operational costs.</li>
+<li><strong>Grid Reliability:</strong> Improved power output predictions assist in balancing supply and demand more effectively, enhancing grid stability and reliability.</li>
+<li><strong>Strategic Decision-Making:</strong> Insights into how environmental and temporal factors affect power output empower stakeholders to make informed decisions regarding resource allocation and infrastructure investments.</li>
+<li><strong>Scalability:</strong> The methodology and models developed can be adapted for larger datasets or real-time data streams, providing a scalable solution for ongoing power output forecasting needs.</li>
+</ul>
+<p><strong>Future Recommendations:</strong></p>
+<ul>
+<li><strong>Model Fine-Tuning:</strong> Further optimization of the KNN model parameters, such as experimenting with different values of <code>n_neighbors</code> and weighting schemes, could potentially enhance predictive performance.</li>
+<li><strong>Feature Expansion:</strong> Incorporating additional relevant features, such as humidity or solar radiation, might improve the model's accuracy.</li>
+<li><strong>Real-Time Deployment:</strong> Integrating the model into a real-time forecasting system could provide continuous insights and allow for dynamic adjustments in operations.</li>
+</ul></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>

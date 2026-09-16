@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'"><title>Construction Safety Vision · Documentation — project resource</title><link rel="stylesheet" href="../../../styles/resource-reader.css"></head><body><header><p class="eyebrow">YWS / PROJECT RESOURCES</p><h1>Construction Safety Vision · Documentation</h1><p>Project documentation from GitHub. Diagrams and demonstrations are available in the project resource library.</p><a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/README.md" target="_blank" rel="noopener noreferrer">View original on GitHub ↗</a></header><main><h2 id="building-safer-sites-object-detection-for-safety-compliance-on-construction-sites">Building Safer Sites: Object Detection for Safety Compliance on Construction Sites</h2>
+<p><strong>By: Young Woo Song</strong><br>
+<em>(See <a href="#references">References</a> below for notebooks and further details.)</em></p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li>Sample Images &amp; Video Placeholder</li>
+<li><a href="#problem-statement">Problem Statement</a></li>
+<li><a href="#industrydomain">Industry/Domain</a></li>
+<li><a href="#stakeholders">Stakeholders</a></li>
+<li><a href="#business-and-data-questions">Business and Data Questions</a></li>
+<li><a href="#data-description">Data Description</a></li>
+<li><a href="#data-science-process">Data Science Process</a></li>
+<li><a href="#modeling-and-evaluation">Modeling and Evaluation</a></li>
+<li><a href="#implementation-and-results">Implementation and Results</a></li>
+<li><a href="#business-and-data-answers">Business and Data Answers</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+<hr>
+<h2 id="overview">Overview <a id="overview-2"></a></h2>
+<ul>
+<li><strong>Presentation:</strong> <a href="https://docs.google.com/presentation/d/1dqKrkC93hJaZuHbiYrfXxdaZGDl-4SeXTTZ4rKVp44w/pub?start=false&amp;loop=false&amp;delayms=3000" target="_blank" rel="noopener noreferrer">Click here</a></li>
+<li><strong>Full Report:</strong> <a href="https://docs.google.com/document/d/e/2PACX-1vTrURLXikE6d2WMttfvWha5lRz4AbbcjGErVmp2-7c2o6KevnptmiShxyBagpeYQg/pub" target="_blank" rel="noopener noreferrer">Click here</a></li>
+</ul>
+<p>Additional Resources:
+- <a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images" target="_blank" rel="noopener noreferrer">Tested Images</a>
+- <a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Video" target="_blank" rel="noopener noreferrer">Tested Videos (Object Tracking / Webcam Inference)</a>
+- <a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_70_epochs_w_normalisation_Results" target="_blank" rel="noopener noreferrer">YOLO Model with Normalization Performance</a>
+- <a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/YOLO_50_epochs_w_Oversampling_Results" target="_blank" rel="noopener noreferrer">YOLO Model with Oversampling Performance</a></p>
+<hr>
+<h2 id="sample-test-images">Sample Test Images</h2>
+<p>Below are a few <strong>sample detection outputs</strong> from the <code>Tested_Images</code> folder. Each output image demonstrates how the model identifies and classifies Personal Protective Equipment (PPE). For the full set, visit the <a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Tested_Images" target="_blank" rel="noopener noreferrer">Tested Images folder</a>.</p>
+<p><br></p>
+<p><strong>1. Output (output.png)</strong><br>
+<br>
+<em>Model detecting workers and PPE (helmets, vests, etc.).</em></p>
+<p><br></p>
+<p><strong>2. Output (output2.png)</strong><br>
+<br>
+<em>Another detection result with bounding boxes around identified PPE.</em></p>
+<p><br></p>
+<p><strong>3. Output (output3.png)</strong><br>
+<br>
+<em>Model inference showing multiple workers; color-coded bounding boxes for each class.</em></p>
+<p><br></p>
+<h3 id="gif-demo">GIF Demo</h3>
+<p>Below is a <strong>short demo</strong> showing the object detection &amp; tracking process in action:</p>
+<p>
+<em>Real-time detection of workers and their PPE in a construction environment.</em></p>
+<hr>
+<h2 id="problem-statement">Problem Statement <a id="problem-statement-2"></a></h2>
+<p>Currently in New Zealand, construction site safety is often monitored manually, which can be <strong>time-consuming</strong> and <strong>error-prone</strong>, leading to <strong>increased risk of accidents</strong> and potential <strong>legal liabilities</strong>.</p>
+<p><strong>Value Proposition</strong>:
+- Automating safety compliance checks can reduce accidents, injuries, and associated costs by ensuring workers wear proper PPE on-site.</p>
+<p>This project aims to <strong>detect safety compliance</strong> items (like PPE gear) via object detection, using labeled image data to identify whether workers are wearing proper safety equipment.</p>
+<hr>
+<h2 id="industrydomain">Industry/Domain <a id="industrydomain-2"></a></h2>
+<ul>
+<li><strong>Focus</strong>: Construction industry, specifically site safety.</li>
+<li><strong>Context</strong>: High-risk environment, where monitoring worker compliance is crucial.</li>
+<li><strong>Application</strong>: Relevant to any industry requiring PPE (e.g., manufacturing, mining, oil &amp; gas).</li>
+</ul>
+<hr>
+<h2 id="stakeholders">Stakeholders <a id="stakeholders-2"></a></h2>
+<ul>
+<li><strong>Key Stakeholders</strong>: Construction company executives, regulatory bodies, site managers, safety officers  </li>
+<li><strong>Goal</strong>: Mitigate accidents, legal liabilities, and cost through proactive monitoring.</li>
+</ul>
+<hr>
+<h2 id="business-and-data-questions">Business and Data Questions <a id="business-and-data-questions-2"></a></h2>
+<ul>
+<li><strong>Business Question</strong>: How can we efficiently detect safety compliance at construction sites using object detection and tracking?</li>
+<li><strong>Data Question</strong>: What data features are required for an accurate model that identifies safety gear on construction sites?</li>
+</ul>
+<hr>
+<h2 id="data-description">Data Description <a id="data-description-2"></a></h2>
+<ul>
+<li><strong>Source</strong>: <a href="https://www.kaggle.com/datasets/snehilsanyal/construction-site-safety-image-dataset-roboflow/data" target="_blank" rel="noopener noreferrer">Kaggle Construction Site Safety Image Dataset</a></li>
+<li><strong>Details</strong>:</li>
+<li>Images labeled for various PPE (helmets, vests, etc.).</li>
+<li>Diverse set of construction scenarios with bounding-box annotations.</li>
+<li>Ongoing data collection can further improve the model.</li>
+</ul>
+<hr>
+<h2 id="data-science-process">Data Science Process <a id="data-science-process-2"></a></h2>
+<ul>
+<li><strong>Data Analysis</strong>:</li>
+<li>Checked image sizes (640x640) for consistency.</li>
+<li>Label distribution showed imbalance (the “Person” class being most frequent).</li>
+</ul>
+<hr>
+<h2 id="modeling-and-evaluation">Modeling and Evaluation <a id="modeling-and-evaluation-2"></a></h2>
+<ul>
+<li><strong>Model Choice</strong>: YOLOv9 for efficient object detection.</li>
+<li><strong>Improvement Stages</strong>:</li>
+<li>Baseline YOLO Model  </li>
+<li>YOLO with Normalization  </li>
+<li>YOLO with Oversampling and Normalization</li>
+<li><strong>Evaluation</strong>:</li>
+<li>The YOLO model with normalization gave the best balance of <strong>precision</strong> and <strong>recall</strong>.</li>
+</ul>
+<hr>
+<h2 id="implementation-and-results">Implementation and Results <a id="implementation-and-results-2"></a></h2>
+<ul>
+<li><strong>Implementation Considerations</strong>:</li>
+<li>Real-time object tracking performance.</li>
+<li>Data collection strategies for continuous model improvement.</li>
+<li>Deployment environment and associated costs.</li>
+<li><strong>Outcomes</strong>:</li>
+<li>Demonstrated strong detection of safety gear with YOLO.</li>
+<li>High precision in identifying key PPE classes (helmets, vests, etc.).</li>
+</ul>
+<hr>
+<h2 id="business-and-data-answers">Business and Data Answers <a id="business-and-data-answers-2"></a></h2>
+<ul>
+<li><strong>Data Answer</strong>: The labeled images effectively trained an accurate detection model.  </li>
+<li><strong>Business Answer</strong>: A robust, real-time compliance check can reduce accidents, costs, and liabilities in the construction sector.  </li>
+<li><strong>Next Steps</strong>: Real-world pilot testing, continued data collection, and further model refinement.</li>
+</ul>
+<hr>
+<h2 id="references">References <a id="references-2"></a></h2>
+<ol>
+<li><strong>Notebooks (Code)</strong></li>
+<li><a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/CSS_Image_detection_Inspection.ipynb" target="_blank" rel="noopener noreferrer">CSS_Image_detection_Inspection.ipynb</a> – Dataset inspection and analysis  </li>
+<li><a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Final_YOLO_Model_50_epochs_ovs_norm.ipynb" target="_blank" rel="noopener noreferrer">Final_YOLO_Model_50_epochs_ovs_norm.ipynb</a> – YOLO with Oversampling &amp; Normalization (50 epochs)  </li>
+<li><a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Final_YOLO_Model_70_epochs_norm.ipynb" target="_blank" rel="noopener noreferrer">Final_YOLO_Model_70_epochs_norm.ipynb</a> – YOLO with Oversampling &amp; Normalization (70 epochs)  </li>
+<li>
+<p><a href="https://github.com/Userdflt/Building-Safer-Sites-Leveraging-YOLO-Model/blob/83f3d3a69af9ecee9b32221fc910bda690e7077b/Webcam_Inference.py" target="_blank" rel="noopener noreferrer">Webcam_Inference.py</a> – Deployment code for local webcam inference</p>
+</li>
+<li>
+<p><strong>Image Sources and Additional Info</strong>  </p>
+</li>
+<li><a href="https://www.slideshare.net/slideshow/digital-transformation-in-the-construction-industry/98665953" target="_blank" rel="noopener noreferrer">Digital Transformation in Construction Industry</a>  </li>
+<li><a href="https://data.worksafe.govt.nz/graph/detail/injuries_week_away?startDate=2022-01&amp;endDate=2023-05&amp;industry=Construction" target="_blank" rel="noopener noreferrer">WorkSafe NZ Injury Data</a>  </li>
+<li><a href="https://safetysupplies.co.nz/blogs/news/vital-ppe-gear-for-ensuring-safety-in-construction" target="_blank" rel="noopener noreferrer">Vital PPE Gear for Construction</a>  </li>
+<li><a href="https://data.worksafe.govt.nz/graph/summary/injuries_serious_harm" target="_blank" rel="noopener noreferrer">Serious Harm Injuries Data</a>  </li>
+<li><a href="https://www.sitesafe.org.nz/globalassets/guides-and-resources/practical-safety-advice/ppe_2019-web.pdf" target="_blank" rel="noopener noreferrer">PPE Practical Safety Advice</a></li>
+<li><a href="https://www.kaggle.com/datasets/snehilsanyal/construction-site-safety-image-dataset-roboflow/data" target="_blank" rel="noopener noreferrer">Construction Site Safety Dataset</a></li>
+</ol></main><footer>Read-only snapshot of the project resource. Refer to GitHub for the latest version.</footer></body></html>
