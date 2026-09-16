@@ -19,10 +19,12 @@ function reflectMotion() {
 reflectMotion();
 const menu = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.site-nav');
+const header = document.querySelector('.site-header');
 function setMenu(open) {
   menu.setAttribute('aria-expanded', String(open));
   menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
   nav.classList.toggle('is-open', open);
+  header.classList.toggle('menu-open', open);
 }
 menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
 nav.addEventListener('click', event => { if (event.target.closest('a')) setMenu(false); });
@@ -30,7 +32,7 @@ document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { setMenu(false); menu.focus(); }
 });
 document.addEventListener('click', event => { if (!event.target.closest('.site-header')) setMenu(false); });
-matchMedia('(min-width: 481px)').addEventListener('change', () => setMenu(false));
+matchMedia('(min-width: 1101px)').addEventListener('change', () => setMenu(false));
 
 // Shareable filter URLs and browser back/forward restoration.
 const filterPanel = document.querySelector('[data-filters]');

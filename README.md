@@ -20,10 +20,13 @@ npx playwright install chromium
 # With npm run dev running in another terminal:
 npm run test:browser
 npm run test:tablet
+npm run test:navigation
 npm run test:resources
 ```
 
 The browser checks cover all 20 pages (17 main pages plus three supporting pages) at 1440, 768, 390, and 320 pixels; WCAG A/AA automated checks; filtering and search; history restoration; gallery keyboard controls and focus return; media controls; old URLs; reduced motion; and JavaScript-disabled content.
+
+Navigation checks exercise real touch targets at seven widths from 320 to 1100 pixels, including the tablet zoom, reduced motion, short landscape screens, resizing, and keyboard dismissal. At 1100 pixels and below, the compact menu stays above the animated tablet and device frame; its links scroll within the available screen height.
 
 ## Edit content
 

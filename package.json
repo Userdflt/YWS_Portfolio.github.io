@@ -10,6 +10,7 @@
     "test": "node --test tests/site.test.mjs",
     "test:browser": "node tests/browser.mjs",
     "test:tablet": "node tests/tablet-browser.mjs",
+    "test:navigation": "node tests/navigation-browser.mjs",
     "test:resources": "node tests/resources-browser.mjs"
   },
   "dependencies": {
