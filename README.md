@@ -81,7 +81,7 @@ To refresh resources intentionally, update the audited snapshot in `content/repo
 
 The canonical deployment URL is `https://userdflt.github.io/YWS_Portfolio.github.io/`. If publishing elsewhere, update `content/site.json` and rebuild. `.nojekyll` and `sitemap.xml` are included. No changes have been pushed or published by the redesign task.
 
-The branding email `youngwoosong@gmail.com` is used by default. The former site used `youngwoo930@gmail.com`; change the single site setting if that address is preferred.
+The contact email is `youngwoo930@gmail.com`. Update `content/site.json` to change the displayed address and all email links, including the header's "Let's talk" link.
 
 The old Vision Studio GitHub URL returns 404. The CodeVision web application has no verified public repository. Their pages explain source availability; CodeVision links separately to the verified open-source retrieval prototype. The architectural visualisation collection has no standalone repository. Generic profile links are never labelled as project source code.
 
