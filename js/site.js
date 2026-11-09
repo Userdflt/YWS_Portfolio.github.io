@@ -1,10 +1,9 @@
 // Content is static; core interactions do not depend on the optional motion engine.
 import {createTabletJourney} from './tablet-journey.js';
 document.documentElement.classList.add('js-enabled');
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let preference;
 try { preference = localStorage.getItem('yws-motion'); } catch { /* Optional storage. */ }
-let motionEnabled = !reducedMotion.matches && preference !== 'off';
+let motionEnabled = preference !== 'off';
 let anime, motionScope, observer, heroAnimation;
 let stopTabletJourney;
 const activeReveals = new Set();
@@ -257,10 +256,6 @@ document.querySelector('[data-tablet-hero]')?.addEventListener('focusin', () => 
 motionButton.addEventListener('click', () => {
   motionEnabled = !motionEnabled; preference = motionEnabled ? 'on' : 'off';
   try { localStorage.setItem('yws-motion',preference); } catch { /* Optional preference. */ }
-  stopMotion(); reflectMotion(); if (motionEnabled) startMotion();
-});
-reducedMotion.addEventListener('change', event => {
-  motionEnabled = !event.matches && preference !== 'off';
   stopMotion(); reflectMotion(); if (motionEnabled) startMotion();
 });
 import('./vendor/anime.esm.min.js').then(module => { anime = module; startMotion(); }).catch(() => { stopMotion(); motionEnabled = false; reflectMotion(); });

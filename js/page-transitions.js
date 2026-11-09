@@ -1,12 +1,12 @@
-// Runs before first paint so cross-document transitions respect saved preferences.
+// Runs before first paint so cross-document transitions respect the saved footer
+// preference, the only off switch; the OS reduced-motion setting is not consulted.
 // Links and history remain browser navigations; no click interception or fetching.
 (() => {
   const root = document.documentElement;
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const motionOff = () => {
     let saved;
     try { saved = localStorage.getItem('yws-motion'); } catch { /* Optional storage. */ }
-    return reduced.matches || saved === 'off' || root.classList.contains('motion-paused');
+    return saved === 'off' || root.classList.contains('motion-paused');
   };
   if (motionOff()) root.classList.add('motion-paused');
   else root.classList.add('motion-allowed');
@@ -31,10 +31,7 @@
     root.dataset.transitionDirection = direction(activation);
     root.dataset.pageTransition = incoming ? 'entering' : 'leaving';
     if (incoming) root.dataset.pageArrival = 'true';
-    const skip = () => { if (reduced.matches || root.classList.contains('motion-paused')) transition.skipTransition(); };
-    reduced.addEventListener('change', skip);
     transition.finished.catch(() => {}).finally(() => {
-      reduced.removeEventListener('change', skip);
       delete root.dataset.pageTransition;
     });
   }

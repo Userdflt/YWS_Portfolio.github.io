@@ -33,18 +33,20 @@ async function assertOpen(page, allLinks = true) {
 }
 
 try {
-  for (const reducedMotion of ['no-preference', 'reduce']) {
+  for (const motion of ['on', 'off']) {
     for (const width of [320, 390, 480, 640, 768, 1024, 1100]) {
-      const context = await browser.newContext({viewport:{width,height:900}, hasTouch:true, reducedMotion});
+      const context = await browser.newContext({viewport:{width,height:900}, hasTouch:true});
+      // Motion is on by default; the saved footer preference is the only off switch.
+      if (motion === 'off') await context.addInitScript(() => { try { localStorage.setItem('yws-motion','off'); } catch {} });
       const page = await context.newPage();
       page.on('pageerror', error => errors.push(error.message));
       await page.goto(base);
       await page.locator('.menu-toggle').waitFor({state:'visible'});
-      if (reducedMotion === 'no-preference') await page.waitForFunction(() => document.querySelector('[data-tablet-hero]').dataset.heroState === 'ready');
+      if (motion === 'on') await page.waitForFunction(() => document.querySelector('[data-tablet-hero]').dataset.heroState === 'ready');
       await tapVisible(page.locator('.menu-toggle'));
       await assertOpen(page);
 
-      if (reducedMotion === 'no-preference') {
+      if (motion === 'on') {
         const midpoint = await page.locator('[data-tablet-journey]').evaluate(element => element.getBoundingClientRect().top + scrollY - parseFloat(element.style.getPropertyValue('--tablet-pin-top')) + parseFloat(element.style.getPropertyValue('--tablet-scroll-distance')) / 2);
         await page.evaluate(y => scrollTo({top:y,behavior:'instant'}), midpoint);
         await page.waitForFunction(() => {
@@ -54,7 +56,7 @@ try {
         await assertOpen(page);
       }
 
-      if (width === 390 && reducedMotion === 'no-preference') await page.screenshot({path:'.preview/navigation-foreground.png'});
+      if (width === 390 && motion === 'on') await page.screenshot({path:'.preview/navigation-foreground.png'});
       await tapVisible(page.getByRole('navigation').getByRole('link',{name:'Projects',exact:true}));
       await page.waitForURL('**/projects.html');
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -65,11 +67,12 @@ try {
       assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'false');
       assert.ok(await page.locator('.menu-toggle').evaluate(element => document.activeElement === element));
       await context.close();
-      console.log(`Navigation passed: ${width}px, ${reducedMotion}`);
+      console.log(`Navigation passed: ${width}px, motion ${motion}`);
     }
   }
 
-  const context = await browser.newContext({viewport:{width:844,height:320},hasTouch:true,reducedMotion:'reduce'});
+  const context = await browser.newContext({viewport:{width:844,height:320},hasTouch:true});
+  await context.addInitScript(() => { try { localStorage.setItem('yws-motion','off'); } catch {} });
   const page = await context.newPage();
   page.on('pageerror', error => errors.push(error.message));
   // Short landscape screens must be able to scroll to the final link on any page.
@@ -103,7 +106,7 @@ try {
   await plainPage.waitForURL('**/projects.html');
   await plain.close();
   assert.deepEqual(errors, []);
-  console.log('Passed: touch targets above the tablet, zoom with menu open, reduced motion, short-screen scrolling, other-page navigation, Escape, outside tap, resize, and no-JS navigation.');
+  console.log('Passed: touch targets above the tablet, zoom with menu open, motion turned off, short-screen scrolling, other-page navigation, Escape, outside tap, resize, and no-JS navigation.');
 } finally {
   await browser.close();
 }
