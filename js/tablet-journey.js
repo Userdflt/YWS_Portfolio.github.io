@@ -1,4 +1,12 @@
 // Keep document scrolling native. Only the tablet's presentation follows scroll.
+// The frame reaches full size here; the scroll past it holds the finished frame instead of growing it.
+const FRAME_END = .75;
+// The hero screen clears between FRAME_END and here, so it never sits on top of the completed frame.
+const HERO_FADE_END = .85;
+// Following sections only begin arriving once the frame is full and the hero screen has gone.
+const CONTENT_FADE_START = .85;
+// Resting gap (px) between the header and the first section, so the handoff lands lower than flush.
+const CONTENT_REST_GAP = 56;
 export function createTabletJourney(anime, finishEntrance) {
   const journey = document.querySelector('[data-tablet-journey]');
   if (!journey) return () => {};
@@ -21,20 +29,21 @@ export function createTabletJourney(anime, finishEntrance) {
     frame = null;
     if (disposed) return;
     progress = Math.max(0, Math.min(1, (scrollY - start) / distance));
+    const frameProgress = Math.min(1, progress / FRAME_END);
     if (progress > 0) finishEntrance();
     timeline?.seek(progress * 1000);
     layout.style.pointerEvents = progress > .7 ? 'none' : '';
     zoom.style.pointerEvents = progress > .7 ? 'none' : '';
     heroFooter.style.pointerEvents = progress > .15 ? 'none' : '';
     header.style.pointerEvents = progress > .001 && progress < .99 ? 'none' : '';
-    content.style.opacity = String(Math.max(0, Math.min(1, (progress - .8) / .2)));
+    content.style.opacity = String(Math.max(0, Math.min(1, (progress - CONTENT_FADE_START) / (1 - CONTENT_FADE_START))));
     content.style.pointerEvents = progress < .98 ? 'none' : '';
     const visible = progress > .001;
     device.style.opacity = visible ? '1' : '0';
-    root.classList.toggle('tablet-portal-open', progress >= .999);
+    root.classList.toggle('tablet-portal-open', frameProgress >= .999);
     journey.classList.toggle('uses-foreground-frame', visible);
     for (const key of ['left','top','width','height','radius','bezel']) {
-      const value = deviceStart[key] + (deviceEnd[key] - deviceStart[key]) * progress;
+      const value = deviceStart[key] + (deviceEnd[key] - deviceStart[key]) * frameProgress;
       device.style.setProperty(`--frame-${key}`, `${value}px`);
     }
     journey.dataset.zoomProgress = progress.toFixed(3);
@@ -58,8 +67,8 @@ export function createTabletJourney(anime, finishEntrance) {
     const headerHeight = header.offsetHeight + screenInset;
     const heroHeight = hero.offsetHeight;
     const pinTop = Math.min(headerHeight, innerHeight - heroHeight - screenInset);
-    distance = Math.max(460, Math.min(900, innerHeight * .85));
-    const overlap = Math.min(heroHeight, innerHeight * .9);
+    distance = Math.max(460, Math.min(900, innerHeight * .85)) / FRAME_END;
+    const overlap = Math.min(heroHeight, innerHeight * .9) - CONTENT_REST_GAP;
     journey.style.setProperty('--tablet-pin-top', `${pinTop}px`);
     journey.style.setProperty('--tablet-hero-height', `${heroHeight}px`);
     journey.style.setProperty('--tablet-scroll-distance', `${distance}px`);
@@ -73,10 +82,10 @@ export function createTabletJourney(anime, finishEntrance) {
     const scale = deviceEnd.width / tablet.offsetWidth;
     const translateY = gap - centreY - (initialTop - centreY) * scale;
     timeline = anime.createTimeline({autoplay:false,defaults:{ease:'linear'}})
-      .add(zoom,{scale:[1,scale],y:[0,translateY],duration:1000},0)
+      .add(zoom,{scale:[1,scale],y:[0,translateY],duration:1000 * FRAME_END},0)
       .add('.tablet-hero-heading, .tablet-hero-footer, .tablet-baseline, .tablet-ground-shadow',{opacity:[1,0],duration:280},0)
-      .add('.tablet-topbar, .tablet-layout',{opacity:[1,0],duration:300},480)
-      .add(zoom,{opacity:[1,0],duration:200},800)
+      .add('.tablet-topbar, .tablet-layout',{opacity:[1,0],duration:300},1000 * FRAME_END - 300)
+      .add(zoom,{opacity:[1,0],duration:1000 * (HERO_FADE_END - FRAME_END)},1000 * FRAME_END)
       .add(header,{opacity:[1,0],duration:120},0)
       .add(header,{opacity:[0,1],duration:120},880);
     lastSize = `${innerWidth}:${innerHeight}:${tablet.offsetWidth}:${tablet.offsetHeight}`;
