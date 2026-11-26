@@ -9,7 +9,9 @@ const pages=['index.html','projects.html','about.html','contact.html',...project
 const errors=[];const findings=[];
 fs.mkdirSync('.preview',{recursive:true});
 try {
- const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+ const context=await browser.newContext({viewport:{width:1440,height:1000}});
+ // The saved footer preference is the only off switch, so these scans use it for a static page.
+ await context.addInitScript(()=>{try{localStorage.setItem('yws-motion','off');}catch{}});
  const page=await context.newPage();
  page.on('pageerror',e=>errors.push(e.message));
  page.on('response',r=>{if(r.status()>=400&&r.url().startsWith(base))errors.push(`${r.status()} ${r.url()}`);});
@@ -98,11 +100,11 @@ try {
  assert.deepEqual(await animatedPage.locator('.hero-tablet').boundingBox(),settledTablet);
  await animatedPage.reload();
  await animatedPage.waitForFunction(()=>document.querySelector('[data-tablet-hero]').dataset.heroState==='revealing');
+ // Flipping the OS preference mid-entrance must not interrupt the hero.
  await animatedPage.emulateMedia({reducedMotion:'reduce'});
- await animatedPage.waitForFunction(()=>getComputedStyle(document.querySelector('.hero-tablet')).transform==='none');
+ await animatedPage.waitForFunction(()=>document.querySelector('[data-tablet-hero]').dataset.heroState==='ready');
+ assert.equal(await animatedPage.locator('html').evaluate(e=>e.classList.contains('motion-paused')),false,'OS reduced motion does not pause motion');
  assert.equal(await animatedPage.locator('.tablet-actions').evaluate(e=>getComputedStyle(e).opacity),'1');
- await animatedPage.emulateMedia({reducedMotion:'no-preference'});
- await animatedPage.waitForFunction(()=>!document.documentElement.classList.contains('motion-paused'));
  assert.equal(await animatedPage.locator('.motion-toggle').textContent(),'Motion: on');
  await animatedPage.getByRole('button',{name:'Motion: on — turn animations off'}).click();
  assert.ok(await animatedPage.locator('html').evaluate(e=>e.classList.contains('motion-paused')));
@@ -119,5 +121,5 @@ try {
  fs.writeFileSync('.preview/accessibility.json',JSON.stringify(findings,null,2));
  console.log(JSON.stringify({findings,errors},null,2));
  assert.deepEqual(errors,[],'Browser errors');assert.deepEqual(findings,[],'Accessibility violations');
- console.log('Passed: 20 pages, four widths, accessibility, filters, URL history, gallery, videos, GIFs, mobile navigation, reduced motion, and no-JS fallback.');
+ console.log('Passed: 20 pages, four widths, accessibility, filters, URL history, gallery, videos, GIFs, mobile navigation, the saved motion preference, and no-JS fallback.');
 } finally {await browser.close();}

@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Young Woo Song">
   <title>Young Woo Song</title>
 
-  <!-- paper plate + ink hairline — the site's light tone, at tile scale -->
-  <rect width="64" height="64" rx="12" fill="#f5f3ed"/>
+  <!-- white plate + ink hairline — the site's light surface, at tile scale -->
+  <rect width="64" height="64" rx="12" fill="#ffffff"/>
   <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="11.25" fill="none"
-        stroke="#213e33" stroke-opacity="0.16" stroke-width="1.5"/>
+        stroke="#0a0a0a" stroke-opacity="0.12" stroke-width="1.5"/>
 
   <!-- 'Y' drawn as geometric strokes, not text: no webfont is available to an
-       icon, and the display face is a thin geometric grotesk either way -->
-  <path d="M18 17 L32 35 L46 17 M32 35 L32 47" fill="none" stroke="#213e33"
+       icon, and the display face is a neutral grotesk either way -->
+  <path d="M18 17 L32 35 L46 17 M32 35 L32 47" fill="none" stroke="#0a0a0a"
         stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/>
-  <circle cx="48" cy="47" r="4" fill="#ad553c"/>
+  <circle cx="48" cy="47" r="4" fill="#2563eb"/>
 </svg>

@@ -1,10 +1,14 @@
 // Content is static; core interactions do not depend on the optional motion engine.
 import {createTabletJourney} from './tablet-journey.js';
 document.documentElement.classList.add('js-enabled');
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+// One entrance vocabulary for every element: a short rise and fade on a single ease.
+const ENTRANCE_MS = 600;
+const TABLET_LIFT_MS = 700;
+const RISE_PX = 12;
+const ENTRANCE_EASE = 'outCubic';
 let preference;
 try { preference = localStorage.getItem('yws-motion'); } catch { /* Optional storage. */ }
-let motionEnabled = !reducedMotion.matches && preference !== 'off';
+let motionEnabled = preference !== 'off';
 let anime, motionScope, observer, heroAnimation;
 let stopTabletJourney;
 const activeReveals = new Set();
@@ -69,7 +73,7 @@ if (filterPanel) {
       query ? url.searchParams.set('q', search.value.trim()) : url.searchParams.delete('q');
       if (url.href !== location.href) history[replace ? 'replaceState' : 'pushState']({}, '', url);
     }
-    if (animate && motionEnabled && anime && visible.length) filterAnimation = anime.animate(visible, {opacity:[.25,1], y:[20,0], duration:520, delay:anime.stagger(35), ease:'outExpo'});
+    if (animate && motionEnabled && anime && visible.length) filterAnimation = anime.animate(visible, {opacity:[.25,1], y:[RISE_PX,0], duration:ENTRANCE_MS, delay:anime.stagger(35), ease:ENTRANCE_EASE});
   }
   function restore() {
     const params = new URLSearchParams(location.search);
@@ -228,21 +232,21 @@ function startMotion() {
     if (tabletHero && !arriving && scrollY < 5 && !tabletHero.contains(document.activeElement)) {
       const mobile = matchMedia('(max-width: 760px)').matches;
       tabletHero.dataset.heroState = 'revealing';
-      heroAnimation = anime.createTimeline({defaults:{ease:'outExpo'},onComplete:() => { tabletHero.dataset.heroState = 'ready'; }})
+      heroAnimation = anime.createTimeline({defaults:{ease:ENTRANCE_EASE},onComplete:() => { tabletHero.dataset.heroState = 'ready'; }})
         .add('.tablet-line',{scaleX:[0,1],duration:650,ease:'inOutCubic'},0)
-        .add('.tablet-slot',{scaleX:[0,1],opacity:[0,1],duration:650},150)
-        .add('.hero-tablet',{y:['115%',0],rotateX:[mobile?12:24,0],scale:[.9,1],duration:mobile?1150:1450,ease:'outQuart'},240)
-        .add('.tablet-ground-shadow',{scaleX:[.3,1],opacity:[0,.6],duration:1100},400)
-        .add('[data-tablet-content]',{y:[18,0],opacity:[0,1],duration:650,delay:anime.stagger(80)},mobile?650:850);
+        .add('.tablet-slot',{scaleX:[0,1],opacity:[0,1],duration:ENTRANCE_MS},150)
+        .add('.hero-tablet',{y:[RISE_PX*2,0],opacity:[0,1],duration:TABLET_LIFT_MS},240)
+        .add('.tablet-ground-shadow',{scaleX:[.3,1],opacity:[0,.6],duration:TABLET_LIFT_MS},400)
+        .add('[data-tablet-content]',{y:[RISE_PX,0],opacity:[0,1],duration:ENTRANCE_MS,delay:anime.stagger(80)},mobile?650:850);
     } else if (tabletHero) tabletHero.dataset.heroState = 'ready';
     const title = document.querySelector('[data-title]');
-    if (title && !arriving) anime.animate(title,{y:[24,0],opacity:[.25,1],duration:900,ease:'outExpo'});
+    if (title && !arriving) anime.animate(title,{y:[RISE_PX,0],opacity:[.25,1],duration:ENTRANCE_MS,ease:ENTRANCE_EASE});
     observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         observer.unobserve(entry.target);
         if (motionEnabled && !entry.target.hidden) {
-          const animation = anime.animate(entry.target,{y:[24,0],opacity:[.2,1],duration:800,ease:'outExpo',onComplete: self => activeReveals.delete(self)});
+          const animation = anime.animate(entry.target,{y:[RISE_PX,0],opacity:[.2,1],duration:ENTRANCE_MS,ease:ENTRANCE_EASE,onComplete: self => activeReveals.delete(self)});
           activeReveals.add(animation);
         }
       });
@@ -257,10 +261,6 @@ document.querySelector('[data-tablet-hero]')?.addEventListener('focusin', () => 
 motionButton.addEventListener('click', () => {
   motionEnabled = !motionEnabled; preference = motionEnabled ? 'on' : 'off';
   try { localStorage.setItem('yws-motion',preference); } catch { /* Optional preference. */ }
-  stopMotion(); reflectMotion(); if (motionEnabled) startMotion();
-});
-reducedMotion.addEventListener('change', event => {
-  motionEnabled = !event.matches && preference !== 'off';
   stopMotion(); reflectMotion(); if (motionEnabled) startMotion();
 });
 import('./vendor/anime.esm.min.js').then(module => { anime = module; startMotion(); }).catch(() => { stopMotion(); motionEnabled = false; reflectMotion(); });

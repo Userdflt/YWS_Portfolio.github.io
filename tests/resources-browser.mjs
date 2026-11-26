@@ -7,7 +7,8 @@ const base='http://localhost:4173/';
 const browser=await chromium.launch();
 const errors=[];
 try {
- const context=await browser.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});
+ const context=await browser.newContext({viewport:{width:1280,height:900}});
+ await context.addInitScript(()=>{try{localStorage.setItem('yws-motion','off');}catch{}});
  const page=await context.newPage();
  page.on('pageerror',error=>errors.push(error.message));
  for(const item of Object.values(resources).flatMap(r=>r.items).filter(item=>['notebook','guide'].includes(item.kind))){

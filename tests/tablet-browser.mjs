@@ -51,11 +51,19 @@ try {
     await page.locator('.tablet-actions a').first().focus();
     await page.waitForFunction(() => Number(document.querySelector('[data-tablet-journey]').dataset.zoomProgress) === 0);
     await scroll(page,450);
+    // The OS preference is not consulted, so flipping it leaves the journey running.
     await page.emulateMedia({reducedMotion:'reduce'});
+    await page.waitForFunction(() => Number(document.querySelector('[data-tablet-journey]').dataset.zoomProgress) > 0);
+    assert.ok(await page.locator('.has-tablet-journey').count() > 0,`${width}: OS reduced motion keeps the journey`);
+    assert.notEqual(await page.locator('.tablet-zoom').evaluate(e => getComputedStyle(e).transform),'none',`${width}: OS reduced motion keeps the zoom transform`);
+    // The footer toggle is the only off switch.
+    await page.evaluate(() => document.querySelector('.motion-toggle').click());
     await page.waitForFunction(() => !document.querySelector('.has-tablet-journey'));
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.tablet-zoom')).transform === 'none');
+    // Turning motion off starts a .01ms opacity transition on the shell, so read it settled.
+    await page.waitForFunction(() => [...document.querySelectorAll('.device-frame,.tablet-layout')].every(element => element.getAnimations().length === 0));
     assert.equal(await page.locator('.tablet-layout').evaluate(e => getComputedStyle(e).opacity),'1');
-    assert.equal(await page.locator('.device-frame').evaluate(e => getComputedStyle(e).opacity),'1','Reduced motion retains the device shell');
+    assert.equal(await page.locator('.device-frame').evaluate(e => getComputedStyle(e).opacity),'1','Motion off retains the device shell');
     await context.close();
   }
 
@@ -98,12 +106,15 @@ try {
   await context.close();
 
   // The published GitHub Pages path must have the same native navigation behaviour.
-  const prefixed = await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  const prefixedContext = await browser.newContext({viewport:{width:390,height:844}});
+  await prefixedContext.addInitScript(() => { try { localStorage.setItem('yws-motion','off'); } catch {} });
+  const prefixed = await prefixedContext.newPage();
   await prefixed.goto(base+'YWS_Portfolio.github.io/');
   assert.equal(await prefixed.locator('.has-tablet-journey').count(),0);
   await prefixed.locator('.tablet-actions a').first().click();
   await prefixed.waitForURL('**/YWS_Portfolio.github.io/projects.html');
   assert.equal(await prefixed.locator('html').getAttribute('data-page-transition'),null);
+  await prefixedContext.close();
   assert.deepEqual(errors,[]);
-  console.log('Passed: scroll zoom and reversal at four widths, keyboard access, live reduced motion, native sideways transitions, project links, Back/Forward scroll restoration, saved motion preference, and GitHub Pages prefix.');
+  console.log('Passed: scroll zoom and reversal at four widths, keyboard access, an ignored OS reduced-motion preference, native sideways transitions, project links, Back/Forward scroll restoration, saved motion preference, and GitHub Pages prefix.');
 } finally { await browser.close(); }

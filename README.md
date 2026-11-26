@@ -1,6 +1,6 @@
 # Young Woo Song - Portfolio
 
-A static portfolio for Young Woo Song, an AI specialist specialising in the architecture, engineering, and construction (AEC) industry. The design follows the supplied ivory, forest-green, and terracotta branding, with self-hosted Manrope typography and Anime.js 4.5.0 motion.
+A static portfolio for Young Woo Song, an AI specialist specialising in the architecture, engineering, and construction (AEC) industry. The design is a clean, light product theme (near-white background, near-black ink, a single blue accent) with self-hosted Inter typography and Anime.js 4.5.0 motion.
 
 ## Preview and verification
 
@@ -60,13 +60,13 @@ The Projects page combines discipline filters with text search. URLs retain sele
 
 All six supplied videos and seven GIF demonstrations are included. Videos use poster images and `preload="none"`; GIFs require an explicit play action and have pause controls. Native video controls remain available. Nothing autoplays. Architectural visualisations are identified as AI-generated studies.
 
-The home hero presents the introduction inside an iPad-style frame with a dark bezel, metallic rim, rounded screen, and camera. Anime.js draws a horizontal line, lifts the tablet through it with a gentle perspective tilt, then reveals the text and links. Scrolling expands a separate foreground frame toward the viewport. The following sections stay hidden until the final part of the zoom, then appear inside the device. The frame stays fixed above content on every page, including the navigation and footer. Scrolling upward reverses the home-page expansion. This uses a sticky section and ordinary document scrolling; it does not intercept the wheel, create a nested scroll area, or lock scrolling. Keyboard focus reveals the relevant content immediately.
+The home hero presents the introduction inside an iPad-style frame with a graphite bezel, rounded screen, and camera. Anime.js draws a horizontal line, lifts the tablet into place with a short rise and fade, then reveals the text and links. Scrolling expands a separate foreground frame toward the viewport. The following sections stay hidden until the final part of the zoom, then appear inside the device. The frame stays fixed above content on every page, including the navigation and footer. Scrolling upward reverses the home-page expansion. This uses a sticky section and ordinary document scrolling; it does not intercept the wheel, create a nested scroll area, or lock scrolling. Keyboard focus reveals the relevant content immediately.
 
-Same-origin page navigation uses native cross-document View Transitions: content slides sideways inside the persistent tablet edge. The bezel and navigation remain stationary; Back navigation reverses the slide. Links, history, hashes, and browser scroll restoration remain native. Browsers without cross-document View Transitions use normal navigation. The OS reduced-motion setting and saved footer motion preference skip the zoom and page slides; the device shell and all content remain available when JavaScript or Anime.js is unavailable.
+Same-origin page navigation uses native cross-document View Transitions: content slides sideways inside the persistent tablet edge. The bezel and navigation remain stationary; Back navigation reverses the slide. Links, history, hashes, and browser scroll restoration remain native. Browsers without cross-document View Transitions use normal navigation. Motion is on by default for every visitor and the OS reduced-motion setting is not consulted; the footer motion toggle is the only off switch, and turning it off skips the zoom and page slides. The device shell and all content remain available when JavaScript or Anime.js is unavailable.
 
-`npm run test:tablet` checks zoom/reversal at four widths, foreground frame layering, persistent visible edges, content handoff, keyboard access, live reduced-motion changes, project navigation, sideways transitions, Back/Forward scroll restoration, saved motion preferences, and the GitHub Pages path prefix. Anime.js also supplies staggered section entrances, gallery changes, and filter transitions.
+`npm run test:tablet` checks zoom/reversal at four widths, foreground frame layering, persistent visible edges, content handoff, keyboard access, the OS reduced-motion preference being ignored while the footer toggle still stops motion, project navigation, sideways transitions, Back/Forward scroll restoration, saved motion preferences, and the GitHub Pages path prefix. Anime.js also supplies staggered section entrances, gallery changes, and filter transitions.
 
-Fonts, animation code, and imagery are served locally. Licenses are retained in `fonts/OFL-Manrope.txt` and `js/vendor/ANIME-LICENSE.md`.
+Fonts, animation code, and imagery are served locally. Licenses are retained in `fonts/OFL-Inter.txt` and `js/vendor/ANIME-LICENSE.md`.
 
 ## Project resource library
 
